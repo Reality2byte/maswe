@@ -1,5 +1,6 @@
 ---
 title: Cryptographically Weak Pseudo-Random Number Generator (PRNG)
+id: MASWE-0027
 alias: insecure-random
 platform: ["android", "ios"]
 profiles: ["L1", "L2"]
@@ -12,6 +13,7 @@ observed_examples:
 - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2013-6386
 - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2006-3419
 - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-4102
+status: new
 ---
 
 ## Overview

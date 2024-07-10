@@ -1,5 +1,6 @@
 ---
 title: Insertion of Sensitive Data into Logs
+id: MASWE-0001
 alias: data-in-logs
 platform: ["android", "ios"]
 profiles: ["L1", "L2", "P"]
@@ -10,6 +11,7 @@ mappings:
   android: https://developer.android.com/privacy-and-security/risks/log-info-disclosure
 refs:
   - https://stackoverflow.com/questions/45270547/is-read-logs-a-normal-or-dangerous-android-permission
+status: new
 ---
 
 ## Overview

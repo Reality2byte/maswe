@@ -1,5 +1,6 @@
 ---
 title: Sensitive Data Stored Unencrypted in Shared Storage Requiring No User Interaction
+id: MASWE-0007
 alias: data-unencrypted-shared-storage-no-user-interaction
 platform: [android]
 profiles: [L1, L2]
@@ -9,7 +10,7 @@ mappings:
   mastg-v1: [MASTG-TEST-0052, MASTG-TEST-0001]
   cwe: [311]
   android: https://developer.android.com/privacy-and-security/risks/sensitive-data-external-storage
-
+status: new
 ---
 
 ## Overview
