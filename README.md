@@ -67,3 +67,27 @@ MAS Advocates are industry adopters of the OWASP MASWE, MASVS and MASTG who have
 </a>
 
 <br><br>
+
+## Authors
+
+<div style="display:flex; justify-content:center; gap:2rem; flex-wrap:wrap; margin-top:2rem;">
+
+  <div style="text-align:center;">
+    <img src="https://raw.githubusercontent.com/OWASP/mastg/master/docs/assets/carlos.jpg" alt="Carlos Holguera" width="100" style="border-radius:50%; display:block; margin:0 auto;" />
+    <p style="margin-top:0.5rem; font-weight:600;">Carlos Holguera</p>
+    <p><a href="https://github.com/cpholguera">cpholguera</a></p>
+  </div>
+
+  <div style="text-align:center;">
+    <img src="https://raw.githubusercontent.com/OWASP/mastg/master/docs/assets/sven.jpg" alt="Sven Schleier" width="100" style="border-radius:50%; display:block; margin:0 auto;" />
+    <p style="margin-top:0.5rem; font-weight:600;">Sven Schleier</p>
+    <p><a href="https://github.com/sushi2k">sushi2k</a></p>
+  </div>
+
+  <div style="text-align:center;">
+    <img src="https://raw.githubusercontent.com/OWASP/mastg/master/docs/assets/jeroen.jpg" alt="Jeroen Beckers" width="100" style="border-radius:50%; display:block; margin:0 auto;" />
+    <p style="margin-top:0.5rem; font-weight:600;">Jeroen Beckers</p>
+    <p><a href="https://github.com/TheDauntless">TheDauntless</a></p>
+  </div>
+
+</div>
