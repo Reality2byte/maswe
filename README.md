@@ -22,28 +22,11 @@ The MASWE is part of OWASP MAS, which also includes the [OWASP Mobile Applicatio
 
 <br>
 
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-<div style="display:flex; justify-content:center; gap:12px;">
-  <a href="https://mas.owasp.org/MASVS">
-    <button type="button" style="background-color:#4A90E2; color:#ffffff; border:none; padding:12px 24px; font-size:16px; border-radius:4px; cursor:pointer;">
-      <span class="material-icons" style="vertical-align:middle; margin-right:8px;">public</span>
-      Read the OWASP MASWE
-    </button>
-  </a>
-  <a href="https://mas.owasp.org/contributing/">
-    <button type="button" style="background-color:#4A90E2; color:#ffffff; border:none; padding:12px 24px; font-size:16px; border-radius:4px; cursor:pointer;">
-      <span class="material-icons" style="vertical-align:middle; margin-right:8px;">flash_on</span>
-      Contribute to OWASP MASWE
-    </button>
-  </a>
-  <a href="https://mas.owasp.org/contact">
-    <button type="button" style="background-color:#4A90E2; color:#ffffff; border:none; padding:12px 24px; font-size:16px; border-radius:4px; cursor:pointer;">
-      <span class="material-icons" style="vertical-align:middle; margin-right:8px;">mail_outline</span>
-      Contact Us
-    </button>
-  </a>
-</div>
+<p align="center">
+  <a href="https://mas.owasp.org/MASVS">Read the OWASP MASWE</a>&nbsp;|&nbsp;
+  <a href="https://mas.owasp.org/contributing/">Contribute to OWASP MASWE</a>&nbsp;|&nbsp;
+  <a href="https://mas.owasp.org/contact">Contact Us</a>
+</p>
 
 <br>
 
