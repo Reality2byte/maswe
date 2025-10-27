@@ -17,7 +17,7 @@ status: new
 
 ## Overview
 
-Mobile platforms allow users and third-party tools to capture screenshots or record screens. Those could act as covert channels that can expose sensitive data and increase the risk of data leakage.
+Mobile platforms allow users and third-party tools to capture screenshots or record screens. This can expose sensitive data and increase the risk of data leakage.
 
 ## Impact
 
@@ -27,19 +27,14 @@ Mobile platforms allow users and third-party tools to capture screenshots or rec
 
 - Display sensitive data on UI
 
-plus one of the following:
-
-- What you have below mode 1
-- Mode 2
-- ...
+And one of the following:
 
 - **Third-party apps with permission to capture or record the screen**: Third-party apps may record the screen while sensitive content is displayed.
 - **Third-party apps with permission to access the screenshot and recording files**: Third-party apps may access screenshots or recordings saved in storage after they are taken by the user or a tool.
-- **External tools may record the screen**: Tools such as [scrcpy](https://github.com/Genymobile/scrcpy) and [QuickTime](https://support.apple.com/guide/quicktime-player/welcome/mac) can record the device's screen via a USB connection.
+- **External tools may record the screen**: Tools such as @MASTG-TOOL-0024 and @MASTG-TOOL-0126 can record the device's screen via a USB connection.
 - **Backgrounding the app**: When an app enters the background state, the system may capture a screenshot of the app's current view to display in the app switcher. These screenshots are stored on the file system and could potentially be accessed or stolen by malicious actors.
 
 ## Mitigations
 
-- **Prevent screenshots using the `FLAG_SECURE` API**: On Android, use [`FLAG_SECURE`](https://developer.android.com/security/fraud-prevention/activities#flag_secure) to block screenshots and screen recordings of your app's content
-
-- **Detect taking a screenshot with `DETECT_SCREEN_CAPTURE` or `sceneCaptureState` API**: Use [`DETECT_SCREEN_CAPTURE`](https://developer.android.com/reference/android/Manifest.permission#DETECT_SCREEN_CAPTURE) on Android or [`sceneCaptureState`](https://developer.apple.com/documentation/uikit/uitraitcollection/scenecapturestate) on iOS to detect when a screenshot is taken, depending on the platform
+- On Android, block screenshots by @MASTG-BEST-0014
+- Redact sensitive on-screen content so that, if a screenshot is taken, no confidential data is visible
