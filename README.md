@@ -1,4 +1,4 @@
-<img width="180px" align="right" style="float: right;" src="https://raw.githubusercontent.com/OWASP/mastg/master/docs/assets/maswe_cover.png">
+<img width="180px" align="right" style="float: right;" src="https://raw.githubusercontent.com/OWASP/mas-website/main/docs/assets/maswe_cover.png">
 
 # OWASP Mobile Application Security Weakness Enumeration (MASWE)
 
@@ -11,7 +11,7 @@
 The **OWASP Mobile Application Security Weakness Enumeration (MASWE)** is a list of common security and privacy weaknesses in mobile applications. It is intended to be used as a reference for developers, security researchers, and security professionals. It acts as the bridge between the [OWASP Mobile Application Security Verification Standard (MASVS)](https://github.com/OWASP/masvs) and the [OWASP Mobile Application Security Testing Guide (MASTG)](https://github.com/OWASP/mastg).
 
 <center>
-<img src="https://raw.githubusercontent.com/OWASP/mastg/master/docs/assets/maswe-overview.png" style="width: 50%; border-radius: 5px; margin: 2em" />
+<img src="https://raw.githubusercontent.com/OWASP/mas-website/main/docs/assets/maswe-overview.png" style="width: 50%; border-radius: 5px; margin: 2em" />
 </center>
 
 For its definition we draw inspiration from the [Common Weakness Enumeration (CWE)](https://cwe.mitre.org/), which is a community-developed list of common software security weaknesses. The MASWE is intended to be a **complementary list to the CWE**, focusing specifically on security weaknesses in mobile applications.
@@ -22,7 +22,7 @@ For its definition we draw inspiration from the [Common Weakness Enumeration (CW
 
 <center>
 <a href="https://mas.owasp.org/MASWE/">
-<img width="250px" src="Document/Images/open_website.png"/>
+<img width="250px" src="https://raw.githubusercontent.com/OWASP/mastg/master/Document/Images/open_website.png"/>
 </a>
 </center>
 
@@ -60,19 +60,19 @@ MAS Advocates are industry adopters of the OWASP MASWE, MASVS and MASTG who have
 <div style="display:flex; justify-content:center; gap:2rem; flex-wrap:wrap; margin-top:2rem;">
 
   <div style="text-align:center;">
-    <img src="https://raw.githubusercontent.com/OWASP/mastg/master/docs/assets/carlos.jpg" alt="Carlos Holguera" width="100" style="border-radius:50%; display:block; margin:0 auto;" />
+    <img src="https://raw.githubusercontent.com/OWASP/mas-website/main/docs/assets/carlos.jpg" alt="Carlos Holguera" width="100" style="border-radius:50%; display:block; margin:0 auto;" />
     <p style="margin-top:0.5rem; font-weight:600;">Carlos Holguera</p>
     <p><a href="https://github.com/cpholguera">cpholguera</a></p>
   </div>
 
   <div style="text-align:center;">
-    <img src="https://raw.githubusercontent.com/OWASP/mastg/master/docs/assets/sven.jpg" alt="Sven Schleier" width="100" style="border-radius:50%; display:block; margin:0 auto;" />
+    <img src="https://raw.githubusercontent.com/OWASP/mas-website/main/docs/assets/sven.jpg" alt="Sven Schleier" width="100" style="border-radius:50%; display:block; margin:0 auto;" />
     <p style="margin-top:0.5rem; font-weight:600;">Sven Schleier</p>
     <p><a href="https://github.com/sushi2k">sushi2k</a></p>
   </div>
 
   <div style="text-align:center;">
-    <img src="https://raw.githubusercontent.com/OWASP/mastg/master/docs/assets/jeroen.jpg" alt="Jeroen Beckers" width="100" style="border-radius:50%; display:block; margin:0 auto;" />
+    <img src="https://raw.githubusercontent.com/OWASP/mas-website/main/docs/assets/jeroen.jpg" alt="Jeroen Beckers" width="100" style="border-radius:50%; display:block; margin:0 auto;" />
     <p style="margin-top:0.5rem; font-weight:600;">Jeroen Beckers</p>
     <p><a href="https://github.com/TheDauntless">TheDauntless</a></p>
   </div>
