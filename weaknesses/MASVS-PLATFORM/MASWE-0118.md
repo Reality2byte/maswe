@@ -1,5 +1,5 @@
 ---
-title: Data Minimisation Not Implemented
+title: Data Minimisation Measures in Caches Not Implemented
 id: MASWE-0118
 alias: data-minimisation
 platform: [android, ios]
@@ -28,7 +28,7 @@ draft:
         - `HTTPCookieStorage.shared.removeCookies(since: .distantPast)`
         - Use `WKHTTPCookieStore` for targeted cookie deletion
 
-      2. Clear app cache and files
+    2. Clear app cache and files
 
     - Android:
         - `context.cacheDir.deleteRecursively()`
@@ -41,7 +41,7 @@ draft:
         - For Core Data, call `NSPersistentStoreCoordinator.destroyPersistentStore(at:ofType:options:)` for a full wipe
         - Reset `UserDefaults` with `removePersistentDomain(forName:)`
 
-      3. Avoid network caches
+    3. Avoid network caches
 
     - Android:
         - `HttpResponseCache.getInstalled()?.delete()` for legacy stack
