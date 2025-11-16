@@ -1,5 +1,5 @@
 ---
-title: Data Minimisation Measures in Caches Not Implemented
+title: Sensitive Data Not Removed After Use
 id: MASWE-0118
 alias: data-minimisation
 platform: [android, ios]
