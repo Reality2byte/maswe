@@ -15,12 +15,6 @@ Read and apply that file in full. The sections below define only the rules that 
 
 MASWE weakness files contain plain text only. Do not include:
 
-- **Images or screenshots.** Visual content belongs in MASTG demos
-  and knowledge articles, not in weakness descriptions.
-- **Code blocks.** Code samples, configuration snippets, and command
-  examples belong in MASTG tests, demos, and best practices. Use
-  inline backticks for identifiers (e.g. `SharedPreferences`,
-  `NSUserDefaults`) but never fenced code blocks.
-- **Cross-references to MASTG or MASVS in the body text.** Mappings
-  to MASVS controls and links to MASTG content are defined in the
-  YAML front matter. Do not duplicate them inline in the prose.
+- **Images or screenshots.** Visual content belongs in the MASTG, not in weakness descriptions.
+- **Code blocks.** Code samples, configuration snippets, and command examples belong in MASTG tests, demos, and best practices. Use inline backticks for identifiers (e.g. `SharedPreferences`, `NSUserDefaults`) but never fenced code blocks.
+- **Cross-references to MASTG or MASVS in the body text.** Mappings to MASVS controls and links to MASTG content are defined in the YAML front matter. Do not duplicate them inline in the prose.
