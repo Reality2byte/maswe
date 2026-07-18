@@ -22,7 +22,7 @@ draft:
   - content providers
   - FLAG_GRANT_READ_URI_PERMISSION
   - FLAG_GRANT_WRITE_URI_PERMISSION
-  - FLAG_GRANT_PERSISTABLE
+  - FLAG_GRANT_PERSISTABLE_URI_PERMISSION
   - content URIs
   - file URIs
 status: placeholder
