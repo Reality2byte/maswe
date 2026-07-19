@@ -9,7 +9,7 @@ mappings:
   masvs-v1: [MSTG-AUTH-8, MSTG-AUTH-1, MSTG-AUTH-12]
   masvs-v2: [MASVS-AUTH-2, MASVS-CRYPTO-2]
   cwe: [285, 287, 312, 319, 326, 602, 603, 863, 922]
-
+  maswe-beta: [MASWE-0034, MASWE-0044, MASWE-0041, MASWE-0042, MASWE-0043]
 refs:
 - https://developer.android.com/training/sign-in/biometric-auth#crypto
 - https://labs.withsecure.com/publications/how-secure-is-your-android-keystore-authentication
@@ -17,7 +17,6 @@ refs:
 - https://github.com/sensepost/objection/issues/136#issuecomment-419664574
 - https://github.com/sensepost/objection/wiki/Understanding-the-iOS-Biometrics-Bypass
 - https://developer.apple.com/documentation/security/secaccesscontrolcreateflags/applicationpassword
-beta-coverage: [MASWE-0034, MASWE-0044, MASWE-0041, MASWE-0042, MASWE-0043]
 draft:
   description: |
     Local authentication (biometrics, device credential, a custom app PIN/password, or

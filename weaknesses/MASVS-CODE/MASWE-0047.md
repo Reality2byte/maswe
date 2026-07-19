@@ -11,13 +11,12 @@ mappings:
   cwe: [287, 326, 327, 1240]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/bad-dns
-
+  maswe-beta: [MASWE-0019, MASWE-0032, MASWE-0049]
 refs:
 - https://developer.android.com/privacy-and-security/security-tips#Credentials
 - https://developer.apple.com/documentation/security/password_autofill
 - https://developer.android.com/privacy-and-security/cryptography#crypto_provider
 - https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-1.pdf?__blob=publicationFile
-beta-coverage: [MASWE-0019, MASWE-0032, MASWE-0049]
 draft:
   description: |
     Security-critical functionality (cryptography, networking/TLS, DNS, and authentication) should

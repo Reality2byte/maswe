@@ -9,12 +9,11 @@ mappings:
   masvs-v1: [MSTG-CRYPTO-2]
   masvs-v2: [MASVS-CRYPTO-2]
   cwe: [326, 327, 916]
-
+  maswe-beta: [MASWE-0010]
 refs:
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-132.pdf
 - https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
-beta-coverage: [MASWE-0010]
 draft:
   description: |
     Cryptographic keys are frequently derived from passwords, passphrases, or other

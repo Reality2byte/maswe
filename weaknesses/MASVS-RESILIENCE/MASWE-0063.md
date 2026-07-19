@@ -9,8 +9,7 @@ mappings:
   masvs-v1: [MSTG-RESILIENCE-3]
   masvs-v2: [MASVS-RESILIENCE-2, MASVS-CODE-4]
   cwe: [693]
-
-beta-coverage: [MASWE-0105]
+  maswe-beta: [MASWE-0105]
 draft:
   description: |
     Beyond executable code, an app relies on resources and assets whose integrity should be verified,

@@ -9,7 +9,7 @@ mappings:
   masvs-v1: [MSTG-NETWORK-4]
   masvs-v2: [MASVS-NETWORK-2]
   cwe: [295]
-beta-coverage: [MASWE-0047]
+  maswe-beta: [MASWE-0047]
 status: new
 ---
 

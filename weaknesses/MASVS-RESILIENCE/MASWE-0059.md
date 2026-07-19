@@ -9,7 +9,7 @@ mappings:
   masvs-v1: [MSTG-RESILIENCE-10]
   masvs-v2: [MASVS-RESILIENCE-1]
   cwe: [693]
-
+  maswe-beta: [MASWE-0100]
 refs:
 - https://developer.android.com/google/play/integrity
 - https://support.google.com/googleplay/android-developer/answer/11395166?hl=en
@@ -20,7 +20,6 @@ refs:
 - https://github.com/iansampson/AppAttest 
 - https://github.com/firebase/firebase-ios-sdk/blob/v8.15.0/FirebaseAppCheck/Sources/AppAttestProvider/DCAppAttestService%2BFIRAppAttestService.h 
 - https://blog.restlesslabs.com/john/ios-app-attest
-beta-coverage: [MASWE-0100]
 draft:
   description: |
     Device attestation lets the backend gain assurance about the integrity of the device and platform

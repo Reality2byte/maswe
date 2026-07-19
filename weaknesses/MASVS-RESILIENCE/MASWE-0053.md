@@ -9,8 +9,7 @@ mappings:
   masvs-v1: [MSTG-RESILIENCE-12]
   masvs-v2: [MASVS-RESILIENCE-3]
   cwe: [693]
-
-beta-coverage: [MASWE-0091]
+  maswe-beta: [MASWE-0091]
 draft:
   description: |
     Obfuscation alone can be undone by automated deobfuscation and static-analysis tooling. This

@@ -15,7 +15,7 @@ mappings:
   - https://developer.android.com/privacy-and-security/risks/access-control-to-exported-components
   - https://developer.android.com/privacy-and-security/risks/android-exported
   - https://developer.android.com/privacy-and-security/risks/custom-permissions
-
+  maswe-beta: [MASWE-0033, MASWE-0038, MASWE-0040, MASWE-0051, MASWE-0059, MASWE-0062, MASWE-0063, MASWE-0064, MASWE-0065, MASWE-0119]
 refs:
 - https://developer.android.com/privacy-and-security/security-tips#IPNetworking
 - https://developer.android.com/privacy-and-security/security-tips#Services
@@ -24,7 +24,6 @@ refs:
 - https://developer.android.com/privacy-and-security/security-tips#binder-and-messenger-interfaces
 - https://developer.android.com/topic/security/risks/content-resolver
 - https://developer.android.com/topic/security/risks/file-providers
-beta-coverage: [MASWE-0033, MASWE-0038, MASWE-0040, MASWE-0051, MASWE-0059, MASWE-0062, MASWE-0063, MASWE-0064, MASWE-0065, MASWE-0119]
 draft:
   description: |
     App components that expose functionality or data must enforce proper authentication and

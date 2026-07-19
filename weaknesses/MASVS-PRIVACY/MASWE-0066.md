@@ -9,6 +9,7 @@ mappings:
   masvs-v1: []
   masvs-v2: [MASVS-PRIVACY-2]
   cwe: [359]
+  maswe-beta: [MASWE-0110]
 refs:
 - https://developer.android.com/reference/android/provider/Settings.Secure#ANDROID_ID
 - https://developer.android.com/privacy-and-security/about#resettable-identifiers
@@ -24,7 +25,6 @@ refs:
 - https://developer.apple.com/app-store/ad-attribution/
 - https://developer.apple.com/documentation/adattributionkit
 - https://gdpr-info.eu/recitals/no-30/
-beta-coverage: [MASWE-0110]
 status: new
 ---
 

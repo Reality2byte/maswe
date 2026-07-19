@@ -8,12 +8,11 @@ profiles: [L2]
 mappings:
   masvs-v2: [MASVS-AUTH-2]
   cwe: [288, 287]
-
+  maswe-beta: [MASWE-0045]
 refs:
 - https://developer.android.com/training/sign-in/biometric-auth#allow-fallback
 - https://developer.apple.com/documentation/localauthentication/logging_a_user_into_your_app_with_face_id_or_touch_id#3148834
 - https://developer.apple.com/documentation/localauthentication/lapolicy/deviceownerauthenticationwithbiometrics/
-beta-coverage: [MASWE-0045]
 draft:
   description: |
     For sensitive transactions, allowing authentication to silently fall back from biometrics to a

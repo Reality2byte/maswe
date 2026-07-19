@@ -11,10 +11,9 @@ mappings:
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/cross-app-scripting
   - https://developer.android.com/privacy-and-security/risks/unsafe-uri-loading
-
+  maswe-beta: [MASWE-0071, MASWE-0070, MASWE-0072]
 refs:
 - https://blog.oversecured.com/Evernote-Universal-XSS-theft-of-all-cookies-from-all-sites-and-more/
-beta-coverage: [MASWE-0071, MASWE-0070, MASWE-0072]
 draft:
   description: |
     WebView objects shouldn't load URLs, HTML, or JavaScript from untrusted sources, and the app

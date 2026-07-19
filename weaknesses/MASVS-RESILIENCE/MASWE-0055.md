@@ -9,8 +9,7 @@ mappings:
   masvs-v1: [MSTG-RESILIENCE-13]
   masvs-v2: [MASVS-RESILIENCE-3, MASVS-NETWORK-1]
   cwe: [319]
-
-beta-coverage: [MASWE-0096]
+  maswe-beta: [MASWE-0096]
 draft:
   description: |
     The app does not apply an additional layer of application-level (payload / end-to-end)

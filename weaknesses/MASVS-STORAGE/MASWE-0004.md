@@ -12,7 +12,7 @@ mappings:
   cwe: [200, 284, 312, 313, 732, 921, 922]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/sensitive-data-external-storage
-beta-coverage: [MASWE-0007, MASWE-0002]
+  maswe-beta: [MASWE-0007, MASWE-0002]
 status: new
 ---
 

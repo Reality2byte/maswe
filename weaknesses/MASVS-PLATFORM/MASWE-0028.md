@@ -9,8 +9,7 @@ mappings:
   masvs-v1: [MSTG-STORAGE-7]
   masvs-v2: [MASVS-PLATFORM-3, MASVS-STORAGE-2]
   cwe: [200, 359]
-
-beta-coverage: [MASWE-0053]
+  maswe-beta: [MASWE-0053]
 draft:
   description: |
     Sensitive data such as passwords, PINs, card numbers, or other PII may be exposed

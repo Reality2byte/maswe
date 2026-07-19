@@ -10,11 +10,10 @@ mappings:
   cwe: [200, 668]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/secure-clipboard-handling
-
+  maswe-beta: [MASWE-0059]
 refs:
 - https://developer.android.com/develop/ui/views/touch-and-input/copy-paste#PreventingSensitiveData
 - https://developer.apple.com/documentation/uikit/uipasteboard
-beta-coverage: [MASWE-0059]
 draft:
   description: |
     The system clipboard is a shared resource: any app (and, on some platforms, nearby devices

@@ -11,10 +11,9 @@ mappings:
   cwe: [1021]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/tapjacking
-
+  maswe-beta: [MASWE-0056]
 refs:
 - https://developer.android.com/topic/security/risks/tapjacking
-beta-coverage: [MASWE-0056]
 draft:
   description: |
     Overlay attacks occur when a malicious app (or an attacker-controlled window) draws content

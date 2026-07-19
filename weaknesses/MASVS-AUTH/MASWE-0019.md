@@ -8,11 +8,10 @@ profiles: [L2]
 mappings:
   masvs-v2: [MASVS-AUTH-3]
   cwe: [287, 778]
-
+  maswe-beta: [MASWE-0031]
 refs:
 - https://developer.android.com/training/articles/security-android-protected-confirmation
 - https://source.android.com/docs/security/features/protected-confirmation
-beta-coverage: [MASWE-0031]
 draft:
   description: |
     Critical actions (e.g. confirming a payment or a high-value transaction) should be

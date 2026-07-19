@@ -11,10 +11,9 @@ mappings:
   cwe: [749, 94]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/insecure-webview-native-bridges
-
+  maswe-beta: [MASWE-0068]
 refs:
 - https://support.google.com/faqs/answer/9095419
-beta-coverage: [MASWE-0068]
 draft:
   description: |
     WebViews can expose native/sensitive functionality to the web content they render, most

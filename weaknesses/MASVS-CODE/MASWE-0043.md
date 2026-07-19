@@ -8,7 +8,7 @@ profiles: [L2]
 mappings:
   masvs-v2: [MASVS-CODE-1]
   cwe: [693, 1357]
-
+  maswe-beta: [MASWE-0078]
 draft:
   description: |
     Targeting the latest platform version (via `targetSdkVersion` on Android or by building with a
@@ -23,7 +23,6 @@ draft:
   - Xcode / SDK version used to build on iOS
   - missing newer platform-enforced protections (scoped storage, permission auto-reset, TLS defaults)
   - backward-compatibility behaviors applied to apps targeting old versions
-beta-coverage: [MASWE-0078]
 status: placeholder
 
 ---

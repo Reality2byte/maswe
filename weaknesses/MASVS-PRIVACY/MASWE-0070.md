@@ -9,10 +9,10 @@ mappings:
   masvs-v1: []
   masvs-v2: [MASVS-PRIVACY-4]
   cwe: [359]
+  maswe-beta: [MASWE-0114]
 refs:
 - https://firebase.google.com/support/privacy/storing-privacy-settings
 - https://www.researchgate.net/publication/335863205_Demystifying_Hidden_Privacy_Settings_in_Mobile_Apps
-beta-coverage: [MASWE-0114]
 status: new
 ---
 

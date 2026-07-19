@@ -9,11 +9,11 @@ mappings:
   masvs-v1: []
   masvs-v2: [MASVS-PRIVACY-4]
   cwe: [200, 285, 358, 359]
+  maswe-beta: [MASWE-0115, MASWE-0060]
 refs:
 - https://developer.apple.com/design/human-interface-guidelines/privacy#Requesting-permission
 - https://developer.apple.com/documentation/uikit/protecting_the_user_s_privacy/requesting_access_to_protected_resources
 - https://developer.android.com/training/permissions/requesting#explain
-beta-coverage: [MASWE-0115, MASWE-0060]
 status: new
 ---
 

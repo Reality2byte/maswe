@@ -9,10 +9,9 @@ mappings:
   masvs-v1: [MSTG-STORAGE-9]
   masvs-v2: [MASVS-PLATFORM-3, MASVS-STORAGE-2]
   cwe: [200, 359]
-
+  maswe-beta: [MASWE-0055]
 refs:
 - https://developer.android.com/about/versions/14/features/screenshot-detection
-beta-coverage: [MASWE-0055]
 status: new
 
 ---

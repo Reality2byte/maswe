@@ -9,13 +9,12 @@ mappings:
   masvs-v1: [MSTG-AUTH-9]
   masvs-v2: [MASVS-AUTH-1, MASVS-AUTH-3]
   cwe: [287, 522]
-
+  maswe-beta: [MASWE-0028, MASWE-0032, MASWE-0035, MASWE-0039]
 refs:
 - https://developer.apple.com/documentation/security/password_autofill
 - https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession
 - https://developer.android.com/guide/topics/text/autofill
 - https://developer.apple.com/documentation/authenticationservices/public-private_key_authentication/supporting_passkeys
-beta-coverage: [MASWE-0028, MASWE-0032, MASWE-0035, MASWE-0039]
 draft:
   description: |
     Apps should support the platform's auto-fill mechanisms for authenticators so that

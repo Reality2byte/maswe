@@ -9,13 +9,12 @@ mappings:
   masvs-v1: [MSTG-CRYPTO-4, MSTG-CRYPTO-5]
   masvs-v2: [MASVS-CRYPTO-1, MASVS-CRYPTO-2]
   cwe: [323, 327]
-
+  maswe-beta: [MASWE-0025, MASWE-0012]
 refs:
 - https://developer.android.com/privacy-and-security/cryptography#deprecated-functionality
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf
 - https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-5.pdf
 - https://csrc.nist.gov/pubs/ir/8547/ipd
-beta-coverage: [MASWE-0025, MASWE-0012]
 draft:
   description: |
     Cryptographic signatures must be generated with algorithms and parameters of

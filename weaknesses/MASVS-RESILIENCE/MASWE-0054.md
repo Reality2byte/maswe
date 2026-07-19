@@ -11,8 +11,7 @@ mappings:
   cwe: [489, 497, 540, 912, 1295]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/test-debug
-
-beta-coverage: [MASWE-0094, MASWE-0093, MASWE-0095]
+  maswe-beta: [MASWE-0094, MASWE-0093, MASWE-0095]
 draft:
   description: |
     The app contains developer debug artifacts that should not be present in production builds.

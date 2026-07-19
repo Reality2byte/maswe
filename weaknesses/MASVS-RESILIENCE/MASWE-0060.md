@@ -9,8 +9,7 @@ mappings:
   masvs-v1: [MSTG-RESILIENCE-2]
   masvs-v2: [MASVS-RESILIENCE-4]
   cwe: [693]
-
-beta-coverage: [MASWE-0101]
+  maswe-beta: [MASWE-0101]
 draft:
   description: |
     A debugger attached to the running app lets an attacker inspect memory, set breakpoints, and alter

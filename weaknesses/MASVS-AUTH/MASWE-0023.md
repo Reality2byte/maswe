@@ -8,8 +8,7 @@ profiles: [L2]
 mappings:
   masvs-v2: [MASVS-AUTH-2, MASVS-CRYPTO-2]
   cwe: [287, 522]
-
-beta-coverage: [MASWE-0046]
+  maswe-beta: [MASWE-0046]
 draft:
   description: |
     Cryptographic keys gated by biometric authentication should be invalidated when the set of

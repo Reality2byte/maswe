@@ -14,7 +14,7 @@ mappings:
   - https://developer.android.com/privacy-and-security/risks/pending-intent
   - https://developer.android.com/privacy-and-security/risks/sender-of-pending-intents
   - https://developer.android.com/privacy-and-security/risks/sticky-broadcast
-
+  maswe-beta: [MASWE-0066]
 refs:
 - https://support.google.com/faqs/answer/9267555?hl=en
 - https://developer.android.com/privacy-and-security/security-tips#intents
@@ -22,7 +22,6 @@ refs:
 - https://developer.android.com/topic/security/risks/implicit-intent-hijacking
 - https://developer.android.com/topic/security/risks/pending-intent
 - https://developer.android.com/topic/security/risks/sticky-broadcast
-beta-coverage: [MASWE-0066]
 draft:
   description: |
     This weakness covers everything related to the insecure handling of Android Intents, e.g.

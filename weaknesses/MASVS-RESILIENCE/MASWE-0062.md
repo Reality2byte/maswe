@@ -9,11 +9,10 @@ mappings:
   masvs-v1: [MSTG-CODE-1]
   masvs-v2: [MASVS-RESILIENCE-2]
   cwe: [347, 693]
-
+  maswe-beta: [MASWE-0104, MASWE-0106]
 refs:
 - https://developer.apple.com/documentation/xcode/using-the-latest-code-signature-format
 - https://developer.apple.com/documentation/devicecheck/preparing-to-use-the-app-attest-service
-beta-coverage: [MASWE-0104, MASWE-0106]
 draft:
   description: |
     The app does not attest its own authenticity/integrity, i.e. it doesn't implement effective

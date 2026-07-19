@@ -8,11 +8,10 @@ profiles: [L2]
 mappings:
   masvs-v2: [MASVS-CRYPTO-2]
   cwe: [262, 324]
-
+  maswe-beta: [MASWE-0011]
 refs:
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf
 - https://developers.google.com/tink/managing-key-rotation
-beta-coverage: [MASWE-0011]
 draft:
   description: |
     Cryptographic keys have a limited cryptoperiod after which they should be retired and

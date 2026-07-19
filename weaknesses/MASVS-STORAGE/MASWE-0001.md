@@ -11,9 +11,9 @@ mappings:
   cwe: [209, 359, 497, 532]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/log-info-disclosure
+  maswe-beta: [MASWE-0001]
 refs:
   - https://stackoverflow.com/questions/45270547/is-read-logs-a-normal-or-dangerous-android-permission
-beta-coverage: [MASWE-0001]
 status: new
 ---
 

@@ -9,7 +9,7 @@ mappings:
   masvs-v1: [MSTG-ARCH-9]
   masvs-v2: [MASVS-CODE-2]
   cwe: [602, 693]
-
+  maswe-beta: [MASWE-0075]
 refs:
 - https://developer.android.com/guide/playcore/in-app-updates
 - https://developer.android.com/reference/com/google/android/play/core/appupdate/AppUpdateManager
@@ -28,7 +28,6 @@ draft:
   - update enforcement only client-side without a server-side check (CWE-602)
   - AppUpdateManager (Android In-App Updates) / App Store version check (iOS)
   - server-driven minimum-supported-version enforcement
-beta-coverage: [MASWE-0075]
 status: placeholder
 
 ---

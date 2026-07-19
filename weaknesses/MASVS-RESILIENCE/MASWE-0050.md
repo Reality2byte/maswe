@@ -11,12 +11,11 @@ mappings:
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/android-debuggable
   cwe: [489]
-
+  maswe-beta: [MASWE-0067, MASWE-0074]
 refs:
 - https://developer.android.com/guide/topics/manifest/application-element
 - https://developer.android.com/reference/android/webkit/WebView#setWebContentsDebuggingEnabled(boolean)
 - https://developer.apple.com/documentation/webkit/wkwebview/4111163-isinspectable
-beta-coverage: [MASWE-0067, MASWE-0074]
 status: new
 ---
 

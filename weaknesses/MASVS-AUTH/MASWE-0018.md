@@ -8,11 +8,10 @@ profiles: [L2]
 mappings:
   masvs-v2: [MASVS-AUTH-3]
   cwe: [285, 287, 613]
-
+  maswe-beta: [MASWE-0030]
 refs:
 - https://developers.google.com/identity/sign-in/android/disconnect
 - https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html
-beta-coverage: [MASWE-0030]
 draft:
   description: |
     When a session is terminated (explicit logout, timeout, or a contextual state change such

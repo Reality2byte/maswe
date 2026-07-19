@@ -11,6 +11,7 @@ mappings:
   cwe: [331, 337, 338, 522]
   android-risks:
     - https://developer.android.com/privacy-and-security/risks/weak-prng
+  maswe-beta: [MASWE-0009, MASWE-0017]
 refs:
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf
@@ -19,7 +20,6 @@ refs:
 - https://developer.android.com/reference/javax/crypto/KeyGenerator
 - https://developer.android.com/reference/kotlin/android/security/keystore/KeyProtection
 - https://developer.apple.com/documentation/cryptokit/aes/keywrap
-beta-coverage: [MASWE-0009, MASWE-0017]
 status: new
 ---
 

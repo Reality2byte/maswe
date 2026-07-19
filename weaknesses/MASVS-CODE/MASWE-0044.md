@@ -11,8 +11,7 @@ mappings:
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/dynamic-code-loading
   - https://developer.android.com/privacy-and-security/risks/create-package-context
-
-beta-coverage: [MASWE-0085]
+  maswe-beta: [MASWE-0085]
 draft:
   description: |
     Loading and executing code that is fetched or resolved at runtime (e.g. via `dlopen`,

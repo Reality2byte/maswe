@@ -12,6 +12,7 @@ mappings:
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/unsafe-trustmanager
   - https://developer.android.com/privacy-and-security/risks/unsafe-hostname
+  maswe-beta: [MASWE-0052]
 refs:
   - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-52r2.pdf#page=17
   - https://developer.android.com/privacy-and-security/security-ssl#tls-1.3-enabled-by-default
@@ -23,7 +24,6 @@ refs:
   - https://developer.apple.com/forums/thread/707320
   - https://support.apple.com/en-us/102390
   - https://developer.apple.com/documentation/foundation/performing-manual-server-trust-authentication
-beta-coverage: [MASWE-0052]
 status: new
 ---
 

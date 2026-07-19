@@ -9,13 +9,12 @@ mappings:
   masvs-v1: [MSTG-CRYPTO-4]
   masvs-v2: [MASVS-CRYPTO-1]
   cwe: [328]
-
+  maswe-beta: [MASWE-0021]
 refs:
 - https://developer.android.com/privacy-and-security/cryptography#deprecated-functionality
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf
 - https://en.wikipedia.org/wiki/Collision_attack
 - https://csrc.nist.gov/pubs/ir/8547/ipd
-beta-coverage: [MASWE-0021]
 draft:
   description: |
     Using broken or unsuitable hash functions in a security-sensitive context can

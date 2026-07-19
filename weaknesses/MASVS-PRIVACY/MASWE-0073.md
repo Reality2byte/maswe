@@ -9,12 +9,12 @@ mappings:
   masvs-v1: []
   masvs-v2: [MASVS-PRIVACY-3]
   cwe: [359]
+  maswe-beta: [MASWE-0108]
 refs:
 - https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_use_of_required_reason_api
 - https://developer.apple.com/documentation/bundleresources/privacy_manifest_files
 - https://developer.apple.com/app-store/app-privacy-details/#user-tracking
 - https://developer.apple.com/documentation/apptrackingtransparency/
-beta-coverage: [MASWE-0108]
 draft:
   description: |
     Platforms increasingly require apps to declare the domains they use for tracking so the

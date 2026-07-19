@@ -11,10 +11,9 @@ mappings:
   cwe: [22, 79, 200, 669]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/webview-unsafe-file-inclusion
-
+  maswe-beta: [MASWE-0069, MASWE-0073]
 refs:
 - https://blog.oversecured.com/Android-Exploring-vulnerabilities-in-WebResourceResponse/
-beta-coverage: [MASWE-0069, MASWE-0073]
 draft:
   description: |
     When a WebView is configured to access local resources (e.g. `setAllowFileAccessFromFileURLs`,

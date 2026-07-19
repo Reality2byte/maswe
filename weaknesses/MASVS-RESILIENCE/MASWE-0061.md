@@ -9,8 +9,7 @@ mappings:
   masvs-v1: [MSTG-RESILIENCE-4]
   masvs-v2: [MASVS-RESILIENCE-4]
   cwe: [693]
-
-beta-coverage: [MASWE-0102]
+  maswe-beta: [MASWE-0102]
 draft:
   description: |
     Dynamic instrumentation and hooking frameworks let an attacker observe and modify the app at

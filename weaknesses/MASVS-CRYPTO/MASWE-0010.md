@@ -8,7 +8,7 @@ profiles: [L2]
 mappings:
   masvs-v2: [MASVS-CRYPTO-2, MASVS-AUTH-2, MASVS-AUTH-3]
   cwe: [284]
-
+  maswe-beta: [MASWE-0018]
 refs:
 - https://developer.android.com/reference/android/security/keystore/KeyGenParameterSpec.Builder#setUnlockedDeviceRequired(boolean)
 - https://developer.apple.com/documentation/security/ksecattraccessiblewhenunlockedthisdeviceonly
@@ -16,7 +16,6 @@ refs:
 - https://developer.apple.com/documentation/security/restricting-keychain-item-accessibility
 - https://source.android.com/docs/security/features/keystore/strongbox
 - https://developer.apple.com/documentation/security/ksecattrtokenidsecureenclave
-beta-coverage: [MASWE-0018]
 draft:
   description: Ensuring that cryptographic keys are accessible only under strict conditions,
     such as when the device is unlocked by an authenticated user, within secure application

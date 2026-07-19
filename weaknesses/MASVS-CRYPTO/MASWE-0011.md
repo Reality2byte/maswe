@@ -11,7 +11,7 @@ mappings:
   cwe: [208, 323, 325, 326, 327, 329, 780]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/broken-cryptographic-algorithm
-
+  maswe-beta: [MASWE-0020, MASWE-0012, MASWE-0022, MASWE-0023]
 refs:
 - https://support.google.com/faqs/answer/10046138?hl=en
 - https://support.google.com/faqs/answer/9450925?hl=en
@@ -20,7 +20,6 @@ refs:
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Br2.pdf
 - https://www.usenix.org/legacy/event/woot10/tech/full_papers/Rizzo.pdf
-beta-coverage: [MASWE-0020, MASWE-0012, MASWE-0022, MASWE-0023]
 status: new
 
 ---

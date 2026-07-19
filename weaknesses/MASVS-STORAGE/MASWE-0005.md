@@ -11,12 +11,12 @@ mappings:
   cwe: [312, 318, 321, 322]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/hardcoded-cryptographic-secrets
+  maswe-beta: [MASWE-0013, MASWE-0014, MASWE-0016]
 refs:
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-175Br1.pdf
 - https://developer.android.com/privacy-and-security/keystore#ImportingEncryptedKeys
 - https://developer.apple.com/documentation/security/certificate_key_and_trust_services/keys/storing_keys_as_data
-beta-coverage: [MASWE-0013, MASWE-0014, MASWE-0016]
 status: new
 ---
 

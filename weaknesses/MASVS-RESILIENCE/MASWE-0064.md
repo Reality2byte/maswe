@@ -9,8 +9,7 @@ mappings:
   masvs-v1: [MSTG-RESILIENCE-6]
   masvs-v2: [MASVS-RESILIENCE-2]
   cwe: [693]
-
-beta-coverage: [MASWE-0107]
+  maswe-beta: [MASWE-0107]
 draft:
   description: |
     An app's executable code can be modified at runtime through in-memory patching, code injection, or

@@ -12,11 +12,11 @@ mappings:
   cwe: [200, 284, 312, 313, 732, 922]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/file-providers
+  maswe-beta: [MASWE-0006, MASWE-0002, MASWE-0118]
 refs:
   - https://developer.apple.com/documentation/uikit/protecting_the_user_s_privacy/encrypting_your_app_s_files
   - https://developer.android.com/about/versions/nougat/android-7.0-changes#permfilesys
   - https://developer.android.com/privacy-and-security/security-tips#internal-storage
-beta-coverage: [MASWE-0006, MASWE-0002, MASWE-0118]
 status: new
 ---
 

@@ -9,8 +9,7 @@ mappings:
   masvs-v1: [MSTG-PLATFORM-11]
   masvs-v2: [MASVS-PLATFORM-1, MASVS-STORAGE-2]
   cwe: [200]
-
-beta-coverage: [MASWE-0061]
+  maswe-beta: [MASWE-0061]
 draft:
   description: |
     On iOS, app extensions (e.g. custom keyboards, share and action extensions) run third-party code

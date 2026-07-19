@@ -9,9 +9,9 @@ mappings:
   masvs-v1: []
   masvs-v2: [MASVS-PRIVACY-4]
   cwe: [359]
+  maswe-beta: [MASWE-0113]
 refs:
 - https://developer.apple.com/app-store/app-privacy-details/#privacy-links
-beta-coverage: [MASWE-0113]
 status: new
 ---
 

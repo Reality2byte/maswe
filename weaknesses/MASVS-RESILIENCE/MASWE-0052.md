@@ -9,8 +9,7 @@ mappings:
   masvs-v1: [MSTG-RESILIENCE-11]
   masvs-v2: [MASVS-RESILIENCE-3]
   cwe: [693]
-
-beta-coverage: [MASWE-0090]
+  maswe-beta: [MASWE-0090]
 draft:
   description: |
     Beyond code, an app's resources and assets (e.g. strings, layouts, images, configuration, and

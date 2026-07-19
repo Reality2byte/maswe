@@ -11,10 +11,9 @@ mappings:
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/strandhogg
   - https://developer.android.com/privacy-and-security/risks/unsafe-download-manager
-
+  maswe-beta: [MASWE-0077, MASWE-0057]
 refs:
 - https://developer.android.com/topic/security/risks/strandhogg
-beta-coverage: [MASWE-0077, MASWE-0057]
 draft:
   description: |
     e.g. via minSdkVersion on Android and MinimumOSVersion on iOS. Ensuring a recent minimum

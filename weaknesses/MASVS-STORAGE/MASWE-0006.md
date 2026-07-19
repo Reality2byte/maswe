@@ -11,11 +11,11 @@ mappings:
   cwe: [312, 540, 798]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/insecure-api-usage
+  maswe-beta: [MASWE-0005, MASWE-0013, MASWE-0036]
 refs:
 - https://cloud.google.com/docs/authentication/api-keys#securing
 - https://cloud.google.com/docs/authentication/api-keys#api_key_restrictions
 - https://github.com/gitleaks/gitleaks
-beta-coverage: [MASWE-0005, MASWE-0013, MASWE-0036]
 status: new
 ---
 

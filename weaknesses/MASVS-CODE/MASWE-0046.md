@@ -9,12 +9,11 @@ mappings:
   masvs-v1: [MSTG-CRYPTO-4]
   masvs-v2: [MASVS-CODE-3, MASVS-CRYPTO-2]
   cwe: [327, 477, 522]
-
+  maswe-beta: [MASWE-0015]
 refs:
 - https://developer.android.com/about/versions/12/behavior-changes-all#bouncy-castle
 - https://developer.android.com/reference/java/security/KeyStore
 - https://labs.withsecure.com/publications/how-secure-is-your-android-keystore-authentication
-beta-coverage: [MASWE-0015]
 draft:
   description: |
     The app relies on deprecated APIs or functionality that are no longer maintained, may lack

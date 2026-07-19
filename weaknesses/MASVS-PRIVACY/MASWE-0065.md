@@ -9,6 +9,7 @@ mappings:
   masvs-v1: []
   masvs-v2: [MASVS-PRIVACY-2]
   cwe: [359]
+  maswe-beta: [MASWE-0109]
 refs:
 - https://cloud.google.com/sensitive-data-protection/docs/classification-redaction
 - https://gdpr-info.eu/recitals/no-26/
@@ -16,7 +17,6 @@ refs:
 - https://gdpr-info.eu/art-4-gdpr/
 - https://ec.europa.eu/justice/article-29/documentation/opinion-recommendation/files/2014/wp216_en.pdf
 - https://www.statista.com/topics/9460/app-tracking-and-mobile-privacy/
-beta-coverage: [MASWE-0109]
 status: new
 ---
 

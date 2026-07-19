@@ -8,8 +8,7 @@ profiles: [L2]
 mappings:
   masvs-v2: [MASVS-PLATFORM-3, MASVS-STORAGE-2]
   cwe: [200, 359]
-
-beta-coverage: [MASWE-0054]
+  maswe-beta: [MASWE-0054]
 draft:
   description: |
     Apps may place sensitive data (e.g. OTPs, message contents, account details) into

@@ -11,12 +11,11 @@ mappings:
   cwe: [212, 313]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/backup-best-practices
-
+  maswe-beta: [MASWE-0004, MASWE-0003]
 refs:
 - https://developer.android.com/guide/topics/data/autobackup#include-exclude-android-11
 - https://developer.android.com/guide/topics/data/autobackup#include-exclude-android-12
 - https://developer.android.com/guide/topics/data/autobackup#define-device-conditions
-beta-coverage: [MASWE-0004, MASWE-0003]
 status: new
 
 ---

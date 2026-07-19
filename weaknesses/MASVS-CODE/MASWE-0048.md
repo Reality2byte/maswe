@@ -17,13 +17,12 @@ mappings:
   - https://developer.android.com/privacy-and-security/risks/xml-external-entities-injection
   - https://developer.android.com/privacy-and-security/risks/untrustworthy-contentprovider-provided-filename
   - https://developer.android.com/privacy-and-security/risks/use-of-native-code
-
+  maswe-beta: [MASWE-0079, MASWE-0080, MASWE-0081, MASWE-0082, MASWE-0083, MASWE-0084, MASWE-0086, MASWE-0087, MASWE-0088]
 refs:
 - https://developer.android.com/topic/security/risks/path-traversal
 - https://developer.android.com/topic/security/risks/sql-injection
 - https://developer.android.com/privacy-and-security/risks/unsafe-deserialization
 - https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html
-beta-coverage: [MASWE-0079, MASWE-0080, MASWE-0081, MASWE-0082, MASWE-0083, MASWE-0084, MASWE-0086, MASWE-0087, MASWE-0088]
 draft:
   description: |
     Any data that originates outside the app's trust boundary must be treated as untrusted and

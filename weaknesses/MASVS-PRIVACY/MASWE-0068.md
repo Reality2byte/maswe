@@ -9,6 +9,7 @@ mappings:
   masvs-v1: [MSTG-STORAGE-12, MSTG-NETWORK-1]
   masvs-v2: [MASVS-PRIVACY-3, MASVS-PRIVACY-1]
   cwe: [359]
+  maswe-beta: [MASWE-0112, MASWE-0108]
 refs:
 - https://support.apple.com/en-us/102188
 - https://support.apple.com/kb/HT211970
@@ -19,7 +20,6 @@ refs:
 - https://support.google.com/googleplay/answer/11416267
 - https://www.youtube.com/watch?v=J7TM0Yy0aTQ
 - https://www.youtube.com/watch?v=4rfF3y4xchU
-beta-coverage: [MASWE-0112, MASWE-0108]
 status: new
 ---
 

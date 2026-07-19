@@ -11,7 +11,7 @@ mappings:
   cwe: [939, 917]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/unsafe-use-of-deeplinks
-
+  maswe-beta: [MASWE-0058]
 draft:
   description: |
     Deep links (Android App Links and custom URL schemes, iOS Universal Links and custom schemes) let
@@ -27,7 +27,6 @@ draft:
   - validating and sanitizing the deep-link URL and its parameters
   - injection via unsanitized deep-link parameters (CWE-917 / CWE-939)
   - platform/OS-version differences in deep-link security
-beta-coverage: [MASWE-0058]
 refs:
 - https://developer.apple.com/documentation/technotes/tn3155-debugging-universal-links
 status: placeholder

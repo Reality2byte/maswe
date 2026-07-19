@@ -8,8 +8,7 @@ profiles: [R]
 mappings:
   masvs-v2: [MASVS-RESILIENCE-1]
   cwe: [693]
-
-beta-coverage: [MASWE-0098]
+  maswe-beta: [MASWE-0098]
 draft:
   description: |
     App virtualization/cloning frameworks (and "dual-app" containers) run an app inside another app's

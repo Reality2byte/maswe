@@ -9,14 +9,13 @@ mappings:
   masvs-v1: [MSTG-AUTH-10]
   masvs-v2: [MASVS-AUTH-3, MASVS-PLATFORM-3]
   cwe: [306]
-
+  maswe-beta: [MASWE-0029]
 refs:
 - https://developer.apple.com/documentation/localauthentication
 - https://auth0.com/blog/what-is-step-up-authentication-when-to-use-it/
 - https://tdcolvin.medium.com/is-firebase-auth-secure-dace0563d41b
 - https://github.com/WICG/trust-token-api
 - https://blog.cloudflare.com/eliminating-captchas-on-iphones-and-macs-using-new-standard/
-beta-coverage: [MASWE-0029]
 draft:
   description: |
     Step-up authentication requires the user to re-authenticate or provide an additional

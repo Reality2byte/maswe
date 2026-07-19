@@ -9,7 +9,7 @@ mappings:
   masvs-v1: [MSTG-CRYPTO-4, MSTG-CRYPTO-5]
   masvs-v2: [MASVS-CRYPTO-1, MASVS-CRYPTO-2]
   cwe: [323, 327, 807, 915]
-
+  maswe-beta: [MASWE-0024, MASWE-0012]
 refs:
 - https://developer.android.com/privacy-and-security/cryptography#deprecated-functionality
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf
@@ -17,7 +17,6 @@ refs:
 - https://datatracker.ietf.org/doc/html/rfc6151
 - https://web.archive.org/web/20170810051504/http://www.tcs.hut.fi/old/papers/aura/aura-csfws97.pdf
 - https://en.wikipedia.org/wiki/Replay_attack
-beta-coverage: [MASWE-0024, MASWE-0012]
 draft:
   description: |
     A Message Authentication Code (MAC) provides integrity and authenticity for a message using a

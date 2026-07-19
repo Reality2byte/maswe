@@ -9,6 +9,7 @@ mappings:
   masvs-v1: []
   masvs-v2: [MASVS-PRIVACY-1]
   cwe: [250]
+  maswe-beta: [MASWE-0117]
 refs:
 - https://developer.apple.com/design/human-interface-guidelines/privacy#Requesting-permission
 - https://developer.apple.com/documentation/uikit/protecting_the_user_s_privacy/requesting_access_to_protected_resources
@@ -20,7 +21,6 @@ refs:
 - https://arxiv.org/pdf/2203.10583
 - https://ieeexplore.ieee.org/document/9001128
 - https://www.enisa.europa.eu/sites/default/files/publications/WP2017%20O-2-2-4%20GDPR%20Mobile.pdf
-beta-coverage: [MASWE-0117]
 status: new
 ---
 

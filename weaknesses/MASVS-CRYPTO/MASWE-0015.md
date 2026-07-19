@@ -9,11 +9,10 @@ mappings:
   masvs-v1: [MSTG-CRYPTO-4]
   masvs-v2: [MASVS-CRYPTO-1]
   cwe: [347]
-
+  maswe-beta: [MASWE-0026]
 refs:
 - https://cwe.mitre.org/data/definitions/347.html
 - https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-5.pdf
-beta-coverage: [MASWE-0026]
 draft:
   description: |
     Cryptographic signature verification must be implemented correctly to guarantee the

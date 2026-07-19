@@ -14,6 +14,7 @@ mappings:
   - https://developer.android.com/privacy-and-security/risks/insecure-library
   - https://developer.android.com/privacy-and-security/risks/unsafe-download-manager
   nist-ssdf: [PS.3.2]
+  maswe-beta: [MASWE-0076]
 status: new
 refs:
 - https://developer.android.com/privacy-and-security/risks/insecure-library
@@ -27,7 +28,6 @@ refs:
 - https://developer.apple.com/support/third-party-SDK-requirements/
 - https://www.youtube.com/watch?v=3klmiHX0uVQ
 - https://developer.apple.com/videos/play/wwdc2023/10060/
-beta-coverage: [MASWE-0076]
 ---
 
 ## Overview
