@@ -32,8 +32,12 @@ draft:
       (`PHPickerViewController` on iOS, the Android Photo Picker), which returns only the items
       the user selects without any permission grant.
 
-    Note: this weakness is intended to also incorporate the original content on non-privacy-preserving
-    functionality; confirm the intended source material before finalizing.
+    Note: this can be seen as the privacy-focused counterpart to @MASWE-0047 (Using Non-Standard APIs for
+    Security-Critical Functionality), which applies the same "leverage platform-provided features
+    rather than custom or non-standard alternatives" principle from a security angle. The overlap is
+    intentional: some platform features (e.g. `ASWebAuthenticationSession` / Custom Tabs) improve
+    both privacy and security. Here the focus is specifically on choosing privacy-preserving
+    functionality.
   topics:
   - use of ASWebAuthenticationSession / Custom Tabs instead of embedded WebViews or SFAuthenticationSession
   - RFC 8252 best practices for OAuth in native apps

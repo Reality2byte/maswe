@@ -8,9 +8,10 @@ profiles: [L2]
 mappings:
   masvs-v2: [MASVS-CODE-4]
   cwe: [494]
+  android-risks:
+  - https://developer.android.com/privacy-and-security/risks/dynamic-code-loading
+  - https://developer.android.com/privacy-and-security/risks/create-package-context
 
-refs:
-- https://developer.android.com/privacy-and-security/risks/runtime-code-loading
 beta-coverage: [MASWE-0085]
 draft:
   description: |

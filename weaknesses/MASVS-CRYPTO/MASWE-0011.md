@@ -9,6 +9,8 @@ mappings:
   masvs-v1: [MSTG-CRYPTO-4, MSTG-CRYPTO-5]
   masvs-v2: [MASVS-CRYPTO-1, MASVS-CRYPTO-2]
   cwe: [208, 323, 325, 326, 327, 329, 780]
+  android-risks:
+  - https://developer.android.com/privacy-and-security/risks/broken-cryptographic-algorithm
 
 refs:
 - https://support.google.com/faqs/answer/10046138?hl=en

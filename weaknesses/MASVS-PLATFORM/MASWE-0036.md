@@ -9,6 +9,8 @@ mappings:
   masvs-v1: [MSTG-PLATFORM-7]
   masvs-v2: [MASVS-PLATFORM-2, MASVS-STORAGE-2]
   cwe: [749, 94]
+  android-risks:
+  - https://developer.android.com/privacy-and-security/risks/insecure-webview-native-bridges
 
 refs:
 - https://support.google.com/faqs/answer/9095419

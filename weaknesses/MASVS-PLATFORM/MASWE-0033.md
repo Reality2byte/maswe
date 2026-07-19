@@ -8,6 +8,8 @@ profiles: [L1, L2]
 mappings:
   masvs-v2: [MASVS-PLATFORM-1, MASVS-STORAGE-2]
   cwe: [200, 668]
+  android-risks:
+  - https://developer.android.com/privacy-and-security/risks/secure-clipboard-handling
 
 refs:
 - https://developer.android.com/develop/ui/views/touch-and-input/copy-paste#PreventingSensitiveData

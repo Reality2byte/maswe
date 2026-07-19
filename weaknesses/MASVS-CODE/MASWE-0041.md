@@ -12,6 +12,7 @@ mappings:
   android-core-app-quality: [SC-N3, PS-T4]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/insecure-library
+  - https://developer.android.com/privacy-and-security/risks/unsafe-download-manager
   nist-ssdf: [PS.3.2]
 status: new
 refs:

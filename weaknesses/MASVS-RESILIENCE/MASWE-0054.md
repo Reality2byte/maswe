@@ -9,6 +9,8 @@ mappings:
   masvs-v1: [MSTG-CODE-3, MSTG-CODE-4]
   masvs-v2: [MASVS-RESILIENCE-3]
   cwe: [489, 497, 540, 912, 1295]
+  android-risks:
+  - https://developer.android.com/privacy-and-security/risks/test-debug
 
 beta-coverage: [MASWE-0094, MASWE-0093, MASWE-0095]
 draft:

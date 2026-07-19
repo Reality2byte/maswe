@@ -9,7 +9,7 @@ mappings:
   masvs-v1: [MSTG-CRYPTO-2]
   masvs-v2: [MASVS-CRYPTO-2]
   cwe: [331, 337, 338, 522]
-  android-risks: 
+  android-risks:
     - https://developer.android.com/privacy-and-security/risks/weak-prng
 refs:
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf

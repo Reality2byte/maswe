@@ -9,6 +9,12 @@ mappings:
   masvs-v1: [MSTG-PLATFORM-4, MSTG-AUTH-3, MSTG-NETWORK-2, MSTG-STORAGE-6]
   masvs-v2: [MASVS-AUTH-1, MASVS-PLATFORM-1, MASVS-STORAGE-2]
   cwe: [200, 276, 284, 285, 287, 732, 749, 923, 925, 926]
+  android-risks:
+  - https://developer.android.com/privacy-and-security/risks/content-resolver
+  - https://developer.android.com/privacy-and-security/risks/insecure-broadcast-receiver
+  - https://developer.android.com/privacy-and-security/risks/access-control-to-exported-components
+  - https://developer.android.com/privacy-and-security/risks/android-exported
+  - https://developer.android.com/privacy-and-security/risks/custom-permissions
 
 refs:
 - https://developer.android.com/privacy-and-security/security-tips#IPNetworking

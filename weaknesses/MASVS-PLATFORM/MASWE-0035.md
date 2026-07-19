@@ -8,6 +8,12 @@ profiles: [L1, L2]
 mappings:
   masvs-v2: [MASVS-PLATFORM-1, MASVS-STORAGE-2]
   cwe: [927, 940]
+  android-risks:
+  - https://developer.android.com/privacy-and-security/risks/implicit-intent-hijacking
+  - https://developer.android.com/privacy-and-security/risks/intent-redirection
+  - https://developer.android.com/privacy-and-security/risks/pending-intent
+  - https://developer.android.com/privacy-and-security/risks/sender-of-pending-intents
+  - https://developer.android.com/privacy-and-security/risks/sticky-broadcast
 
 refs:
 - https://support.google.com/faqs/answer/9267555?hl=en

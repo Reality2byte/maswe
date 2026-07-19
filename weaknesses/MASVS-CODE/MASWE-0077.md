@@ -12,6 +12,7 @@ mappings:
 refs:
 - https://reproducible-builds.org/
 - https://slsa.dev/
+- https://github.com/signalapp/Signal-Android/blob/main/reproducible-builds/README.md
 draft:
   description: |
     A build is reproducible when compiling the same source with the same build environment

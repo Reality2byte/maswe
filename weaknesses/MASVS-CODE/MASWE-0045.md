@@ -8,6 +8,8 @@ profiles: [L2]
 mappings:
   masvs-v2: [MASVS-CODE-3, MASVS-CODE-4]
   cwe: [693]
+  android-risks:
+  - https://developer.android.com/privacy-and-security/risks/use-of-native-code
 refs:
 - https://cs.android.com/android/platform/superproject/main/+/main:bionic/linker/linker_main.cpp;l=397?q=linker_main&ss=android%2Fplatform%2Fsuperproject%2Fmain
 - https://partners.trellix.com/enterprise/en-us/assets/white-papers/wp-secure-coding-android-applications.pdf

@@ -1,5 +1,5 @@
 ---
-title: Running on a recent Platform Version Not Ensured
+title: Running on a Recent Platform Version Not Ensured
 id: MASWE-0042
 alias: run-on-recent-platform-version
 requirement: "The app terminates if an unsupported OS version is detected."
@@ -8,6 +8,9 @@ profiles: [L2]
 mappings:
   masvs-v2: [MASVS-CODE-1]
   cwe: [451, 693, 1104, 1357]
+  android-risks:
+  - https://developer.android.com/privacy-and-security/risks/strandhogg
+  - https://developer.android.com/privacy-and-security/risks/unsafe-download-manager
 
 refs:
 - https://developer.android.com/topic/security/risks/strandhogg

@@ -9,6 +9,14 @@ mappings:
   masvs-v1: [MSTG-PLATFORM-2]
   masvs-v2: [MASVS-CODE-4]
   cwe: [20, 22, 73, 89, 116, 345, 348, 349, 502, 611, 924]
+  android-risks:
+  - https://developer.android.com/privacy-and-security/risks/path-traversal
+  - https://developer.android.com/privacy-and-security/risks/zip-path-traversal
+  - https://developer.android.com/privacy-and-security/risks/sql-injection
+  - https://developer.android.com/privacy-and-security/risks/unsafe-deserialization
+  - https://developer.android.com/privacy-and-security/risks/xml-external-entities-injection
+  - https://developer.android.com/privacy-and-security/risks/untrustworthy-contentprovider-provided-filename
+  - https://developer.android.com/privacy-and-security/risks/use-of-native-code
 
 refs:
 - https://developer.android.com/topic/security/risks/path-traversal
@@ -44,6 +52,7 @@ draft:
   - SQL injection / parameterized queries
   - insecure parsing and escaping (XXE, output encoding)
   - insecure object deserialization (Serializable, Parcelable, NSCoding, XML/JSON)
+  - use of the Uri class on Android which applies little to no validation on untrusted input (see android docs for Uri)
 status: placeholder
 
 ---

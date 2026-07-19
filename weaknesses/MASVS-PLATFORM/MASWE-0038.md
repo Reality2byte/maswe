@@ -8,6 +8,9 @@ profiles: [L1, L2]
 mappings:
   masvs-v2: [MASVS-PLATFORM-2, MASVS-CODE-4]
   cwe: [79, 601, 829]
+  android-risks:
+  - https://developer.android.com/privacy-and-security/risks/cross-app-scripting
+  - https://developer.android.com/privacy-and-security/risks/unsafe-uri-loading
 
 refs:
 - https://blog.oversecured.com/Evernote-Universal-XSS-theft-of-all-cookies-from-all-sites-and-more/
