@@ -17,27 +17,36 @@ refs:
 - https://developer.android.com/guide/topics/data/autobackup#include-exclude-android-12
 - https://developer.android.com/guide/topics/data/autobackup#define-device-conditions
 status: new
-
 ---
 
 ## Overview
 
-iOS and Android automatically back up app data to cloud services, and users can also create local backups on physical machines, or backups are automatically created during data transfers when switching between phones. When developers fail to properly configure how their app handles backups and neglect to exclude sensitive files, the backups may contain sensitive user and app data. Under certain conditions, the backups may not be adequately secured by the cloud provider, or a malicious actor could tamper with the backed up files, potentially altering the app's behavior or extracting confidential information.
+This weakness occurs when an app fails to exclude sensitive data from device backups, so that user and app secrets end up in cloud or local backup archives.
 
-## Impact
-
-- **Modification of App's Behavior**: An attacker can tamper with data inside the backup, altering the app's logic. For example, they could modify a database that tracks the state of premium features and then restore the modified backup to the device. Another common scenario is backing up the device before redeeming a one-time coupon and restoring the backup afterward, which would allow the malicious actor to reuse the same coupon multiple times.
-- **Loss of Confidentiality**: Sensitive data stored in backups (e.g., personal information, photos, documents or audio files) may be extracted by attackers, leading to privacy breaches.
-- **Leakage of Authentication Material**: An attacker can extract passwords, cryptographic keys, and session tokens to facilitate additional attacks, such as identity theft, account takeover, or unauthorized access.
+iOS and Android automatically back up app data to cloud services, users can create local backups on physical machines, and backups are also created during data transfers when switching between phones. When developers do not properly configure how their app handles backups and neglect to exclude sensitive files, the backups may contain sensitive user and app data. Under certain conditions, the backups may not be adequately secured by the cloud provider, or a malicious actor could tamper with the backed-up files.
 
 ## Modes of Introduction
 
-- **Automatic System Backups**: By default, iOS and Android back up app data to the cloud once the user consents during the initial setup.
-- **Local Backups**: Users can back up their devices to local systems (e.g., laptops). If local backups are stored unencrypted or not securely handled, attackers could tamper with this data.
-- **Device-To-Device Transfer**: Transferring data between devices (e.g., via iCloud or Google's device-to-device migration tools) enables an attacker to perform similar attacks.
+- **Automatic System Backups**: Relying on the platform's default cloud backup behavior, which includes app data once the user consents during the initial device setup, without defining backup exclusion rules for sensitive files.
+- **Local Backups**: Allowing sensitive data to be included in backups that users create on local systems (e.g., laptops), where it may be stored unencrypted.
+- **Device-To-Device Transfer**: Allowing sensitive data to be included in device-to-device migrations (e.g., via iCloud or Google's migration tools) without restricting transfer conditions.
+- **Sensitive Data Unencrypted in Backups**: Storing sensitive data in backed-up locations without additional encryption, so it is readable by anyone who obtains the backup.
+
+## Impact
+
+Attackers can extract or tamper with sensitive data included in backups by:
+
+- Extracting local or cloud backups of the device.
+- Tampering with backup contents and restoring the modified backup to a device.
+
+This can lead to:
+
+- **Compromise of Sensitive Data**: Attackers can extract personal information, photos, documents, or audio files from backups, resulting in unauthorized disclosure of user data.
+- **Authentication or Authorization Bypass**: Attackers can extract passwords, cryptographic keys, and session tokens from backups, resulting in identity theft, account takeover, or unauthorized access to backend services.
+- **Bypass of Protection Mechanisms**: Attackers can modify backed-up app state, e.g. a database tracking premium features, or restore a pre-redemption backup to reuse one-time coupons, resulting in circumvention of business logic and revenue loss for the app owner.
 
 ## Mitigations
 
-- Exclude sensitive information, files, and key material from backups.
-- If you have to include sensitive data in backups, ensure it is encrypted with an algorithm strong enough to protect the data for its entire required lifetime, even if the backup is later compromised.
-- On Android, constrain when backups are allowed by declaring the appropriate [device conditions](https://developer.android.com/guide/topics/data/autobackup#define-device-conditions), such as requiring client-side encryption (`requireFlags="clientSideEncryption"`) and disabling device-to-device transfer (`deviceToDeviceTransfer`) for sensitive datasets, so that unencrypted copies are never produced.
+- **Exclude Sensitive Data from Backups**: Declare backup rules that exclude sensitive information, files, and key material from all backup mechanisms.
+- **Encrypt Data That Must Be Backed Up**: If sensitive data has to be included in backups, encrypt it with an algorithm strong enough to protect the data for its entire required lifetime, even if the backup is later compromised.
+- **Constrain Backup Conditions**: On Android, declare the appropriate [device conditions](https://developer.android.com/guide/topics/data/autobackup#define-device-conditions), such as requiring client-side encryption (`requireFlags="clientSideEncryption"`) and disabling device-to-device transfer (`deviceToDeviceTransfer`) for sensitive datasets, so that unencrypted copies are never produced.

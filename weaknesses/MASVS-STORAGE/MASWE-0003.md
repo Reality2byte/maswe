@@ -14,39 +14,48 @@ mappings:
   - https://developer.android.com/privacy-and-security/risks/file-providers
   maswe-beta: [MASWE-0006, MASWE-0002, MASWE-0118]
 refs:
-  - https://developer.apple.com/documentation/uikit/protecting_the_user_s_privacy/encrypting_your_app_s_files
-  - https://developer.android.com/about/versions/nougat/android-7.0-changes#permfilesys
-  - https://developer.android.com/privacy-and-security/security-tips#internal-storage
+- https://developer.apple.com/documentation/uikit/protecting_the_user_s_privacy/encrypting_your_app_s_files
+- https://developer.android.com/about/versions/nougat/android-7.0-changes#permfilesys
+- https://developer.android.com/privacy-and-security/security-tips#internal-storage
 status: new
 ---
 
 ## Overview
 
-Mobile apps may need to store sensitive data locally within private storage locations such as the application sandbox and this data is at risk of exposure via, for example, incorrect file permissions, an app vulnerability, device vulnerability or data backup mechanisms.
+This weakness occurs when an app stores sensitive data unencrypted in private storage locations, such as the application sandbox, where it can be exposed via incorrect file permissions, an app or device vulnerability, or data backup mechanisms.
 
-[Sensitive data](../../Document/0x04b-Mobile-App-Security-Testing.md#identifying-sensitive-data "Sensitive Data") may include personally identifiable information (PII), passwords, cryptographic keys or session tokens.
-
-## Impact
-
-- **Loss of Confidentiality**: Under the right conditions an attacker could extract sensitive data stored internally within the application sandbox leading to loss of confidentiality and enable further attacks such as identity theft or account takeover.
+Sensitive data may include personally identifiable information (PII), passwords, cryptographic keys, or session tokens.
 
 ## Modes of Introduction
 
-- **Data Stored Unencrypted**: Sensitive data is written to the app's private data directory (sandbox) unencrypted.
-- **Hardcoded Encryption Key**: Sensitive data is encrypted but the key is hardcoded inside the application.
-- **Encryption Key Stored on Filesystem**: Sensitive data is encrypted but the key is stored alongside it or in another easily accessible location.
-- **Encryption Used is Insufficient**: Sensitive data is encrypted but the encryption is not considered to be strong.
-- **Insufficient Access Restrictions**: Even within private storage, sensitive files may be exposed to other apps through incorrect file permissions (e.g. the deprecated `MODE_WORLD_READABLE`/`MODE_WORLD_WRITEABLE` modes on Android), a misconfigured `FileProvider`, or Keychain items protected with weak accessibility attributes on iOS (e.g. `kSecAttrAccessibleAlways`).
-- **Data Not Removed After Use**: Sensitive data written to private storage (including caches, temporary files, WebView state, and network caches) is retained longer than needed, widening the window of exposure.
+- **Data Stored Unencrypted**: Writing sensitive data to the app's private data directory (sandbox) unencrypted.
+- **Hardcoded Encryption Key**: Encrypting sensitive data with a key that is hardcoded inside the application.
+- **Encryption Key Stored on Filesystem**: Encrypting sensitive data but storing the key alongside it or in another easily accessible location.
+- **Insufficient Encryption**: Encrypting sensitive data with an algorithm or configuration that is not considered strong.
+- **Insufficient Access Restrictions**: Exposing private files to other apps through incorrect file permissions (e.g. the deprecated `MODE_WORLD_READABLE`/`MODE_WORLD_WRITEABLE` modes on Android), a misconfigured `FileProvider`, or Keychain items protected with weak accessibility attributes on iOS (e.g. `kSecAttrAccessibleAlways`).
+- **Data Not Removed After Use**: Retaining sensitive data in private storage (including caches, temporary files, WebView state, and network caches) longer than needed.
+
+## Impact
+
+Attackers can access sensitive data stored unencrypted in private storage by:
+
+- Accessing the device storage on a compromised device.
+- Accessing files exposed through incorrect file permissions or misconfigured content providers.
+- Extracting local or cloud backups of the device.
+
+This can lead to:
+
+- **Compromise of Sensitive Data**: Attackers can extract PII and other user data from the application sandbox, resulting in unauthorized disclosure and enabling further attacks such as identity theft.
+- **Authentication or Authorization Bypass**: Attackers can extract passwords, cryptographic keys, or session tokens, resulting in account takeover or unauthorized access to protected functionality.
 
 ## Mitigations
 
-- Avoid storing sensitive data locally if not required for application functionality to reduce the likelihood and impact of this weakness. For example keeping PII server-side, rendering it at time of use, and removing any cached data on logout.
-- Restrict access to private files: never use `MODE_WORLD_READABLE`/`MODE_WORLD_WRITEABLE`, share data through a properly configured `ContentProvider`/`FileProvider` with per-grant permissions instead, and on iOS store Keychain items with the strictest viable accessibility attribute (e.g. `kSecAttrAccessibleWhenUnlockedThisDeviceOnly`).
-- Apply data minimization: clear sensitive data, caches, and temporary files as soon as they are no longer needed (e.g. on logout or when leaving a sensitive flow) to limit the window during which it can be exposed.
-- Store cryptographic keys exclusively using the platform's hardware-backed keystore solution, such as the Android Keystore or the iOS Keychain.
-- For storing other files and preferences, use platform-provided features for encrypting data at rest or other techniques implementing envelope encryption with Data Encryption Keys (DEK) and Key Encryption Keys (KEK) or equivalent methods. For example, on Android, use [`EncryptedFile`](https://developer.android.com/reference/androidx/security/crypto/EncryptedFile) or [`EncryptedSharedPreferences`](https://developer.android.com/reference/androidx/security/crypto/EncryptedSharedPreferences); on iOS, use [iOS Data Protection](https://developer.apple.com/documentation/uikit/protecting_the_user_s_privacy/encrypting_your_app_s_files).
+- **Minimize Local Storage of Sensitive Data**: Avoid storing sensitive data locally if it is not required for app functionality, e.g. keep PII server-side, render it at time of use, and remove any cached data on logout.
+- **Restrict File Access**: Never use `MODE_WORLD_READABLE`/`MODE_WORLD_WRITEABLE`; share data through a properly configured `ContentProvider`/`FileProvider` with per-grant permissions instead, and on iOS store Keychain items with the strictest viable accessibility attribute (e.g. `kSecAttrAccessibleWhenUnlockedThisDeviceOnly`).
+- **Remove Data When No Longer Needed**: Clear sensitive data, caches, and temporary files as soon as they are no longer needed (e.g. on logout or when leaving a sensitive flow) to limit the window during which they can be exposed.
+- **Use Platform Keystores**: Store cryptographic keys exclusively using the platform's hardware-backed keystore solution, such as the Android Keystore or the iOS Keychain.
+- **Encrypt Data at Rest**: For other files and preferences, use platform-provided features for encrypting data at rest or techniques implementing envelope encryption with Data Encryption Keys (DEK) and Key Encryption Keys (KEK) or equivalent methods. For example, on Android, use [`EncryptedFile`](https://developer.android.com/reference/androidx/security/crypto/EncryptedFile) or [`EncryptedSharedPreferences`](https://developer.android.com/reference/androidx/security/crypto/EncryptedSharedPreferences); on iOS, use [iOS Data Protection](https://developer.apple.com/documentation/uikit/protecting_the_user_s_privacy/encrypting_your_app_s_files).
 
 !!! Warning
 
-    The **Jetpack security crypto library**, including the `EncryptedFile` and  `EncryptedSharedPreferences` classes, has been [deprecated](https://developer.android.com/privacy-and-security/cryptography#jetpack_security_crypto_library). However, since an official replacement has not yet been released, we recommend using these classes until one is available.
+    The **Jetpack security crypto library**, including the `EncryptedFile` and `EncryptedSharedPreferences` classes, has been [deprecated](https://developer.android.com/privacy-and-security/cryptography#jetpack_security_crypto_library). However, since an official replacement has not yet been released, we recommend using these classes until one is available.

@@ -21,33 +21,43 @@ refs:
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Br2.pdf
 - https://www.usenix.org/legacy/event/woot10/tech/full_papers/Rizzo.pdf
 status: new
-
 ---
 
 ## Overview
 
-Improper encryption refers to cryptographic systems or implementations that are vulnerable to attack, allowing unauthorized individuals to decrypt secured data.
+This weakness occurs when encryption is implemented with broken algorithms, insecure modes or parameters, or non-cryptographic techniques, leaving the protected data recoverable or forgeable without the key.
+
+Encryption is only as strong as its weakest component: the algorithm, the mode of operation, the padding scheme, the initialization vectors (IVs) or nonces, and the way keys are used all contribute to the actual security of the ciphertext.
+
+## Modes of Introduction
+
+- **Broken Algorithms**: Relying on broken encryption algorithms (i.e., that are deprecated or disallowed by NIST or other standards) such as RC4.
+- **Predictable or Reused Initialization Vectors (IVs)**: Using IVs that are hardcoded, null, predictable, or reused in modes like AES-CBC or AES-CTR, or reusing nonces or using authentication tags of insufficient length in AEAD modes like AES-GCM.
+- **Risky Padding**: Using a padding scheme susceptible to padding oracle attacks (e.g. PKCS#7 with unauthenticated AES-CBC, or PKCS#1 v1.5 for RSA) in combination with observable padding-error signals.
+- **Broken Modes of Operation**: Using modes that are considered broken. For example, AES-ECB is broken due to practical known-plaintext attacks and is disallowed by NIST.
+- **Insufficient Key Length**: Using key sizes below current recommendations for the chosen algorithm.
+- **Insecure or Wrong Key Usage**: Reusing a single key for multiple purposes (e.g. encryption and signing) or with an unauthorized algorithm, violating key-separation principles. Per [NIST.SP.800-57pt1r5](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf), a single key should be used for only one purpose.
+- **Non-Cryptographic Operations**: Relying on techniques such as XOR, Base64 encoding, or simple obfuscation methods for security purposes. These methods provide no actual encryption.
 
 ## Impact
 
-- **Loss of Confidentiality**: Improper encryption may enable attackers to decipher and obtain sensitive information, resulting in unauthorized exposure and possible data breaches.
-- **Loss of Integrity**: Improper encryption can compromise the integrity of data, allowing adversaries to alter or manipulate the information without detection.
+Attackers can decrypt or forge improperly encrypted data by:
 
-## Mode of Introduction
+- Performing cryptanalysis of broken algorithms, modes, or parameters.
+- Exploiting predictable or reused IVs or nonces to detect patterns or recover plaintext.
+- Exploiting padding oracles exposed through observable error signals or timing differences.
+- Brute-forcing cryptographic material generated with insufficient length.
 
-- **Broken Algorithms**: Relying on broken encryption algorithms (i.e., that are deprecated or disallowed by NIST or other standards) such as RC4.
-- **Predictable or Reused Initialization Vectors (IVs)**: Using IVs that are hardcoded, null, predictable, or reused in modes like AES-CBC or AES-CTR breaks semantic security, allowing attackers to detect patterns or recover plaintext differences. In AEAD modes like AES-GCM, reusing nonces or using authentication tags of insufficient length compromises both confidentiality and integrity. On Android, use `GCMParameterSpec` (not the legacy `IvParameterSpec`) for GCM.
-- **Risky Padding**: Using a padding scheme susceptible to padding oracle attacks (e.g. PKCS#7 with unauthenticated AES-CBC, or PKCS#1 v1.5 for RSA) in combination with observable padding-error signals allows attackers to decrypt or forge ciphertext without the key. See @MASWE-0015 for signature verification and prefer authenticated encryption.
-- **Broken Modes of Operation**: Using modes that are considered broken. For example, AES-ECB is broken due to practical known-plaintext attacks and it's disallowed by NIST.
-- **Insufficient Key Length**: The use of insufficient key sizes (e.g., 128-bit keys in AES) can compromise encryption strength making the encryption susceptible to brute-force attacks.
-- **Insecure or Wrong Key Usage**: Reusing a single key for multiple purposes (e.g. encryption and signing) or with an unauthorized algorithm violates key-separation principles. Per [NIST.SP.800-57pt1r5](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf), a single key should be used for only one purpose.
-- **Non-Cryptographic Operations**: Relying on techniques such as XOR, Base64 encoding, or simple obfuscation methods for security purposes. These methods provide no actual encryption and can be easily reversed or decoded, exposing sensitive data.
+This can lead to:
+
+- **Compromise of Sensitive Data**: Attackers can decipher protected information or alter it without detection, resulting in unauthorized disclosure or manipulation of sensitive data.
+- **Authentication or Authorization Bypass**: Attackers can forge ciphertexts, tokens, or signatures accepted by the app or its backend, resulting in unauthorized access to protected accounts, data, or functionality.
 
 ## Mitigations
 
 - **Use Secure Encryption Modes**: Choose secure, authenticated modes (e.g. approved by NIST) such as `AES/GCM/NoPadding`. If AES-CBC must be used, apply Encrypt-then-MAC (e.g. append HMAC) and, for RSA, prefer OAEP over PKCS#1 v1.5.
-- **Ensure Proper Initialization Vector Management**: Generate IVs using cryptographically secure random number generators (with sufficient entropy) and ensure they are unique for every operation; never hardcode, null, or reuse them.
+- **Ensure Proper Initialization Vector Management**: Generate IVs using cryptographically secure random number generators (with sufficient entropy) and ensure they are unique for every operation; never hardcode, null, or reuse them. On Android, use `GCMParameterSpec` (not the legacy `IvParameterSpec`) for GCM.
 - **Use Sufficiently Long Keys**: Enforce sufficiently long keys such as those approved by NIST, e.g., a minimum of 256 bits for AES.
 - **Use Each Key for a Single Purpose**: Derive or generate separate keys for encryption, authentication, and signing, and only use each key with its authorized algorithm.
 - **Do Not Expose Cryptographic Errors**: Avoid leaking detailed padding or decryption error messages or timing differences that could serve as an oracle.
-- **Rely on Proper Cryptographic Primitives**: Rely on well-vetted cryptographic primitives that have undergone rigorous peer review and formal validation.
+- **Rely on Proper Cryptographic Primitives**: Rely on well-vetted cryptographic primitives that have undergone rigorous peer review and formal validation. See @MASWE-0015 for signature verification.

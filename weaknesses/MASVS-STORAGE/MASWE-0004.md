@@ -13,41 +13,48 @@ mappings:
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/sensitive-data-external-storage
   maswe-beta: [MASWE-0007, MASWE-0002]
+refs:
+- https://developer.android.com/training/data-storage
+- https://developer.android.com/privacy-and-security/security-tips#external-storage
 status: new
 ---
 
 ## Overview
 
-Apps frequently opt to store data in the external storage due to its larger capacity. However, this convenience comes with a potential security drawback. Once a malicious app is granted the relevant permissions, it can access this data without user consent or interaction at any time. Additionally, external storage like SD cards can be physically removed and read by a malicious actor. Even if the external storage is emulated by the system, the risk arises from improper file permissions or the misuse of APIs for saving files. In such cases, the files become vulnerable to unauthorized access, modifications and deletions, posing a security threat to the application.
+This weakness occurs when an app stores sensitive data unencrypted in shared or external storage, where other apps can access it without any user interaction.
 
-Developers may consider switching to Private Storage or Shared Storage Requiring User Interaction if they need more privacy and security. However, if the external storage is the most suitable for the app, it's a good practise to encrypt data stored in the external storage. Below you can find potential security impacts and mitigations linked to the use of the external storage.
+Apps frequently opt to store data in external storage due to its larger capacity. However, once another app is granted the relevant permissions, it can access this data at any time. External storage such as SD cards can also be physically removed and read. Even when external storage is emulated by the system, improper file permissions or misuse of file-saving APIs can leave files open to unauthorized access, modification, or deletion.
 
-## Impact
-
-- **Loss of confidentiality**: An attacker can extract sensitive data stored externally, such as personal information and media like photos, documents, and audio files.
-
-- **Loss of secure material**: An attacker can extract passwords, cryptographic keys, and session tokens to facilitate additional attacks, such as identity theft or account takeover.
-
-- **Modification of app's behaviour**: An attacker can tamper with data used by the app, altering the app's logic. For example, they could modify a database describing the state of premium features or inject a malicious payload to enable further attacks such as SQL injection and Path Traversal.
-
-- **Modification of downloaded code**: An app can download new functionality from the Internet and store the executable code in external storage before loading it into the process. An attacker can modify this code before it is used by the app.
+This weakness primarily concerns Android, which permits the use of shared and external storage. On iOS, apps cannot directly write to or read from arbitrary locations; the system enforces strict sandboxing so apps can only access their own sandboxed file directories.
 
 ## Modes of Introduction
 
-This threat is primarily a concern for Android devices since they permit the use of external storage. Even if a device lacks physical external storage, Android emulates it to provide access to the external storage API.
+- **Data Stored Unencrypted**: Writing sensitive data to shared or external storage unencrypted.
+- **Hardcoded Encryption Key**: Encrypting sensitive data stored in external storage with a key that is hardcoded inside the application.
+- **Encryption Key Stored on Filesystem**: Encrypting sensitive data stored in external storage but storing the key alongside it or in another easily accessible location.
+- **Insufficient Encryption**: Encrypting sensitive data with an algorithm or configuration that is not considered strong.
+- **Reuse of Encryption Key**: Sharing the encryption key between two devices owned by a single user, enabling data cloning between those devices via external storage.
 
-- **Data Stored Unencrypted**: Sensitive data is stored in the external storage unencrypted.
-- **Hardcoded Encryption Key**: Sensitive data is encrypted and stored in the external storage but the key is hardcoded inside the application.
-- **Encryption Key Stored on Filesystem**: Sensitive data is encrypted and stored in the external storage but the key is stored alongside it or in another easily accessible location.
-- **Encryption Used is Insufficient**: Sensitive data is encrypted but the encryption is not considered to be strong.
-- **Reuse of encryption key**: The encryption key is shared between two devices owned by a single user, enabling the process of data cloning between these devices in the external storage.
+## Impact
 
-On iOS, apps cannot directly write to or read from the arbitrary locations, as compared to desktop operating system or Android. iOS maintains strict sandboxing rules, meaning apps can only access their own sandboxed file directories.
+Attackers can access or tamper with sensitive data stored in shared or external storage by:
+
+- Accessing shared or external storage from any app holding the corresponding permissions.
+- Physically removing and reading external storage media such as SD cards.
+
+This can lead to:
+
+- **Compromise of Sensitive Data**: Attackers can extract personal information and media such as photos, documents, and audio files, resulting in unauthorized disclosure of user data.
+- **Authentication or Authorization Bypass**: Attackers can extract passwords, cryptographic keys, and session tokens, resulting in identity theft or account takeover.
+- **Bypass of Protection Mechanisms**: Attackers can tamper with data used by the app, e.g. a database describing the state of premium features, resulting in circumvention of business logic and revenue loss for the app owner.
+- **Execution of Unauthorized Code**: Attackers can modify executable code or inject malicious payloads (e.g. enabling SQL injection or path traversal) into files that the app loads or processes from external storage, resulting in code execution or further compromise within the app's context.
 
 ## Mitigations
 
-Sensitive data stored in the external storage should be encrypted, and any keys used for data encryption should be protected by the device's hardware-backed keystore, where available. It is highly discouraged to include cryptographic keys hardcoded inside the application. You can also consider storing your files in the [private app sandbox or internal storage](https://developer.android.com/training/data-storage/app-specific#internal) and using [Android's EncryptedFile API wrapper for file encryption](https://developer.android.com/reference/androidx/security/crypto/EncryptedFile).
+- **Prefer Private Storage**: Store files in the [private app sandbox or internal storage](https://developer.android.com/training/data-storage/app-specific#internal) whenever possible, or use shared storage mechanisms that require user interaction for access.
+- **Encrypt Data Before Writing**: Encrypt any sensitive data stored in shared or external storage, e.g. using [Android's `EncryptedFile` API](https://developer.android.com/reference/androidx/security/crypto/EncryptedFile).
+- **Protect Encryption Keys**: Protect any keys used for data encryption with the device's hardware-backed keystore where available, and never hardcode them inside the application.
 
 !!! Warning
 
-    The **Jetpack security crypto library**, including the `EncryptedFile` and  `EncryptedSharedPreferences` classes, has been [deprecated](https://developer.android.com/privacy-and-security/cryptography#jetpack_security_crypto_library). However, since an official replacement has not yet been released, we recommend using these classes until one is available.
+    The **Jetpack security crypto library**, including the `EncryptedFile` and `EncryptedSharedPreferences` classes, has been [deprecated](https://developer.android.com/privacy-and-security/cryptography#jetpack_security_crypto_library). However, since an official replacement has not yet been released, we recommend using these classes until one is available.

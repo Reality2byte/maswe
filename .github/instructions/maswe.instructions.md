@@ -47,12 +47,13 @@ Required fields:
 title: <Short, specific weakness name>
 id: MASWE-XXXX
 alias: <shortened alias of the title, in lowercase with dashes instead of spaces>
+requirement: "<One-sentence positive requirement the app must fulfill>"
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:
-  masvs-v1: [MSTG-<CATEGORY>-<N>
+  masvs-v1: [MSTG-<CATEGORY>-<N>]
   masvs-v2: [MASVS-<CATEGORY>-<N>]
-  cwe:[CWE-ID, CWE-ID]
+  cwe: [CWE-ID, CWE-ID]
   android-risks:
     - If applicable
 refs:
@@ -62,20 +63,27 @@ status: <new | draft | placeholder>
 ---
 ```
 
+YAML style: do not quote list items unless required (`[android, ios]`, not `["android", "ios"]`). Keep the fields in the order shown above, with `status` last.
+
 Field rules:
 
 - **title**: Noun phrase naming the weakness, not a sentence. No trailing period. Use title case. Avoid vendor names unless they are part of the standardized term (e.g. "Android KeyStore").
 - **alias**: Short, lowercase, dash-separated version of the title. This is used for cross-referencing the weakness in MASTG content. It should be unique across all weaknesses. Examples: `weak-crypto-key-derivation`, `no-key-rotation`.
+- **requirement**: A single sentence, in quotes, stating the positive security requirement that the app must fulfill (the inverse of the weakness). Example: `"The app encrypts all network traffic."`
 - **platform**: List of affected platforms. Use `[android, ios]` if the weakness applies to both. Use a single-item list if it is platform-specific (e.g. `[android]` for StrandHogg).
 - **profiles**: MAS Testing Profiles that the weakness is relevant for. Most weaknesses apply to `L1` and `L2`. Resilience weaknesses apply to `R` and Privacy to `P`. Use the current profile values defined in <https://github.com/OWASP/mastg/blob/master/Document/0x03b-Testing-Profiles.md>
 - **mappings**: Cross-references to related controls and weaknesses in other standards. At least one MASVS v2 control is required. Mappings to MASVS v1, CWE, and Android risks are optional but encouraged when applicable.
-  - **mappings.masvs-v1**: One or more MSTG v1 controls that covered this topic. This helps identify content to port from MASTG v1.
-  - **mappings.masvs-v2**: One or more MASVS v2 controls this weakness helps verify. At least one entry is required.
+  - **masvs-v1**: One or more MSTG v1 controls that covered this topic. This helps identify content to port from MASTG v1.
+  - **masvs-v2**: One or more MASVS v2 controls this weakness helps verify. At least one entry is required.
+  - **mastg-v1**: One or more MASTG v1 tests that covered this topic. Optional; helps identify content to port from MASTG v1.
+  - **maswe-beta**: One or more MASWE v0.x (pre-1.0.0-rc) weaknesses that this weakness supersedes or absorbs. This is optional but encouraged for traceability.
   - **cwe**: One or more CWE IDs that correspond to this weakness. This helps link to the broader software security ecosystem.
   - **android-risks**: One or more specific risks from the Android developer documentation (https://developer.android.com/privacy-and-security/risks) that correspond to this weakness. This is an optional field that can help link to Android-specific guidance, but it should only be used when there is a clear match
+  - **android-core-app-quality**: One or more security checklist IDs from the [Android Core App Quality guidelines](https://developer.android.com/docs/quality-guidelines/core-app-quality). Optional.
+  - **nist-ssdf**: One or more practice IDs from the [NIST Secure Software Development Framework (SP 800-218)](https://csrc.nist.gov/projects/ssdf). Optional.
+- **observed_examples**: Links to public, real-world occurrences of the weakness (e.g. CVE entries or published research). Optional.
 - **refs**: External references. Prefer stable, vendor-neutral sources (official platform docs, CWE, NIST, academic papers).
-- **status**: When you generate a new MASWE draft, set
-`status: new`.
+- **status**: When you generate a new MASWE draft, set `status: new`.
 
 Do not invent additional front matter fields. If you believe a new field is needed, open an issue first.
 
@@ -87,9 +95,6 @@ Use exactly these top-level section headings, in this order, all at `##` level. 
 2. `## Modes of Introduction`
 3. `## Impact`
 4. `## Mitigations`
-
-Some existing approved MASWEs order `## Impact` before
-`## Modes of Introduction`. Prefer the order above for new content, but do not re-order existing approved pages in an unrelated PR.
 
 ### `## Overview`
 
@@ -103,24 +108,98 @@ materially differs.
 ### `## Modes of Introduction`
 
 - How the weakness gets introduced into an app. Typical causes: unsafe defaults, missing configuration, unsafe API usage, copy-pasted code, outdated libraries, insufficient input validation, misuse of platform features.
-- Prefer a short bulleted list (3-5 bullets).
-- Each bullet starts with a **bold short label** followed by a colon and then the explanation. For example:
-  `- **Hardcoded Keys**: Including cryptographic keys directly in the application code, making them susceptible to extraction through decompilation and reverse-engineering.`
-- Each bullet describes a developer-facing cause, not a consequence.
-- If the weakness can be introduced through a third-party SDK or cross-platform framework, call that out explicitly.
+- They must reflect the testable aspects of the weakness, which is what developers introduced and can fix. Avoid describing the consequences of the weakness here.
+- They must be **platform-agnostic** as much as possible. Only mention platform-specific details when it really matters to the introduction of the weakness or when the specific example is especially helpful to illustrate the weakness.
+    - It is ok to mention the Android Keystore or iOS Keychain as examples of secure storage.
+    - It is ok to mention Android's `SharedPreferences` or iOS's `UserDefaults` as examples of insecure storage.
+    - It is not ok to mention Android's `WebView` or iOS's `WKWebView` as examples of web content containers. Mentioning WebView is sufficient.
+- Use a short bulleted list where each bullet starts with a **bold short label** followed by a colon and then the explanation.
+
+For example:
+
+- `**Hardcoded Keys**: Including cryptographic keys directly in the application code, making them susceptible to extraction through decompilation and reverse-engineering.`
+    - This should not contain the consequences (e.g. "making them susceptible to extraction through decompilation and reverse-engineering") — that belongs in the Impact section. Instead, it should describe how the weakness is introduced (e.g. "Including cryptographic keys directly in the application code").
 
 ### `## Impact`
 
-- What an attacker can do, or what the user loses, if the weakness is present.
-- Short bulleted list (3-5 bullets). Each bullet starts with a **bold short label** followed by a colon and then the concrete outcome. For example:
-  `- **Loss of Confidentiality**: Sensitive information can be exposed, resulting in a loss of confidentiality. Once keys are exposed, all data encrypted with those keys is at risk.`
-- Avoid vague risk labels. Each outcome should be specific and actionable.
-- No CVSS numbers. Severity is context-dependent and cannot be universally assigned to a weakness. Instead, the impact section should provide enough detail for testers and developers to make their own informed severity assessments based on the specific app context.
+The Impact section describes what attackers can achieve, how they can achieve it, and the consequences that may follow.
+
+Use these files.
+
+- `.github/instructions/impact-patterns.yaml`, reusable patterns for the opening sentence.
+- `.github/instructions/impact-attacks.yaml`, reusable descriptions of attack paths.
+- `.github/instructions/impact-labels.yaml`, canonical labels for consequences.
+
+Reuse the same language and terms across MASWEs whenever the outcome, attack path, or consequence is equivalent.
+
+#### Structure
+
+Start with the immediate outcome attackers can achieve, using a pattern from `impact-patterns.yaml`.
+
+```md
+Attackers can [obtain, expose, modify, bypass, or disrupt something] by:
+```
+
+List all relevant attack paths, using wording from `impact-attacks.yaml` whenever applicable.
+
+```md
+- [Attack path].
+- [Alternative attack path].
+```
+
+Do not repeat consequences for each attack path when they are the same.
+
+Then add.
+
+```md
+This can lead to:
+```
+
+List the consequences using this pattern.
+
+```md
+- **[Canonical Impact Label]**: [Concrete attacker action or consequence], resulting in [specific harm].
+```
+
+Each consequence must.
+
+- Use an exact label from `impact-labels.yaml`.
+- Explain what attackers can do after achieving the stated outcome.
+- Include a `resulting in` clause.
+- Be specific to the affected user, app, service, or organization.
+- Avoid unsupported, duplicate, or generic consequences.
+
+#### Example 1
+
+```md
+Attackers can extract hardcoded secrets, credentials, and internal information by:
+
+- Obtaining the app package and reverse engineering it.
+
+This can lead to:
+
+- **Financial Loss**: Attackers can abuse compromised API keys to make unauthorized billed API calls, resulting in unexpected charges to the app owner.
+- **Compromise of System Integrity and Business Operations**: Attackers can use extracted credentials to access backend services, resulting in service disruption, account suspension, or denial of service.
+```
+
+#### Example 2
+
+```md
+Attackers can obtain cryptographic keys while they are in use by:
+
+- Using a debugger.
+- Using dynamic instrumentation.
+- Accessing the device storage on a compromised device.
+
+This can lead to:
+
+- **Compromise of Sensitive Data**: Attackers can decrypt protected information or forge encrypted data, resulting in unauthorized disclosure or modification of sensitive data.
+- **Authentication or Authorization Bypass**: Attackers can create valid cryptographic values or impersonate trusted parties, resulting in unauthorized access to protected accounts, data, or functionality.
+```
 
 ### `## Mitigations`
 
 - What developers must do to prevent or reduce the impact of the weakness.
+- Mitigations typically correspond to the modes of introduction. Each mitigation should be actionable and specific, providing clear guidance on how to address the weakness.
 - Short bulleted list. Each bullet starts with a **bold short label** followed by a colon and then an imperative sentence addressed to the developer. For example:
   `- **Use Platform Keystores**: Where possible, generate cryptographic keys dynamically on the device, rather than using predefined keys, and ensure that they are securely stored after creation.`
-- When a mitigation is fully captured by a MASTG-BEST entry, link to it with `@MASTG-BEST-XXXX` and keep the bullet short. Do not duplicate the content of the best practice.
-- Do not include testing steps here.

@@ -3,10 +3,10 @@ title: Inadequate Privacy Policy
 id: MASWE-0067
 alias: privacy-policy
 requirement: "The app provides an adequate privacy policy."
-platform: ["android", "ios"]
-profiles: ["P"]
+platform: [android, ios]
+profiles: [P]
 mappings:
-  masvs-v1: [MASVS-STORAGE-12]
+  masvs-v1: [MSTG-STORAGE-12]
   masvs-v2: [MASVS-PRIVACY-3]
   cwe: [359]
   maswe-beta: [MASWE-0111]
@@ -19,23 +19,30 @@ status: new
 
 ## Overview
 
-Mobile apps must provide users with a clear and comprehensive statement regarding how their data is collected, processed, shared, and protected. Privacy policies should be easily accessible, tailored specifically to the app in question, and written in a way that users can easily understand. Without a robust privacy policy, users are unable to make informed decisions about their data, and may be unaware of how their information is being used or shared.
+This weakness occurs when an app does not provide users with a clear, accessible, and accurate statement of how their data is collected, processed, shared, and protected.
 
-A privacy policy that is incomplete, vague, or does not match the app's behavior can mislead users and lead to a lack of transparency, resulting in potential privacy violations and legal repercussions for developers.
+Privacy policies should be easily accessible, tailored specifically to the app in question, and written in a way that users can easily understand. Without a robust privacy policy, users are unable to make informed decisions about their data, and may be unaware of how their information is being used or shared. A privacy policy that is incomplete, vague, or does not match the app's behavior can mislead users and undermine transparency.
 
 ## Modes of Introduction
 
 - **Unclear or Absent Privacy Policy**: Not providing a privacy policy, or having one that is not easily accessible or clear to the user, or that doesn't specifically address the data practices of that particular app, instead being a generic document that covers multiple services.
-- **Discrepancies in Policy vs Behavior**: Differences between the privacy policy and the app's actual behavior.
+- **Discrepancies in Policy vs Behavior**: Collecting, processing, or sharing data in ways that differ from what the privacy policy states.
 
 ## Impact
 
-- **Violation of User Privacy**: Users may unknowingly provide data without understanding how it will be used, exposing them to privacy risks, such as data sharing with third parties, profiling, or targeted advertising without explicit consent.
-- **Loss of User Trust**: Users are more likely to lose trust in an app that lacks transparency, which may lead to negative reviews, decreased user engagement, and reduced retention rates.
-- **Legal and Compliance Issues**: Failure to provide an adequate privacy policy can result in non-compliance with privacy laws and regulations, such as GDPR or CCPA, potentially leading to fines, legal action, or removal from app stores.
+Apps and embedded third-party components can collect, process, or share personal data in ways users cannot anticipate by:
+
+- Operating without a privacy policy or under a vague, generic, or inaccessible one.
+- Deviating from the practices stated in the published privacy policy.
+
+This can lead to:
+
+- **Violation of User Privacy**: Users can unknowingly provide data that is shared with third parties, used for profiling, or used for targeted advertising without explicit consent, resulting in the loss of control over their personal information.
+- **Loss of User Trust**: Users can perceive the app as non-transparent, resulting in negative reviews, decreased user engagement, and reduced retention for the app owner.
+- **Legal and Regulatory Non-Compliance**: Failing to provide an adequate privacy policy can violate privacy laws and regulations, such as GDPR or CCPA, resulting in fines, legal action, or removal from app stores for the app owner.
 
 ## Mitigations
 
 - **Provide a Clear Privacy Policy**: Make sure a comprehensive and understandable privacy policy is readily accessible to users. Tailor it to the specific data practices of your app and write it in clear, understandable language as stated in Article 12 of the GDPR.
-- **Ensure Consistency in Privacy vs Behavior**: Keep your data collection practices documented and up to date in privacy policies, privacy labels, and app store listings. Ensure that these documents match the app's actual behavior to avoid discrepancies that could mislead users or violate platform policies.
+- **Ensure Consistency in Policy vs Behavior**: Keep your data collection practices documented and up to date in privacy policies, privacy labels, and app store listings. Ensure that these documents match the app's actual behavior to avoid discrepancies that could mislead users or violate platform policies.
 - **Regularly Review and Update Privacy Policy**: Regularly review and update the privacy policy to reflect any changes in data collection practices, new features, or modifications to existing features that may impact how user data is handled.

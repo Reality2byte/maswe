@@ -1,0 +1,41 @@
+- Obtaining the app package and reverse engineering it.
+- Debugging the app at runtime.
+- Using dynamic instrumentation.
+- Attaching a remote inspector to the app's debuggable web content.
+- Accessing the device storage on a compromised device.
+- Accessing the system logs on a compromised device or from an app holding log-access permissions.
+- Accessing files exposed through incorrect file permissions or misconfigured content providers.
+- Extracting local or cloud backups of the device.
+- Tampering with backup contents and restoring the modified backup to a device.
+- Accessing shared or external storage from any app holding the corresponding permissions.
+- Physically removing and reading external storage media such as SD cards.
+- Monitoring network traffic on the same network (e.g., public Wi-Fi or a compromised router).
+- Monitoring local or proximity interfaces such as Bluetooth, NFC, or USB.
+- Performing a Machine-in-the-Middle (MITM) attack, e.g., via ARP poisoning, DNS spoofing, or a rogue access point.
+- Presenting a fraudulent or otherwise invalid certificate that the app accepts.
+- Obtaining a valid certificate for the target domain from a compromised, coerced, or rogue Certificate Authority (CA).
+- Installing an attacker-controlled CA certificate on a device they control to inspect the app's traffic.
+- Brute-forcing cryptographic material generated with insufficient length.
+- Predicting or reproducing values generated with insufficient entropy.
+- Intercepting cryptographic keys exported in plaintext.
+- Performing cryptanalysis of broken algorithms, modes, or parameters.
+- Exploiting predictable or reused IVs or nonces to detect patterns or recover plaintext.
+- Exploiting padding oracles exposed through observable error signals or timing differences.
+- Observing enough outputs to recover the internal state of a non-cryptographic PRNG.
+- Capturing or recording the screen from another app or an external tool.
+- Accessing screenshots automatically taken by the system, e.g., when the app moves to the background.
+- Identifying vulnerable dependency versions in the app package and using public advisories or exploits.
+- Collecting and correlating identifiers and usage data across apps, devices, and services.
+- Collecting non-resettable identifiers or misusing resettable ones.
+- Linking directly identifiable data to real-world identities.
+- Operating without a privacy policy or under a vague, generic, or inaccessible one.
+- Deviating from the practices stated in the published privacy policy.
+- Collecting or sharing data categories that are not declared in the platform's privacy labels.
+- Transmitting undeclared identifiers or analytics data to first- or third-party services over the network.
+- Providing no way for users to delete, export, modify, or opt out of the collection of their data.
+- Making profile details, activity status, or discoverability visible to other users or third parties by default.
+- Collecting data under consent that is bundled, implied, or otherwise not freely and specifically given.
+- Continuing to collect data under an outdated consent after practices have changed.
+- Exporting or sharing data through flows whose privacy consequences are not evident to the user.
+- Holding excessive or no-longer-needed permissions granted to the app.
+- Inheriting the app's permissions in third-party SDKs, whose data collection is difficult to audit and control.

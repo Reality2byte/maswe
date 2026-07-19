@@ -22,25 +22,32 @@ status: new
 
 ## Overview
 
-Cryptographic keys are essential for securing sensitive data in mobile applications. However, if these keys are not properly protected at rest, they can be easily compromised. This weakness involves storing cryptographic keys in insecure locations, such as unencrypted SharedPreferences, unprotected files, hardcoding them within the application code, or including them in source control and versioning systems which may end in the final application package in production.
+This weakness occurs when cryptographic keys are stored outside the platform-provided secure keystore, in locations such as unencrypted preferences, unprotected files, or the application code itself.
 
-Attackers can decompile or reverse-engineer the app to extract hardcoded keys.
-
-## Impact
-
-- **Unauthorized Access**: If cryptographic keys are not properly protected, attackers may gain unauthorized access to sensitive data and potential identity theft.
-- **Loss of Integrity**: Compromised keys can allow attackers to tamper with encrypted data.
-- **Loss of Confidentiality**: Sensitive information can be exposed, resulting in a loss of confidentiality. Once keys are exposed, all data encrypted with those keys is at risk.
+Cryptographic keys are essential for securing sensitive data in mobile applications. Keys that are hardcoded in the app, included in source control and shipped in the final package, or written to insecure storage locations lack the access control and hardware-backed protection that platform keystores, such as the [Android Keystore](https://developer.android.com/training/articles/keystore) and the [iOS Keychain](https://developer.apple.com/documentation/security/keychain_services), are designed to provide.
 
 ## Modes of Introduction
 
 - **Insecure Storage Locations**: Storing cryptographic keys in locations that are not designed for secure storage, such as regular configuration or user preferences files, application data directories, or other areas lacking encryption and access control mechanisms.
-- **Hardcoded Cryptographic Keys**: Including cryptographic keys directly in the application code, making them susceptible to extraction through decompilation and reverse-engineering.
-- **Insecure Imported Keys**: Importing cryptographic keys from untrusted sources or without validating their integrity, which can lead to the introduction of malicious or compromised keys into the application environment.
+- **Hardcoded Cryptographic Keys**: Including cryptographic keys directly in the application code or in resources shipped with the app package.
+- **Insecure Imported Keys**: Importing cryptographic keys from untrusted sources or without validating their integrity.
+
+## Impact
+
+Attackers can extract cryptographic keys stored outside the platform keystore by:
+
+- Obtaining the app package and reverse engineering it.
+- Accessing the device storage on a compromised device.
+- Extracting local or cloud backups of the device.
+
+This can lead to:
+
+- **Compromise of Sensitive Data**: Attackers can decrypt protected information or forge encrypted data, resulting in unauthorized disclosure or modification of sensitive data.
+- **Authentication or Authorization Bypass**: Attackers can create valid cryptographic values or impersonate trusted parties, resulting in unauthorized access to protected accounts, data, or functionality.
 
 ## Mitigations
 
-- **Use Platform Keystores**: Where possible, generate cryptographic keys dynamically on the device, rather than using predefined keys, and ensure that they are securely stored after creation. For this you can use the platform-specific keystores, such as the [Android KeyStore](https://developer.android.com/training/articles/keystore) or [iOS KeyChain](https://developer.apple.com/documentation/security/keychain_services).
+- **Use Platform Keystores**: Where possible, generate cryptographic keys dynamically on the device, rather than using predefined keys, and ensure that they are securely stored after creation. For this you can use the platform-specific keystores, such as the [Android Keystore](https://developer.android.com/training/articles/keystore) or the [iOS Keychain](https://developer.apple.com/documentation/security/keychain_services).
 - **Implement Strongest Hardware Security Solutions**: For the most critical cases and whenever [available and compatible](https://developer.android.com/privacy-and-security/keystore#HardwareSecurityModule) for the use case at hand, leverage the strongest hardware-backed security options such as [Android StrongBox](https://source.android.com/docs/security/features/keystore/strongbox) or iOS's Secure Enclave [`kSecAttrTokenIDSecureEnclave`](https://developer.apple.com/documentation/security/ksecattrtokenidsecureenclave) option to ensure the highest protection including physical and side-channel attacks.
 - **Use Cryptographic Key Management Systems**: Securely retrieve keys from server-side services that provide secure storage, access control, and auditing for sensitive data. For example, AWS Secrets Manager, Azure Key Vault, or Google Cloud Secret Manager are some popular managed secrets storage solutions. The app can securely retrieve the necessary secrets at runtime through secure, authenticated API calls.
 - **Encrypt and Wrap Keys**: Whenever storing keys in platform keystores is not suitable for the use case or keys need to be exported, use envelope encryption (DEK+KEK) and key wrapping techniques as specified in [NIST.SP.800-175Br1 5.3.5](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-175Br1.pdf) to protect cryptographic keys before storing them.

@@ -14,40 +14,46 @@ mappings:
   - https://developer.android.com/privacy-and-security/risks/unsafe-hostname
   maswe-beta: [MASWE-0052]
 refs:
-  - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-52r2.pdf#page=17
-  - https://developer.android.com/privacy-and-security/security-ssl#tls-1.3-enabled-by-default
-  - https://support.google.com/faqs/answer/7071387?hl=en
-  - https://developer.android.com/reference/android/webkit/WebViewClient.html?sjid=15211564825735678155-EU#onReceivedSslError(android.webkit.WebView,%20android.webkit.SslErrorHandler,%20android.net.http.SslError)
-  - https://developer.android.com/privacy-and-security/security-ssl#WarningsSslSocket
-  - https://wiki.sei.cmu.edu/confluence/display/java/MSC00-J.+Use+SSLSocket+rather+than+Socket+for+secure+data+exchange
-  - https://developer.apple.com/forums/thread/67493
-  - https://developer.apple.com/forums/thread/707320
-  - https://support.apple.com/en-us/102390
-  - https://developer.apple.com/documentation/foundation/performing-manual-server-trust-authentication
+- https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-52r2.pdf#page=17
+- https://developer.android.com/privacy-and-security/security-ssl#tls-1.3-enabled-by-default
+- https://support.google.com/faqs/answer/7071387?hl=en
+- https://developer.android.com/reference/android/webkit/WebViewClient.html?sjid=15211564825735678155-EU#onReceivedSslError(android.webkit.WebView,%20android.webkit.SslErrorHandler,%20android.net.http.SslError)
+- https://developer.android.com/privacy-and-security/security-ssl#WarningsSslSocket
+- https://wiki.sei.cmu.edu/confluence/display/java/MSC00-J.+Use+SSLSocket+rather+than+Socket+for+secure+data+exchange
+- https://developer.apple.com/forums/thread/67493
+- https://developer.apple.com/forums/thread/707320
+- https://support.apple.com/en-us/102390
+- https://developer.apple.com/documentation/foundation/performing-manual-server-trust-authentication
 status: new
 ---
 
 ## Overview
 
-Apps that do not properly validate TLS certificates during secure communication are susceptible to [Machine-in-the-Middle (MITM)](../../Document/0x04f-Testing-Network-Communication.md#intercepting-network-traffic-through-mitm) attacks and other security threats. This weakness occurs when an app accepts invalid, expired, self-signed, or untrusted certificates without appropriate verification, compromising the integrity and confidentiality of data in transit.
+This weakness occurs when an app does not properly validate TLS certificates during secure communication, accepting invalid, expired, self-signed, or untrusted certificates without appropriate verification.
 
-## Impact
-
-- **Data Interception**: Attackers can capture and read sensitive information transmitted over the network.
-- **Data Manipulation**: Attackers might alter data in transit, causing corruption or injecting malicious content.
-- **Data Exposure**: Sensitive information can be compromised.
-- **Unauthorized Access**: Attackers may gain unauthorized access to user accounts or systems by intercepting authentication tokens or credentials.
-- **Impersonation of Services**: Users may be deceived into interacting with malicious servers impersonating legitimate services.
-- **Data Integrity Loss**: Altered or corrupted data may be accepted by the application, leading to unreliable or malicious outcomes.
+Certificate validation is the mechanism through which a TLS client establishes that it is talking to the intended server and not to an intermediary. When it is disabled, weakened, or implemented incorrectly, the confidentiality and integrity guarantees of TLS no longer hold, even though the connection itself is encrypted.
 
 ## Modes of Introduction
 
-- **Disabling Certificate Validation**: Developers disable or bypass certificate validation checks to simplify development or troubleshoot connectivity issues.
-- **Accepting Self-Signed Certificates**: Applications accept self-signed or untrusted certificates without proper validation against trusted Certificate Authorities (CAs).
-- **Ignoring Hostname Verification**: Failing to verify that the certificate's hostname matches the server's hostname allows attackers to present valid certificates for other domains.
+- **Disabling Certificate Validation**: Disabling or bypassing certificate validation checks to simplify development or troubleshoot connectivity issues, and shipping that configuration to production.
+- **Accepting Self-Signed Certificates**: Accepting self-signed or untrusted certificates without proper validation against trusted Certificate Authorities (CAs).
+- **Ignoring Hostname Verification**: Failing to verify that the certificate's hostname matches the server's hostname.
 - **Using Insecure Custom Trust Managers**: Implementing custom certificate validation logic that is incomplete, incorrect, or insecure.
 - **Incorrect Error Handling**: Proceeding with connections even when certificate validation errors occur, without alerting the user or terminating the connection.
 - **Trusting All Certificates**: Configuring the application to trust all certificates by default, without any validation.
+
+## Impact
+
+Attackers can intercept or modify TLS-protected network traffic by:
+
+- Performing a Machine-in-the-Middle (MITM) attack, e.g., via ARP poisoning, DNS spoofing, or a rogue access point.
+- Presenting a fraudulent or otherwise invalid certificate that the app accepts.
+
+This can lead to:
+
+- **Compromise of Sensitive Data**: Attackers can capture, read, or alter sensitive information transmitted over the network, resulting in unauthorized disclosure or manipulation of user data.
+- **Authentication or Authorization Bypass**: Attackers can capture credentials or session tokens in transit, resulting in user impersonation and unauthorized access to accounts or backend systems.
+- **Compromise of System Integrity and Business Operations**: Attackers can impersonate legitimate servers and feed altered or malicious data to the app, resulting in unreliable or malicious app behavior and reputational damage for the app owner.
 
 ## Mitigations
 

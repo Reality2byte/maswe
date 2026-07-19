@@ -9,13 +9,12 @@ mappings:
   masvs-v1: [MSTG-CODE-5]
   masvs-v2: [MASVS-CODE-3]
   cwe: [1395, 1357]
-  android-core-app-quality: [SC-N3, PS-T4]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/insecure-library
   - https://developer.android.com/privacy-and-security/risks/unsafe-download-manager
+  android-core-app-quality: [SC-N3, PS-T4]
   nist-ssdf: [PS.3.2]
   maswe-beta: [MASWE-0076]
-status: new
 refs:
 - https://developer.android.com/privacy-and-security/risks/insecure-library
 - https://www.cisa.gov/sites/default/files/2023-04/sbom-types-document-508c.pdf
@@ -28,13 +27,14 @@ refs:
 - https://developer.apple.com/support/third-party-SDK-requirements/
 - https://www.youtube.com/watch?v=3klmiHX0uVQ
 - https://developer.apple.com/videos/play/wwdc2023/10060/
+status: new
 ---
 
 ## Overview
 
-Mobile apps often depend on third-party libraries, software development kits (SDKs), or frameworks, either open-source components maintained by the community or closed-source products provided by commercial vendors, to implement functionality, streamline development, or integrate platform services.
+This weakness occurs when an app includes third-party libraries, software development kits (SDKs), or frameworks that contain publicly known vulnerabilities.
 
-When these dependencies contain vulnerabilities, they can be more easily exploited than vulnerabilities in first-party code because these vulnerabilities (and some exploits) are often documented in public databases, such as the CVE list, or accessible through security advisories.
+Mobile apps often depend on such components, either open-source components maintained by the community or closed-source products provided by commercial vendors, to implement functionality, streamline development, or integrate platform services. Vulnerabilities in dependencies can be more easily exploited than vulnerabilities in first-party code because they (and some exploits) are often documented in public databases, such as the CVE list, or accessible through security advisories.
 
 **The developer is responsible** for ensuring all dependencies are secure and up to date because they are part of the app's codebase and therefore extend the app's attack surface. Google and Apple emphasize this in their security best practices:
 
@@ -58,21 +58,25 @@ In terms of privacy, dependencies can introduce risks if they collect or transmi
 
 For more information on privacy and data collection declarations, see @MASWE-0068.
 
-## Impact
-
-Using dependencies with known vulnerabilities in mobile apps can result in various security risks, including but not limited to:
-
-- **Sensitive Data Exposure**: Vulnerable dependencies may be exploited to bypass access controls or cryptographic protections, which could lead to the exposure of sensitive user data, including credentials, session tokens, and personally identifiable information (PII). This can result in data breaches, which can have legal, financial and reputational consequences.
-- **Execution of Unauthorized Code or Privilege Escalation**: Exploitable vulnerabilities in embedded dependencies can allow attackers to execute arbitrary code within the app's context (e.g., through code injection), escalate privileges, or manipulate app behavior. The overall impact can range from full compromise of user accounts, abuse of backend services or persistent access to protected resources. The business impact can be severe, including financial loss, service disruption, and damage to customer trust.
-- **Regulatory and Policy Non-Compliance**: Including dependencies with publicly known CVEs may violate regulatory requirements (e.g., GDPR, HIPAA, PCI-DSS) or platform security policies (e.g., Google Play or App Store guidelines). Failure to update or remediate such vulnerabilities can result in app rejection, fines, or mandatory disclosures.
-
 ## Modes of Introduction
 
-- **Direct Dependencies**: Vulnerable dependencies can be introduced into the app either manually (by copying and linking source or binary files) or more commonly via package managers and build tools (e.g., Gradle, CocoaPods, Swift Package Manager). This includes both first- and third-party SDKs, and may involve both statically and dynamically linked libraries.
-- **Transitive Dependencies**: Dependencies can be pulled in indirectly through other libraries or SDKs that the app uses. This means that an app may still be affected by a vulnerable library if one of its dependencies includes it, even if the app does not directly include the library itself.
-- **Dynamically Loaded Dependencies**: Some libraries may be dynamically loaded at runtime, which can make it difficult to track and manage dependencies. This can lead to situations where a vulnerable version of a library is used without the developer's knowledge.
-- **Outdated Platform Security Components**: Mobile apps may depend on platform-provided security components, such as cryptographic libraries or SSL/TLS implementations. If these components are outdated or lack timely updates, they can introduce known vulnerabilities into the application. For instance, on Android, the system's security provider responsible for secure network communications must be explicitly updated by the developer at app startup.
-- **Usage of Third-Party Frameworks**: Applications may be built in a third-party application framework such as Flutter or React Native. The framework itself, as well as any platform-specific bindings may contain vulnerabilities.
+- **Direct Dependencies**: Including vulnerable dependencies either manually (by copying and linking source or binary files) or, more commonly, via package managers and build tools (e.g., Gradle, CocoaPods, Swift Package Manager). This includes both first- and third-party SDKs, and may involve both statically and dynamically linked libraries.
+- **Transitive Dependencies**: Pulling in vulnerable dependencies indirectly through other libraries or SDKs that the app uses, even if the app does not directly include the vulnerable library itself.
+- **Dynamically Loaded Dependencies**: Loading libraries dynamically at runtime, which can make it difficult to track and manage dependencies and can lead to a vulnerable version being used without the developer's knowledge.
+- **Outdated Platform Security Components**: Relying on platform-provided security components, such as cryptographic libraries or SSL/TLS implementations, that are outdated or lack timely updates. For instance, on Android, the system's security provider responsible for secure network communications must be explicitly updated by the developer at app startup.
+- **Usage of Third-Party Frameworks**: Building the app on a third-party application framework such as Flutter or React Native, where the framework itself, as well as any platform-specific bindings, may contain vulnerabilities.
+
+## Impact
+
+Attackers can exploit publicly known vulnerabilities in the app's dependencies by:
+
+- Identifying vulnerable dependency versions in the app package and using public advisories or exploits.
+
+This can lead to:
+
+- **Compromise of Sensitive Data**: Attackers can exploit vulnerable components to bypass access controls or cryptographic protections and expose credentials, session tokens, or personally identifiable information (PII), resulting in data breaches with legal, financial, and reputational consequences for the app owner.
+- **Execution of Unauthorized Code**: Attackers can exploit vulnerabilities in embedded dependencies to execute arbitrary code within the app's context (e.g., through code injection), escalate privileges, or manipulate app behavior, resulting in compromised user accounts, abuse of backend services, or persistent access to protected resources.
+- **Legal and Regulatory Non-Compliance**: Shipping dependencies with publicly known CVEs can violate regulatory requirements (e.g., GDPR, HIPAA, PCI-DSS) or platform security policies (e.g., Google Play or App Store guidelines), resulting in app rejection, fines, or mandatory disclosures for the app owner.
 
 ## Mitigations
 

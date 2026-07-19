@@ -3,8 +3,8 @@ title: Inadequate Data Collection Declarations
 id: MASWE-0068
 alias: data-collection-declarations
 requirement: "The app adequately declares all user collected data."
-platform: ["android", "ios"]
-profiles: ["P"]
+platform: [android, ios]
+profiles: [P]
 mappings:
   masvs-v1: [MSTG-STORAGE-12, MSTG-NETWORK-1]
   masvs-v2: [MASVS-PRIVACY-3, MASVS-PRIVACY-1]
@@ -25,23 +25,30 @@ status: new
 
 ## Overview
 
-When a mobile app's stated data collection practices, such as those documented in Apple's [App Privacy Report](https://support.apple.com/en-us/102188) and [Privacy Nutrition Labels](https://support.apple.com/kb/HT211970), or Google's [Data Safety section](https://support.google.com/googleplay/android-developer/answer/10787469?hl=en), are incomplete or inconsistent with the app's actual behavior, users are prevented from making informed decisions about their privacy, including understanding whether data will be linked to their identity, used for tracking, or shared with third parties.
+This weakness occurs when an app's stated data collection practices, such as those documented in Apple's [App Privacy Report](https://support.apple.com/en-us/102188) and [Privacy Nutrition Labels](https://support.apple.com/kb/HT211970), or Google's [Data Safety section](https://support.google.com/googleplay/android-developer/answer/10787469?hl=en), are incomplete or inconsistent with the app's actual behavior.
 
-These declarations must clearly outline what data is collected, how it is used, whether it is linked to the user's identity, and whether it is shared with third parties in accordance with the platform's policies.
+These declarations must clearly outline what data is collected, how it is used, whether it is linked to the user's identity, and whether it is shared with third parties in accordance with the platform's policies. When they are inaccurate, users are prevented from making informed decisions about their privacy, including understanding whether data will be linked to their identity, used for tracking, or shared with third parties.
 
 **Note about third-party libraries (SDKs)**: Developers, as data controllers, are legally responsible for ensuring that third-party components process sensitive data lawfully, fairly, and transparently, as highlighted in the [ENISA study on GDPR compliance](https://www.enisa.europa.eu/sites/default/files/publications/WP2017%20O-2-2-4%20GDPR%20Mobile.pdf) (Section 2.2.7, _"Data transfers and processing by third parties"_). However, in some cases, it may be challenging for mobile app developers to be fully aware of what data these third-party SDKs actually collect.
 
 ## Modes of Introduction
 
-- **Undeclared Data Collection and Purpose**: Failing to declare what data is being collected (e.g., location, contacts, identifiers) and for what purposes (e.g., analytics, personalization), leaving users unaware of how their information is used.
-- **Discrepancies in Declarations vs Behavior**: Differences between privacy label declarations (such as Apple's Privacy Nutrition Labels or Google's Data Safety Section) and the app's actual behavior, including undeclared data collection, sharing with third parties not mentioned in privacy labels, or using data for purposes not disclosed, which are against both Apple and Google guidelines.
-- **Undeclared Data Sent in Network Traffic**: Data actually transmitted over the network, even over HTTPS, that goes beyond what is declared, such as over-collection beyond functional needs, sending detailed location/behavior analytics, unnecessary identifiers (e.g. IMEI, email, phone number), or sharing with third-party analytics/advertising services not reflected in the declarations.
+- **Undeclared Data Collection and Purpose**: Failing to declare what data is being collected (e.g., location, contacts, identifiers) and for what purposes (e.g., analytics, personalization).
+- **Discrepancies in Declarations vs Behavior**: Publishing privacy label declarations (such as Apple's Privacy Nutrition Labels or Google's Data Safety Section) that differ from the app's actual behavior, including undeclared data collection, sharing with third parties not mentioned in privacy labels, or using data for purposes not disclosed, which are against both Apple and Google guidelines.
+- **Undeclared Data Sent in Network Traffic**: Transmitting data over the network, even over HTTPS, that goes beyond what is declared, such as over-collection beyond functional needs, detailed location/behavior analytics, unnecessary identifiers (e.g. IMEI, email, phone number), or sharing with third-party analytics/advertising services not reflected in the declarations.
 
 ## Impact
 
-- **Violation of User Privacy**: Users may unknowingly share data without fully understanding its purpose, which can lead to unauthorized sharing, profiling, or targeted advertising.
-- **Loss of User Trust**: Inconsistent declarations can result in users losing trust in the app, leading to negative reviews, lower user engagement, and reduced retention.
-- **Legal and Compliance Issues**: Inaccurate or inconsistent data declarations may lead to non-compliance with regulations like GDPR or CCPA, resulting in potential fines, legal action, or removal from app stores.
+Apps and embedded third-party components can collect or share more data than users were led to expect by:
+
+- Collecting or sharing data categories that are not declared in the platform's privacy labels.
+- Transmitting undeclared identifiers or analytics data to first- or third-party services over the network.
+
+This can lead to:
+
+- **Violation of User Privacy**: Users can unknowingly share data whose purpose they do not understand, resulting in unauthorized sharing, profiling, or targeted advertising.
+- **Loss of User Trust**: Users can discover the inconsistent declarations, resulting in negative reviews, lower user engagement, and reduced retention for the app owner.
+- **Legal and Regulatory Non-Compliance**: Inaccurate or inconsistent data declarations can violate regulations like GDPR or CCPA and platform policies, resulting in fines, legal action, or removal from app stores for the app owner.
 
 ## Mitigations
 

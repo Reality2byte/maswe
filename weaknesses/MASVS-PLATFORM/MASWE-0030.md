@@ -13,32 +13,32 @@ mappings:
 refs:
 - https://developer.android.com/about/versions/14/features/screenshot-detection
 status: new
-
 ---
 
 ## Overview
 
-Mobile platforms allow users and third-party tools to capture screenshots or record screens. This can expose sensitive data and increase the risk of data leakage.
+This weakness occurs when sensitive data displayed by the app can be captured in screenshots or screen recordings, or persists in system-generated snapshots, without the app preventing or redacting it.
 
-There are several ways an attacker may obtain this sensitive data:
-
-- **Third-party apps with permission to capture or record the screen**: Third-party apps may record the screen while sensitive content is displayed.
-- **Third-party apps with permission to access the screenshot and recording files**: Third-party apps may access screenshots or recordings saved in storage after they are taken by the user or a tool.
-- **External tools may record the screen**: Tools such as @MASTG-TOOL-0024 and @MASTG-TOOL-0126 can record the device's screen via a USB connection.
-- **Automatic Screenshots when Backgrounding**: When an app enters the background state, the system may capture a screenshot of the app's current view to display in the app switcher. These screenshots are stored on the file system and could potentially be accessed or stolen by malicious actors.
-
-## Impact
-
-- **Loss of Confidentiality**: Under certain conditions, an attacker could access sensitive data previously displayed on the screen, potentially compromising confidentiality and enabling further attacks, such as identity theft or account takeover.
+Mobile platforms allow users, other apps, and external tools to capture screenshots or record the screen. In addition, when an app enters the background, the system may capture a snapshot of the app's current view to display in the app switcher, and store it on the file system. Any sensitive content visible on screen at that moment can end up in these images.
 
 ## Modes of Introduction
 
-This can typically occur in two ways:
+- **Screenshots and Screen Recordings Not Prevented**: Not implementing measures (such as setting secure window flags) to prevent the operating system or other apps from capturing screenshots or screen recordings of sensitive views.
+- **Unredacted Sensitive On-Screen Content**: Displaying sensitive information directly on the screen without masking or redacting it, including in the view snapshot the system takes when the app moves to the background.
 
-- **Screenshots and Screen Recordings Not Prevented:** The app does not implement measures (such as setting secure window flags) to prevent the operating system or other apps from capturing screenshots or screen recordings.
-- **Unredacted Sensitive On-Screen Content:** The app displays sensitive information directly on the screen without masking or redacting it, allowing confidential data to be visible if a screenshot or screen recording is taken.
+## Impact
+
+Attackers can access sensitive data displayed on the screen by:
+
+- Capturing or recording the screen from another app or an external tool.
+- Accessing shared or external storage from any app holding the corresponding permissions.
+- Accessing screenshots automatically taken by the system, e.g., when the app moves to the background.
+
+This can lead to:
+
+- **Compromise of Sensitive Data**: Attackers can obtain sensitive data previously displayed on the screen, such as account details, personal information, or one-time codes, resulting in unauthorized disclosure and enabling further attacks such as identity theft or account takeover.
 
 ## Mitigations
 
-- Prevent screenshots and screen recording.
-- Redact sensitive on-screen content so that, if a screenshot is taken, no confidential data is visible.
+- **Prevent Screenshots and Screen Recording**: Mark views containing sensitive data as secure so the system blocks screenshots and screen recordings of them.
+- **Redact Sensitive On-Screen Content**: Mask or redact sensitive content in the UI and replace or obscure the view before the system captures the background snapshot, so no confidential data is visible in captured images.
