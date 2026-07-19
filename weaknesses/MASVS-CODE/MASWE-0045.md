@@ -11,29 +11,42 @@ mappings:
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/use-of-native-code
   maswe-beta: [MASWE-0116]
-refs:
-- https://cs.android.com/android/platform/superproject/main/+/main:bionic/linker/linker_main.cpp;l=397?q=linker_main&ss=android%2Fplatform%2Fsuperproject%2Fmain
-- https://partners.trellix.com/enterprise/en-us/assets/white-papers/wp-secure-coding-android-applications.pdf
-- https://mas.owasp.org/MASTG/0x05i-Testing-Code-Quality-and-Build-Settings/#binary-protection-mechanisms
-- https://mas.owasp.org/MASTG/0x06i-Testing-Code-Quality-and-Build-Settings/#binary-protection-mechanisms
-- https://sensepost.com/blog/2021/on-ios-binary-protections/
-- https://www.sans.org/blog/stack-canaries-gingerly-sidestepping-the-cage/
-draft:
-  description: |
-    Compilers and toolchains provide exploit-mitigation features that make memory-corruption bugs
-    harder to exploit. This weakness occurs when the app's native code is built without them, such as
-    stack canaries, Address Space Layout Randomization (ASLR) / Position-Independent Executable (PIE),
-    non-executable memory (NX/DEP), and fortified (bounds-checked) libc functions. Missing these
-    mitigations lowers the effort required to exploit memory-corruption vulnerabilities (CWE-693).
-  topics:
-  - Position-Independent Executable (PIE) / PIC
-  - stack canaries (stack-smashing protection)
-  - non-executable memory (NX / DEP)
-  - fortify-source / bounds-checked libc functions
-  - Automatic Reference Counting / memory-safe language usage where applicable
-  note: PIC cannot be switched off in newer versions of Android, the NDK does not link against such libraries anymore [source](https://cs.android.com/android/platform/superproject/main/+/main:bionic/linker/linker_main.cpp;l=397?q=linker_main&ss=android%2Fplatform%2Fsuperproject%2Fmain). Alternative title could be Memory Anti-Exploitation Mechanisms Not Implemented.
-status: placeholder
 observed_examples:
 - https://nvd.nist.gov/vuln/detail/CVE-2019-3568
+refs:
+- https://partners.trellix.com/enterprise/en-us/assets/white-papers/wp-secure-coding-android-applications.pdf
+- https://sensepost.com/blog/2021/on-ios-binary-protections/
+- https://www.sans.org/blog/stack-canaries-gingerly-sidestepping-the-cage/
+status: new
 ---
 
+## Overview
+
+This weakness occurs when an app's native code is built without the exploit-mitigation features that compilers and toolchains provide.
+
+Mitigations such as stack canaries (stack-smashing protection), Address Space Layout Randomization via Position-Independent Executables (PIE/PIC), non-executable memory (NX/DEP), fortified (bounds-checked) libc functions, and Automatic Reference Counting on iOS do not remove memory-corruption bugs, but they substantially raise the effort required to exploit them. Binaries built without these features make any memory-corruption vulnerability, in the app's own code or its native dependencies, far easier to turn into code execution.
+
+## Modes of Introduction
+
+- **Missing Stack Protection**: Compiling native code without stack canaries, leaving stack-based buffer overflows directly exploitable.
+- **Missing PIE/ASLR Support**: Building binaries that are not position-independent, defeating address-space layout randomization. Note that on current Android versions the linker no longer loads non-PIE binaries, but legacy toolchains and other platforms can still produce them.
+- **Missing Fortified Functions**: Building without fortify-source style bounds-checked replacements for risky libc functions.
+- **Unsafe Memory Management Choices**: Disabling Automatic Reference Counting on iOS or otherwise opting out of memory-safety features where safer defaults exist.
+
+## Impact
+
+Attackers can exploit memory-corruption bugs with substantially less effort by:
+
+- Exploiting memory-corruption vulnerabilities in the app's native code.
+- Supplying crafted input through any external interface (network, IPC, files, UI, or peripherals).
+
+This can lead to:
+
+- **Execution of Unauthorized Code**: Attackers can convert memory-corruption bugs into reliable code execution in the app's context, resulting in full compromise of the app and its data.
+- **Compromise of Sensitive Data**: Attackers can read process memory through exploited native bugs, resulting in exposure of credentials, keys, and user data held in memory.
+
+## Mitigations
+
+- **Enable Compiler Mitigations**: Build all native code and dependencies with stack canaries, PIE/PIC, non-executable memory, and fortified functions enabled, and verify the flags in release binaries rather than assuming toolchain defaults.
+- **Keep Memory-Safety Features On**: Use Automatic Reference Counting on iOS and prefer memory-safe languages for new code where feasible.
+- **Cover Third-Party Native Libraries**: Verify that prebuilt native dependencies were also compiled with these mitigations, since a single unprotected library weakens the whole process.

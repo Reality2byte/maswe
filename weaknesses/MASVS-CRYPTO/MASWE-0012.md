@@ -15,19 +15,34 @@ refs:
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf
 - https://en.wikipedia.org/wiki/Collision_attack
 - https://csrc.nist.gov/pubs/ir/8547/ipd
-draft:
-  description: |
-    Using broken or unsuitable hash functions in a security-sensitive context can
-    compromise data integrity and authenticity. Broken algorithms such as MD5 and SHA-1
-    are vulnerable to collision attacks and must not be used where collision or
-    second-preimage resistance is required (e.g. digital signatures, integrity checks,
-    certificate fingerprints). Note that password/passphrase handling requires a
-    dedicated password-based KDF rather than a plain hash (see @MASWE-0008).
-  topics:
-  - broken hashing algorithms (e.g. MD5, SHA-1)
-  - collision and second-preimage resistance requirements
-  - selecting an approved hash function (e.g. SHA-256/SHA-3) per NIST guidance
-status: placeholder
-
+status: new
 ---
 
+## Overview
+
+This weakness occurs when a broken or unsuitable hash function is used in a security-sensitive context, such as integrity checks, digital signatures, or certificate fingerprints.
+
+Broken algorithms such as MD5 and SHA-1 are vulnerable to collision attacks and must not be used where collision or second-preimage resistance is required. Using an otherwise sound hash function for the wrong job is equally problematic: passwords and passphrases require a dedicated password-based key derivation function rather than a plain hash (see @MASWE-0008), and non-cryptographic checksums provide no security at all.
+
+## Modes of Introduction
+
+- **Broken Hash Algorithms**: Using algorithms such as MD5 or SHA-1 in contexts that require collision or second-preimage resistance, e.g. digital signatures, integrity verification, or fingerprinting.
+- **Wrong Hash for the Job**: Using a plain, fast hash for password storage or key derivation instead of a password-based KDF (see @MASWE-0008), or using non-cryptographic checksums such as CRC-32 where a cryptographic hash is required.
+- **Truncated Digests**: Truncating hash output below the security strength required by the use case, reducing collision and preimage resistance.
+
+## Impact
+
+Attackers can forge or replay data that passes hash-based integrity or authenticity checks by:
+
+- Crafting collisions or second preimages for broken hash functions.
+
+This can lead to:
+
+- **Compromise of Sensitive Data**: Attackers can substitute or modify data without invalidating its hash, resulting in undetected manipulation of sensitive information.
+- **Authentication or Authorization Bypass**: Attackers can forge artifacts whose authenticity is established via hashes, such as signed payloads or fingerprinted certificates, resulting in impersonation or unauthorized access.
+
+## Mitigations
+
+- **Use Approved Hash Functions**: Use hash functions approved by current standards, such as SHA-256 or stronger members of the SHA-2 and SHA-3 families, per [NIST.SP.800-131Ar2](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf), and follow emerging post-quantum guidance such as [NIST IR 8547](https://csrc.nist.gov/pubs/ir/8547/ipd).
+- **Use Password-Based KDFs for Passwords**: Never hash passwords or passphrases directly; use a dedicated password-based KDF as described in @MASWE-0008.
+- **Preserve Digest Length**: Do not truncate digests below the security strength required by the use case.

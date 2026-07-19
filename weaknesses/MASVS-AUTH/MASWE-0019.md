@@ -12,32 +12,38 @@ mappings:
 refs:
 - https://developer.android.com/training/articles/security-android-protected-confirmation
 - https://source.android.com/docs/security/features/protected-confirmation
-draft:
-  description: |
-    Critical actions (e.g. confirming a payment or a high-value transaction) should be
-    non-repudiable: the user must be shown exactly what they are approving, through a
-    trusted, hardware-protected confirmation path, and the app should obtain
-    cryptographic evidence that this specific prompt was confirmed by the user. Without
-    such a path, a compromised OS, overlay attack, or tampered UI could get the user to
-    approve something different from what they saw, and the user could later plausibly
-    deny having authorized the action.
-
-    On Android, the only known way to achieve this today is Android Protected Confirmation,
-    which displays a prompt via a Trusted UI and signs the confirmed message with a
-    hardware-backed key. Note that Android Protected Confirmation does not provide a secure
-    information channel, so it must not be used to display sensitive information that
-    wouldn't ordinarily be shown on the device. Equivalent trusted-confirmation paths on
-    iOS/GrapheneOS and other platforms need to be evaluated. The essential requirement is
-    that the confirmation goes through a Trusted UI / hardware-protected confirmation path.
-
-    This weakness should also minimally cover the legal context of non-repudiation (e.g.
-    the evidentiary value of a signed, user-confirmed action).
-  topics:
-  - Android Protected Confirmation (Trusted UI + hardware-backed signature)
-  - hardware-protected confirmation paths on iOS / GrapheneOS and other platforms
-  - cryptographic evidence binding the confirmed message to the user's approval
-  - legal context of non-repudiation
-status: placeholder
-
+status: new
 ---
 
+## Overview
+
+This weakness occurs when critical actions, such as confirming a payment or a high-value transaction, can be approved without a trusted confirmation path that produces cryptographic evidence of what the user actually saw and approved.
+
+For a critical action to be non-repudiable, the user must be shown exactly what they are approving through a trusted, hardware-protected confirmation path, and the app should obtain cryptographic evidence that this specific prompt was confirmed by the user. On Android, this can be achieved with [Android Protected Confirmation](https://developer.android.com/training/articles/security-android-protected-confirmation), which displays the prompt via a Trusted UI and signs the confirmed message with a hardware-backed key. Note that it does not provide a secure information channel, so it must not be used to display sensitive information that wouldn't ordinarily be shown on the device. Equivalent trusted-confirmation paths on other platforms need to be evaluated case by case.
+
+Beyond the technical aspect, non-repudiation has a legal dimension: a signed, user-confirmed action carries evidentiary value that a plain in-app confirmation does not, which matters when transactions are later disputed.
+
+## Modes of Introduction
+
+- **No Trusted Confirmation Path**: Confirming critical actions through the regular app UI, which a compromised OS or a tampered app can render differently from what is actually executed.
+- **No Cryptographic Evidence of Approval**: Completing critical actions without obtaining a hardware-backed signature that binds the displayed message to the user's approval, leaving the app owner unable to prove what was approved.
+- **Sensitive Data in the Confirmation Prompt**: Displaying sensitive information through the trusted confirmation prompt, which protects the integrity of the confirmation but is not a secure display channel for secrets.
+
+## Impact
+
+Attackers can obtain user approval for actions different from what the user intended by:
+
+- Displaying overlays or tampering with the UI to alter what the user sees while approving an action.
+- Manipulating a compromised OS to alter or fabricate the confirmation flow.
+
+This can lead to:
+
+- **Financial Loss**: Attackers can trick users into approving altered payments or transactions, resulting in funds being transferred to attacker-controlled destinations.
+- **Compromise of System Integrity and Business Operations**: Users can plausibly repudiate transactions when the app owner holds no cryptographic proof of what was approved, resulting in disputes, chargebacks, and legal exposure for the app owner.
+
+## Mitigations
+
+- **Use a Hardware-Protected Confirmation Path**: Confirm critical actions through a Trusted UI mechanism such as Android Protected Confirmation, where the prompt is displayed and confirmed outside the reach of the main OS.
+- **Bind Cryptographic Evidence to the Action**: Have the confirmation produce a hardware-backed signature over the exact message shown to the user, verify it server-side, and retain it as evidence of the approval.
+- **Do Not Display Secrets in the Prompt**: Keep sensitive information out of the trusted confirmation message; it guarantees integrity of the confirmation, not confidentiality of its contents.
+- **Use the Strongest Available Alternative**: Where no trusted-UI mechanism exists, bind transaction approval to a user-authenticated, hardware-backed signing key (e.g. biometric-bound transaction signing) as the closest available equivalent.

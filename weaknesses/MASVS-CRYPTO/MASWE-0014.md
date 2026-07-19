@@ -15,20 +15,38 @@ refs:
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf
 - https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-5.pdf
 - https://csrc.nist.gov/pubs/ir/8547/ipd
-draft:
-  description: |
-    Cryptographic signatures must be generated with algorithms and parameters of
-    sufficient strength to guarantee integrity and authenticity. Using weak or deprecated
-    schemes (e.g. SHA1withRSA), short keys, or reusing a signing key for other purposes
-    undermines the signature's security and can allow forgery. Randomness used during
-    signing (e.g. the per-signature nonce in (EC)DSA) must be unpredictable and unique.
-  topics:
-  - weak or deprecated signature algorithms (e.g. SHA1withRSA)
-  - insufficient key length for the signing algorithm
-  - predictable or reused per-signature nonce in (EC)DSA
-  - using a signing key for more than one purpose (key separation)
-  - selecting approved signature schemes per NIST FIPS 186-5
-status: placeholder
-
+status: new
 ---
 
+## Overview
+
+This weakness occurs when cryptographic signatures are generated with weak algorithms, insufficient parameters, or flawed randomness, undermining the integrity and authenticity guarantees they are meant to provide.
+
+Signatures are only as strong as the scheme and parameters behind them: deprecated combinations such as SHA1withRSA, keys that are too short, and signing keys reused for other purposes all weaken the guarantee. In addition, the randomness used during signing is critical: in (EC)DSA, a predictable or reused per-signature nonce allows the private key itself to be recovered from observed signatures.
+
+## Modes of Introduction
+
+- **Weak or Deprecated Signature Algorithms**: Generating signatures with deprecated schemes or digest combinations, such as SHA1withRSA.
+- **Insufficient Key Length**: Using signing keys shorter than the lengths recommended by current standards for the chosen algorithm.
+- **Predictable Signature Nonces**: Generating the per-signature nonce in (EC)DSA with insufficient entropy, or reusing it across signatures.
+- **Key Reuse Across Purposes**: Using a signing key for other purposes, such as encryption or key agreement, violating key-separation principles.
+
+## Impact
+
+Attackers can forge signatures or recover signing keys by:
+
+- Recovering private keys from predictable or reused signature nonces.
+- Performing cryptanalysis of broken algorithms, modes, or parameters.
+- Brute-forcing cryptographic material generated with insufficient length.
+
+This can lead to:
+
+- **Authentication or Authorization Bypass**: Attackers can sign arbitrary data as the app or user, resulting in impersonation and unauthorized transactions or API calls accepted by peers that trust the signature.
+- **Compromise of Sensitive Data**: Attackers can tamper with signed data while producing valid signatures for it, resulting in undetected manipulation of information whose integrity depends on the signature.
+
+## Mitigations
+
+- **Use Approved Signature Schemes**: Generate signatures with schemes approved in [NIST FIPS 186-5](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-5.pdf), such as ECDSA, RSA-PSS, or EdDSA, with approved digests, and follow post-quantum migration guidance such as [NIST IR 8547](https://csrc.nist.gov/pubs/ir/8547/ipd).
+- **Use Sufficient Key Lengths**: Ensure signing keys meet or exceed the lengths recommended by [NIST.SP.800-131Ar2](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf) for the chosen algorithm.
+- **Ensure Nonce Uniqueness**: Generate (EC)DSA per-signature nonces with a cryptographically secure random number generator, or use deterministic schemes (e.g. RFC 6979 deterministic ECDSA or Ed25519) that eliminate nonce misuse.
+- **Use Signing Keys for a Single Purpose**: Keep signing keys dedicated to signing and generate separate keys for other operations.

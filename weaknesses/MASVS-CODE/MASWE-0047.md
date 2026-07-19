@@ -17,42 +17,39 @@ refs:
 - https://developer.apple.com/documentation/security/password_autofill
 - https://developer.android.com/privacy-and-security/cryptography#crypto_provider
 - https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-1.pdf?__blob=publicationFile
-draft:
-  description: |
-    Security-critical functionality (cryptography, networking/TLS, DNS, and authentication) should
-    rely on platform-provided APIs and functionality or established, peer-reviewed libraries,
-    rather than on custom ("roll-your-own") implementations or unproven third-party components.
-    Platform APIs and vetted libraries are designed and maintained by experts, incorporate security
-    best practices, and receive timely updates; custom or non-standard implementations are far more
-    likely to contain subtle, exploitable flaws and to miss security updates. This weakness also
-    covers cases where the app fails to leverage secure functionality the platform already provides,
-    for example using an insecure custom DNS setup instead of the platform's Private DNS /
-    DNS-over-TLS support.
-
-    This weakness consolidates:
-
-    - **Risky cryptography implementations**: custom or non-compliant crypto (e.g. not meeting
-      standards such as FIPS 140-2/3), unproven algorithms, or home-grown constructions that
-      haven't undergone rigorous peer review and formal validation.
-    - **Non-standard networking**: rolling a custom networking/TLS stack, using an insecure custom
-      DNS setup instead of the platform's secure name-resolution functionality, or using outdated
-      third-party networking libraries instead of proven APIs such as `URLSession`/`NSURLSession`
-      on iOS or `HttpsURLConnection`/`OkHttp` on Android.
-    - **Non-standard authentication**: implementing custom authentication instead of using
-      platform-provided authentication APIs (e.g. Android Credential Manager/`AccountManager`,
-      iOS Authentication Services / Password AutoFill).
-
-    Note: this can be seen as the security-focused counterpart to @MASWE-0074 (Usage of Non-Privacy-Preserving
-    Functionality), which applies the same "leverage platform-provided features rather than custom
-    or non-standard alternatives" principle from a privacy angle. The overlap is intentional: some
-    platform APIs (e.g. `ASWebAuthenticationSession` / Custom Tabs) improve both security and
-    privacy.
-  topics:
-  - roll-your-own cryptography vs. vetted, standards-compliant libraries
-  - custom networking/TLS stacks vs. proven networking APIs (URLSession, HttpsURLConnection, OkHttp, Alamofire)
-  - custom authentication vs. platform-provided authentication APIs (Credential Manager, AccountManager, Authentication Services)
-  - unmaintained/unproven third-party security libraries
-  - Custom DNS Resolution, the app bypasses platform-provided name resolution by implementing or configuring a custom resolver without equivalent transport security, trust management, and update guarantees.
-status: placeholder
-
+status: new
 ---
+
+## Overview
+
+This weakness occurs when security-critical functionality, such as cryptography, networking and TLS, DNS resolution, or authentication, is implemented with custom code or unproven components instead of platform-provided APIs or established, peer-reviewed libraries.
+
+Platform APIs and vetted libraries are designed and maintained by experts, incorporate security best practices, and receive timely updates. Custom or non-standard implementations are far more likely to contain subtle, exploitable flaws and to miss security updates. This weakness also covers failing to leverage secure functionality the platform already provides, for example using an insecure custom DNS setup instead of the platform's Private DNS / DNS-over-TLS support. It is the security-focused counterpart to @MASWE-0074, which applies the same principle from a privacy angle.
+
+## Modes of Introduction
+
+- **Roll-Your-Own Cryptography**: Implementing custom or non-compliant cryptography (e.g. not meeting standards such as FIPS 140-2/3), unproven algorithms, or home-grown constructions that have not undergone rigorous peer review and formal validation.
+- **Custom Networking or TLS Stacks**: Rolling a custom networking/TLS stack or using outdated third-party networking libraries instead of proven APIs such as `URLSession` on iOS or `HttpsURLConnection`/OkHttp on Android.
+- **Custom DNS Resolution**: Bypassing platform-provided name resolution with a custom resolver that lacks equivalent transport security, trust management, and update guarantees.
+- **Custom Authentication**: Implementing custom authentication flows instead of platform-provided authentication APIs (e.g. Android Credential Manager/`AccountManager`, iOS Authentication Services / Password AutoFill).
+- **Unmaintained Security Libraries**: Depending on unproven or unmaintained third-party components for security-critical functionality.
+
+## Impact
+
+Attackers can exploit flaws in non-standard security implementations by:
+
+- Exploiting flaws in custom or unproven security implementations.
+- Performing cryptanalysis of broken algorithms, modes, or parameters.
+- Performing a Machine-in-the-Middle (MITM) attack, e.g., via ARP poisoning, DNS spoofing, or a rogue access point.
+
+This can lead to:
+
+- **Compromise of Sensitive Data**: Attackers can break weak custom cryptography or intercept traffic handled by flawed custom stacks, resulting in unauthorized disclosure or modification of sensitive data.
+- **Authentication or Authorization Bypass**: Attackers can exploit logic flaws in custom authentication implementations, resulting in unauthorized access to user accounts and protected functionality.
+
+## Mitigations
+
+- **Use Platform Security APIs**: Prefer platform-provided functionality for cryptography, TLS, DNS, and authentication; it is expert-maintained and updated with the OS.
+- **Choose Vetted, Standards-Compliant Libraries**: Where a library is needed, use established, peer-reviewed components that comply with recognized standards (e.g. FIPS 140-2/3, BSI TR-02102) and are actively maintained.
+- **Never Roll Your Own Crypto or TLS**: Do not design or implement custom cryptographic algorithms, protocols, or TLS stacks for production use.
+- **Leverage Secure Platform Defaults**: Use the platform's secure name resolution (e.g. Private DNS / DNS-over-TLS) and credential-management flows instead of custom substitutes.

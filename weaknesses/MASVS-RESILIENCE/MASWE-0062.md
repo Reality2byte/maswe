@@ -13,28 +13,37 @@ mappings:
 refs:
 - https://developer.apple.com/documentation/xcode/using-the-latest-code-signature-format
 - https://developer.apple.com/documentation/devicecheck/preparing-to-use-the-app-attest-service
-draft:
-  description: |
-    The app does not attest its own authenticity/integrity, i.e. it doesn't implement effective
-    techniques to verify that the running binary is a genuine, unmodified copy of the app
-    (CWE-347). This includes verifying the app signature and binaries at runtime (e.g. detecting
-    an invalid app signing certificate, or an outdated signing scheme such as Android V1-only or
-    an iOS CodeDirectory version below 20400).
-
-    This weakness previously focused on "Official Store Verification". Rather than only checking
-    whether the app was downloaded from an official store (e.g. by verifying the package name),
-    the emphasis is now on verifying the app's own signature / app attestation, which is a
-    stronger guarantee and also covers apps distributed through alternative stores. Checking the
-    app's signature or package name against the expected values remains one of the techniques.
-  topics:
-  - app signature / binaries checked at runtime
-  - native libraries verifying app integrity (e.g. AppAttest)
-  - invalid app signing certificate detection
-  - latest signing scheme not used (Android V1-only, iOS CodeDirectory < 20400)
-  - verifying the app's signature / package name (incl. official-store assurance)
-  - Effectiveness Assessment (e.g. bypassing the detection)
-  note: consider Static Code Modification? / Repackaging Detection Not Implemented
-status: placeholder
-
+status: new
 ---
 
+## Overview
+
+This weakness occurs when an app does not attest its own authenticity and integrity, i.e. it implements no effective techniques to verify that the running binary is a genuine, unmodified copy of the app.
+
+App attestation includes verifying the app's signature and binaries at runtime, detecting an invalid or unexpected signing certificate, and using platform attestation services that vouch for the app's identity (e.g. App Attest on iOS, Play Integrity app verdicts on Android). It also covers using current signing schemes: outdated formats, such as Android V1-only signatures or an iOS CodeDirectory version below 20400, weaken the platform's own integrity guarantees. Verifying the package or signature against expected values, which also provides official-store assurance, remains one of the applicable techniques.
+
+## Modes of Introduction
+
+- **No Runtime Integrity Verification**: Not verifying the app's signature, package identity, or binaries at runtime, so a repackaged copy runs unnoticed.
+- **No Platform App Attestation**: Not using platform services that attest the app's identity to the backend, so servers cannot distinguish genuine clients from modified ones.
+- **Outdated Signing Schemes**: Signing releases with outdated formats (e.g. Android V1-only signatures, iOS CodeDirectory below version 20400) that are easier to abuse.
+
+## Impact
+
+Attackers can distribute and run modified copies of the app by:
+
+- Patching or repackaging the app to remove or alter client-side checks.
+- Installing a repackaged version of the app on victim devices.
+
+This can lead to:
+
+- **Bypass of Protection Mechanisms**: Attackers can strip security controls from a repackaged copy that still works against the backend, resulting in the circumvention of the app's defenses at scale.
+- **Compromise of Sensitive Data**: Attackers can distribute trojanized versions of the app that harvest credentials and data from the users they deceive, resulting in account compromise attributed to the app.
+- **Compromise of System Integrity and Business Operations**: Modified clients, cracked features, and clone apps circulate under the app's brand, resulting in revenue loss and reputational damage for the app owner.
+
+## Mitigations
+
+- **Verify App Integrity at Runtime**: Check the app's signing certificate, package identity, and binaries at runtime against expected values, implementing checks in layers that are harder to patch out (e.g. native code).
+- **Use Platform App Attestation**: Integrate services such as iOS App Attest or Play Integrity app verdicts and verify their results server-side, so the backend rejects modified or repackaged clients.
+- **Use Current Signing Schemes**: Sign releases with up-to-date signature formats and rotate away from deprecated ones.
+- **Respond to Failed Checks**: Terminate, restrict functionality, or flag the session to the backend when integrity verification fails, and assess the checks against known bypass techniques.

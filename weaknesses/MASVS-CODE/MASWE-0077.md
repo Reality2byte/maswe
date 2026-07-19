@@ -8,25 +8,39 @@ profiles: [L2]
 mappings:
   masvs-v2: [MASVS-CODE-3]
   cwe: [1357, 494]
-
 refs:
 - https://reproducible-builds.org/
 - https://slsa.dev/
 - https://github.com/signalapp/Signal-Android/blob/main/reproducible-builds/README.md
-draft:
-  description: |
-    A build is reproducible when compiling the same source with the same build environment
-    always yields a bit-for-bit identical artifact. When builds are not reproducible, it is
-    impossible for a third party (or the developer) to independently verify that a distributed
-    binary was built from the claimed, unmodified source, which weakens supply-chain integrity
-    and makes it harder to detect tampering or injected malicious code. Reproducible builds,
-    together with build provenance/attestation (e.g. SLSA), let stakeholders verify the
-    integrity of released artifacts.
-  topics:
-  - non-deterministic build outputs (timestamps, paths, ordering, embedded environment data)
-  - inability to independently verify a released binary against its source
-  - build provenance and attestation (e.g. SLSA)
-  - pinned, controlled, and documented build environments/toolchains
-status: placeholder
-
+status: new
 ---
+
+## Overview
+
+This weakness occurs when compiling the app's source with the same build environment does not yield a bit-for-bit identical artifact, making it impossible to independently verify that a distributed binary was built from the claimed, unmodified source.
+
+Reproducible builds allow third parties, and the developers themselves, to detect tampering or injected malicious code by rebuilding from source and comparing the result with the released artifact. Without reproducibility, this verification is impossible, weakening supply-chain integrity. Together with build provenance and attestation frameworks (e.g. SLSA), reproducible builds let stakeholders verify the integrity of released artifacts.
+
+## Modes of Introduction
+
+- **Non-Deterministic Build Outputs**: Embedding timestamps, absolute paths, environment data, or unstable orderings in build artifacts, so identical inputs produce differing outputs.
+- **Unpinned Build Environments**: Building with undocumented or unpinned toolchains and dependencies, so no one can recreate the environment that produced a release.
+- **No Provenance or Attestation**: Publishing releases without provenance describing what was built, from which source, and by which pipeline.
+
+## Impact
+
+Attackers can conceal tampering with the app's released binaries by:
+
+- Distributing tampered builds that cannot be distinguished from legitimate ones.
+- Compromising a dependency, SDK, or build tool in the app's supply chain.
+
+This can lead to:
+
+- **Execution of Unauthorized Code**: Attackers can inject code during the build or distribution process without detection, since no independent party can verify the binary against the source, resulting in malicious code shipping to the entire user base.
+- **Loss of User Trust**: Users and auditors cannot verify that the shipped app matches the published source, resulting in weakened trust in the app, particularly for security- and privacy-sensitive apps.
+
+## Mitigations
+
+- **Make Builds Deterministic**: Eliminate timestamps, absolute paths, environment-dependent data, and unstable orderings from build outputs, following [reproducible-builds.org](https://reproducible-builds.org/) guidance.
+- **Pin and Document the Build Environment**: Define the exact toolchain and dependency versions in version control so any party can recreate the build environment.
+- **Publish Provenance and Attestations**: Generate build provenance (e.g. per [SLSA](https://slsa.dev/)) and, where feasible, publish verification instructions so third parties can reproduce and compare releases.

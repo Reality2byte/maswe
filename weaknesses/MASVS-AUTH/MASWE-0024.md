@@ -15,27 +15,39 @@ refs:
 - https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession
 - https://developer.android.com/guide/topics/text/autofill
 - https://developer.apple.com/documentation/authenticationservices/public-private_key_authentication/supporting_passkeys
-draft:
-  description: |
-    Apps should support the platform's auto-fill mechanisms for authenticators so that
-    credentials, one-time codes, and passkeys can be provided securely without the user
-    resorting to insecure workarounds such as copy/paste from other apps. Lacking auto-fill
-    support pushes users toward weaker practices and misses the platform's secure credential
-    flows.
-
-    This consolidates several related best practices: credential and one-time-code auto-fill
-    (e.g. platform auto-fill from SMS) to avoid copy/paste; iOS Password AutoFill, which
-    streamlines logging into web services associated with the app's domain (and, for
-    third-party services, using `ASWebAuthenticationSession` instead of Password AutoFill);
-    passwordless authentication such as passkeys / multi-device FIDO credentials and
-    WebAuthn/`ASAuthorization`; and shared web credentials / website association so that
-    credentials can be shared securely between an app and its website counterpart.
-  topics:
-  - credential and one-time-code auto-fill to avoid copy/paste (e.g. platform auto-fill from SMS)
-  - iOS Password AutoFill for the app's associated domain
-  - ASWebAuthenticationSession for third-party services instead of Password AutoFill
-  - passwordless authentication (passkeys, multi-device FIDO, WebAuthn/ASAuthorization)
-  - shared web credentials and website association
-status: placeholder
-
+status: new
 ---
+
+## Overview
+
+This weakness occurs when an app does not support the platform's auto-fill and credential-management mechanisms, pushing users toward insecure workarounds such as copying and pasting credentials between apps.
+
+Platforms provide secure flows for supplying credentials, one-time codes, and passkeys: credential and one-time-code auto-fill, Password AutoFill tied to the app's associated domain, system authentication sessions for third-party services, passwordless authentication with passkeys and WebAuthn, and shared web credentials between an app and its website counterpart. When an app ignores these mechanisms, users end up typing or copying secrets manually, weakening both their credentials and the trust boundary they cross.
+
+## Modes of Introduction
+
+- **No Auto-Fill Support in Credential Fields**: Building login fields that are not recognized by or are incompatible with the platform's auto-fill framework and password managers.
+- **No One-Time-Code Auto-Fill**: Requiring users to manually read and copy one-time codes (e.g. from SMS) instead of supporting the platform's code auto-fill.
+- **Missing Website Association**: Not associating the app with its domain, preventing secure credential sharing between the app and its website counterpart.
+- **Embedded Third-Party Login Instead of System Flows**: Handling third-party authentication in embedded views instead of system-provided authentication sessions (e.g. `ASWebAuthenticationSession`).
+- **No Support for Passwordless Authentication**: Not offering passkeys or other multi-device FIDO/WebAuthn credentials where they could replace passwords.
+
+## Impact
+
+Attackers can capture credentials that users handle manually by:
+
+- Reading sensitive data from the clipboard when users copy it between apps.
+- Phishing credentials through lookalike apps or pages when users must type them manually.
+
+This can lead to:
+
+- **Authentication or Authorization Bypass**: Attackers can reuse captured credentials or one-time codes, resulting in account takeover and unauthorized access to the user's data and functionality.
+- **Compromise of Sensitive Data**: Attackers can read credentials exposed through clipboard-based workarounds, resulting in disclosure of authentication material that protects sensitive information.
+
+## Mitigations
+
+- **Support Platform Auto-Fill**: Annotate credential fields so the platform's auto-fill framework and password managers can fill them securely (e.g. autofill hints on Android, `textContentType` on iOS).
+- **Support One-Time-Code Auto-Fill**: Use the platform mechanisms that deliver one-time codes directly into the app, removing the need for manual copying.
+- **Associate the App with Its Domain**: Configure website association (e.g. iOS Password AutoFill with associated domains, shared web credentials) so credentials flow securely between the app and its website.
+- **Use System Authentication Sessions for Third-Party Logins**: Authenticate against third-party services with system flows such as `ASWebAuthenticationSession` instead of embedded views.
+- **Adopt Passkeys**: Offer passkeys or other WebAuthn-based passwordless authentication to remove shared secrets from the login flow entirely.

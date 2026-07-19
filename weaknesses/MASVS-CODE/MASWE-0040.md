@@ -15,20 +15,34 @@ refs:
 - https://developer.android.com/reference/com/google/android/play/core/appupdate/AppUpdateManager
 - https://medium.com/swlh/updating-users-to-the-latest-app-release-on-ios-ed96e4c76705
 - https://gist.github.com/DineshKachhot/f63fcebceca6351fc982cafd38f6f05c
-draft:
-  description: |
-    When a critical vulnerability is discovered in an app that is already in production, the developer
-    needs a way to force users onto a fixed version. This weakness occurs when the app has no
-    enforced-update mechanism (e.g. Android In-App Updates / `AppUpdateManager`, or an App Store
-    version check on iOS), or when the update requirement is enforced only on the client side and can
-    therefore be bypassed. Robust enforcement requires the backend to signal and enforce the minimum
-    acceptable version rather than relying solely on local checks.
-  topics:
-  - no in-app / enforced update mechanism at all (CWE-693)
-  - update enforcement only client-side without a server-side check (CWE-602)
-  - AppUpdateManager (Android In-App Updates) / App Store version check (iOS)
-  - server-driven minimum-supported-version enforcement
-status: placeholder
-
+status: new
 ---
 
+## Overview
+
+This weakness occurs when an app has no mechanism to force users onto a fixed version after a critical vulnerability is discovered, or when the update requirement is enforced only on the client side.
+
+When a critical vulnerability is found in a production app, the developer needs a way to move the installed base to a patched version quickly. Platforms provide building blocks for this, such as Android In-App Updates (`AppUpdateManager`) and store version checks on iOS, but robust enforcement requires the backend to signal and enforce the minimum acceptable version: a purely client-side check can be bypassed by the very attackers it is meant to stop.
+
+## Modes of Introduction
+
+- **No Enforced-Update Mechanism**: Shipping the app without any in-app or enforced update flow, so vulnerable versions keep working indefinitely.
+- **Client-Side-Only Enforcement**: Enforcing the update requirement only in app code, without the backend rejecting requests from versions below the minimum supported one.
+
+## Impact
+
+Attackers can exploit vulnerabilities that remain reachable in outdated app versions by:
+
+- Exploiting known vulnerabilities in outdated app versions that users are still running.
+- Patching or repackaging the app to remove or alter client-side checks.
+
+This can lead to:
+
+- **Compromise of Sensitive Data**: Attackers can exploit already-fixed vulnerabilities against users stuck on old versions, resulting in exposure of user data long after a patch was published.
+- **Compromise of System Integrity and Business Operations**: The app owner cannot retire vulnerable versions from the installed base, resulting in a prolonged attack window, extended incident response, and continued abuse of backend services.
+
+## Mitigations
+
+- **Implement an Enforced Update Flow**: Use platform mechanisms such as Android In-App Updates or a version check against the app store on iOS to require updating when a critical fix ships.
+- **Enforce the Minimum Version Server-Side**: Have the backend declare the minimum supported app version and reject requests from older clients, so bypassing the client-side prompt does not restore access.
+- **Distinguish Flexible and Immediate Updates**: Reserve blocking (immediate) updates for security-critical releases and use flexible updates otherwise, so users accept the mechanism when it matters.

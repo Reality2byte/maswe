@@ -9,25 +9,37 @@ mappings:
   masvs-v2: [MASVS-AUTH-2, MASVS-CRYPTO-2]
   cwe: [287, 522]
   maswe-beta: [MASWE-0046]
-draft:
-  description: |
-    Cryptographic keys gated by biometric authentication should be invalidated when the set of
-    enrolled biometrics changes, so that an attacker who enrolls a new fingerprint or face cannot
-    unlock keys bound to the legitimate user's biometrics. On Android this invalidation is enabled by
-    default but can be turned off with `setInvalidatedByBiometricEnrollment(false)`; on iOS it must be
-    explicitly enabled by using `SecAccessControlCreateFlags.biometryCurrentSet` (formerly
-    `touchIDCurrentSet`) when creating the access control, which invalidates the keychain item when a
-    biometric is added or removed. This weakness occurs when the app leaves biometric-bound keys valid
-    across new enrollments.
-  topics:
-  - Enabled by default on Android but can be disabled by calling `setInvalidatedByBiometricEnrollment(false)`
-  - Disabled by default on iOS but can be enabled using `SecAccessControlCreateFlags.biometryCurrentSet`
-    (prev. `touchIDCurrentSet`) when setting access control (since iOS 9). This invalidates
-    keychain items when a fingerprint is added or removed. See kSecAccessControlTouchIDCurrentSet,
-    biometryCurrentSet.
-  - verifying invalidation-on-enrollment is not disabled on Android (setInvalidatedByBiometricEnrollment)
-  - responding safely when a key has been invalidated (e.g. requiring re-enrollment/re-auth)
-status: placeholder
-
+refs:
+- https://developer.android.com/reference/android/security/keystore/KeyGenParameterSpec.Builder#setInvalidatedByBiometricEnrollment(boolean)
+- https://developer.apple.com/documentation/security/secaccesscontrolcreateflags/biometrycurrentset
+status: new
 ---
 
+## Overview
+
+This weakness occurs when cryptographic keys gated by biometric authentication remain valid after the set of enrolled biometrics changes.
+
+Biometric-bound keys are meant to be usable only by the person whose biometrics were enrolled when the key was created. If keys stay valid across enrollments, anyone who can add a new fingerprint or face to the device can unlock them. On Android, invalidation on new enrollment is enabled by default but can be disabled with `setInvalidatedByBiometricEnrollment(false)`; on iOS, it must be explicitly enabled by creating the access control with `SecAccessControlCreateFlags.biometryCurrentSet` (formerly `touchIDCurrentSet`), which invalidates the Keychain item when a biometric is added or removed.
+
+## Modes of Introduction
+
+- **Invalidation Disabled on Android**: Creating keys with `setInvalidatedByBiometricEnrollment(false)`, keeping them usable after new biometrics are enrolled.
+- **Invalidation Not Enabled on iOS**: Protecting Keychain items without `biometryCurrentSet`, so items remain accessible with any enrolled biometric, including ones added later.
+- **Unsafe Invalidation Recovery**: Silently re-creating an invalidated key or falling back to weaker authentication when invalidation occurs, instead of re-verifying the user's identity first.
+
+## Impact
+
+Attackers can use biometric-protected keys without the legitimate user's biometrics by:
+
+- Enrolling additional biometrics on the device after obtaining the device credential.
+
+This can lead to:
+
+- **Authentication or Authorization Bypass**: Attackers can pass biometric prompts with their own newly enrolled biometrics, resulting in unauthorized approval of operations bound to the victim's identity.
+- **Compromise of Sensitive Data**: Attackers can unlock data protected by biometric-bound keys, resulting in unauthorized disclosure of sensitive user information.
+
+## Mitigations
+
+- **Keep Enrollment Invalidation Enabled on Android**: Do not call `setInvalidatedByBiometricEnrollment(false)` for keys protecting sensitive data or operations.
+- **Enable Enrollment Invalidation on iOS**: Create Keychain access controls with `SecAccessControlCreateFlags.biometryCurrentSet` so items are invalidated when the enrolled biometric set changes.
+- **Handle Invalidation Safely**: When a key has been invalidated, require full re-authentication of the user (e.g. account credentials or a server-verified flow) before re-creating the key, and never silently fall back to weaker protection.

@@ -17,28 +17,43 @@ refs:
 - https://datatracker.ietf.org/doc/html/rfc6151
 - https://web.archive.org/web/20170810051504/http://www.tcs.hut.fi/old/papers/aura/aura-csfws97.pdf
 - https://en.wikipedia.org/wiki/Replay_attack
-draft:
-  description: |
-    A Message Authentication Code (MAC) provides integrity and authenticity for a message using a
-    shared secret key. Improper use of a MAC in a security-sensitive context undermines these
-    guarantees and can let attackers forge or replay messages, or learn information through side
-    channels. Typical problems include using a MAC key for more than one purpose or with an
-    unauthorized algorithm, keys with insufficient entropy, MACs built on broken hash functions
-    (e.g. MD5/SHA-1), non-cryptographic checksums (e.g. CRC-32) used where a MAC is required,
-    fragile constructions (e.g. raw CBC-MAC on variable-length messages), truncated tags, missing
-    replay protection (timestamp/nonce), and incorrect MAC-then-encrypt / encrypt-then-MAC ordering
-    that leaks information via timing or error messages.
-  topics:
-  - Using a MAC key for more than one purpose or with an unauthorized algorithm (key separation)
-  - Using HMAC with keys with insufficient entropy
-  - Using HMAC with missing timestamp (or nonce)
-  - Using MAC‑then‑encrypt or encrypt‑then‑MAC incorrectly, leaking information via timing or error messages
-  - Allowing predictors (users or attackers) to control data inputs, creating scenarios where forged or replayed tags bypass integrity checks.
-  - Hash functions lacking collision resistance (e.g., MD5 or SHA‑1 used in HMAC)
-  - Use of non‑cryptographic checksums (e.g., CRC‑32 instead of HMAC)
-  - MAC constructions that fail outside narrow assumptions (e.g., raw CBC‑MAC on variable‑length messages)
-  - Tags that are too short significantly lower the effort required for forgery
-status: placeholder
-
+status: new
 ---
 
+## Overview
+
+This weakness occurs when a Message Authentication Code (MAC) is missing, built on broken primitives, or used incorrectly in a security-sensitive context, so the integrity and authenticity of messages are no longer guaranteed.
+
+A MAC provides integrity and authenticity for a message using a shared secret key. These guarantees only hold when the MAC algorithm is sound, the key is strong and used for a single purpose, the tag is long enough, verification does not leak information, and the protocol prevents captured messages from being accepted again.
+
+## Modes of Introduction
+
+- **Non-Cryptographic Checksums**: Using checksums such as CRC-32 where a MAC is required; checksums detect accidental corruption but can be trivially recomputed by an attacker.
+- **MACs Built on Broken Hashes**: Building MACs on hash functions lacking collision resistance, such as MD5 or SHA-1.
+- **Weak or Reused MAC Keys**: Using MAC keys with insufficient entropy, or using a MAC key for more than one purpose or with an unauthorized algorithm, violating key-separation principles.
+- **Fragile Constructions**: Using constructions that fail outside narrow assumptions, such as raw CBC-MAC on variable-length messages, or composing encryption and authentication incorrectly (e.g. MAC-then-encrypt where encrypt-then-MAC is required).
+- **Truncated Tags**: Using authentication tags that are too short, significantly lowering the effort required for forgery.
+- **Missing Replay Protection**: Authenticating messages without a timestamp, nonce, or sequence number, so previously captured valid messages remain acceptable.
+- **Observable Verification Failures**: Exposing timing differences or detailed error messages during MAC verification that can serve as an oracle.
+
+## Impact
+
+Attackers can forge or replay messages that the app or its backend accepts as authentic by:
+
+- Replaying previously captured valid messages or tags.
+- Performing cryptanalysis of broken algorithms, modes, or parameters.
+- Brute-forcing cryptographic material generated with insufficient length.
+
+This can lead to:
+
+- **Compromise of Sensitive Data**: Attackers can modify protected messages or stored data without detection, resulting in undetected manipulation of sensitive information.
+- **Authentication or Authorization Bypass**: Attackers can forge or replay authenticated messages, such as commands or transactions, resulting in unauthorized actions being executed on behalf of the user.
+
+## Mitigations
+
+- **Use Standard MAC Algorithms**: Use HMAC with an approved hash function (SHA-256 or stronger) or an approved authenticated mode, following [NIST SP 800-224](https://csrc.nist.gov/pubs/sp/800/224/ipd) and [NIST.SP.800-131Ar2](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf); never use non-cryptographic checksums for security purposes.
+- **Use Strong, Single-Purpose Keys**: Generate MAC keys with a cryptographically secure random number generator and use each key for only one purpose and algorithm.
+- **Prefer AEAD or Encrypt-then-MAC**: When combining encryption and authentication, use an AEAD mode (e.g. AES-GCM) or the encrypt-then-MAC composition.
+- **Use Full-Length Tags**: Do not truncate authentication tags below the length required by the security level of the use case.
+- **Add Replay Protection**: Include and verify a timestamp, nonce, or sequence number in authenticated messages so captured messages cannot be replayed.
+- **Verify in Constant Time**: Compare tags using constant-time comparison and return uniform errors so verification cannot be used as an oracle.

@@ -14,21 +14,37 @@ mappings:
   maswe-beta: [MASWE-0069, MASWE-0073]
 refs:
 - https://blog.oversecured.com/Android-Exploring-vulnerabilities-in-WebResourceResponse/
-draft:
-  description: |
-    When a WebView is configured to access local resources (e.g. `setAllowFileAccessFromFileURLs`,
-    `setAllowUniversalAccessFromFileURLs`, `setAllowFileAccess`, `setAllowContentAccess`) while
-    also rendering untrusted content, malicious JavaScript can read app-private files, traverse the
-    filesystem, or exfiltrate data via XHR. This also covers insecure custom resource loading via
-    `WebResourceResponse` (instead of `WebViewAssetLoader`), which can serve attacker-controllable
-    HTML/JS (enabling XSS) and expose files from a protected internal sphere to the less-trusted
-    WebView JavaScript context or external websites.
-  topics:
-  - universal file access from file URLs
-  - restricting file:// and content:// access
-  - insecure WebResourceResponse vs. WebViewAssetLoader
-  - exposing app-private files/data to the WebView JavaScript context
-status: placeholder
-
+status: new
 ---
 
+## Overview
+
+This weakness occurs when a WebView is configured to access local resources while also rendering untrusted content, allowing that content to reach files and data outside the web sandbox.
+
+Settings that enable file or content access (e.g. `setAllowFileAccess`, `setAllowFileAccessFromFileURLs`, `setAllowUniversalAccessFromFileURLs`, `setAllowContentAccess` on Android, or overly broad file read access grants on iOS) let JavaScript running in the WebView read app-private files, traverse the filesystem, or exfiltrate data. Insecure custom resource loading, such as serving internal files through a hand-rolled `WebResourceResponse` instead of a safe asset loader, can likewise expose protected files to the less-trusted WebView JavaScript context or serve attacker-controllable content from the app's own origin.
+
+## Modes of Introduction
+
+- **File Access Enabled with Untrusted Content**: Enabling file or content access settings on WebViews that also render untrusted or externally influenced content.
+- **Universal Access from File URLs**: Allowing universal or file-URL cross-origin access, so a local HTML file can read other local files and send them to remote origins.
+- **Insecure Custom Resource Loading**: Serving internal files through custom response handlers without path validation, instead of a dedicated asset-loading mechanism with a restricted scope.
+- **Overly Broad File Read Grants**: Granting the WebView read access to broader directories than the specific content it needs to display.
+
+## Impact
+
+Attackers can access local files and app-private data from web content by:
+
+- Injecting malicious JavaScript into WebView content (e.g., via MITM on insecure connections or a compromised website).
+- Delivering crafted deep links or intents from a malicious app or web page.
+
+This can lead to:
+
+- **Compromise of Sensitive Data**: Attackers can read and exfiltrate app-private files, such as databases, preferences, or cached tokens, resulting in unauthorized disclosure of user and app data.
+- **Authentication or Authorization Bypass**: Attackers can steal session material stored in reachable files or WebView storage, resulting in account takeover.
+
+## Mitigations
+
+- **Disable File and Content Access**: Keep file, file-URL, and content access settings disabled unless strictly required, and never combine them with untrusted content.
+- **Use a Safe Asset Loader**: Serve local app resources through a dedicated asset-loading mechanism with a fixed, validated scope instead of custom response handlers over arbitrary paths.
+- **Scope File Read Access Narrowly**: When loading local files, grant read access only to the specific file or directory being displayed.
+- **Separate Trusted and Untrusted Content**: Render untrusted content only in WebViews with no local resource access and no privileged configuration.

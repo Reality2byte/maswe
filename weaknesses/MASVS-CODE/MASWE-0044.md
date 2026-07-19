@@ -12,18 +12,37 @@ mappings:
   - https://developer.android.com/privacy-and-security/risks/dynamic-code-loading
   - https://developer.android.com/privacy-and-security/risks/create-package-context
   maswe-beta: [MASWE-0085]
-draft:
-  description: |
-    Loading and executing code that is fetched or resolved at runtime (e.g. via `dlopen`,
-    `DexClassLoader`/`PathClassLoader`, loading native libraries or DEX/JAR files from writable
-    or external locations, or downloading executable code) is dangerous when the source or
-    integrity of that code is not verified. An attacker who can modify or substitute the loaded
-    code can achieve arbitrary code execution within the app's context (CWE-494).
-  topics:
-  - dlopen / native library loading from untrusted paths
-  - DexClassLoader / PathClassLoader loading from writable or external storage
-  - downloading and executing code without integrity/authenticity verification
-status: placeholder
-
+refs:
+- https://developer.android.com/privacy-and-security/risks/dynamic-code-loading
+status: new
 ---
 
+## Overview
+
+This weakness occurs when an app loads and executes code resolved at runtime without verifying its source and integrity.
+
+Dynamic code loading includes loading native libraries via `dlopen`, loading DEX/JAR files through class loaders, and downloading executable code or scripts at runtime. When the loaded code comes from writable or external locations, or is fetched without integrity and authenticity verification, an attacker who can modify or substitute it gains arbitrary code execution within the app's context, with all the app's permissions and data access.
+
+## Modes of Introduction
+
+- **Loading from Writable or External Locations**: Loading native libraries or DEX/JAR files from writable, external, or world-accessible storage where other apps or actors can replace them.
+- **Downloaded Code Without Verification**: Downloading and executing code, plugins, or scripts without verifying their integrity and authenticity (e.g. signature verification, see @MASWE-0015).
+- **Code from Other Packages**: Executing code from other installed packages (e.g. via package contexts with code inclusion) whose identity and integrity are not verified.
+
+## Impact
+
+Attackers can execute arbitrary code within the app's context by:
+
+- Substituting or modifying code that the app loads at runtime from writable or unverified locations.
+- Performing a Machine-in-the-Middle (MITM) attack, e.g., via ARP poisoning, DNS spoofing, or a rogue access point.
+
+This can lead to:
+
+- **Execution of Unauthorized Code**: Attackers can run attacker-controlled code with the app's identity, permissions, and data access, resulting in full compromise of the app's functionality on the device.
+- **Compromise of Sensitive Data**: Attackers can use the injected code to read the app's private data and credentials, resulting in unauthorized disclosure of user and app data.
+
+## Mitigations
+
+- **Avoid Dynamic Code Loading**: Ship all executable code inside the signed app package whenever possible; app stores also restrict runtime code delivery.
+- **Load Only from Protected Locations**: When loading is unavoidable, load code only from the app's protected, read-only installation directories, never from writable or external storage.
+- **Verify Integrity and Authenticity**: Verify a cryptographic signature over any dynamically delivered code against a pinned trusted key before loading it, and deliver it only over secure channels.

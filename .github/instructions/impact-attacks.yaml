@@ -22,10 +22,60 @@
 - Exploiting predictable or reused IVs or nonces to detect patterns or recover plaintext.
 - Exploiting padding oracles exposed through observable error signals or timing differences.
 - Observing enough outputs to recover the internal state of a non-cryptographic PRNG.
+- Performing offline brute-force or dictionary attacks against keys derived from low-entropy inputs.
+- Precomputing derived keys when salts are missing, hardcoded, or reused.
+- Applying a single compromised key to all current and historical data protected with it.
+- Invoking keystore operations on a compromised or stolen device when key use does not require user authentication.
+- Crafting collisions or second preimages for broken hash functions.
+- Replaying previously captured valid messages or tags.
+- Recovering private keys from predictable or reused signature nonces.
+- Presenting data with invalid, stripped, or attacker-signed signatures that the app accepts.
+- Using a victim's device with an active session (e.g., an unlocked or stolen device).
+- Reusing stolen session tokens obtained through other attacks.
+- Using a known, guessed, or shoulder-surfed device credential (PIN, pattern, or password).
+- Enrolling additional biometrics on the device after obtaining the device credential.
+- Displaying overlays or tampering with the UI to alter what the user sees while approving an action.
+- Manipulating a compromised OS to alter or fabricate the confirmation flow.
+- Invoking exported or unprotected app components from another app installed on the device.
+- Connecting to open ports or local services exposed by the app.
+- Patching or repackaging the app to remove or alter client-side checks.
+- Reading sensitive data from the clipboard when users copy it between apps.
+- Phishing credentials through lookalike apps or pages when users must type them manually.
+- Observing the device screen while sensitive data is displayed or entered (shoulder surfing).
+- Reading notification content shown on the lock screen without unlocking the device.
+- Reading notification content from another app holding notification-access permissions.
+- Registering the same custom URL scheme to intercept links intended for the app.
+- Delivering crafted deep links or intents from a malicious app or web page.
+- Capturing user input through a malicious custom keyboard or app extension.
+- Registering intent filters to intercept implicit intents sent by the app.
+- Modifying or replaying mutable PendingIntents obtained from the app.
+- Injecting malicious JavaScript into WebView content (e.g., via MITM on insecure connections or a compromised website).
+- Harvesting on-screen content through a malicious accessibility service the user was tricked into enabling.
+- Exploiting known vulnerabilities in outdated app versions that users are still running.
+- Exploiting platform vulnerabilities on outdated OS versions the app still supports.
+- Leveraging legacy platform behaviors applied to apps targeting outdated platform versions.
+- Substituting or modifying code that the app loads at runtime from writable or unverified locations.
+- Exploiting memory-corruption vulnerabilities in the app's native code.
+- Exploiting known weaknesses in deprecated APIs or components the app still uses.
+- Exploiting flaws in custom or unproven security implementations.
+- Supplying crafted input through any external interface (network, IPC, files, UI, or peripherals).
+- Compromising a dependency, SDK, or build tool in the app's supply chain.
+- Introducing malicious code through an insider or compromised developer account.
+- Distributing tampered builds that cannot be distinguished from legitimate ones.
+- Accessing a lost or stolen device that has no secure lock screen configured.
+- Inspecting or modifying app traffic on a device they control after bypassing transport protections (e.g., pinning).
+- Running the app on a rooted or jailbroken device they control.
+- Running the app in an emulator or virtual device.
+- Running the app inside an app-virtualization or cloning framework.
+- Impersonating the app with scripts, bots, or tampered clients when interacting with the backend.
+- Installing a repackaged version of the app on victim devices.
+- Modifying the app's files or resources on a compromised device.
 - Capturing or recording the screen from another app or an external tool.
 - Accessing screenshots automatically taken by the system, e.g., when the app moves to the background.
 - Identifying vulnerable dependency versions in the app package and using public advisories or exploits.
 - Collecting and correlating identifiers and usage data across apps, devices, and services.
+- Contacting undeclared tracking domains that platform enforcement cannot block.
+- Handling credentials and browsing state inside the app instead of isolated system flows.
 - Collecting non-resettable identifiers or misusing resettable ones.
 - Linking directly identifiable data to real-world identities.
 - Operating without a privacy policy or under a vague, generic, or inaccessible one.

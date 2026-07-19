@@ -34,7 +34,7 @@ This can lead to:
 
 - **Violation of User Privacy**: Users cannot exercise their rights to manage their personal data, such as deleting or exporting their information, resulting in the loss of control over their data and an increased amount of exposed data if a breach occurs.
 - **Loss of User Trust**: Users can perceive that they have no control over their personal data, resulting in negative reviews, decreased user engagement, and reduced retention for the app owner.
-- **Legal and Regulatory Non-Compliance**: Failing to provide data management capabilities required by regulations like GDPR and CCPA can result in fines, legal action, and other consequences for the app owner.
+- **Legal and Regulatory Non-Compliance**: Failing to provide data management capabilities can violate regulations like GDPR and CCPA, resulting in fines, legal action, and other consequences for the app owner.
 
 ## Mitigations
 

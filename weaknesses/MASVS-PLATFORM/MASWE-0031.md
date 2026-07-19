@@ -14,20 +14,34 @@ mappings:
   maswe-beta: [MASWE-0056]
 refs:
 - https://developer.android.com/topic/security/risks/tapjacking
-draft:
-  description: |
-    Overlay attacks occur when a malicious app (or an attacker-controlled window) draws content
-    on top of the target app to trick the user into interacting with it (tapjacking) or to
-    capture their input. The app is vulnerable when it does not defend against being fully or
-    partially obscured, e.g. by not using `View.setFilterTouchesWhenObscured(true)` /
-    `android:filterTouchesWhenObscured="true"` and not ignoring touch events carrying the
-    `FLAG_WINDOW_IS_PARTIALLY_OBSCURED` flag. This can lead the user to unknowingly approve
-    sensitive actions or disclose sensitive input.
-  topics:
-  - tapjacking (full and partial occlusion)
-  - filtering touches when the window is obscured
-  - protecting sensitive confirmation screens from overlays
-status: placeholder
-
+status: new
 ---
 
+## Overview
+
+This weakness occurs when an app does not defend its sensitive screens against being fully or partially obscured by attacker-controlled windows.
+
+In an overlay attack, a malicious app draws content on top of the target app to trick the user into interacting with it (tapjacking) or to capture their input. The user believes they are interacting with the visible overlay while their touches reach the app underneath, or vice versa. Sensitive confirmation screens, permission-like prompts, and input fields are the typical targets.
+
+## Modes of Introduction
+
+- **Touch Filtering Not Enabled**: Not enabling touch filtering on sensitive views (e.g. `setFilterTouchesWhenObscured(true)` or `android:filterTouchesWhenObscured="true"`) and not discarding touch events flagged as obscured (e.g. `FLAG_WINDOW_IS_PARTIALLY_OBSCURED`).
+- **Sensitive Screens Not Protected**: Presenting confirmation dialogs or security-relevant screens without any occlusion defense, so their content can be covered or mimicked by an overlay.
+
+## Impact
+
+Attackers can hijack user interactions with the app by:
+
+- Displaying overlays or tampering with the UI to alter what the user sees while approving an action.
+
+This can lead to:
+
+- **Financial Loss**: Attackers can trick users into confirming payments or transfers they believe to be something else, resulting in direct financial harm to the user.
+- **Authentication or Authorization Bypass**: Attackers can trick users into granting permissions or approving security prompts, resulting in unauthorized access to protected data or functionality.
+- **Compromise of Sensitive Data**: Attackers can capture input entered into overlay-mimicked fields, resulting in the disclosure of credentials or other sensitive user input.
+
+## Mitigations
+
+- **Enable Touch Filtering on Sensitive Views**: Configure sensitive views to ignore touches delivered while the window is obscured, and discard motion events flagged as (partially) obscured.
+- **Protect Sensitive Screens**: Apply overlay defenses to confirmation and authentication screens specifically, and consider pausing or hiding sensitive content when the app detects it is being drawn over.
+- **Use Trusted Confirmation Paths for Critical Actions**: For the most critical approvals, use hardware-protected confirmation mechanisms that overlays cannot forge (see @MASWE-0019).

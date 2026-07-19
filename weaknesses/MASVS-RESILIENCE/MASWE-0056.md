@@ -10,14 +10,37 @@ mappings:
   masvs-v2: [MASVS-RESILIENCE-1, MASVS-RESILIENCE-4]
   cwe: [693]
   maswe-beta: [MASWE-0097, MASWE-0103]
-draft:
-  description: no root/jailbreak detection implemented e.g. check for Cydia, SuperSU,
-    Magisk, Xposed, etc. The app does not implement effective techniques to detect if the device is rooted or jailbroken (CWE-693). More broadly, the app should apply Runtime Application Self-Protection (RASP) techniques that detect a compromised environment and trigger appropriate responses.
-  topics:
-  - detection in place
-  - RASP techniques with detection triggering different responses
-  - Effectiveness Assessment (e.g. bypassing the detection)
-status: placeholder
-
+status: new
 ---
 
+## Overview
+
+This weakness occurs when an app does not implement effective techniques to detect whether the device it runs on is rooted or jailbroken.
+
+On a rooted or jailbroken device, the platform's sandboxing and permission guarantees no longer hold: privileged users and tools (e.g. Magisk, SuperSU, Xposed, or jailbreak toolchains and their managers) can access the app's private data, instrument its process, and defeat its client-side controls. More broadly, the app should apply Runtime Application Self-Protection (RASP) techniques that detect a compromised environment and trigger appropriate responses.
+
+## Modes of Introduction
+
+- **No Detection Implemented**: Shipping without any checks for rooting or jailbreak artifacts, such as management apps, su binaries, hooking frameworks, modified system properties, or writable system partitions.
+- **Naive or Single-Point Checks**: Implementing one easily located check whose removal or hooking disables the entire defense.
+- **No Response Strategy**: Detecting a compromised environment but not responding to it in a way appropriate to the app's risk profile.
+
+## Impact
+
+Attackers can run and manipulate the app in a privileged environment without resistance by:
+
+- Running the app on a rooted or jailbroken device they control.
+- Using dynamic instrumentation.
+- Accessing the device storage on a compromised device.
+
+This can lead to:
+
+- **Bypass of Protection Mechanisms**: Attackers can use elevated privileges to defeat the app's client-side security controls, resulting in the circumvention of protections such as anti-tampering, licensing, or fraud controls.
+- **Compromise of Sensitive Data**: Attackers can read the app's private data and intercept its runtime state without sandbox restrictions, resulting in exposure of user data, keys, and tokens.
+
+## Mitigations
+
+- **Implement Layered Detection**: Combine multiple, varied checks (file-system artifacts, system properties, management apps, behavioral probes) implemented in different layers (e.g. native code) so no single patch disables them all.
+- **Respond Appropriately**: Define graded responses to detection, from warning the user to restricting sensitive functionality or terminating, matched to the app's risk profile.
+- **Combine with Attestation**: Back local checks with server-verified device attestation (see @MASWE-0059) so the backend can act on integrity signals even if local checks are bypassed.
+- **Assess Effectiveness**: Regularly test the detection against publicly available bypass tools and update it as evasion techniques evolve.

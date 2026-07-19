@@ -16,21 +16,37 @@ refs:
 - https://tdcolvin.medium.com/is-firebase-auth-secure-dace0563d41b
 - https://github.com/WICG/trust-token-api
 - https://blog.cloudflare.com/eliminating-captchas-on-iphones-and-macs-using-new-standard/
-draft:
-  description: |
-    Step-up authentication requires the user to re-authenticate or provide an additional
-    authentication factor before performing a sensitive action, even within an already
-    authenticated session. An example is a user logged into their bank account (with or
-    without MFA) who requests a sensitive action such as transferring a large sum of money:
-    they should be required to re-confirm their identity (e.g. via MFA or biometrics) so
-    that only the legitimate user can complete the action. When step-up authentication is
-    missing, an attacker who gains access to an active session (e.g. an unlocked device)
-    can perform sensitive operations unchallenged.
-  topics:
-  - re-authentication before sensitive transactions or when displaying sensitive PII (ioXt UP107)
-  - additional factor / MFA prompt for high-risk actions
-  - binding the step-up challenge to the specific action
-status: placeholder
-
+status: new
 ---
 
+## Overview
+
+This weakness occurs when an app allows sensitive actions to be performed within an already authenticated session without requiring the user to re-confirm their identity.
+
+Step-up authentication requires the user to re-authenticate or provide an additional authentication factor before performing a sensitive action, even within an active session. For example, a user logged into their bank account who requests a large transfer should be required to re-confirm their identity (e.g. via biometrics or a second factor) so that only the legitimate user can complete the action. Without it, whoever holds the active session, not necessarily the legitimate user, can perform every operation the account allows.
+
+## Modes of Introduction
+
+- **No Re-Authentication for Sensitive Actions**: Allowing high-risk operations, such as payments, credential or profile changes, or the display of sensitive personal data, with only the assurance of the initial login.
+- **Step-Up Not Bound to the Action**: Implementing a re-authentication challenge that is not tied to the specific transaction being approved, so a single approval can be reused for a different or modified action.
+- **Uniform Assurance Level**: Designing all functionality behind a single login assurance level without classifying operations by risk.
+
+## Impact
+
+Attackers can perform sensitive actions in a victim's authenticated session by:
+
+- Using a victim's device with an active session (e.g., an unlocked or stolen device).
+- Reusing stolen session tokens obtained through other attacks.
+
+This can lead to:
+
+- **Financial Loss**: Attackers can initiate transfers or purchases in the victim's session, resulting in direct financial harm to the user.
+- **Compromise of Sensitive Data**: Attackers can view or export sensitive personal data available in the session, resulting in unauthorized disclosure of user information.
+- **Authentication or Authorization Bypass**: Attackers can change the account's credentials or security settings without any additional challenge, resulting in persistent account takeover.
+
+## Mitigations
+
+- **Require Step-Up for Sensitive Actions**: Re-authenticate the user, e.g. with biometrics bound to a keystore-protected key or an additional factor, before executing high-risk operations or displaying highly sensitive data.
+- **Bind the Challenge to the Action**: Tie the step-up challenge cryptographically to the specific transaction (e.g. transaction signing), so an approval cannot be replayed or applied to a different action.
+- **Classify Actions by Risk**: Define which operations require step-up authentication and match the required assurance level to the sensitivity of each action.
+- **Enforce Step-Up Server-Side**: Have the server require and verify step-up evidence before executing the action, rather than trusting a client-side check.

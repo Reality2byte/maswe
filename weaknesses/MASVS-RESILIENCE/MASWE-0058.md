@@ -10,13 +10,36 @@ mappings:
   masvs-v2: [MASVS-RESILIENCE-1, MASVS-RESILIENCE-4]
   cwe: [693]
   maswe-beta: [MASWE-0099, MASWE-0103]
-draft:
-  description: The app's code doesn’t implement effective techniques to detect if it is running in an emulator (CWE-693), e.g. identifying features and limitations available for commonly used emulation solutions. More broadly, the app should apply Runtime Application Self-Protection (RASP) techniques that detect a compromised environment and trigger appropriate responses.
-  topics:
-  - detection in place
-  - RASP techniques with detection triggering different responses
-  - Effectiveness Assessment (e.g. bypassing the detection)
-status: placeholder
-
+status: new
 ---
 
+## Overview
+
+This weakness occurs when an app does not implement effective techniques to detect that it is running in an emulator or virtual device.
+
+Emulators give attackers a fully controlled, snapshottable environment for analyzing the app, automating interactions, and running it at scale in bot farms. Detection typically relies on identifying the features and limitations of commonly used emulation solutions, such as characteristic device identifiers, hardware properties, sensors, and timing behavior. More broadly, the app should apply Runtime Application Self-Protection (RASP) techniques that detect a compromised environment and trigger appropriate responses.
+
+## Modes of Introduction
+
+- **No Emulator Checks**: Shipping without any verification of device properties, hardware features, or sensor behavior that distinguish emulators from real devices.
+- **Trivially Spoofable Checks**: Relying on a single property (e.g. a device model string) that emulators can trivially fake.
+- **No Response Strategy**: Detecting an emulated environment but not adapting the app's behavior in response.
+
+## Impact
+
+Attackers can analyze and automate the app in a fully controlled environment by:
+
+- Running the app in an emulator or virtual device.
+- Using dynamic instrumentation.
+
+This can lead to:
+
+- **Bypass of Protection Mechanisms**: Attackers can iterate on bypasses of the app's defenses with snapshots and full inspection, resulting in faster and cheaper circumvention of its protections.
+- **Compromise of System Integrity and Business Operations**: Attackers can run automated fleets of emulated instances, resulting in bot-driven fraud, fake accounts, and abuse of the app owner's services.
+
+## Mitigations
+
+- **Detect Emulator Characteristics**: Check device identifiers, hardware capabilities, sensor availability, and behavioral traits that differ between emulators and physical devices, combining multiple signals.
+- **Respond to Detection**: Restrict sensitive functionality, require additional verification, or terminate when an emulated environment is detected, according to the app's risk profile.
+- **Combine with Attestation**: Use server-verified device attestation (see @MASWE-0059) so emulated environments are also flagged independently of local checks.
+- **Assess Effectiveness**: Test the detection against popular emulators and hardening/evasion tools and refine it over time.

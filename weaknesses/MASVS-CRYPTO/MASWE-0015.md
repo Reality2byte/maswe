@@ -13,20 +13,36 @@ mappings:
 refs:
 - https://cwe.mitre.org/data/definitions/347.html
 - https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-5.pdf
-draft:
-  description: |
-    Cryptographic signature verification must be implemented correctly to guarantee the
-    integrity and authenticity of data. Common failures include skipping verification
-    entirely, ignoring or not checking the verification result, accepting signatures from
-    untrusted or unpinned keys, failing to validate the full certificate/trust chain, or
-    using algorithms and parameters that do not match the signer's. Any of these lets an
-    attacker present forged or tampered data as authentic.
-  topics:
-  - verification result not checked or ignored
-  - accepting signatures without validating the signer's key/trust chain
-  - algorithm confusion or accepting weak/deprecated signature algorithms
-  - verifying against attacker-controllable public keys
-status: placeholder
-
+status: new
 ---
 
+## Overview
+
+This weakness occurs when an app fails to verify cryptographic signatures correctly, accepting forged or tampered data as authentic.
+
+Signature verification protects the integrity and authenticity of data such as updates, configuration, licenses, or tokens. The guarantee breaks down when verification is skipped, when its result is ignored, when the signer's key is not validated against a trusted identity, or when the app lets the attacker influence which algorithm or key is used for verification.
+
+## Modes of Introduction
+
+- **Verification Skipped or Result Ignored**: Not verifying signatures on security-relevant data, or computing the verification but proceeding regardless of its result.
+- **Untrusted or Unpinned Signer Keys**: Accepting signatures without validating the signer's key against a trusted set or certificate chain, or verifying against public keys that ship alongside the data and can be replaced by an attacker.
+- **Algorithm Confusion**: Accepting the algorithm declared by the data being verified (e.g. a token header), including weak, deprecated, or "none" algorithms, instead of enforcing the expected one.
+
+## Impact
+
+Attackers can present forged or tampered data as authentic by:
+
+- Presenting data with invalid, stripped, or attacker-signed signatures that the app accepts.
+
+This can lead to:
+
+- **Execution of Unauthorized Code**: Attackers can deliver tampered updates, plugins, or configuration that the app accepts as genuine, resulting in attacker-controlled code or behavior running within the app.
+- **Authentication or Authorization Bypass**: Attackers can forge signed tokens or assertions (e.g. session or license tokens), resulting in unauthorized access to protected accounts, data, or functionality.
+- **Compromise of Sensitive Data**: Attackers can substitute tampered data for authentic data without detection, resulting in the app processing or displaying manipulated information.
+
+## Mitigations
+
+- **Always Verify and Check the Result**: Verify signatures on all security-relevant data and treat any verification failure as fatal for the operation; never proceed on an ignored or swallowed result.
+- **Validate the Signer's Identity**: Verify signatures only against keys anchored in a trusted set, such as pinned keys or a validated certificate chain, and never against keys delivered alongside the data itself.
+- **Enforce the Expected Algorithm**: Allow-list the exact signature algorithms the app expects and reject anything else, including "none" or algorithms chosen by the data being verified.
+- **Use Approved Schemes**: Verify with signature schemes approved in [NIST FIPS 186-5](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-5.pdf) and reject weak or deprecated ones.

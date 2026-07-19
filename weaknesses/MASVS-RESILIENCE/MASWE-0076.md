@@ -8,26 +8,39 @@ profiles: [R]
 mappings:
   masvs-v2: [MASVS-RESILIENCE-2]
   cwe: [693]
-
 refs:
 - https://developers.google.com/android/play-protect
 - https://support.google.com/googleplay/android-developer/answer/13375539
-draft:
-  description: |
-    The app does not implement or integrate techniques to detect the presence of malware on the
-    device or malicious apps/components that could target it (e.g. apps abusing accessibility
-    services, overlay-capable apps, known malicious packages, or a compromised runtime
-    environment). For high-assurance apps, detecting a potentially hostile environment allows
-    the app to warn the user, restrict functionality, or trigger other protective responses.
-    This complements environment-integrity checks such as
-    @MASWE-0056 (root/jailbreak detection) and platform services such as Google
-    Play Protect / the Play Integrity API.
-  topics:
-  - detecting known malicious apps/packages on the device
-  - detecting apps abusing accessibility services or screen overlays
-  - integrating platform malware/threat signals (e.g. Play Protect / Play Integrity)
-  - responses to a detected hostile environment (warn, restrict, block)
-  - Effectiveness Assessment (e.g. bypassing the detection)
-status: placeholder
-
+status: new
 ---
+
+## Overview
+
+This weakness occurs when an app does not implement or integrate techniques to detect malware on the device or malicious apps and components that could target it.
+
+Mobile malware commonly attacks other apps indirectly: abusing accessibility services to read screens and drive the UI, drawing overlays to phish credentials, or exploiting a compromised runtime environment. For high-assurance apps, detecting a potentially hostile environment, e.g. known malicious packages, apps holding accessibility or overlay capabilities, or platform threat signals such as Google Play Protect status, allows the app to warn the user, restrict functionality, or trigger other protective responses. This complements environment-integrity checks such as @MASWE-0056 and platform services such as the Play Integrity API.
+
+## Modes of Introduction
+
+- **No Hostile-Environment Checks**: Not checking for known malicious packages or platform threat signals before enabling sensitive functionality.
+- **Abuse-Prone Capabilities Ignored**: Not considering apps holding accessibility or overlay capabilities in the app's risk decisions for sensitive flows (see @MASWE-0031, @MASWE-0039).
+- **No Response Strategy**: Detecting a hostile environment but not warning the user or restricting sensitive functionality.
+
+## Impact
+
+Attackers can target the app with malware running on the same device by:
+
+- Harvesting on-screen content through a malicious accessibility service the user was tricked into enabling.
+- Displaying overlays or tampering with the UI to alter what the user sees while approving an action.
+
+This can lead to:
+
+- **Compromise of Sensitive Data**: Malware can capture credentials, one-time codes, and displayed content while the app takes no protective action, resulting in exposure of user data the app could have defended.
+- **Financial Loss**: Malware can automate or manipulate transactions against the unprotected app, resulting in direct financial harm to users and fraud losses for the app owner.
+
+## Mitigations
+
+- **Integrate Platform Threat Signals**: Use available platform services (e.g. Play Protect status, Play Integrity verdicts) to learn about known malware and a compromised environment.
+- **Assess Risky Capabilities**: Factor the presence of accessibility- or overlay-capable apps into risk decisions for sensitive flows, combined with the UI-level defenses of @MASWE-0031 and @MASWE-0039.
+- **Respond Proportionately**: Warn the user, require additional verification, restrict functionality, or block sensitive operations when a hostile environment is detected.
+- **Assess Effectiveness**: Validate the detection against current malware behaviors and update it as the threat landscape evolves.

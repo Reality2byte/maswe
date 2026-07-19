@@ -10,18 +10,37 @@ mappings:
   masvs-v2: [MASVS-RESILIENCE-2]
   cwe: [693]
   maswe-beta: [MASWE-0107]
-draft:
-  description: |
-    An app's executable code can be modified at runtime through in-memory patching, code injection, or
-    hooking. This weakness occurs when the app does not verify the integrity of its own code at runtime
-    (CWE-693), for example by detecting modifications to loaded code/segments, injected libraries, or
-    patched functions, and does not respond when tampering is detected. It complements static app
-    integrity/attestation (@MASWE-0062) by covering runtime tampering.
-  topics:
-  - in-memory code / patch tampering detection
-  - detecting injected libraries and function hooks
-  - runtime code/segment integrity checks
-  - Effectiveness Assessment (e.g. bypassing the detection)
-status: placeholder
-
+status: new
 ---
+
+## Overview
+
+This weakness occurs when an app does not verify the integrity of its own code at runtime, allowing in-memory patching, code injection, and hooking to go undetected.
+
+Even a correctly signed app can be modified while it runs: attackers can patch instructions in memory, inject libraries into the process, or hook functions to change their behavior. Runtime code integrity verification, such as checking loaded code segments, detecting injected libraries, and spotting patched function prologues, complements static app attestation (see @MASWE-0062) by covering tampering that happens after the app has launched.
+
+## Modes of Introduction
+
+- **No Runtime Code Checks**: Not verifying the integrity of loaded code segments or executable memory at runtime.
+- **Injected Libraries Not Detected**: Not inspecting the process for libraries that are not part of the app or platform.
+- **Hooked Functions Not Detected**: Not checking security-critical functions for patched prologues or redirected implementations.
+- **No Response to Tampering**: Detecting modifications but not reacting to protect sensitive operations.
+
+## Impact
+
+Attackers can modify the app's code while it runs by:
+
+- Using dynamic instrumentation.
+- Debugging the app at runtime.
+
+This can lead to:
+
+- **Bypass of Protection Mechanisms**: Attackers can patch or hook the functions implementing the app's security checks, resulting in the circumvention of its client-side defenses.
+- **Compromise of Sensitive Data**: Attackers can redirect or wrap data-handling functions to siphon their inputs and outputs, resulting in exposure of credentials and user data processed by the app.
+
+## Mitigations
+
+- **Verify Code Segments at Runtime**: Periodically validate the integrity of the app's loaded code and executable memory, especially around sensitive operations.
+- **Detect Injection and Hooking**: Check for foreign libraries in the process and for patched prologues or redirected implementations of security-critical functions.
+- **Layer and Protect the Checks**: Implement checks in native code, diversify them, and protect them with obfuscation (see @MASWE-0051) so they cannot all be disabled with one patch.
+- **Respond to Detection**: Terminate, restrict functionality, or signal the backend when runtime tampering is detected, and assess the checks against current hooking frameworks.

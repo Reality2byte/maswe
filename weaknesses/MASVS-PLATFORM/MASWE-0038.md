@@ -14,22 +14,39 @@ mappings:
   maswe-beta: [MASWE-0071, MASWE-0070, MASWE-0072]
 refs:
 - https://blog.oversecured.com/Evernote-Universal-XSS-theft-of-all-cookies-from-all-sites-and-more/
-draft:
-  description: |
-    WebView objects shouldn't load URLs, HTML, or JavaScript from untrusted sources, and the app
-    shouldn't let users navigate to sites outside of the developer's control. Loading untrusted
-    content (e.g. a URL received via an intent or deep link, or JavaScript fetched from an
-    unverified source) can lead to cross-site scripting, including Universal XSS, allowing an
-    attacker to steal cookies/tokens from any site, perform phishing, or drive-by downloads.
-    Whenever possible, use an allowlist to restrict what the WebView loads (e.g. via
-    `WebViewClient.shouldOverrideUrlLoading`) and enable Safe Browsing.
-  topics:
-  - not restricting navigation to trusted origins
-  - loading URLs from untrusted sources (e.g. intents or deep links)
-  - loading JavaScript from untrusted/unverified sources
-  - Universal XSS (theft of cookies/tokens across sites)
-  - not enabling Safe Browsing
-status: placeholder
-
+status: new
 ---
 
+## Overview
+
+This weakness occurs when a WebView loads URLs, HTML, or JavaScript from untrusted sources, or lets users navigate to arbitrary sites outside the developer's control.
+
+WebViews often run with app-specific privileges, such as JavaScript bridges, cookies, and stored sessions, so loading untrusted content into them is far more dangerous than opening it in the system browser. A URL received via an intent or deep link, or JavaScript fetched from an unverified source, can lead to cross-site scripting, including Universal XSS, allowing an attacker to steal cookies and tokens from any site, perform phishing, or trigger drive-by downloads.
+
+## Modes of Introduction
+
+- **Unrestricted Navigation**: Not restricting which origins the WebView may load (e.g. via `WebViewClient.shouldOverrideUrlLoading` or navigation delegates), letting users or content navigate anywhere.
+- **Untrusted URLs from External Input**: Loading URLs received through intents, deep links, or other external input without validating them against an allowlist.
+- **Untrusted Script Inclusion**: Loading JavaScript from unverified sources into pages rendered by the WebView.
+- **Safe Browsing Disabled**: Disabling platform protections such as Safe Browsing that warn about known-malicious sites.
+- **Deprecated WebView Components**: Using deprecated WebView implementations that lack modern process isolation and security protections.
+
+## Impact
+
+Attackers can execute malicious web content inside the app's WebView by:
+
+- Delivering crafted deep links or intents from a malicious app or web page.
+- Injecting malicious JavaScript into WebView content (e.g., via MITM on insecure connections or a compromised website).
+
+This can lead to:
+
+- **Compromise of Sensitive Data**: Attackers can steal cookies, tokens, or displayed data from any origin via cross-site scripting in the privileged WebView, resulting in unauthorized disclosure of session material and user data.
+- **Authentication or Authorization Bypass**: Attackers can reuse stolen session cookies or tokens, resulting in account takeover across the sites the WebView had sessions with.
+- **Loss of User Trust**: Attackers can render phishing pages or trigger unwanted downloads inside the app's own UI, resulting in users being deceived under the app's identity and reputational damage for the app owner.
+
+## Mitigations
+
+- **Allowlist Navigation**: Restrict the WebView to an allowlist of trusted origins and open everything else in the system browser.
+- **Validate Externally Supplied URLs**: Treat URLs arriving via intents or deep links as untrusted input and validate them before loading (see @MASWE-0032).
+- **Load Scripts Only from Trusted Sources**: Never inject or include JavaScript fetched from unverified sources.
+- **Keep Platform Protections Enabled**: Leave Safe Browsing and equivalent protections enabled and use current, supported WebView components.

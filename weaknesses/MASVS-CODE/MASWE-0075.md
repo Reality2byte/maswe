@@ -8,27 +8,42 @@ profiles: [L2]
 mappings:
   masvs-v2: [MASVS-CODE-3]
   cwe: [506, 507, 511]
-
 refs:
 - https://developer.android.com/privacy-and-security/risks/insecure-library
 - https://support.google.com/googleplay/android-developer/answer/13326895
 - https://developer.apple.com/support/third-party-SDK-requirements/
-draft:
-  description: |
-    An app may ship with malicious code, either introduced intentionally by an insider, or
-    unintentionally through a compromised dependency, SDK, build tool, or supply-chain attack.
-    Malicious code can exfiltrate data, execute hidden or backdoored functionality, display
-    unwanted content, or perform actions against the user's interest. Because the developer is
-    responsible for all code shipped in the app (including third-party SDKs), the app must be
-    reviewed and its supply chain controlled to detect and prevent inclusion of malicious code.
-    This complements @MASWE-0041 (dependencies with known vulnerabilities) and
-    @MASWE-0077 (non-reproducible builds).
-  topics:
-  - intentionally introduced malicious code / insider threat
-  - malicious or compromised third-party SDKs and dependencies (supply-chain)
-  - backdoors and hidden functionality
-  - build-tool / build-pipeline compromise
-  - detecting malicious code (code review, SCA, behavioral analysis)
-status: placeholder
-
+status: new
 ---
+
+## Overview
+
+This weakness occurs when an app ships with malicious code, introduced either intentionally by an insider or unintentionally through a compromised dependency, SDK, build tool, or other supply-chain attack.
+
+Malicious code can exfiltrate data, execute hidden or backdoored functionality, display unwanted content, or perform actions against the user's interest. Because the developer is responsible for all code shipped in the app, including third-party SDKs, the codebase must be reviewed and the supply chain controlled to detect and prevent the inclusion of malicious code. This complements @MASWE-0041, which covers dependencies with known vulnerabilities, and @MASWE-0077, which covers the inability to verify what was actually built.
+
+## Modes of Introduction
+
+- **Insider-Introduced Code**: Malicious code committed intentionally by someone with access to the codebase or through a compromised developer account.
+- **Compromised Dependencies**: Malicious or trojanized third-party SDKs and libraries pulled into the app, including through typosquatting or hijacked packages.
+- **Compromised Build Pipeline**: Build tools, plugins, or CI/CD infrastructure that inject code into the app during compilation or packaging.
+- **Hidden Functionality**: Backdoors, hidden switches, or undisclosed capabilities shipped in the app or its components.
+
+## Impact
+
+Attackers can run malicious functionality inside the trusted app by:
+
+- Compromising a dependency, SDK, or build tool in the app's supply chain.
+- Introducing malicious code through an insider or compromised developer account.
+
+This can lead to:
+
+- **Compromise of Sensitive Data**: Attackers can exfiltrate user data and credentials from inside the app's trust boundary, resulting in large-scale disclosure across the entire user base.
+- **Execution of Unauthorized Code**: Attackers can trigger backdoored or hidden functionality at will, resulting in attacker-controlled behavior running with the app's identity and permissions.
+- **Compromise of System Integrity and Business Operations**: The app owner distributes malware to their own users, resulting in app-store removal, incident response costs, and severe reputational damage.
+
+## Mitigations
+
+- **Review Code and Changes**: Enforce code review for all changes, restrict and monitor access to the codebase, and require strong authentication for developer accounts.
+- **Control the Supply Chain**: Pin dependency versions, verify package integrity and provenance, source components only from reputable publishers, and monitor them with Software Composition Analysis (see @MASWE-0041).
+- **Protect the Build Pipeline**: Harden and monitor CI/CD infrastructure, restrict who and what can alter build configurations, and generate build provenance attestations (see @MASWE-0077).
+- **Analyze the Shipped Artifact**: Scan and behaviorally analyze release builds to detect unexpected code, permissions, or network endpoints before distribution.

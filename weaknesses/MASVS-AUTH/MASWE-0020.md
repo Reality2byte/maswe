@@ -24,34 +24,42 @@ refs:
 - https://developer.android.com/privacy-and-security/security-tips#binder-and-messenger-interfaces
 - https://developer.android.com/topic/security/risks/content-resolver
 - https://developer.android.com/topic/security/risks/file-providers
-draft:
-  description: |
-    App components that expose functionality or data must enforce proper authentication and
-    authorization on their callers. This weakness covers any app component that is reachable
-    by other apps or processes without adequate access control, including Android services,
-    broadcast receivers, activities, and content providers, as well as a local web service or
-    open port exposed by the app (which is also considered an app component).
-
-    Typical problems include components unintentionally exported, components exported with
-    unrestricted or missing permissions, exposed Binder/Messenger interfaces that don't verify
-    the caller (e.g. not calling `checkCallingPermission()`), sticky broadcasts, over-broad URI
-    permission grants (e.g. `FLAG_GRANT_PERSISTABLE_URI_PERMISSION` and other
-    `FLAG_GRANT_*_URI_PERMISSION` flags), content providers exposing data without proper
-    permission tags or protection levels, and locally bound network services (open ports)
-    accepting connections without authentication. It also covers auth-material handling on such
-    surfaces, such as authentication tokens not being validated and insecure authentication
-    handled inside WebViews.
-  topics:
-  - unintentionally exported services, broadcast receivers, activities, and content providers
-  - unrestricted or missing permissions and protection levels on exported components
-  - exposed Binder/Messenger interfaces not verifying the caller (checkCallingPermission)
-  - sticky broadcasts
-  - over-broad URI permission grants (FLAG_GRANT_READ/WRITE/PERSISTABLE_URI_PERMISSION)
-  - content providers (database- and file-based, FileProvider) exposing data without access control
-  - one-time vs. persistent data sharing with other apps
-  - local web service / unprotected open ports treated as an app component
-  - authentication tokens not validated (e.g. OAuth2/JWT client-side checks, none algorithm, PKCE)
-  - insecure authentication handled in WebViews (e.g. WebViewClient.onReceivedHttpAuthRequest)
-status: placeholder
-
+status: new
 ---
+
+## Overview
+
+This weakness occurs when app components that expose functionality or data do not enforce proper authentication or authorization on their callers.
+
+It covers any component reachable by other apps or processes without adequate access control, including services, broadcast receivers, activities, and content providers, as well as local web services or open ports exposed by the app, which are also considered app components. It also covers the handling of authentication material on such surfaces, for example authentication tokens accepted without validation or authentication flows handled insecurely inside WebViews.
+
+## Modes of Introduction
+
+- **Unintentionally Exported Components**: Exporting services, broadcast receivers, activities, or content providers through defaults or misconfiguration when they are only meant for internal use.
+- **Missing or Weak Permissions on Exported Components**: Exporting components without permission requirements, with weak protection levels, or with misconfigured custom permissions.
+- **Caller Not Verified on IPC Interfaces**: Exposing Binder or Messenger interfaces that do not verify the caller's identity or permissions (e.g. not calling `checkCallingPermission()`).
+- **Over-Broad Data Grants**: Using sticky broadcasts, over-broad or persistable URI permission grants, or persistent data sharing where one-time, scoped sharing would suffice.
+- **Unprotected Local Network Services**: Binding a local web service or open port that accepts connections without authentication.
+- **Authentication Material Not Validated**: Accepting authentication tokens without proper validation (e.g. missing signature or claim checks, no PKCE in OAuth flows) or handling authentication inside WebViews instead of secure system flows.
+
+## Impact
+
+Attackers can access sensitive data and functionality exposed by app components by:
+
+- Invoking exported or unprotected app components from another app installed on the device.
+- Connecting to open ports or local services exposed by the app.
+
+This can lead to:
+
+- **Compromise of Sensitive Data**: Attackers can query unprotected content providers or receive broadcast data, resulting in unauthorized disclosure of user or app data to other apps on the device.
+- **Authentication or Authorization Bypass**: Attackers can invoke privileged functionality, such as internal services or unvalidated token flows, without authenticating, resulting in actions being executed on behalf of the user.
+- **Bypass of Protection Mechanisms**: Attackers can launch internal activities directly, resulting in the circumvention of intended flows such as authentication screens or paywalls.
+
+## Mitigations
+
+- **Do Not Export Components Unnecessarily**: Explicitly mark internal components as not exported and keep the exposed surface minimal.
+- **Protect Exported Components with Permissions**: Guard intentionally exported components with permissions of an appropriate protection level (e.g. signature-level for same-developer apps) and define custom permissions correctly.
+- **Verify Callers on IPC Interfaces**: Check the caller's identity or permissions on Binder and Messenger interfaces before performing sensitive operations or returning data.
+- **Grant Minimal, Short-Lived Data Access**: Prefer one-time, narrowly scoped URI grants over persistable ones, avoid sticky broadcasts, and restrict content provider paths to exactly what must be shared.
+- **Authenticate Local Services**: Avoid opening local ports where possible; if required, authenticate every connection and bind only to the local interface.
+- **Validate Authentication Material**: Validate tokens server-side (signature, issuer, audience, expiry), use PKCE for OAuth flows, and use system-provided authentication sessions instead of handling credentials inside WebViews.
