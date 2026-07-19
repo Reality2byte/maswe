@@ -9,6 +9,7 @@ mappings:
   masvs-v1: [MSTG-AUTH-10]
   masvs-v2: [MASVS-AUTH-3, MASVS-PLATFORM-3]
   cwe: [306]
+  android-core-app-quality: [Biometric_Authentication]
   maswe-beta: [MASWE-0029]
 refs:
 - https://developer.apple.com/documentation/localauthentication

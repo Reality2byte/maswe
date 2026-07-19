@@ -11,6 +11,7 @@ mappings:
   cwe: [22, 79, 200, 669]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/webview-unsafe-file-inclusion
+  android-core-app-quality: [WebView_Asset_Loader]
   maswe-beta: [MASWE-0069, MASWE-0073]
 refs:
 - https://blog.oversecured.com/Android-Exploring-vulnerabilities-in-WebResourceResponse/

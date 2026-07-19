@@ -8,6 +8,7 @@ profiles: [L2]
 mappings:
   masvs-v2: [MASVS-AUTH-2]
   cwe: [288, 287]
+  android-core-app-quality: [Biometric_Authentication]
   maswe-beta: [MASWE-0045]
 refs:
 - https://developer.android.com/training/sign-in/biometric-auth#allow-fallback

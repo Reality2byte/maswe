@@ -9,6 +9,7 @@ mappings:
   masvs-v1: [MSTG-CRYPTO-4]
   masvs-v2: [MASVS-CRYPTO-1]
   cwe: [328]
+  android-core-app-quality: [Cryptographic_Algorithms]
   maswe-beta: [MASWE-0021]
 refs:
 - https://developer.android.com/privacy-and-security/cryptography#deprecated-functionality

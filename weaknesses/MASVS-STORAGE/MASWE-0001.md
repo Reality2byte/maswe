@@ -11,6 +11,7 @@ mappings:
   cwe: [209, 359, 497, 532]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/log-info-disclosure
+  android-core-app-quality: [Sensitive_Data_Logging]
   maswe-beta: [MASWE-0001]
 refs:
 - https://developer.android.com/privacy-and-security/risks/log-info-disclosure

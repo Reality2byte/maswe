@@ -15,6 +15,7 @@ mappings:
   - https://developer.android.com/privacy-and-security/risks/access-control-to-exported-components
   - https://developer.android.com/privacy-and-security/risks/android-exported
   - https://developer.android.com/privacy-and-security/risks/custom-permissions
+  android-core-app-quality: [Component_Export, Component_Permissions, Component_Protection]
   maswe-beta: [MASWE-0033, MASWE-0038, MASWE-0040, MASWE-0051, MASWE-0059, MASWE-0062, MASWE-0063, MASWE-0064, MASWE-0065, MASWE-0119]
 refs:
 - https://developer.android.com/privacy-and-security/security-tips#IPNetworking

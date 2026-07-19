@@ -79,7 +79,7 @@ Field rules:
   - **maswe-beta**: One or more MASWE v0.x (pre-1.0.0-rc) weaknesses that this weakness supersedes or absorbs. This is optional but encouraged for traceability.
   - **cwe**: One or more CWE IDs that correspond to this weakness. This helps link to the broader software security ecosystem.
   - **android-risks**: One or more specific risks from the Android developer documentation (https://developer.android.com/privacy-and-security/risks) that correspond to this weakness. This is an optional field that can help link to Android-specific guidance, but it should only be used when there is a clear match
-  - **android-core-app-quality**: One or more security checklist IDs from the [Android Core App Quality guidelines](https://developer.android.com/docs/quality-guidelines/core-app-quality). Optional.
+  - **android-core-app-quality**: One or more checklist item IDs from the [Android Core App Quality guidelines](https://developer.android.com/docs/quality-guidelines/core-app-quality), using the current named IDs (e.g. `Network_Security_Traffic`, `Minimize_Permissions`), not the legacy `SC-*`/`PS-*` numbering. Optional; only use when there is a clear match, and only for weaknesses whose `platform` includes `android`.
   - **nist-ssdf**: One or more practice IDs from the [NIST Secure Software Development Framework (SP 800-218)](https://csrc.nist.gov/projects/ssdf). Optional.
 - **observed_examples**: Links to public, real-world occurrences of the weakness (e.g. CVE entries or published research). Optional.
 - **refs**: External references. Prefer stable, vendor-neutral sources (official platform docs, CWE, NIST, academic papers).

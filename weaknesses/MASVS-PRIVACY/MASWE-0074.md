@@ -8,6 +8,7 @@ profiles: [P]
 mappings:
   masvs-v2: [MASVS-PRIVACY-2]
   cwe: [359]
+  android-core-app-quality: [Minimize_Permissions]
 refs:
 - https://datatracker.ietf.org/doc/html/rfc8252#appendix-B
 - https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession

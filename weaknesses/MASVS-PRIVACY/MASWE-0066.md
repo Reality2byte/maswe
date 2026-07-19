@@ -8,6 +8,7 @@ profiles: [P]
 mappings:
   masvs-v2: [MASVS-PRIVACY-2]
   cwe: [359]
+  android-core-app-quality: [Hardware_IDs]
   maswe-beta: [MASWE-0110]
 refs:
 - https://developer.android.com/reference/android/provider/Settings.Secure#ANDROID_ID

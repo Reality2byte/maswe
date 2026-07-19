@@ -8,6 +8,7 @@ profiles: [P]
 mappings:
   masvs-v2: [MASVS-PRIVACY-1]
   cwe: [250]
+  android-core-app-quality: [Minimize_Permissions, Sensitive_Permissions, Runtime_Permissions, Permission_Rationale, Graceful_Degradation]
   maswe-beta: [MASWE-0117]
 refs:
 - https://developer.apple.com/design/human-interface-guidelines/privacy#Requesting-permission

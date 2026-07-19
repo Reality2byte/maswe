@@ -9,6 +9,7 @@ mappings:
   masvs-v1: [MSTG-AUTH-8, MSTG-AUTH-1, MSTG-AUTH-12]
   masvs-v2: [MASVS-AUTH-2, MASVS-CRYPTO-2]
   cwe: [285, 287, 312, 319, 326, 602, 603, 863, 922]
+  android-core-app-quality: [Biometric_Authentication]
   maswe-beta: [MASWE-0034, MASWE-0044, MASWE-0041, MASWE-0042, MASWE-0043]
 refs:
 - https://developer.android.com/training/sign-in/biometric-auth#crypto

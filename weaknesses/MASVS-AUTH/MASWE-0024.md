@@ -9,6 +9,7 @@ mappings:
   masvs-v1: [MSTG-AUTH-9]
   masvs-v2: [MASVS-AUTH-1, MASVS-AUTH-3]
   cwe: [287, 522]
+  android-core-app-quality: [Autofill_Hints, Credential_Manager]
   maswe-beta: [MASWE-0028, MASWE-0032, MASWE-0035, MASWE-0039]
 refs:
 - https://developer.apple.com/documentation/security/password_autofill

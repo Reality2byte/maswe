@@ -11,6 +11,7 @@ mappings:
   cwe: [208, 323, 325, 326, 327, 329, 780]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/broken-cryptographic-algorithm
+  android-core-app-quality: [Cryptographic_Algorithms]
   maswe-beta: [MASWE-0020, MASWE-0012, MASWE-0022, MASWE-0023]
 refs:
 - https://support.google.com/faqs/answer/10046138?hl=en

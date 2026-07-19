@@ -8,6 +8,7 @@ profiles: [L2]
 mappings:
   masvs-v2: [MASVS-CODE-1]
   cwe: [693, 1357]
+  android-core-app-quality: [Target_SDK_Version, Compile_SDK_Version]
   maswe-beta: [MASWE-0078]
 refs:
 - https://developer.android.com/google/play/requirements/target-sdk

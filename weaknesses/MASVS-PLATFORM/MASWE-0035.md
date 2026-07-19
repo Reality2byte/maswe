@@ -14,6 +14,7 @@ mappings:
   - https://developer.android.com/privacy-and-security/risks/pending-intent
   - https://developer.android.com/privacy-and-security/risks/sender-of-pending-intents
   - https://developer.android.com/privacy-and-security/risks/sticky-broadcast
+  android-core-app-quality: [Component_Permissions]
   maswe-beta: [MASWE-0066]
 refs:
 - https://support.google.com/faqs/answer/9267555?hl=en

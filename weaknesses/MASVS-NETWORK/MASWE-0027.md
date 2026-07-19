@@ -9,6 +9,7 @@ mappings:
   masvs-v1: [MSTG-NETWORK-4]
   masvs-v2: [MASVS-NETWORK-2]
   cwe: [295]
+  android-core-app-quality: [Network_Security_Configuration]
   maswe-beta: [MASWE-0047]
 refs:
 - https://developer.android.com/privacy-and-security/security-config#CertificatePinning

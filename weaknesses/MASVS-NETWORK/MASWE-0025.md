@@ -12,7 +12,7 @@ mappings:
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/cleartext-communications
   - https://developer.android.com/privacy-and-security/risks/insecure-machine-to-machine
-  android-core-app-quality: [SC-9, SC-N1, SC-N2]
+  android-core-app-quality: [Network_Security_Traffic, Network_Security_Configuration]
   maswe-beta: [MASWE-0050, MASWE-0037, MASWE-0048]
 refs:
 - https://developer.apple.com/documentation/security/preventing-insecure-network-connections

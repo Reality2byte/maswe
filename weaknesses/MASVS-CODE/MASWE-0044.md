@@ -11,6 +11,7 @@ mappings:
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/dynamic-code-loading
   - https://developer.android.com/privacy-and-security/risks/create-package-context
+  android-core-app-quality: [App_Bundles]
   maswe-beta: [MASWE-0085]
 refs:
 - https://developer.android.com/privacy-and-security/risks/dynamic-code-loading

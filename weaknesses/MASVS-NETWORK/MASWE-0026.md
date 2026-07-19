@@ -12,6 +12,7 @@ mappings:
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/unsafe-trustmanager
   - https://developer.android.com/privacy-and-security/risks/unsafe-hostname
+  android-core-app-quality: [Network_Security_Configuration, Security_Provider_Initialization]
   maswe-beta: [MASWE-0052]
 refs:
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-52r2.pdf#page=17
