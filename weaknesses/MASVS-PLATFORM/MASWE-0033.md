@@ -25,8 +25,7 @@ draft:
     excluding items from universal clipboard on iOS), and clear it when appropriate.
 
     Note: the general IPC / localhost-server aspects previously covered here have moved to
-    [MASWE-0020](../MASVS-AUTH/MASWE-0020.md); this weakness exclusively covers improper use of
-    the clipboard.
+    @MASWE-0020; this weakness exclusively covers improper use of the clipboard.
   topics:
   - copying sensitive data to the clipboard
   - not marking clipboard content as sensitive (e.g. Android EXTRA_IS_SENSITIVE)

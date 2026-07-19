@@ -24,7 +24,7 @@ draft:
     implementation details (CWE-1295), and may allow bypassing security controls (CWE-489,
     CWE-912).
 
-    Note the distinction from [MASWE-0006](../MASVS-STORAGE/MASWE-0006.md): that weakness (in
+    Note the distinction from @MASWE-0006: that weakness (in
     STORAGE) covers developer _leftover artifacts_ that leak confidentiality, such as staging /
     integration URLs, developer emails/usernames, and source code files hardcoded in the package.
     This weakness (in RESILIENCE) covers developer _debug artifacts_ that weaken the app's
