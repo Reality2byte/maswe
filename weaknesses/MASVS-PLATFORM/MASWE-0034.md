@@ -11,10 +11,18 @@ mappings:
 
 beta-coverage: [MASWE-0061]
 draft:
-  description: restricting use of certain extensions
+  description: |
+    On iOS, app extensions (e.g. custom keyboards, share and action extensions) run third-party code
+    that can interact with the host app and observe or exfiltrate the data the app hands to them. An
+    app that handles sensitive data should restrict which extension point identifiers it allows, for
+    example by implementing `application(_:shouldAllowExtensionPointIdentifier:)` to reject untrusted
+    extension categories, and by disabling third-party keyboards via the
+    `UIApplicationKeyboardExtensionPointIdentifier` for sensitive input fields. Allowing untrusted
+    extensions unconditionally can leak sensitive user input or content.
   topics:
-  - restricting use of certain extensions via `application:shouldAllowExtensionPointIdentifier:`
-  - Third-Party Keyboards Not Disabled via UIApplicationKeyboardExtensionPointIdentifier
+  - restricting extensions via application(_:shouldAllowExtensionPointIdentifier:)
+  - disabling third-party keyboards (UIApplicationKeyboardExtensionPointIdentifier) for sensitive fields
+  - risks of custom keyboard / share / action extensions handling sensitive data
 status: placeholder
 
 ---

@@ -11,9 +11,17 @@ mappings:
 
 beta-coverage: [MASWE-0091]
 draft:
-  description: The app's code doesn’t implement effective anti-deobfuscation techniques to protect against reverse engineering (CWE-693)
+  description: |
+    Obfuscation alone can be undone by automated deobfuscation and static-analysis tooling. This
+    weakness occurs when the app does not implement anti-deobfuscation techniques that raise the cost
+    of reversing obfuscated code (CWE-693), such as anti-decompilation tricks, control-flow constructs
+    that defeat common deobfuscators, self-checks, and detection of tampering with the obfuscation. It
+    complements code obfuscation (@MASWE-0051) by protecting the obfuscation itself.
   topics:
-  - anti-deobfuscation techniques
+  - anti-deobfuscation / anti-decompilation techniques
+  - control-flow constructs resistant to automated deobfuscators
+  - detecting tampering with obfuscated code
+  - Effectiveness Assessment (e.g. attempting deobfuscation)
 status: placeholder
 
 ---

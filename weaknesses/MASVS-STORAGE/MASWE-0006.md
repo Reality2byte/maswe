@@ -26,10 +26,10 @@ This weakness covers any sensitive data that is hardcoded and shipped with the a
 
 - **API keys and secrets** for first- or third-party services.
 - **Credentials** such as passwords, session tokens, or other authentication material.
-- **Cryptographic material** such as symmetric keys or private keys embedded directly in the package (as opposed to being generated and stored in a platform keystore, see [MASWE-0005](MASWE-0005.md)).
+- **Cryptographic material** such as symmetric keys or private keys embedded directly in the package (as opposed to being generated and stored in a platform keystore, see @MASWE-0005).
 - **Developer leftover artifacts**, such as staging or integration URLs, developer emails and usernames, and source code files left in the package (e.g. `.swift`, `.cpp`, map files, or other build artifacts) that leak internal information.
 
-Note that developer _debug_ artifacts (verbose logging, backdoors, testing utilities, hidden switches) are covered separately under resilience in [MASWE-0054](../MASVS-RESILIENCE/MASWE-0054.md). The focus here is on hardcoded sensitive data that leaks confidentiality regardless of any anti-tampering considerations.
+Note that developer _debug_ artifacts (verbose logging, backdoors, testing utilities, hidden switches) are covered separately under resilience in @MASWE-0054. The focus here is on hardcoded sensitive data that leaks confidentiality regardless of any anti-tampering considerations.
 
 ## Impact
 
@@ -53,6 +53,6 @@ Sensitive data can be hardcoded in several places that end up in the final packa
 - If a stateful API service is not viable, use a stateless API service fronted by a middleware solution (API proxy or gateway) that proxies requests between the app and the API endpoint, keeping the static secret server-side rather than in the client. Use JSON Web Tokens (JWT) and JSON Web Signature (JWS) as appropriate.
 - If secrets must be hardcoded, configure them with the minimum required permissions and restrictions to reduce the impact in case of exposure.
 - Consider using a [Key Management Service](https://cloud.google.com/kms/docs/key-management-service) to retrieve secrets at runtime after validating app integrity.
-- Store cryptographic keys and authentication material using the platform's hardware-backed keystore (Android Keystore, iOS Keychain) instead of embedding them in the package. See [MASWE-0005](MASWE-0005.md).
+- Store cryptographic keys and authentication material using the platform's hardware-backed keystore (Android Keystore, iOS Keychain) instead of embedding them in the package. See @MASWE-0005.
 - Regularly audit the codebase and dependencies for hardcoded sensitive data and developer leftovers (e.g. using tools such as [gitleaks](https://github.com/gitleaks/gitleaks)) and strip build artifacts and source files from release packages.
 - As a **last resort** when no other secure option is available, white-box cryptography, code/resource obfuscation, and RASP can raise the effort required to extract secrets, ensuring keys are only assembled in memory when needed. These techniques deter but do not prevent extraction and must not replace the mitigations above.

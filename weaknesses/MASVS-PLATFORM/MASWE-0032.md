@@ -10,14 +10,20 @@ mappings:
   cwe: [939, 917]
 
 draft:
-  description: e.g. use of URL Custom Schemes, unverified AppLinks/Universal Links,
-    not validating URLs. Deep Link parameters offers a wide range of possibilities. A malformed URI or parameter value, if not sanitized, may trigger an injection in different points of the application. For example, CWE-939 prevents the exploit of the URI checking the source and CWE-917 prevents the exploit of the URI checking the content.
+  description: |
+    Deep links (Android App Links and custom URL schemes, iOS Universal Links and custom schemes) let
+    other apps and websites launch the app at a specific screen and pass parameters. They become
+    insecure when the app relies on unverified custom URL schemes (which any app can claim), does not
+    verify App Links / Universal Links through domain association, or fails to validate and sanitize
+    the incoming URL and its parameters. Because deep-link input is attacker-controllable, a malformed
+    URI or parameter can trigger injection or logic abuse at various points in the app (CWE-939 for
+    source verification, CWE-917 for content/expression injection).
   topics:
-  - URL Custom Schemes
-  - AppLinks
-  - Universal Links
-  - URL validation
-  - Check for OS version. e.g. deep link are more secure after Android XX
+  - URL Custom Schemes (claimable by any app)
+  - Android App Links / iOS Universal Links domain association (autoVerify, apple-app-site-association)
+  - validating and sanitizing the deep-link URL and its parameters
+  - injection via unsanitized deep-link parameters (CWE-917 / CWE-939)
+  - platform/OS-version differences in deep-link security
 beta-coverage: [MASWE-0058]
 refs:
 - https://developer.apple.com/documentation/technotes/tn3155-debugging-universal-links

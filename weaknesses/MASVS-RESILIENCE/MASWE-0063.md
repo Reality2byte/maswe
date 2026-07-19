@@ -11,11 +11,17 @@ mappings:
 
 beta-coverage: [MASWE-0105]
 draft:
-  description: The app's code doesn’t implement effective techniques to verify the integrity of its own resources (CWE-693).
+  description: |
+    Beyond executable code, an app relies on resources and assets whose integrity should be verified,
+    including files in the app sandbox, downloaded resources, and dynamically loaded resources (e.g.
+    those restored from a backup). This weakness occurs when the app does not verify that these
+    resources have not been tampered with (CWE-693), allowing an attacker to change app behavior or
+    inject malicious content by altering resources.
   topics:
-  - Sandbox Integrity
-  - Integrity of downloaded resources
-  - Integrity of dynamically loaded resources (e.g. via backup restore)
+  - sandbox / app-resource integrity verification
+  - integrity of downloaded resources
+  - integrity of dynamically loaded resources (e.g. via backup restore)
+  - responding to failed resource-integrity checks
 status: placeholder
 
 ---

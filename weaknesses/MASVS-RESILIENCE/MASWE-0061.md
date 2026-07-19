@@ -11,11 +11,18 @@ mappings:
 
 beta-coverage: [MASWE-0102]
 draft:
-  description: The app's code doesn’t implement effective techniques to detect if it is being analyzed by dynamic analysis tools (CWE-693), e.g. Frida, Xposed, Ellekit, etc.
+  description: |
+    Dynamic instrumentation and hooking frameworks let an attacker observe and modify the app at
+    runtime, bypassing client-side security controls. This weakness occurs when the app does not detect
+    the presence of such tools (CWE-693), e.g. Frida, Xposed/LSPosed, and ElleKit/Cydia Substrate, by
+    checking for their artifacts (loaded libraries, named pipes, listening ports, installed hooks), and
+    does not respond when they are detected.
   topics:
   - Frida detection
-  - Xposed detection
-  - ElleKit detection
+  - Xposed / LSPosed detection
+  - ElleKit / Cydia Substrate detection
+  - detecting hooking artifacts (loaded libraries, ports, named pipes)
+  - Effectiveness Assessment (e.g. bypassing the detection)
 status: placeholder
 
 ---

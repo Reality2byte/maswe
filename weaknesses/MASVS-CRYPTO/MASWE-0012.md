@@ -22,7 +22,7 @@ draft:
     are vulnerable to collision attacks and must not be used where collision or
     second-preimage resistance is required (e.g. digital signatures, integrity checks,
     certificate fingerprints). Note that password/passphrase handling requires a
-    dedicated password-based KDF rather than a plain hash (see [MASWE-0008](MASWE-0008.md)).
+    dedicated password-based KDF rather than a plain hash (see @MASWE-0008).
   topics:
   - broken hashing algorithms (e.g. MD5, SHA-1)
   - collision and second-preimage resistance requirements

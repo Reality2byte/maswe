@@ -15,10 +15,18 @@ refs:
 - https://medium.com/swlh/updating-users-to-the-latest-app-release-on-ios-ed96e4c76705
 - https://gist.github.com/DineshKachhot/f63fcebceca6351fc982cafd38f6f05c
 draft:
-  description: Check if the app enforces updates e.g. via AppUpdateManager on Android or itunes check on app version on iOS. However, the backend would be enforcing this and not only the app locally.
+  description: |
+    When a critical vulnerability is discovered in an app that is already in production, the developer
+    needs a way to force users onto a fixed version. This weakness occurs when the app has no
+    enforced-update mechanism (e.g. Android In-App Updates / `AppUpdateManager`, or an App Store
+    version check on iOS), or when the update requirement is enforced only on the client side and can
+    therefore be bypassed. Robust enforcement requires the backend to signal and enforce the minimum
+    acceptable version rather than relying solely on local checks.
   topics:
-  - The in‑app update mechanism isn't used at all (CWE-693).
-  - The update enforcement occurs purely locally (client‑side) without server‑side checks (CWE-602).
+  - no in-app / enforced update mechanism at all (CWE-693)
+  - update enforcement only client-side without a server-side check (CWE-602)
+  - AppUpdateManager (Android In-App Updates) / App Store version check (iOS)
+  - server-driven minimum-supported-version enforcement
 beta-coverage: [MASWE-0075]
 status: placeholder
 

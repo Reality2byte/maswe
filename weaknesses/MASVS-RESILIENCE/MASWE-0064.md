@@ -11,10 +11,17 @@ mappings:
 
 beta-coverage: [MASWE-0107]
 draft:
-  description: The app's code doesn’t implement effective techniques to verify the integrity of its own code at runtime (CWE-693), e.g. detecting in-memory code/patch tampering or code injection.
-  topics: 
-  - memory tampering detection
-  - runtime code/patch integrity checks
+  description: |
+    An app's executable code can be modified at runtime through in-memory patching, code injection, or
+    hooking. This weakness occurs when the app does not verify the integrity of its own code at runtime
+    (CWE-693), for example by detecting modifications to loaded code/segments, injected libraries, or
+    patched functions, and does not respond when tampering is detected. It complements static app
+    integrity/attestation (@MASWE-0062) by covering runtime tampering.
+  topics:
+  - in-memory code / patch tampering detection
+  - detecting injected libraries and function hooks
+  - runtime code/segment integrity checks
+  - Effectiveness Assessment (e.g. bypassing the detection)
 status: placeholder
 
 ---

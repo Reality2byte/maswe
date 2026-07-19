@@ -19,7 +19,7 @@ draft:
     environment). For high-assurance apps, detecting a potentially hostile environment allows
     the app to warn the user, restrict functionality, or trigger other protective responses.
     This complements environment-integrity checks such as
-    [MASWE-0056](MASWE-0056.md) (root/jailbreak detection) and platform services such as Google
+    @MASWE-0056 (root/jailbreak detection) and platform services such as Google
     Play Protect / the Play Integrity API.
   topics:
   - detecting known malicious apps/packages on the device

@@ -10,9 +10,17 @@ mappings:
 
 beta-coverage: [MASWE-0098]
 draft:
-  description: The app's code doesn’t implement effective techniques to detect if it is running in a virtualized environment (CWE-693), e.g. checking for known virtualization software or anomalies in the environment.
+  description: |
+    App virtualization/cloning frameworks (and "dual-app" containers) run an app inside another app's
+    process, letting an attacker instrument it, access its data, or run multiple cloned instances
+    without rooting the device. This weakness occurs when the app does not detect that it is running
+    inside such a virtualized or cloned environment (CWE-693), for example by checking its process path
+    and package structure for anomalies or looking for known virtualization frameworks, and does not
+    respond when one is detected.
   topics:
-  - detection in place for "cloned" apps or virtualized environments
+  - detection of cloned apps / virtualized (dual-app) environments
+  - checks for known virtualization frameworks and process/path anomalies
+  - responding to a detected virtualized environment
   - Effectiveness Assessment (e.g. bypassing the detection)
 status: placeholder
 

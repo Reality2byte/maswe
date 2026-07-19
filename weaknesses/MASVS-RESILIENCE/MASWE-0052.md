@@ -11,11 +11,17 @@ mappings:
 
 beta-coverage: [MASWE-0090]
 draft:
-  description: e.g. resource obfuscation, binary encryption/packing
+  description: |
+    Beyond code, an app's resources and assets (e.g. strings, layouts, images, configuration, and
+    native binaries) can reveal how the app works and aid reverse engineering. This weakness occurs
+    when resources are left in clear, unobfuscated form and binaries are neither encrypted nor packed.
+    Note that obfuscation or encryption applied without integrity validation can itself be tampered
+    with (CWE-649), so resource protection should complement, not replace, integrity checks.
   topics:
-  - data/resource obfuscated/encrypted
-  - binaries encrypted/packed
+  - data/resources not obfuscated or encrypted
+  - native binaries not encrypted/packed
   - obfuscation/encryption used without integrity validation (CWE-649)
+  - resource/string identifier obfuscation
 status: placeholder
 
 ---

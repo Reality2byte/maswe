@@ -20,8 +20,8 @@ draft:
     unwanted content, or perform actions against the user's interest. Because the developer is
     responsible for all code shipped in the app (including third-party SDKs), the app must be
     reviewed and its supply chain controlled to detect and prevent inclusion of malicious code.
-    This complements [MASWE-0041](MASWE-0041.md) (dependencies with known vulnerabilities) and
-    [MASWE-0077](MASWE-0077.md) (non-reproducible builds).
+    This complements @MASWE-0041 (dependencies with known vulnerabilities) and
+    @MASWE-0077 (non-reproducible builds).
   topics:
   - intentionally introduced malicious code / insider threat
   - malicious or compromised third-party SDKs and dependencies (supply-chain)

@@ -11,9 +11,16 @@ mappings:
 
 beta-coverage: [MASWE-0101]
 draft:
-  description: The app's code doesn’t implement effective techniques to detect if it is being debugged (CWE-693), e.g. checking for debugger presence.
+  description: |
+    A debugger attached to the running app lets an attacker inspect memory, set breakpoints, and alter
+    control flow to bypass client-side controls. This weakness occurs when the app does not detect the
+    presence of a debugger at runtime (CWE-693), for example via platform checks
+    (`Debug.isDebuggerConnected()` and the `TracerPid` in `/proc/self/status` on Android, or
+    `sysctl`/`ptrace`-based checks on iOS), and does not respond appropriately when one is detected.
   topics:
-  - debugger detection
+  - debugger presence detection (Android Debug.isDebuggerConnected() / TracerPid; iOS sysctl/ptrace)
+  - responding to a detected debugger
+  - Effectiveness Assessment (e.g. bypassing the detection)
 status: placeholder
 
 ---

@@ -18,7 +18,16 @@ refs:
 - https://en.wikipedia.org/wiki/Replay_attack
 beta-coverage: [MASWE-0024, MASWE-0012]
 draft:
-  description: Improper use of MACs in security sensitive contexts affecting data integrity.
+  description: |
+    A Message Authentication Code (MAC) provides integrity and authenticity for a message using a
+    shared secret key. Improper use of a MAC in a security-sensitive context undermines these
+    guarantees and can let attackers forge or replay messages, or learn information through side
+    channels. Typical problems include using a MAC key for more than one purpose or with an
+    unauthorized algorithm, keys with insufficient entropy, MACs built on broken hash functions
+    (e.g. MD5/SHA-1), non-cryptographic checksums (e.g. CRC-32) used where a MAC is required,
+    fragile constructions (e.g. raw CBC-MAC on variable-length messages), truncated tags, missing
+    replay protection (timestamp/nonce), and incorrect MAC-then-encrypt / encrypt-then-MAC ordering
+    that leaks information via timing or error messages.
   topics:
   - Using a MAC key for more than one purpose or with an unauthorized algorithm (key separation)
   - Using HMAC with keys with insufficient entropy

@@ -21,9 +21,18 @@ refs:
 - https://blog.restlesslabs.com/john/ios-app-attest
 beta-coverage: [MASWE-0100]
 draft:
-  description: The app doesn't use App Attestation APIs, such as Google Play Integrity API, iOS DeviceCheck API,so the backend cannot ensure requests originate from a genuine app binary (CWE-693). This exposes the app to tampering, fraud, replay attacks, and unauthorized use of premium features.
+  description: |
+    Device attestation lets the backend gain assurance about the integrity of the device and platform
+    the app runs on, using platform services such as the Android Play Integrity API or iOS
+    DeviceCheck / App Attest. This weakness occurs when the app does not implement device attestation,
+    so the backend cannot distinguish requests from genuine, uncompromised devices from those coming
+    from rooted, emulated, tampered, or automated environments (CWE-693), exposing it to tampering,
+    fraud, replay attacks, and abuse of premium features. Attestation results must be verified
+    server-side (including nonce/freshness) to be meaningful.
   topics:
-  - detection in place
+  - Android Play Integrity API / iOS DeviceCheck & App Attest
+  - server-side verification of attestation results (nonce, freshness)
+  - detecting rooted/emulated/tampered environments via attestation
   - Effectiveness Assessment (e.g. bypassing the detection)
 status: placeholder
 
