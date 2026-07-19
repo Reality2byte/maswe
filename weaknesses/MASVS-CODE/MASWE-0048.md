@@ -2,6 +2,7 @@
 title: Unsafe Handling of Untrusted Data
 id: MASWE-0048
 alias: unsafe-untrusted-data
+requirement: "The app securely handles untrusted data."
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:

@@ -2,6 +2,7 @@
 title: Non-Reproducible Builds
 id: MASWE-0077
 alias: non-reproducible-builds
+requirement: "The app offers reproducible builds."
 platform: [android, ios]
 profiles: [L2]
 mappings:

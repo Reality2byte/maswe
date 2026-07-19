@@ -2,6 +2,7 @@
 title: Inadequate Data Collection Declarations
 id: MASWE-0068
 alias: data-collection-declarations
+requirement: "The app adequately declares all user collected data."
 platform: ["android", "ios"]
 profiles: ["P"]
 mappings:

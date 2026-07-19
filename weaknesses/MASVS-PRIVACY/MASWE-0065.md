@@ -2,6 +2,7 @@
 title: Lack of Anonymization or Pseudonymisation Measures
 id: MASWE-0065
 alias: anonymization-pseudonymization-measures
+requirement: "The app uses anonymization or pseudonymisation measures."
 platform: ["android", "ios"]
 profiles: ["P"]
 mappings:

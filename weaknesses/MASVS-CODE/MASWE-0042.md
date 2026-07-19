@@ -2,6 +2,7 @@
 title: Running on a recent Platform Version Not Ensured
 id: MASWE-0042
 alias: run-on-recent-platform-version
+requirement: "The app terminates if an unsupported OS version is detected."
 platform: [android, ios]
 profiles: [L2]
 mappings:

@@ -2,6 +2,7 @@
 title: Malicious Code Included in the App
 id: MASWE-0075
 alias: malicious-code-included
+requirement: "The app package does not contain malicious code."
 platform: [android, ios]
 profiles: [L2]
 mappings:

@@ -2,6 +2,7 @@
 title: Insecure Identity Pinning
 id: MASWE-0027
 alias: insecure-pinning
+requirement: "The app correctly implements identity pinning."
 platform: [android, ios]
 profiles: [L2]
 mappings:

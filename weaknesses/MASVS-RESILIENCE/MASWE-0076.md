@@ -2,6 +2,7 @@
 title: Malware Detection Not Implemented
 id: MASWE-0076
 alias: malware-detection
+requirement: "The app detects attacks by malware."
 platform: [android, ios]
 profiles: [R]
 mappings:

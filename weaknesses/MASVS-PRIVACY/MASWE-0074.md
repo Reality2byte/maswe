@@ -2,6 +2,7 @@
 title: Usage of Non-Privacy-Preserving Functionality
 id: MASWE-0074
 alias: non-privacy-preserving-functionality
+requirement: "The app uses privacy-preserving functionality."
 platform: [android, ios]
 profiles: [P]
 mappings:

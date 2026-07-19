@@ -2,6 +2,7 @@
 title: Debug Mechanisms Not Disabled
 id: MASWE-0050
 alias: debuggable-flag
+requirement: "The app disables debug mechanisms."
 platform: [android, ios]
 profiles: [R]
 mappings:

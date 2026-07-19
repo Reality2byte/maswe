@@ -2,6 +2,7 @@
 title: Lack of Non-Repudiation for Critical Actions
 id: MASWE-0019
 alias: insecure-android-confirmation
+requirement: "The app ensures non-repudiation for critical actions."
 platform: [android, ios]
 profiles: [L2]
 mappings:

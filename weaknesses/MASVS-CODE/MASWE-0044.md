@@ -2,6 +2,7 @@
 title: Unsafe Dynamic Code Loading
 id: MASWE-0044
 alias: unsafe-code-loading
+requirement: "The app loads dynamic code safely from trusted sources."
 platform: [android, ios]
 profiles: [L2]
 mappings:

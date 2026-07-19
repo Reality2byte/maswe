@@ -2,6 +2,7 @@
 title: Latest Platform Version Not Targeted
 id: MASWE-0043
 alias: target-latest-platform-version
+requirement: "The app targets a recent OS version."
 platform: [android, ios]
 profiles: [L2]
 mappings:

@@ -2,6 +2,7 @@
 title: Insertion of Sensitive Data into Logs
 id: MASWE-0001
 alias: data-in-logs
+requirement: "The app excludes sensitive data from application logs."
 platform: ["android", "ios"]
 profiles: ["L1", "L2", "P"]
 mappings:

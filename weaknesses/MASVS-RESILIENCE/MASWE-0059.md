@@ -2,6 +2,7 @@
 title: Device Attestation Not Implemented
 id: MASWE-0059
 alias: device-attestation
+requirement: "The app implements device attestation."
 platform: [android, ios]
 profiles: [R]
 mappings:

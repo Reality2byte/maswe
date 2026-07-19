@@ -2,6 +2,7 @@
 title: Inadequate Tracking Domains Declarations
 id: MASWE-0073
 alias: tracking-domains-declarations
+requirement: "The app adequately declares all tracking domains it connects to."
 platform: ["android", "ios"]
 profiles: ["P"]
 mappings:

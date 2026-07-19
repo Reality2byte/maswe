@@ -2,6 +2,7 @@
 title: Improper Encryption
 id: MASWE-0011
 alias: weak-encryption
+requirement: "The app properly encrypts sensitive data."
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:

@@ -2,6 +2,7 @@
 title: Improper Cryptographic Key Derivation
 id: MASWE-0008
 alias: weak-crypto-key-derivation
+requirement: "The app derives cryptographic keys using approved key derivation functions."
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:

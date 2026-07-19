@@ -2,6 +2,7 @@
 title: Incorrect Use of Identifiers for User Tracking
 id: MASWE-0066
 alias: unique-identifiers-user-tracking
+requirement: "The app does not use persistent or unique identifiers in a way that enables user tracking."
 platform: ["android", "ios"]
 profiles: ["P"]
 mappings:

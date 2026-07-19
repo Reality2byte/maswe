@@ -2,6 +2,7 @@
 title: Emulator Detection Not Implemented
 id: MASWE-0058
 alias: emulator-detection
+requirement: "The app detects when it is running on an emulator."
 platform: [android, ios]
 profiles: [R]
 mappings:

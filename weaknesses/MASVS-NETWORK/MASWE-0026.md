@@ -2,6 +2,7 @@
 title: Insecure Certificate Validation
 id: MASWE-0026
 alias: insecure-cert-val
+requirement: "The app validates certificates for all network traffic."
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:

@@ -2,6 +2,7 @@
 title: Code Integrity Not Verified
 id: MASWE-0064
 alias: runtime-code-integrity
+requirement: "The app verifies the integrity of its code."
 platform: [android, ios]
 profiles: [R]
 mappings:

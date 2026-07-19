@@ -2,6 +2,7 @@
 title: No Application-Level Payload Encryption
 id: MASWE-0055
 alias: data-unencrypted
+requirement: "The app applies application-level payload encryption in addition to transport-layer encryption."
 platform: [android, ios]
 profiles: [R]
 mappings:

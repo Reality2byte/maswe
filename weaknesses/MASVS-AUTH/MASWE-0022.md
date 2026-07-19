@@ -2,6 +2,7 @@
 title: Fallback to Non-biometric Credentials Allowed for Sensitive Transactions
 id: MASWE-0022
 alias: no-biometric-fallback
+requirement: "The app does not allow fallback to non-biometric credentials for sensitive transactions."
 platform: [android, ios]
 profiles: [L2]
 mappings:

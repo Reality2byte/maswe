@@ -2,6 +2,7 @@
 title: App Attestation Not Implemented
 id: MASWE-0062
 alias: app-integrity
+requirement: "The app implements app attestation."
 platform: [android, ios]
 profiles: [R]
 mappings:

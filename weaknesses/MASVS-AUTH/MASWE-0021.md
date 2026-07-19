@@ -2,6 +2,7 @@
 title: Local Authentication Can Be Bypassed
 id: MASWE-0021
 alias: event-bound-biometric-auth
+requirement: "The app implements local authentication securely."
 platform: [android, ios]
 profiles: [L2]
 mappings:

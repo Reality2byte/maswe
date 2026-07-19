@@ -2,6 +2,7 @@
 title: Debug Artifacts Not Removed
 id: MASWE-0054
 alias: non-production-resources
+requirement: "The app removes debug artifacts."
 platform: [android, ios]
 profiles: [R]
 mappings:

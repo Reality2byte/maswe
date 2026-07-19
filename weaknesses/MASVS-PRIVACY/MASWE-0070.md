@@ -2,6 +2,7 @@
 title: Inadequate Data Visibility Controls
 id: MASWE-0070
 alias: data-visibility-control
+requirement: "The app provides adequate controls over the visibility of user data."
 platform: ["android", "ios"]
 profiles: ["P"]
 mappings:

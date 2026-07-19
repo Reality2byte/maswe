@@ -2,6 +2,7 @@
 title: Cryptographic Key Access Not Restricted
 id: MASWE-0010
 alias: crypto-key-access-not-restricted
+requirement: "The app restricts access to cryptographic keys."
 platform: [android, ios]
 profiles: [L2]
 mappings:

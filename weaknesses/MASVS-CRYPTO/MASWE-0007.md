@@ -2,6 +2,7 @@
 title: Improper Cryptographic Key Generation
 id: MASWE-0007
 alias: weak-crypto-key-generation
+requirement: "The app securely generates cryptographic keys."
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:

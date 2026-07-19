@@ -2,6 +2,7 @@
 title: App Resources Integrity Not Verified
 id: MASWE-0063
 alias: app-resources-integrity
+requirement: "The app verifies the integrity of its resources."
 platform: [android, ios]
 profiles: [R]
 mappings:

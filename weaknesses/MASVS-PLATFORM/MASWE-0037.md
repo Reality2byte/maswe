@@ -2,6 +2,7 @@
 title: WebViews Allow Access to Local Resources with Untrusted Content
 id: MASWE-0037
 alias: webviews-local-resources
+requirement: "The app does not allow WebViews loading untrusted content to access local resources."
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:

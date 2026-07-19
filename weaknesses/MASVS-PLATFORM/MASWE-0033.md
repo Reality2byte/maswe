@@ -2,6 +2,7 @@
 title: Improper Use of the Clipboard
 id: MASWE-0033
 alias: improper-clipboard
+requirement: "The app avoids placing sensitive data on the system clipboard."
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:

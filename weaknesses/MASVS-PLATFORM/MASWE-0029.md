@@ -2,6 +2,7 @@
 title: Sensitive Data Leaked via Notifications
 id: MASWE-0029
 alias: data-leak-notifications
+requirement: "The app does not unnecessarily expose sensitive data through system notifications."
 platform: [android, ios]
 profiles: [L2]
 mappings:

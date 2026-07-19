@@ -2,6 +2,7 @@
 title: Cryptographic Key Rotation Not Implemented
 id: MASWE-0009
 alias: no-key-rotation
+requirement: "The app rotates cryptographic keys regularly."
 platform: [android, ios]
 profiles: [L2]
 mappings:

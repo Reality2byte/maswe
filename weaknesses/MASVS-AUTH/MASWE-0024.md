@@ -2,6 +2,7 @@
 title: Lack of Auto-fill Support for Authenticators
 id: MASWE-0024
 alias: autofill-authenticators
+requirement: "The app enables auto-fill support for authenticators."
 platform: [android, ios]
 profiles: [L2]
 mappings:

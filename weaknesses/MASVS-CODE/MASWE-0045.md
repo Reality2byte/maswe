@@ -2,6 +2,7 @@
 title: Compiler-Provided Security Features Not Used
 id: MASWE-0045
 alias: compiler-provided-security-features-not-implemented
+requirement: "The app uses the compiler-provided security features of the platform."
 platform: [android, ios]
 profiles: [L2]
 mappings:

@@ -2,6 +2,7 @@
 title: Network Traffic Not Encrypted
 id: MASWE-0025
 alias: cleartext-traffic
+requirement: "The app encrypts all network traffic."
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:

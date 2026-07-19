@@ -2,6 +2,7 @@
 title: Inadequate or Ambiguous User Consent Mechanisms
 id: MASWE-0071
 alias: ambiguous-consent-mechanisms
+requirement: "The app requests user consent prior to any data processing."
 platform: ["android", "ios"]
 profiles: ["P"]
 mappings:

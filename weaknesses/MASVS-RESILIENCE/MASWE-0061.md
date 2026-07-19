@@ -2,6 +2,7 @@
 title: Dynamic Analysis Tools Detection Not Implemented
 id: MASWE-0061
 alias: dynamic-analysis-tools
+requirement: "The app detects dynamic analysis tools."
 platform: [android, ios]
 profiles: [R]
 mappings:

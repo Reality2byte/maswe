@@ -2,6 +2,7 @@
 title: Sensitive Data Leaked via Accessibility Services
 id: MASWE-0039
 alias: data-leak-accessibility
+requirement: "The app prevents sensitive data from being exposed to, or captured by, accessibility services."
 platform: [android, ios]
 profiles: [L2]
 mappings:

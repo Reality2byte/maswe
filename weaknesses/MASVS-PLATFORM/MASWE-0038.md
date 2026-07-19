@@ -2,6 +2,7 @@
 title: WebViews Loading Untrusted Content
 id: MASWE-0038
 alias: webviews-untrusted-content
+requirement: "The app does not allow WebViews to load untrusted content."
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:

@@ -2,6 +2,7 @@
 title: Debugger Detection Not Implemented
 id: MASWE-0060
 alias: debugger-detection
+requirement: "The app terminates if a debugger is detected."
 platform: [android, ios]
 profiles: [R]
 mappings:

@@ -2,6 +2,7 @@
 title: Improper Verification of Cryptographic Signature
 id: MASWE-0015
 alias: improper-signature-verification
+requirement: "The app properly verifies cryptographic signatures."
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:

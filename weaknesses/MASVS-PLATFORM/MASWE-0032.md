@@ -2,6 +2,7 @@
 title: Insecure Deep Links
 id: MASWE-0032
 alias: insecure-deep-links
+requirement: "The app securely handles deep links."
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:

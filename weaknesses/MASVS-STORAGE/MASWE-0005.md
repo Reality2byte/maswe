@@ -2,6 +2,7 @@
 title: Cryptographic Keys Stored Outside of Platform Keystore
 id: MASWE-0005
 alias: crypto-keys-not-protected-at-rest
+requirement: "The app stores cryptographic keys inside the platform-provided secure keystore."
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:

@@ -2,6 +2,7 @@
 title: Sensitive Functionality Exposed in WebViews
 id: MASWE-0036
 alias: js-bridges-webviews
+requirement: "The app does not expose sensitive native functionality to WebView content."
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:

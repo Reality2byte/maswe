@@ -2,6 +2,7 @@
 title: Sensitive Data Accessible After Session Termination
 id: MASWE-0018
 alias: reauth-state-changes
+requirement: "The app makes sensitive data inaccessible after session termination."
 platform: [android, ios]
 profiles: [L2]
 mappings:

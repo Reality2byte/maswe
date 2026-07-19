@@ -2,6 +2,7 @@
 title: Dependencies with Known Vulnerabilities
 id: MASWE-0041
 alias: dependencies-with-known-vulnerabilities
+requirement: "The app's third-party components are regularly checked for known vulnerabilities."
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:

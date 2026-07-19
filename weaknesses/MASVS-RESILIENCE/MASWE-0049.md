@@ -2,6 +2,7 @@
 title: Missing Device Secure Lock Verification Implementation
 id: MASWE-0049
 alias: secured-device-detection-not-implemented
+requirement: "The app verifies that the device has a secure lock screen configured before enabling sensitive functionality."
 platform: [android, ios]
 profiles: [L2]
 mappings:

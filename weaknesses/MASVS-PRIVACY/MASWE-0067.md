@@ -2,6 +2,7 @@
 title: Inadequate Privacy Policy
 id: MASWE-0067
 alias: privacy-policy
+requirement: "The app provides an adequate privacy policy."
 platform: ["android", "ios"]
 profiles: ["P"]
 mappings:

@@ -2,6 +2,7 @@
 title: Lack of Proper Data Management Controls
 id: MASWE-0069
 alias: data-management-controls
+requirement: "The app provides adequate controls to manage user data."
 platform: ["android", "ios"]
 profiles: ["P"]
 mappings:

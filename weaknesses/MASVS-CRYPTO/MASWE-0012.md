@@ -2,6 +2,7 @@
 title: Improper Hashing
 id: MASWE-0012
 alias: improper-hashing
+requirement: "The app properly hashes sensitive data."
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:

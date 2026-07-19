@@ -2,6 +2,7 @@
 title: Lack of Authentication or Authorization on App Components
 id: MASWE-0020
 alias: missing-auth-app-components
+requirement: "The app enforces authentication and authorization on its components."
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:

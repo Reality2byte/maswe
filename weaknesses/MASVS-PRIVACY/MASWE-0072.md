@@ -2,6 +2,7 @@
 title: Inadequate Permission Management
 id: MASWE-0072
 alias: inadequate-permission-management
+requirement: "The app adequately manages permissions."
 platform: ["android", "ios"]
 profiles: ["P"]
 mappings:

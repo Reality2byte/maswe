@@ -2,6 +2,7 @@
 title: Improper Use of Message Authentication Code (MAC)
 id: MASWE-0013
 alias: improper-mac
+requirement: "The app properly uses Message Authentication Codes (MACs)."
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:

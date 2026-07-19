@@ -2,6 +2,7 @@
 title: Sensitive Data Not Excluded From Backup
 id: MASWE-0002
 alias: data-not-excluded-backup
+requirement: "The app excludes sensitive data from backups."
 platform: [android, ios]
 profiles: [L1, L2, P]
 mappings:

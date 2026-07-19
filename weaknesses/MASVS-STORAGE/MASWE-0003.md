@@ -2,6 +2,7 @@
 title: Sensitive Data Stored Unencrypted in Private Storage
 id: MASWE-0003
 alias: data-unencrypted-private-storage
+requirement: "The app encrypts sensitive data stored in private storage."
 platform: [android, ios]
 profiles: [L2]
 mappings:

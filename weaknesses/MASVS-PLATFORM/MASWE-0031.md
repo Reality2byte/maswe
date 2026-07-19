@@ -2,6 +2,7 @@
 title: App Vulnerable to Overlay Attacks
 id: MASWE-0031
 alias: tapjacking-attacks
+requirement: "The app protects its sensitive screens against overlay attacks."
 platform: [android, ios]
 profiles: [L2]
 mappings:

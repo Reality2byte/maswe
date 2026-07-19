@@ -2,6 +2,7 @@
 title: Resource Obfuscation Not Implemented
 id: MASWE-0052
 alias: resource-obfuscation
+requirement: "The app applies resource obfuscation to hinder reverse engineering."
 platform: [android, ios]
 profiles: [R]
 mappings:

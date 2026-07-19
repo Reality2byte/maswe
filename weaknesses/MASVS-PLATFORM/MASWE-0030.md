@@ -2,6 +2,7 @@
 title: Sensitive Data Leaked via Screenshots or Screen Recordings
 id: MASWE-0030
 alias: data-leak-screenshots
+requirement: "The app removes sensitive data from views when moved to the background or when being recorded."
 platform: [android, ios]
 profiles: [L2]
 mappings:

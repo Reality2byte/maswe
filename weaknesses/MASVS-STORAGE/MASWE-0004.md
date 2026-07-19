@@ -2,6 +2,7 @@
 title: Sensitive Data Stored Unencrypted Outside of Private Storage
 id: MASWE-0004
 alias: data-unencrypted-shared-storage-no-user-interaction
+requirement: "The app encrypts sensitive data stored outside of private storage."
 platform: [android]
 profiles: [L1, L2]
 mappings:

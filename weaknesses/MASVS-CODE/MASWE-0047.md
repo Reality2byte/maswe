@@ -2,6 +2,7 @@
 title: Using Non-Standard Libraries for Security-Critical Functionality
 id: MASWE-0047
 alias: non-standard-security-libs
+requirement: "The app does not use non-standard libraries for security-critical functionality."
 platform: [android, ios]
 profiles: [L2]
 mappings:

@@ -2,6 +2,7 @@
 title: Improper Random Number Generation
 id: MASWE-0016
 alias: improper-random-number-generation
+requirement: "The app properly generates random numbers."
 platform: ["android", "ios"]
 profiles: ["L1", "L2"]
 mappings:

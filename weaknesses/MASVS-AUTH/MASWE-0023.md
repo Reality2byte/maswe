@@ -2,6 +2,7 @@
 title: Crypto Keys Not Invalidated on New Biometric Enrollment
 id: MASWE-0023
 alias: crypto-keys-biometric-enrollment
+requirement: "The app invalidates keys after any enrollment of new biometric data."
 platform: [android, ios]
 profiles: [L2]
 mappings:

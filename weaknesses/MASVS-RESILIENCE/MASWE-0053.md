@@ -2,6 +2,7 @@
 title: Anti-Deobfuscation Techniques Not Implemented
 id: MASWE-0053
 alias: anti-deobfuscation
+requirement: "The app implements anti-deobfuscation techniques to protect its obfuscation."
 platform: [android, ios]
 profiles: [R]
 mappings:

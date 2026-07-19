@@ -2,6 +2,7 @@
 title: Allowing Untrusted App Extensions
 id: MASWE-0034
 alias: insecure-app-extensions
+requirement: "The app only permits trusted app extensions to interact with it."
 platform: [ios]
 profiles: [L1, L2]
 mappings:

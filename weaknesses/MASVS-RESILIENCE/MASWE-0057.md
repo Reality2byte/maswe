@@ -2,6 +2,7 @@
 title: App Virtualization Environment Detection Not Implemented
 id: MASWE-0057
 alias: app-virtualization-detection
+requirement: "The app detects when it is running inside an app-virtualization environment."
 platform: [android, ios]
 profiles: [R]
 mappings:

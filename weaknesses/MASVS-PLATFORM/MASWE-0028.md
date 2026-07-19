@@ -2,6 +2,7 @@
 title: Sensitive Data Exposed via the User Interface
 id: MASWE-0028
 alias: data-leak-ui
+requirement: "The app does not unnecessarily expose sensitive data through the app user interface."
 platform: [android, ios]
 profiles: [L2]
 mappings:

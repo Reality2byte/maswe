@@ -2,6 +2,7 @@
 title: Code Obfuscation Not Implemented
 id: MASWE-0051
 alias: code-obfuscation
+requirement: "The app applies code obfuscation to hinder reverse engineering."
 platform: [android, ios]
 profiles: [R]
 mappings:

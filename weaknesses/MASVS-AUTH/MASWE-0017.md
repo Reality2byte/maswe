@@ -2,6 +2,7 @@
 title: Step-Up Authentication Not Implemented for Sensitive Actions
 id: MASWE-0017
 alias: step-up-auth
+requirement: "The app enforces step-up authentication before granting access to sensitive functionality."
 platform: [android, ios]
 profiles: [L2]
 mappings:

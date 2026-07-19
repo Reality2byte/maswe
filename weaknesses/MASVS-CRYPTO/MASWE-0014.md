@@ -2,6 +2,7 @@
 title: Improper Generation of Cryptographic Signatures
 id: MASWE-0014
 alias: improper-signature-generation
+requirement: "The app properly generates cryptographic signatures."
 platform: [android, ios]
 profiles: [L1, L2]
 mappings:

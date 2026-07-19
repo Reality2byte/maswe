@@ -2,6 +2,7 @@
 title: Insecure Intents
 id: MASWE-0035
 alias: insecure-intents
+requirement: "The app securely handles intents."
 platform: [android]
 profiles: [L1, L2]
 mappings:
