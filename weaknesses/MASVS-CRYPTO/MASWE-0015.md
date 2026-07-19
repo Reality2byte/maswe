@@ -1,22 +1,31 @@
 ---
-title: Deprecated Android KeyStore Implementations
+title: Improper Verification of Cryptographic Signature
 id: MASWE-0015
-alias: deprecated-keystore
-platform: [android]
-profiles: [L2]
+alias: improper-signature-verification
+platform: [android, ios]
+profiles: [L1, L2]
 mappings:
   masvs-v1: [MSTG-CRYPTO-4]
-  masvs-v2: [MASVS-CRYPTO-2, MASVS-CODE-3]
-  cwe: [327, 477, 522]
+  masvs-v2: [MASVS-CRYPTO-1]
+  cwe: [347]
 
 refs:
-- https://labs.withsecure.com/publications/how-secure-is-your-android-keystore-authentication
-- https://developer.android.com/reference/java/security/KeyStore
-- https://developer.android.com/about/versions/12/behavior-changes-all#bouncy-castle
+- https://cwe.mitre.org/data/definitions/347.html
+- https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-5.pdf
+beta-coverage: [MASWE-0026]
 draft:
-  description: Avoid deprecated implementations such as BKS
+  description: |
+    Cryptographic signature verification must be implemented correctly to guarantee the
+    integrity and authenticity of data. Common failures include skipping verification
+    entirely, ignoring or not checking the verification result, accepting signatures from
+    untrusted or unpinned keys, failing to validate the full certificate/trust chain, or
+    using algorithms and parameters that do not match the signer's. Any of these lets an
+    attacker present forged or tampered data as authentic.
   topics:
-  - Bouncy Castle (BKS)
+  - verification result not checked or ignored
+  - accepting signatures without validating the signer's key/trust chain
+  - algorithm confusion or accepting weak/deprecated signature algorithms
+  - verifying against attacker-controllable public keys
 status: placeholder
 
 ---

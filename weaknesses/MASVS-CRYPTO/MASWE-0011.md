@@ -1,22 +1,51 @@
 ---
-title: Cryptographic Key Rotation Not Implemented
+title: Improper Encryption
 id: MASWE-0011
-alias: no-key-rotation
+alias: weak-encryption
 platform: [android, ios]
-profiles: [L2]
+profiles: [L1, L2]
 mappings:
-  masvs-v2: [MASVS-CRYPTO-2]
-  cwe: [262, 324]
+  masvs-v1: [MSTG-CRYPTO-4, MSTG-CRYPTO-5]
+  masvs-v2: [MASVS-CRYPTO-1, MASVS-CRYPTO-2]
+  cwe: [208, 323, 325, 326, 327, 329, 780]
 
 refs:
-- https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf
-- https://developers.google.com/tink/managing-key-rotation
-draft:
-  description: Key rotation is a best practice to limit the impact of a key compromise.
-    It is especially important for long-lived keys such as asymmetric keys.
-  topics:
-  - long-lived keys (cryptoperiods as per NIST.SP.800-57pt1r5)
-status: placeholder
+- https://support.google.com/faqs/answer/10046138?hl=en
+- https://support.google.com/faqs/answer/9450925?hl=en
+- https://developer.android.com/privacy-and-security/cryptography#deprecated-functionality
+- https://developer.android.com/privacy-and-security/cryptography#pbe-without-iv
+- https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf
+- https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Br2.pdf
+- https://www.usenix.org/legacy/event/woot10/tech/full_papers/Rizzo.pdf
+beta-coverage: [MASWE-0020, MASWE-0012, MASWE-0022, MASWE-0023]
+status: new
 
 ---
 
+## Overview
+
+Improper encryption refers to cryptographic systems or implementations that are vulnerable to attack, allowing unauthorized individuals to decrypt secured data.
+
+## Impact
+
+- **Loss of Confidentiality**: Improper encryption may enable attackers to decipher and obtain sensitive information, resulting in unauthorized exposure and possible data breaches.
+- **Loss of Integrity**: Improper encryption can compromise the integrity of data, allowing adversaries to alter or manipulate the information without detection.
+
+## Mode of Introduction
+
+- **Broken Algorithms**: Relying on broken encryption algorithms (i.e., that are deprecated or disallowed by NIST or other standards) such as RC4.
+- **Predictable or Reused Initialization Vectors (IVs)**: Using IVs that are hardcoded, null, predictable, or reused in modes like AES-CBC or AES-CTR breaks semantic security, allowing attackers to detect patterns or recover plaintext differences. In AEAD modes like AES-GCM, reusing nonces or using authentication tags of insufficient length compromises both confidentiality and integrity. On Android, use `GCMParameterSpec` (not the legacy `IvParameterSpec`) for GCM.
+- **Risky Padding**: Using a padding scheme susceptible to padding oracle attacks (e.g. PKCS#7 with unauthenticated AES-CBC, or PKCS#1 v1.5 for RSA) in combination with observable padding-error signals allows attackers to decrypt or forge ciphertext without the key. See [MASWE-0015](MASWE-0015.md) for signature verification and prefer authenticated encryption.
+- **Broken Modes of Operation**: Using modes that are considered broken. For example, AES-ECB is broken due to practical known-plaintext attacks and it's disallowed by NIST.
+- **Insufficient Key Length**: The use of insufficient key sizes (e.g., 128-bit keys in AES) can compromise encryption strength making the encryption susceptible to brute-force attacks.
+- **Insecure or Wrong Key Usage**: Reusing a single key for multiple purposes (e.g. encryption and signing) or with an unauthorized algorithm violates key-separation principles. Per [NIST.SP.800-57pt1r5](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf), a single key should be used for only one purpose.
+- **Non-Cryptographic Operations**: Relying on techniques such as XOR, Base64 encoding, or simple obfuscation methods for security purposes. These methods provide no actual encryption and can be easily reversed or decoded, exposing sensitive data.
+
+## Mitigations
+
+- **Use Secure Encryption Modes**: Choose secure, authenticated modes (e.g. approved by NIST) such as `AES/GCM/NoPadding`. If AES-CBC must be used, apply Encrypt-then-MAC (e.g. append HMAC) and, for RSA, prefer OAEP over PKCS#1 v1.5.
+- **Ensure Proper Initialization Vector Management**: Generate IVs using cryptographically secure random number generators (with sufficient entropy) and ensure they are unique for every operation; never hardcode, null, or reuse them.
+- **Use Sufficiently Long Keys**: Enforce sufficiently long keys such as those approved by NIST, e.g., a minimum of 256 bits for AES.
+- **Use Each Key for a Single Purpose**: Derive or generate separate keys for encryption, authentication, and signing, and only use each key with its authorized algorithm.
+- **Do Not Expose Cryptographic Errors**: Avoid leaking detailed padding or decryption error messages or timing differences that could serve as an oracle.
+- **Rely on Proper Cryptographic Primitives**: Rely on well-vetted cryptographic primitives that have undergone rigorous peer review and formal validation.
