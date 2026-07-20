@@ -10,7 +10,7 @@ mappings:
   masvs-v2: [MASVS-STORAGE-1, MASVS-CRYPTO-2]
   cwe: [312, 318, 321, 322]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/hardcoded-cryptographic-secrets
+  - hardcoded-cryptographic-secrets
   maswe-beta: [MASWE-0013, MASWE-0014, MASWE-0016]
 refs:
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf

@@ -10,11 +10,11 @@ mappings:
   masvs-v2: [MASVS-AUTH-1, MASVS-PLATFORM-1, MASVS-STORAGE-2]
   cwe: [200, 276, 284, 285, 287, 732, 749, 923, 925, 926]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/content-resolver
-  - https://developer.android.com/privacy-and-security/risks/insecure-broadcast-receiver
-  - https://developer.android.com/privacy-and-security/risks/access-control-to-exported-components
-  - https://developer.android.com/privacy-and-security/risks/android-exported
-  - https://developer.android.com/privacy-and-security/risks/custom-permissions
+  - content-resolver
+  - insecure-broadcast-receiver
+  - access-control-to-exported-components
+  - android-exported
+  - custom-permissions
   android-core-app-quality: [Component_Export, Component_Permissions, Component_Protection]
   maswe-beta: [MASWE-0033, MASWE-0038, MASWE-0040, MASWE-0051, MASWE-0059, MASWE-0062, MASWE-0063, MASWE-0064, MASWE-0065, MASWE-0119]
 refs:

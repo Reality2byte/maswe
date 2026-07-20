@@ -9,7 +9,7 @@ mappings:
   masvs-v2: [MASVS-CODE-3]
   cwe: [506, 507, 511]
 refs:
-- https://developer.android.com/privacy-and-security/risks/insecure-library
+- insecure-library
 - https://support.google.com/googleplay/android-developer/answer/13326895
 - https://developer.apple.com/support/third-party-SDK-requirements/
 status: new

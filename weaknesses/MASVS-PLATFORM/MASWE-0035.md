@@ -9,11 +9,11 @@ mappings:
   masvs-v2: [MASVS-PLATFORM-1, MASVS-STORAGE-2]
   cwe: [927, 940]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/implicit-intent-hijacking
-  - https://developer.android.com/privacy-and-security/risks/intent-redirection
-  - https://developer.android.com/privacy-and-security/risks/pending-intent
-  - https://developer.android.com/privacy-and-security/risks/sender-of-pending-intents
-  - https://developer.android.com/privacy-and-security/risks/sticky-broadcast
+  - implicit-intent-hijacking
+  - intent-redirection
+  - pending-intent
+  - sender-of-pending-intents
+  - sticky-broadcast
   android-core-app-quality: [Component_Permissions]
   maswe-beta: [MASWE-0066]
 refs:

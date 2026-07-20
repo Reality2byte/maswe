@@ -10,7 +10,7 @@ mappings:
   masvs-v2: [MASVS-PLATFORM-2, MASVS-STORAGE-2]
   cwe: [749, 94]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/insecure-webview-native-bridges
+  - insecure-webview-native-bridges
   android-core-app-quality: [WebView_JavaScript]
   maswe-beta: [MASWE-0068]
 refs:

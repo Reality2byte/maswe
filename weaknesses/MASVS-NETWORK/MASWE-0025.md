@@ -10,8 +10,8 @@ mappings:
   masvs-v2: [MASVS-NETWORK-1]
   cwe: [311, 319]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/cleartext-communications
-  - https://developer.android.com/privacy-and-security/risks/insecure-machine-to-machine
+  - cleartext-communications
+  - insecure-machine-to-machine
   android-core-app-quality: [Network_Security_Traffic, Network_Security_Configuration]
   maswe-beta: [MASWE-0050, MASWE-0037, MASWE-0048]
 refs:

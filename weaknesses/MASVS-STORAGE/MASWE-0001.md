@@ -10,11 +10,11 @@ mappings:
   masvs-v2: [MASVS-STORAGE-2, MASVS-PRIVACY-1]
   cwe: [209, 359, 497, 532]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/log-info-disclosure
+  - log-info-disclosure
   android-core-app-quality: [Sensitive_Data_Logging]
   maswe-beta: [MASWE-0001]
 refs:
-- https://developer.android.com/privacy-and-security/risks/log-info-disclosure
+- log-info-disclosure
 - https://developer.apple.com/documentation/os/logging/generating_log_messages_from_your_code
 status: new
 ---
@@ -49,4 +49,4 @@ This can lead to:
 - **Redact Sensitive Data**: Where log statements are needed around sensitive values, redact or mask those values before writing them.
 - **Remove Unnecessary Logging**: Strip logging statements from release builds unless they are deemed necessary to the app and explicitly identified as safe, e.g. as a result of a security audit.
 - **Use Log Levels Properly**: Assign debug-only details to debug or verbose levels and ensure those levels are disabled in production releases.
-- **Disable Logging in Production**: Use build flags or configuration to disable logging in production releases, following the platform guidance for [Android](https://developer.android.com/privacy-and-security/risks/log-info-disclosure#mitigations) and [iOS](https://developer.apple.com/documentation/os/logging/generating_log_messages_from_your_code#3665948).
+- **Disable Logging in Production**: Use build flags or configuration to disable logging in production releases, following the platform guidance for [Android](log-info-disclosure#mitigations) and [iOS](https://developer.apple.com/documentation/os/logging/generating_log_messages_from_your_code#3665948).

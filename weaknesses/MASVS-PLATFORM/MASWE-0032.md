@@ -10,7 +10,7 @@ mappings:
   masvs-v2: [MASVS-PLATFORM-1, MASVS-STORAGE-2, MASVS-CODE-4]
   cwe: [939, 917]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/unsafe-use-of-deeplinks
+  - unsafe-use-of-deeplinks
   maswe-beta: [MASWE-0058]
 refs:
 - https://developer.apple.com/documentation/technotes/tn3155-debugging-universal-links

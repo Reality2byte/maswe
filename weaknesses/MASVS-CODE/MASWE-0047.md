@@ -10,7 +10,7 @@ mappings:
   masvs-v2: [MASVS-CODE-3, MASVS-AUTH-1, MASVS-CRYPTO-1, MASVS-NETWORK-1]
   cwe: [287, 326, 327, 1240]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/bad-dns
+  - bad-dns
   android-core-app-quality: [Cryptographic_Algorithms]
   maswe-beta: [MASWE-0019, MASWE-0032, MASWE-0049]
 refs:

@@ -10,12 +10,12 @@ mappings:
   masvs-v2: [MASVS-CODE-3]
   cwe: [1395, 1357]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/insecure-library
-  - https://developer.android.com/privacy-and-security/risks/unsafe-download-manager
+  - insecure-library
+  - unsafe-download-manager
   android-core-app-quality: [SDK_Maintenance, Security_Provider_Initialization]
   maswe-beta: [MASWE-0076]
 refs:
-- https://developer.android.com/privacy-and-security/risks/insecure-library
+- insecure-library
 - https://www.cisa.gov/sites/default/files/2023-04/sbom-types-document-508c.pdf
 - https://www.ntia.doc.gov/files/ntia/publications/sbom_minimum_elements_report.pdf
 - https://developer.android.com/guide/practices/sdk-best-practices

@@ -9,12 +9,12 @@ mappings:
   masvs-v2: [MASVS-CODE-4]
   cwe: [494]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/dynamic-code-loading
-  - https://developer.android.com/privacy-and-security/risks/create-package-context
+  - dynamic-code-loading
+  - create-package-context
   android-core-app-quality: [App_Bundles]
   maswe-beta: [MASWE-0085]
 refs:
-- https://developer.android.com/privacy-and-security/risks/dynamic-code-loading
+- dynamic-code-loading
 status: new
 ---
 

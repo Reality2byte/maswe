@@ -10,7 +10,7 @@ mappings:
   masvs-v2: [MASVS-RESILIENCE-3]
   cwe: [489, 497, 540, 912, 1295]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/test-debug
+  - test-debug
   android-core-app-quality: [Production_Build_Quality]
   maswe-beta: [MASWE-0094, MASWE-0093, MASWE-0095]
 status: new

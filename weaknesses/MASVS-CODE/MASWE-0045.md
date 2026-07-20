@@ -9,7 +9,7 @@ mappings:
   masvs-v2: [MASVS-CODE-3, MASVS-CODE-4]
   cwe: [693]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/use-of-native-code
+  - use-of-native-code
   maswe-beta: [MASWE-0116]
 refs:
 - https://partners.trellix.com/enterprise/en-us/assets/white-papers/wp-secure-coding-android-applications.pdf

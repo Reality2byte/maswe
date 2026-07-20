@@ -9,8 +9,8 @@ mappings:
   masvs-v2: [MASVS-CODE-1]
   cwe: [451, 693, 1104, 1357]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/strandhogg
-  - https://developer.android.com/privacy-and-security/risks/unsafe-download-manager
+  - strandhogg
+  - unsafe-download-manager
   maswe-beta: [MASWE-0077, MASWE-0057]
 refs:
 - https://developer.android.com/topic/security/risks/strandhogg

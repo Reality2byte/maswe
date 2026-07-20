@@ -10,7 +10,7 @@ mappings:
   masvs-v2: [MASVS-CRYPTO-2]
   cwe: [331, 337, 338, 522]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/weak-prng
+  - weak-prng
   android-core-app-quality: [Cryptographic_Algorithms]
   maswe-beta: [MASWE-0009, MASWE-0017]
 refs:

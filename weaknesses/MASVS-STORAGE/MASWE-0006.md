@@ -10,7 +10,7 @@ mappings:
   masvs-v2: [MASVS-STORAGE-1]
   cwe: [312, 540, 798]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/insecure-api-usage
+  - insecure-api-usage
   maswe-beta: [MASWE-0005, MASWE-0013, MASWE-0036]
 refs:
 - https://cloud.google.com/docs/authentication/api-keys#securing

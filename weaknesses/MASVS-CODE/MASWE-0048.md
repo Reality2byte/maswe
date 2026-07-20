@@ -10,18 +10,18 @@ mappings:
   masvs-v2: [MASVS-CODE-4]
   cwe: [20, 22, 73, 89, 116, 345, 348, 349, 502, 611, 924]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/path-traversal
-  - https://developer.android.com/privacy-and-security/risks/zip-path-traversal
-  - https://developer.android.com/privacy-and-security/risks/sql-injection
-  - https://developer.android.com/privacy-and-security/risks/unsafe-deserialization
-  - https://developer.android.com/privacy-and-security/risks/xml-external-entities-injection
-  - https://developer.android.com/privacy-and-security/risks/untrustworthy-contentprovider-provided-filename
-  - https://developer.android.com/privacy-and-security/risks/use-of-native-code
+  - path-traversal
+  - zip-path-traversal
+  - sql-injection
+  - unsafe-deserialization
+  - xml-external-entities-injection
+  - untrustworthy-contentprovider-provided-filename
+  - use-of-native-code
   maswe-beta: [MASWE-0079, MASWE-0080, MASWE-0081, MASWE-0082, MASWE-0083, MASWE-0084, MASWE-0086, MASWE-0087, MASWE-0088]
 refs:
 - https://developer.android.com/topic/security/risks/path-traversal
 - https://developer.android.com/topic/security/risks/sql-injection
-- https://developer.android.com/privacy-and-security/risks/unsafe-deserialization
+- unsafe-deserialization
 - https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html
 status: new
 ---

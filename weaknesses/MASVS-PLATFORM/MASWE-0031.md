@@ -10,7 +10,7 @@ mappings:
   masvs-v2: [MASVS-PLATFORM-3, MASVS-CODE-1]
   cwe: [1021]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/tapjacking
+  - tapjacking
   maswe-beta: [MASWE-0056]
 refs:
 - https://developer.android.com/topic/security/risks/tapjacking

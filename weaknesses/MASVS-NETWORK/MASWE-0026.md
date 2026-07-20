@@ -10,8 +10,8 @@ mappings:
   masvs-v2: [MASVS-NETWORK-1]
   cwe: [295, 297]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/unsafe-trustmanager
-  - https://developer.android.com/privacy-and-security/risks/unsafe-hostname
+  - unsafe-trustmanager
+  - unsafe-hostname
   android-core-app-quality: [Network_Security_Configuration, Security_Provider_Initialization]
   maswe-beta: [MASWE-0052]
 refs:

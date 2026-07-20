@@ -10,7 +10,7 @@ mappings:
   masvs-v2: [MASVS-STORAGE-2, MASVS-PRIVACY-1]
   cwe: [212, 313]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/backup-best-practices
+  - backup-best-practices
   maswe-beta: [MASWE-0004, MASWE-0003]
 refs:
 - https://developer.android.com/guide/topics/data/autobackup#include-exclude-android-11

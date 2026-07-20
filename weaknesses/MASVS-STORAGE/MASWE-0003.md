@@ -10,7 +10,7 @@ mappings:
   masvs-v2: [MASVS-STORAGE-1, MASVS-STORAGE-2, MASVS-CRYPTO-2, MASVS-PRIVACY-1]
   cwe: [200, 284, 312, 313, 732, 922]
   android-risks:
-  - https://developer.android.com/privacy-and-security/risks/file-providers
+  - file-providers
   maswe-beta: [MASWE-0006, MASWE-0002, MASWE-0118]
 refs:
 - https://developer.apple.com/documentation/uikit/protecting_the_user_s_privacy/encrypting_your_app_s_files
