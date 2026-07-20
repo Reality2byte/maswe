@@ -13,11 +13,6 @@ mappings:
   - https://developer.android.com/privacy-and-security/risks/weak-prng
   android-core-app-quality: [Cryptographic_Algorithms]
   maswe-beta: [MASWE-0027]
-observed_examples:
-- https://nvd.nist.gov/vuln/detail/CVE-2013-6386
-- https://nvd.nist.gov/vuln/detail/CVE-2006-3419
-- https://nvd.nist.gov/vuln/detail/CVE-2008-4102
-- https://www.zellic.io/blog/proton-dart-flutter-csprng-prng/
 refs:
 - https://www.ietf.org/rfc/rfc1750.txt
 - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#secure-random-number-generation

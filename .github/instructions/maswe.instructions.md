@@ -75,13 +75,10 @@ Field rules:
 - **mappings**: Cross-references to related controls and weaknesses in other standards. At least one MASVS v2 control is required. Mappings to MASVS v1, CWE, and Android risks are optional but encouraged when applicable.
   - **masvs-v1**: One or more MSTG v1 controls that covered this topic. This helps identify content to port from MASTG v1.
   - **masvs-v2**: One or more MASVS v2 controls this weakness helps verify. At least one entry is required.
-  - **mastg-v1**: One or more MASTG v1 tests that covered this topic. Optional; helps identify content to port from MASTG v1.
   - **maswe-beta**: One or more MASWE v0.x (pre-1.0.0-rc) weaknesses that this weakness supersedes or absorbs. This is optional but encouraged for traceability.
   - **cwe**: One or more CWE IDs that correspond to this weakness. This helps link to the broader software security ecosystem.
   - **android-risks**: One or more specific risks from the Android developer documentation (https://developer.android.com/privacy-and-security/risks) that correspond to this weakness. This is an optional field that can help link to Android-specific guidance, but it should only be used when there is a clear match
   - **android-core-app-quality**: One or more checklist item IDs from the [Android Core App Quality guidelines](https://developer.android.com/docs/quality-guidelines/core-app-quality), using the current named IDs (e.g. `Network_Security_Traffic`, `Minimize_Permissions`), not the legacy `SC-*`/`PS-*` numbering. Optional; only use when there is a clear match, and only for weaknesses whose `platform` includes `android`.
-  - **nist-ssdf**: One or more practice IDs from the [NIST Secure Software Development Framework (SP 800-218)](https://csrc.nist.gov/projects/ssdf). Optional.
-- **observed_examples**: Links to public, real-world occurrences of the weakness (e.g. CVE entries or published research). Optional.
 - **refs**: External references. Prefer stable, vendor-neutral sources (official platform docs, CWE, NIST, academic papers).
 - **status**: When you generate a new MASWE draft, set `status: new`.
 

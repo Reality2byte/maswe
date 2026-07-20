@@ -11,8 +11,6 @@ mappings:
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/use-of-native-code
   maswe-beta: [MASWE-0116]
-observed_examples:
-- https://nvd.nist.gov/vuln/detail/CVE-2019-3568
 refs:
 - https://partners.trellix.com/enterprise/en-us/assets/white-papers/wp-secure-coding-android-applications.pdf
 - https://sensepost.com/blog/2021/on-ios-binary-protections/

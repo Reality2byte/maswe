@@ -8,7 +8,6 @@ profiles: [L1, L2]
 mappings:
   masvs-v1: [MSTG-STORAGE-2]
   masvs-v2: [MASVS-STORAGE-1, MASVS-STORAGE-2]
-  mastg-v1: [MASTG-TEST-0052, MASTG-TEST-0001]
   cwe: [200, 284, 312, 313, 732, 921, 922]
   android-risks:
   - https://developer.android.com/privacy-and-security/risks/sensitive-data-external-storage
