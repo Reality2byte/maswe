@@ -42,7 +42,7 @@ In cryptography, security strength is heavily influenced by how keys are generat
 Attackers can predict or reproduce improperly generated cryptographic keys by:
 
 - Brute-forcing cryptographic material generated with insufficient length.
-- Predicting or reproducing values generated with insufficient entropy.
+- Recovering or guessing the seed used by the generator to reproduce its output.
 - Intercepting cryptographic keys exported in plaintext.
 
 This can lead to:

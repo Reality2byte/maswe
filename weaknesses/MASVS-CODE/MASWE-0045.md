@@ -35,7 +35,7 @@ Mitigations such as stack canaries (stack-smashing protection), Address Space La
 
 Attackers can exploit memory-corruption bugs with substantially less effort by:
 
-- Exploiting memory-corruption vulnerabilities in the app's native code.
+- Obtaining the app package and reverse engineering it.
 - Supplying crafted input through any external interface (network, IPC, files, UI, or peripherals).
 
 This can lead to:

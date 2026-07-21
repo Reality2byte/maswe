@@ -144,7 +144,15 @@ List all relevant attack paths, using wording from `impact-attacks.yaml` wheneve
 - [Alternative attack path].
 ```
 
+Each attack path must.
+
+- Name a concrete attacker action or a precondition the attacker needs (installing an app, accessing storage, obtaining the package, running the app in a controlled environment), never restate the outcome already given in the opening sentence. The opening sentence says *what* attackers achieve; the bullets say *how* they get there.
+- Be an action someone could observe or attempt, not a property of the app. "Leveraging legacy platform behaviors applied to apps targeting outdated platform versions" describes the weakness; "Accessing app data exposed by legacy compatibility behaviors that the platform still applies to apps targeting an old version" describes the attack.
+- Reuse the opening sentence's verb only when the bullet adds a distinct actor, interface, or precondition. A bullet that repeats the opener's verb and its object ("Attackers can exploit flaws in non-standard security implementations by: - Exploiting flaws in custom or unproven security implementations.") is a restatement and must be rewritten or dropped.
+
 Do not repeat consequences for each attack path when they are the same.
+
+If no entry in `impact-attacks.yaml` fits, add one there in the same style and reuse it, rather than inventing per-weakness wording.
 
 Then add.
 

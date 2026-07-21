@@ -15,7 +15,6 @@ mappings:
   android-core-app-quality: [SDK_Maintenance, Security_Provider_Initialization]
   maswe-beta: [MASWE-0076]
 refs:
-- insecure-library
 - https://www.cisa.gov/sites/default/files/2023-04/sbom-types-document-508c.pdf
 - https://www.ntia.doc.gov/files/ntia/publications/sbom_minimum_elements_report.pdf
 - https://developer.android.com/guide/practices/sdk-best-practices

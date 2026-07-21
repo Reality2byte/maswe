@@ -33,7 +33,7 @@ Platforms deprecate APIs precisely because better-designed replacements exist, o
 
 Attackers can exploit weaknesses that maintained APIs have already addressed by:
 
-- Exploiting known weaknesses in deprecated APIs or components the app still uses.
+- Identifying deprecated components in the app package and using publicly documented attacks against them.
 
 This can lead to:
 

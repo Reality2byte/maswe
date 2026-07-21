@@ -33,7 +33,7 @@ When a critical vulnerability is found in a production app, the developer needs 
 
 Attackers can exploit vulnerabilities that remain reachable in outdated app versions by:
 
-- Exploiting known vulnerabilities in outdated app versions that users are still running.
+- Targeting users who remain on an app version with publicly known vulnerabilities.
 - Patching or repackaging the app to remove or alter client-side checks.
 
 This can lead to:

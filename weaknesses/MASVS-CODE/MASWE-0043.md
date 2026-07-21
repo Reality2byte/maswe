@@ -31,7 +31,7 @@ Targeting the latest platform version, via `targetSdkVersion` on Android or by b
 
 Attackers can exploit the absence of modern platform protections by:
 
-- Leveraging legacy platform behaviors applied to apps targeting outdated platform versions.
+- Accessing app data exposed by legacy compatibility behaviors that the platform still applies to apps targeting an old version.
 
 This can lead to:
 

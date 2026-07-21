@@ -31,7 +31,8 @@ Cryptographic keys have a limited cryptoperiod, as defined in [NIST.SP.800-57pt1
 
 Attackers can decrypt or forge all data ever protected with a compromised key by:
 
-- Applying a single compromised key to all current and historical data protected with it.
+- Obtaining the app package and reverse engineering it.
+- Accessing the device storage on a compromised device.
 
 This can lead to:
 

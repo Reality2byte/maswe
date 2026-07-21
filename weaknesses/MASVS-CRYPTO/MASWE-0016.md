@@ -36,7 +36,7 @@ A [PRNG](https://en.wikipedia.org/wiki/Pseudorandom_number_generator) generates 
 Attackers can predict or reproduce random values used in security contexts by:
 
 - Observing enough outputs to recover the internal state of a non-cryptographic PRNG.
-- Predicting or reproducing values generated with insufficient entropy.
+- Recovering or guessing the seed used by the generator to reproduce its output.
 - Obtaining the app package and reverse engineering it.
 
 This can lead to:

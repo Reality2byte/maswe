@@ -39,7 +39,7 @@ Platform APIs and vetted libraries are designed and maintained by experts, incor
 
 Attackers can exploit flaws in non-standard security implementations by:
 
-- Exploiting flaws in custom or unproven security implementations.
+- Obtaining the app package and reverse engineering it.
 - Performing cryptanalysis of broken algorithms, modes, or parameters.
 - Performing a Machine-in-the-Middle (MITM) attack, e.g., via ARP poisoning, DNS spoofing, or a rogue access point.
 

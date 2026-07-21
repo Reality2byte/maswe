@@ -16,7 +16,7 @@
 - Obtaining a valid certificate for the target domain from a compromised, coerced, or rogue Certificate Authority (CA).
 - Installing an attacker-controlled CA certificate on a device they control to inspect the app's traffic.
 - Brute-forcing cryptographic material generated with insufficient length.
-- Predicting or reproducing values generated with insufficient entropy.
+- Recovering or guessing the seed used by the generator to reproduce its output.
 - Intercepting cryptographic keys exported in plaintext.
 - Performing cryptanalysis of broken algorithms, modes, or parameters.
 - Exploiting predictable or reused IVs or nonces to detect patterns or recover plaintext.
@@ -24,7 +24,6 @@
 - Observing enough outputs to recover the internal state of a non-cryptographic PRNG.
 - Performing offline brute-force or dictionary attacks against keys derived from low-entropy inputs.
 - Precomputing derived keys when salts are missing, hardcoded, or reused.
-- Applying a single compromised key to all current and historical data protected with it.
 - Invoking keystore operations on a compromised or stolen device when key use does not require user authentication.
 - Crafting collisions or second preimages for broken hash functions.
 - Replaying previously captured valid messages or tags.
@@ -51,13 +50,12 @@
 - Modifying or replaying mutable PendingIntents obtained from the app.
 - Injecting malicious JavaScript into WebView content (e.g., via MITM on insecure connections or a compromised website).
 - Harvesting on-screen content through a malicious accessibility service the user was tricked into enabling.
-- Exploiting known vulnerabilities in outdated app versions that users are still running.
-- Exploiting platform vulnerabilities on outdated OS versions the app still supports.
-- Leveraging legacy platform behaviors applied to apps targeting outdated platform versions.
+- Targeting users who remain on an app version with publicly known vulnerabilities.
+- Installing a malicious app on a device running an OS version affected by unpatched platform vulnerabilities.
+- Running the app on a device whose OS version lacks the platform protections the app relies on.
+- Accessing app data exposed by legacy compatibility behaviors that the platform still applies to apps targeting an old version.
 - Substituting or modifying code that the app loads at runtime from writable or unverified locations.
-- Exploiting memory-corruption vulnerabilities in the app's native code.
-- Exploiting known weaknesses in deprecated APIs or components the app still uses.
-- Exploiting flaws in custom or unproven security implementations.
+- Identifying deprecated components in the app package and using publicly documented attacks against them.
 - Supplying crafted input through any external interface (network, IPC, files, UI, or peripherals).
 - Compromising a dependency, SDK, or build tool in the app's supply chain.
 - Introducing malicious code through an insider or compromised developer account.

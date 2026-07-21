@@ -30,9 +30,10 @@ Ensuring a recent minimum platform version guarantees the availability of securi
 
 ## Impact
 
-Attackers can exploit platform-level weaknesses on the outdated OS versions the app supports by:
+Attackers can exploit platform-level weaknesses that the app cannot fix on its own by:
 
-- Exploiting platform vulnerabilities on outdated OS versions the app still supports.
+- Installing a malicious app on a device running an OS version affected by unpatched platform vulnerabilities.
+- Running the app on a device whose OS version lacks the platform protections the app relies on.
 
 This can lead to:
 
