@@ -5,6 +5,8 @@ alias: non-production-resources
 requirement: "The app removes debug artifacts."
 platform: [android, ios]
 profiles: [R]
+threat: MAS-THREAT-0054
+attacks: [MAS-ATTACK-0001, MAS-ATTACK-0006]
 mappings:
   masvs-v1: [MSTG-CODE-3, MSTG-CODE-4]
   masvs-v2: [MASVS-RESILIENCE-3]
@@ -30,13 +32,6 @@ Such artifacts help adversaries understand the app's behavior and internals, may
 - **Backdoors and Hidden Switches**: Leaving debug or test code that can disable security controls, e.g. an insecure trust manager or a hidden configuration flag that turns off TLS verification.
 
 ## Impact
-
-Attackers can analyze the app's internals and disable its security controls by:
-
-- Obtaining the app package and reverse engineering it.
-- Accessing the system logs on a compromised device or from an app holding log-access permissions.
-
-This can lead to:
 
 - **Bypass of Protection Mechanisms**: Attackers can activate leftover debug switches or code paths that disable security controls such as certificate validation, resulting in the defeat of protections the production app is supposed to enforce.
 - **Compromise of Sensitive Data**: Attackers can use verbose logs, symbols, and debug flows to learn implementation details and extract sensitive values, resulting in information disclosure that enables further attacks.

@@ -5,6 +5,8 @@ alias: target-latest-platform-version
 requirement: "The app targets a recent OS version."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0043
+attacks: [MAS-ATTACK-0056]
 mappings:
   masvs-v2: [MASVS-CODE-1]
   cwe: [693, 1357]
@@ -28,12 +30,6 @@ Targeting the latest platform version, via `targetSdkVersion` on Android or by b
 - **Compatibility Behaviors Left in Place**: Relying on legacy behaviors (e.g. broad storage access or lenient permission handling) that only continue to work because the app targets an old version.
 
 ## Impact
-
-Attackers can exploit the absence of modern platform protections by:
-
-- Accessing app data exposed by legacy compatibility behaviors that the platform still applies to apps targeting an old version.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can take advantage of legacy behaviors, such as broader file-system or permission access, resulting in exposure of user data that current platform defaults would have protected.
 - **Compromise of System Integrity and Business Operations**: The app can fall below app-store target-version requirements, resulting in blocked updates or removal from distribution for the app owner.

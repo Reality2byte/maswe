@@ -5,6 +5,8 @@ alias: data-leak-screenshots
 requirement: "The app removes sensitive data from views when moved to the background or when being recorded."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0030
+attacks: [MAS-ATTACK-0010, MAS-ATTACK-0071, MAS-ATTACK-0072]
 mappings:
   masvs-v1: [MSTG-STORAGE-9]
   masvs-v2: [MASVS-PLATFORM-3, MASVS-STORAGE-2]
@@ -27,14 +29,6 @@ Mobile platforms allow users, other apps, and external tools to capture screensh
 - **Unredacted Sensitive On-Screen Content**: Displaying sensitive information directly on the screen without masking or redacting it, including in the view snapshot the system takes when the app moves to the background.
 
 ## Impact
-
-Attackers can access sensitive data displayed on the screen by:
-
-- Capturing or recording the screen from another app or an external tool.
-- Accessing shared or external storage from any app holding the corresponding permissions.
-- Accessing screenshots automatically taken by the system, e.g., when the app moves to the background.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can obtain sensitive data previously displayed on the screen, such as account details, personal information, or one-time codes, resulting in unauthorized disclosure and enabling further attacks such as identity theft or account takeover.
 

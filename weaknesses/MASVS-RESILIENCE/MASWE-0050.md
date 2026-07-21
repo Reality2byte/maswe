@@ -5,6 +5,8 @@ alias: debuggable-flag
 requirement: "The app disables debug mechanisms."
 platform: [android, ios]
 profiles: [R]
+threat: MAS-THREAT-0050
+attacks: [MAS-ATTACK-0002, MAS-ATTACK-0003, MAS-ATTACK-0004]
 mappings:
   masvs-v1: [MSTG-RESILIENCE-2]
   masvs-v2: [MASVS-RESILIENCE-4, MASVS-PLATFORM-2]
@@ -33,14 +35,6 @@ Beyond the application-level debuggable flag, this weakness also covers WebView 
 - **WebView Content Debugging Left Enabled**: Leaving WebView content debugging enabled in production (e.g. `setWebContentsDebuggingEnabled(true)` on Android or `isInspectable = true` on iOS).
 
 ## Impact
-
-Attackers can inspect and manipulate a debuggable app at runtime, even on non-rooted or non-jailbroken devices, by:
-
-- Debugging the app at runtime.
-- Attaching a remote inspector to the app's debuggable web content.
-- Using dynamic instrumentation.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can read the app's memory and logs to obtain encryption keys, API keys, user credentials, or tokens that are never written to the app's code or disk, resulting in unauthorized disclosure of secrets and user data.
 - **Authentication or Authorization Bypass**: Attackers can manipulate the app's execution flow to skip authentication and authorization checks, resulting in unauthorized access to protected functionality.

@@ -5,6 +5,8 @@ alias: inadequate-permission-management
 requirement: "The app adequately manages permissions."
 platform: [android, ios]
 profiles: [P]
+threat: MAS-THREAT-0072
+attacks: [MAS-ATTACK-0088, MAS-ATTACK-0089]
 mappings:
   masvs-v2: [MASVS-PRIVACY-1]
   cwe: [250]
@@ -42,13 +44,6 @@ Third-party libraries (SDKs) further complicate permission management by inherit
 - **Inadequate Permission Explanations**: Failing to provide clear explanations for why each permission is required.
 
 ## Impact
-
-Apps and embedded third-party components can access more sensitive device resources and data than needed by:
-
-- Holding excessive or no-longer-needed permissions granted to the app.
-- Inheriting the app's permissions in third-party SDKs, whose data collection is difficult to audit and control.
-
-This can lead to:
 
 - **Violation of User Privacy**: Apps and embedded components can unnecessarily access personal data such as location, contacts, or media, resulting in misuse, surveillance, or profiling of the user.
 - **Compromise of Sensitive Data**: Third-party services can collect and retain data obtained through inherited permissions; once that data leaves the app its security can no longer be guaranteed, resulting in an increased risk of large-scale exposure via data breaches.

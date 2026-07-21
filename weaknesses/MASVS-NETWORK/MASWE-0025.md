@@ -5,6 +5,8 @@ alias: cleartext-traffic
 requirement: "The app encrypts all network traffic."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0025
+attacks: [MAS-ATTACK-0012, MAS-ATTACK-0013, MAS-ATTACK-0014]
 mappings:
   masvs-v1: [MSTG-NETWORK-2, MSTG-NETWORK-1]
   masvs-v2: [MASVS-NETWORK-1]
@@ -54,14 +56,6 @@ Secure network protocols not only provide confidentiality but also ensure data i
 - **Third-Party Libraries**: Using third-party libraries or SDKs that default to insecure communication methods or are improperly configured.
 
 ## Impact
-
-Attackers can intercept or modify cleartext network traffic by:
-
-- Monitoring network traffic on the same network (e.g., public Wi-Fi or a compromised router).
-- Performing a Machine-in-the-Middle (MITM) attack, e.g., via ARP poisoning, DNS spoofing, or a rogue access point.
-- Monitoring local or proximity interfaces such as Bluetooth, NFC, or USB.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can capture, read, or alter sensitive information transmitted over the network, resulting in unauthorized disclosure or manipulation of user data.
 - **Authentication or Authorization Bypass**: Attackers can capture session tokens or credentials sent over cleartext channels, resulting in user impersonation and unauthorized access to accounts or backend systems.

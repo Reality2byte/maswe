@@ -5,6 +5,8 @@ alias: data-collection-declarations
 requirement: "The app adequately declares all user collected data."
 platform: [android, ios]
 profiles: [P]
+threat: MAS-THREAT-0068
+attacks: [MAS-ATTACK-0081, MAS-ATTACK-0082]
 mappings:
   masvs-v1: [MSTG-STORAGE-12, MSTG-NETWORK-1]
   masvs-v2: [MASVS-PRIVACY-3, MASVS-PRIVACY-1]
@@ -38,13 +40,6 @@ These declarations must clearly outline what data is collected, how it is used, 
 - **Undeclared Data Sent in Network Traffic**: Transmitting data over the network, even over HTTPS, that goes beyond what is declared, such as over-collection beyond functional needs, detailed location/behavior analytics, unnecessary identifiers (e.g. IMEI, email, phone number), or sharing with third-party analytics/advertising services not reflected in the declarations.
 
 ## Impact
-
-Apps and embedded third-party components can collect or share more data than users were led to expect by:
-
-- Collecting or sharing data categories that are not declared in the platform's privacy labels.
-- Transmitting undeclared identifiers or analytics data to first- or third-party services over the network.
-
-This can lead to:
 
 - **Violation of User Privacy**: Users can unknowingly share data whose purpose they do not understand, resulting in unauthorized sharing, profiling, or targeted advertising.
 - **Loss of User Trust**: Users can discover the inconsistent declarations, resulting in negative reviews, lower user engagement, and reduced retention for the app owner.

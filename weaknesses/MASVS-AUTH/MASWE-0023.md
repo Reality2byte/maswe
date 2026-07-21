@@ -5,6 +5,8 @@ alias: crypto-keys-biometric-enrollment
 requirement: "The app invalidates keys after any enrollment of new biometric data."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0023
+attacks: [MAS-ATTACK-0035]
 mappings:
   masvs-v2: [MASVS-AUTH-2, MASVS-CRYPTO-2]
   cwe: [287, 522]
@@ -28,12 +30,6 @@ Biometric-bound keys are meant to be usable only by the person whose biometrics 
 - **Unsafe Invalidation Recovery**: Silently re-creating an invalidated key or falling back to weaker authentication when invalidation occurs, instead of re-verifying the user's identity first.
 
 ## Impact
-
-Attackers can use biometric-protected keys without the legitimate user's biometrics by:
-
-- Enrolling additional biometrics on the device after obtaining the device credential.
-
-This can lead to:
 
 - **Authentication or Authorization Bypass**: Attackers can pass biometric prompts with their own newly enrolled biometrics, resulting in unauthorized approval of operations bound to the victim's identity.
 - **Compromise of Sensitive Data**: Attackers can unlock data protected by biometric-bound keys, resulting in unauthorized disclosure of sensitive user information.

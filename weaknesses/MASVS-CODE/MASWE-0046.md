@@ -5,6 +5,8 @@ alias: deprecated-apis
 requirement: "The app does not use deprecated APIs or functionality."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0046
+attacks: [MAS-ATTACK-0058]
 mappings:
   masvs-v1: [MSTG-CRYPTO-4]
   masvs-v2: [MASVS-CODE-3, MASVS-CRYPTO-2]
@@ -30,12 +32,6 @@ Platforms deprecate APIs precisely because better-designed replacements exist, o
 - **Deprecation Warnings Ignored**: Building with unresolved deprecation warnings, so the use of outdated functionality accumulates unnoticed.
 
 ## Impact
-
-Attackers can exploit weaknesses that maintained APIs have already addressed by:
-
-- Identifying deprecated components in the app package and using publicly documented attacks against them.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can exploit the known shortcomings of deprecated implementations, resulting in exposure of data those APIs were supposed to protect.
 - **Authentication or Authorization Bypass**: Attackers can abuse weaknesses in deprecated authentication- or keystore-related APIs, resulting in unauthorized access to protected keys or functionality.

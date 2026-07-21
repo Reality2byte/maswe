@@ -5,6 +5,8 @@ alias: insecure-pinning
 requirement: "The app correctly implements identity pinning."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0027
+attacks: [MAS-ATTACK-0014, MAS-ATTACK-0016, MAS-ATTACK-0017]
 mappings:
   masvs-v1: [MSTG-NETWORK-4]
   masvs-v2: [MASVS-NETWORK-2]
@@ -34,14 +36,6 @@ Pinning is not foolproof: attackers who can reverse-engineer the app may remove 
 - **Lack of Backup Pins**: Not including backup pins, so the app cannot establish connections if the primary pin is no longer valid.
 
 ## Impact
-
-Attackers can intercept or modify TLS-protected traffic even when standard certificate validation succeeds by:
-
-- Performing a Machine-in-the-Middle (MITM) attack, e.g., via ARP poisoning, DNS spoofing, or a rogue access point.
-- Obtaining a valid certificate for the target domain from a compromised, coerced, or rogue Certificate Authority (CA).
-- Installing an attacker-controlled CA certificate on a device they control to inspect the app's traffic.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can capture, read, or alter sensitive information transmitted over the network, resulting in unauthorized disclosure or manipulation of user data.
 - **Authentication or Authorization Bypass**: Attackers can capture credentials or session tokens in transit, resulting in user impersonation and unauthorized access to accounts or backend systems.

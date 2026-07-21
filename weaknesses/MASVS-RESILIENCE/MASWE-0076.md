@@ -5,6 +5,8 @@ alias: malware-detection
 requirement: "The app detects attacks by malware."
 platform: [android, ios]
 profiles: [R]
+threat: MAS-THREAT-0076
+attacks: [MAS-ATTACK-0036, MAS-ATTACK-0052]
 mappings:
   masvs-v2: [MASVS-RESILIENCE-2]
   cwe: [693]
@@ -27,13 +29,6 @@ Mobile malware commonly attacks other apps indirectly: abusing accessibility ser
 - **No Response Strategy**: Detecting a hostile environment but not warning the user or restricting sensitive functionality.
 
 ## Impact
-
-Attackers can target the app with malware running on the same device by:
-
-- Harvesting on-screen content through a malicious accessibility service the user was tricked into enabling.
-- Displaying overlays or tampering with the UI to alter what the user sees while approving an action.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Malware can capture credentials, one-time codes, and displayed content while the app takes no protective action, resulting in exposure of user data the app could have defended.
 - **Financial Loss**: Malware can automate or manipulate transactions against the unprotected app, resulting in direct financial harm to users and fraud losses for the app owner.

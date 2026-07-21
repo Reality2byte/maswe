@@ -5,6 +5,8 @@ alias: run-on-recent-platform-version
 requirement: "The app terminates if an unsupported OS version is detected."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0042
+attacks: [MAS-ATTACK-0054, MAS-ATTACK-0055]
 mappings:
   masvs-v2: [MASVS-CODE-1]
   cwe: [451, 693, 1104, 1357]
@@ -29,13 +31,6 @@ Ensuring a recent minimum platform version guarantees the availability of securi
 - **Known-Vulnerable Platform Versions Supported**: Allowing the app to run on OS versions affected by relevant, unfixable platform vulnerabilities (e.g. StrandHogg v1/v2 task affinity and `allowTaskReparenting` abuse on older Android).
 
 ## Impact
-
-Attackers can exploit platform-level weaknesses that the app cannot fix on its own by:
-
-- Installing a malicious app on a device running an OS version affected by unpatched platform vulnerabilities.
-- Running the app on a device whose OS version lacks the platform protections the app relies on.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can leverage missing platform protections or unpatched OS vulnerabilities to reach the app's data, resulting in exposure of user data on outdated devices.
 - **Authentication or Authorization Bypass**: Attackers can abuse platform flaws such as task hijacking to phish credentials from the app's users on affected versions, resulting in account takeover.

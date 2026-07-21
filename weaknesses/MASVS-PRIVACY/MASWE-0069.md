@@ -5,6 +5,8 @@ alias: data-management-controls
 requirement: "The app provides adequate controls to manage user data."
 platform: [android, ios]
 profiles: [P]
+threat: MAS-THREAT-0069
+attacks: [MAS-ATTACK-0083]
 mappings:
   masvs-v2: [MASVS-PRIVACY-4]
   cwe: [359]
@@ -25,12 +27,6 @@ These mechanisms typically include the ability for users to delete, export, modi
 - **Lack of Proper Data Management Settings**: Failing to provide users with the ability to delete, export, modify, or opt out of data collection.
 
 ## Impact
-
-Apps and their backend services can retain and process personal data beyond the user's control by:
-
-- Providing no way for users to delete, export, modify, or opt out of the collection of their data.
-
-This can lead to:
 
 - **Violation of User Privacy**: Users cannot exercise their rights to manage their personal data, such as deleting or exporting their information, resulting in the loss of control over their data and an increased amount of exposed data if a breach occurs.
 - **Loss of User Trust**: Users can perceive that they have no control over their personal data, resulting in negative reviews, decreased user engagement, and reduced retention for the app owner.

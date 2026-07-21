@@ -5,6 +5,8 @@ alias: resource-obfuscation
 requirement: "The app applies resource obfuscation to hinder reverse engineering."
 platform: [android, ios]
 profiles: [R]
+threat: MAS-THREAT-0052
+attacks: [MAS-ATTACK-0001]
 mappings:
   masvs-v1: [MSTG-RESILIENCE-11]
   masvs-v2: [MASVS-RESILIENCE-3]
@@ -27,12 +29,6 @@ Beyond code, strings, layouts, configuration files, bundled data, and native bin
 - **Protection Without Integrity Validation**: Obfuscating or encrypting resources without verifying their integrity, leaving the protected resources silently replaceable.
 
 ## Impact
-
-Attackers can analyze the app's inner workings through its resources by:
-
-- Obtaining the app package and reverse engineering it.
-
-This can lead to:
 
 - **Bypass of Protection Mechanisms**: Attackers can locate security-relevant configuration and assets and use them to target the app's defenses, resulting in easier circumvention of its protections.
 - **Compromise of Sensitive Data**: Attackers can extract proprietary content and internal information from clear resources, resulting in intellectual property exposure.

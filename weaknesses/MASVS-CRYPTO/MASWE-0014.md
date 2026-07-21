@@ -5,6 +5,8 @@ alias: improper-signature-generation
 requirement: "The app properly generates cryptographic signatures."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0014
+attacks: [MAS-ATTACK-0018, MAS-ATTACK-0021, MAS-ATTACK-0030]
 mappings:
   masvs-v1: [MSTG-CRYPTO-4, MSTG-CRYPTO-5]
   masvs-v2: [MASVS-CRYPTO-1, MASVS-CRYPTO-2]
@@ -32,14 +34,6 @@ Signatures are only as strong as the scheme and parameters behind them: deprecat
 - **Key Reuse Across Purposes**: Using a signing key for other purposes, such as encryption or key agreement, violating key-separation principles.
 
 ## Impact
-
-Attackers can forge signatures or recover signing keys by:
-
-- Recovering private keys from predictable or reused signature nonces.
-- Performing cryptanalysis of broken algorithms, modes, or parameters.
-- Brute-forcing cryptographic material generated with insufficient length.
-
-This can lead to:
 
 - **Authentication or Authorization Bypass**: Attackers can sign arbitrary data as the app or user, resulting in impersonation and unauthorized transactions or API calls accepted by peers that trust the signature.
 - **Compromise of Sensitive Data**: Attackers can tamper with signed data while producing valid signatures for it, resulting in undetected manipulation of information whose integrity depends on the signature.

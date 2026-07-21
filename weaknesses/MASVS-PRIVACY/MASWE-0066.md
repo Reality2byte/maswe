@@ -5,6 +5,8 @@ alias: unique-identifiers-user-tracking
 requirement: "The app does not use persistent or unique identifiers in a way that enables user tracking."
 platform: [android, ios]
 profiles: [P]
+threat: MAS-THREAT-0066
+attacks: [MAS-ATTACK-0074, MAS-ATTACK-0077]
 mappings:
   masvs-v2: [MASVS-PRIVACY-2]
   cwe: [359]
@@ -44,13 +46,6 @@ Unique identifiers, especially those that cannot be reset, are a key enabler of 
 - **Tracking Without User Consent**: Tracking users across services or apps without their explicit consent or without providing the ability to opt out or reset identifiers. For instance, on iOS, access to the IDFA requires explicit user consent under the [App Tracking Transparency (ATT) framework](https://developer.apple.com/documentation/AppTrackingTransparency). The IDFV can track users across apps by the same vendor without explicit consent but resets when all of the vendor's apps are removed from the device.
 
 ## Impact
-
-Apps and embedded third-party components can track users across apps, devices, and services by:
-
-- Collecting non-resettable identifiers or misusing resettable ones.
-- Collecting and correlating identifiers and usage data across apps, devices, and services.
-
-This can lead to:
 
 - **Violation of User Privacy**: Third parties can build detailed profiles of individuals, estimating interests, health status, sexual orientation, and other personal attributes, resulting in users losing control over their personal information and being subject to unwanted targeting or profiling.
 - **Loss of User Trust**: Users can discover undisclosed tracking, resulting in negative reviews, decreased engagement, and reduced retention for the app owner.

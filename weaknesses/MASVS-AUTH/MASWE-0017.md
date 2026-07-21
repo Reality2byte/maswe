@@ -5,6 +5,8 @@ alias: step-up-auth
 requirement: "The app enforces step-up authentication before granting access to sensitive functionality."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0017
+attacks: [MAS-ATTACK-0032, MAS-ATTACK-0033]
 mappings:
   masvs-v1: [MSTG-AUTH-10]
   masvs-v2: [MASVS-AUTH-3, MASVS-PLATFORM-3]
@@ -33,13 +35,6 @@ Step-up authentication requires the user to re-authenticate or provide an additi
 - **Uniform Assurance Level**: Designing all functionality behind a single login assurance level without classifying operations by risk.
 
 ## Impact
-
-Attackers can perform sensitive actions in a victim's authenticated session by:
-
-- Using a victim's device with an active session (e.g., an unlocked or stolen device).
-- Reusing stolen session tokens obtained through other attacks.
-
-This can lead to:
 
 - **Financial Loss**: Attackers can initiate transfers or purchases in the victim's session, resulting in direct financial harm to the user.
 - **Compromise of Sensitive Data**: Attackers can view or export sensitive personal data available in the session, resulting in unauthorized disclosure of user information.

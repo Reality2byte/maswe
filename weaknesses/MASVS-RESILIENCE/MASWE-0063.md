@@ -5,6 +5,8 @@ alias: app-resources-integrity
 requirement: "The app verifies the integrity of its resources."
 platform: [android, ios]
 profiles: [R]
+threat: MAS-THREAT-0063
+attacks: [MAS-ATTACK-0009, MAS-ATTACK-0070]
 mappings:
   masvs-v1: [MSTG-RESILIENCE-3]
   masvs-v2: [MASVS-RESILIENCE-2, MASVS-CODE-4]
@@ -27,13 +29,6 @@ Beyond executable code, apps depend on resources whose integrity matters: files 
 - **No Response to Tampering**: Having no defined behavior for when a resource fails validation.
 
 ## Impact
-
-Attackers can alter the app's behavior through its resources by:
-
-- Modifying the app's files or resources on a compromised device.
-- Tampering with backup contents and restoring the modified backup to a device.
-
-This can lead to:
 
 - **Bypass of Protection Mechanisms**: Attackers can modify configuration or state files that drive security-relevant behavior, resulting in the circumvention of controls without modifying any code.
 - **Execution of Unauthorized Code**: Attackers can inject malicious content into resources the app renders or interprets (e.g. scripts or templates), resulting in attacker-controlled behavior inside the app.

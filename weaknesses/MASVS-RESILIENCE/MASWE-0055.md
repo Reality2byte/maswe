@@ -5,6 +5,8 @@ alias: data-unencrypted
 requirement: "The app applies application-level payload encryption in addition to transport-layer encryption."
 platform: [android, ios]
 profiles: [R]
+threat: MAS-THREAT-0055
+attacks: [MAS-ATTACK-0064]
 mappings:
   masvs-v1: [MSTG-RESILIENCE-13]
   masvs-v2: [MASVS-RESILIENCE-3, MASVS-NETWORK-1]
@@ -25,12 +27,6 @@ Even when the connection uses HTTPS, an attacker who controls the device can byp
 - **No Integrity Binding on Requests**: Not signing or otherwise binding sensitive requests, so intercepted payloads can be modified and replayed once the transport layer is bypassed.
 
 ## Impact
-
-Attackers can inspect and manipulate the app's API payloads by:
-
-- Inspecting or modifying app traffic on a device they control after bypassing transport protections (e.g., pinning).
-
-This can lead to:
 
 - **Compromise of System Integrity and Business Operations**: Attackers can map the app's API and craft or tamper with requests, resulting in fraud, scraping, and abuse of backend services at the app owner's expense.
 - **Bypass of Protection Mechanisms**: Attackers can modify payloads that carry security-relevant state, resulting in the circumvention of client-reported controls and business logic.

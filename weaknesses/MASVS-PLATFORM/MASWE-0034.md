@@ -5,6 +5,8 @@ alias: insecure-app-extensions
 requirement: "The app only permits trusted app extensions to interact with it."
 platform: [ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0034
+attacks: [MAS-ATTACK-0048]
 mappings:
   masvs-v1: [MSTG-PLATFORM-11]
   masvs-v2: [MASVS-PLATFORM-1, MASVS-STORAGE-2]
@@ -29,12 +31,6 @@ On iOS, app extensions run third-party code that can interact with the host app 
 - **Sensitive Data Handed to Extensions**: Passing more data than necessary to share or action extensions, which can process and transmit it outside the app's control.
 
 ## Impact
-
-Attackers can capture sensitive user input and content by:
-
-- Capturing user input through a malicious custom keyboard or app extension.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can log keystrokes or read content handed to a malicious extension, resulting in unauthorized disclosure of personal data typed into or shared from the app.
 - **Authentication or Authorization Bypass**: Attackers can capture credentials or one-time codes typed on a malicious keyboard, resulting in unauthorized access to the user's accounts.

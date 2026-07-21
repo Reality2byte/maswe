@@ -5,6 +5,8 @@ alias: app-integrity
 requirement: "The app implements app attestation."
 platform: [android, ios]
 profiles: [R]
+threat: MAS-THREAT-0062
+attacks: [MAS-ATTACK-0040, MAS-ATTACK-0069]
 mappings:
   masvs-v1: [MSTG-CODE-1]
   masvs-v2: [MASVS-RESILIENCE-2]
@@ -29,13 +31,6 @@ App attestation includes verifying the app's signature and binaries at runtime, 
 - **Outdated Signing Schemes**: Signing releases with outdated formats (e.g. Android V1-only signatures, iOS CodeDirectory below version 20400) that are easier to abuse.
 
 ## Impact
-
-Attackers can distribute and run modified copies of the app by:
-
-- Patching or repackaging the app to remove or alter client-side checks.
-- Installing a repackaged version of the app on victim devices.
-
-This can lead to:
 
 - **Bypass of Protection Mechanisms**: Attackers can strip security controls from a repackaged copy that still works against the backend, resulting in the circumvention of the app's defenses at scale.
 - **Compromise of Sensitive Data**: Attackers can distribute trojanized versions of the app that harvest credentials and data from the users they deceive, resulting in account compromise attributed to the app.

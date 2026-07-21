@@ -5,6 +5,8 @@ alias: insecure-android-confirmation
 requirement: "The app ensures non-repudiation for critical actions."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0019
+attacks: [MAS-ATTACK-0036, MAS-ATTACK-0037]
 mappings:
   masvs-v2: [MASVS-AUTH-3]
   cwe: [287, 778]
@@ -30,13 +32,6 @@ Beyond the technical aspect, non-repudiation has a legal dimension: a signed, us
 - **Sensitive Data in the Confirmation Prompt**: Displaying sensitive information through the trusted confirmation prompt, which protects the integrity of the confirmation but is not a secure display channel for secrets.
 
 ## Impact
-
-Attackers can obtain user approval for actions different from what the user intended by:
-
-- Displaying overlays or tampering with the UI to alter what the user sees while approving an action.
-- Manipulating a compromised OS to alter or fabricate the confirmation flow.
-
-This can lead to:
 
 - **Financial Loss**: Attackers can trick users into approving altered payments or transactions, resulting in funds being transferred to attacker-controlled destinations.
 - **Compromise of System Integrity and Business Operations**: Users can plausibly repudiate transactions when the app owner holds no cryptographic proof of what was approved, resulting in disputes, chargebacks, and legal exposure for the app owner.

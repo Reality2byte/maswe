@@ -5,6 +5,8 @@ alias: data-unencrypted-private-storage
 requirement: "The app encrypts sensitive data stored in private storage."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0003
+attacks: [MAS-ATTACK-0005, MAS-ATTACK-0007, MAS-ATTACK-0008]
 mappings:
   masvs-v1: [MSTG-STORAGE-2]
   masvs-v2: [MASVS-STORAGE-1, MASVS-STORAGE-2, MASVS-CRYPTO-2, MASVS-PRIVACY-1]
@@ -35,14 +37,6 @@ Sensitive data may include personally identifiable information (PII), passwords,
 - **Data Not Removed After Use**: Retaining sensitive data in private storage (including caches, temporary files, WebView state, and network caches) longer than needed.
 
 ## Impact
-
-Attackers can access sensitive data stored unencrypted in private storage by:
-
-- Accessing the device storage on a compromised device.
-- Accessing files exposed through incorrect file permissions or misconfigured content providers.
-- Extracting local or cloud backups of the device.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can extract PII and other user data from the application sandbox, resulting in unauthorized disclosure and enabling further attacks such as identity theft.
 - **Authentication or Authorization Bypass**: Attackers can extract passwords, cryptographic keys, or session tokens, resulting in account takeover or unauthorized access to protected functionality.

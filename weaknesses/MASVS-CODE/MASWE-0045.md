@@ -5,6 +5,8 @@ alias: compiler-provided-security-features-not-implemented
 requirement: "The app uses the compiler-provided security features of the platform."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0045
+attacks: [MAS-ATTACK-0001, MAS-ATTACK-0059]
 mappings:
   masvs-v2: [MASVS-CODE-3, MASVS-CODE-4]
   cwe: [693]
@@ -32,13 +34,6 @@ Mitigations such as stack canaries (stack-smashing protection), Address Space La
 - **Unsafe Memory Management Choices**: Disabling Automatic Reference Counting on iOS or otherwise opting out of memory-safety features where safer defaults exist.
 
 ## Impact
-
-Attackers can exploit memory-corruption bugs with substantially less effort by:
-
-- Obtaining the app package and reverse engineering it.
-- Supplying crafted input through any external interface (network, IPC, files, UI, or peripherals).
-
-This can lead to:
 
 - **Execution of Unauthorized Code**: Attackers can convert memory-corruption bugs into reliable code execution in the app's context, resulting in full compromise of the app and its data.
 - **Compromise of Sensitive Data**: Attackers can read process memory through exploited native bugs, resulting in exposure of credentials, keys, and user data held in memory.

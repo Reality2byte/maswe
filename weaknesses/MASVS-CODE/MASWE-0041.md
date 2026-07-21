@@ -5,6 +5,8 @@ alias: dependencies-with-known-vulnerabilities
 requirement: "The app's third-party components are regularly checked for known vulnerabilities."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0041
+attacks: [MAS-ATTACK-0073]
 mappings:
   masvs-v1: [MSTG-CODE-5]
   masvs-v2: [MASVS-CODE-3]
@@ -65,12 +67,6 @@ For more information on privacy and data collection declarations, see @MASWE-006
 - **Usage of Third-Party Frameworks**: Building the app on a third-party application framework such as Flutter or React Native, where the framework itself, as well as any platform-specific bindings, may contain vulnerabilities.
 
 ## Impact
-
-Attackers can exploit publicly known vulnerabilities in the app's dependencies by:
-
-- Identifying vulnerable dependency versions in the app package and using public advisories or exploits.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can exploit vulnerable components to bypass access controls or cryptographic protections and expose credentials, session tokens, or personally identifiable information (PII), resulting in data breaches with legal, financial, and reputational consequences for the app owner.
 - **Execution of Unauthorized Code**: Attackers can exploit vulnerabilities in embedded dependencies to execute arbitrary code within the app's context (e.g., through code injection), escalate privileges, or manipulate app behavior, resulting in compromised user accounts, abuse of backend services, or persistent access to protected resources.

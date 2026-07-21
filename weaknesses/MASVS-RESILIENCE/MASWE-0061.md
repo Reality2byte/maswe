@@ -5,6 +5,8 @@ alias: dynamic-analysis-tools
 requirement: "The app detects dynamic analysis tools."
 platform: [android, ios]
 profiles: [R]
+threat: MAS-THREAT-0061
+attacks: [MAS-ATTACK-0003]
 mappings:
   masvs-v1: [MSTG-RESILIENCE-4]
   masvs-v2: [MASVS-RESILIENCE-4]
@@ -26,12 +28,6 @@ Tools such as Frida, Xposed/LSPosed, and ElleKit/Cydia Substrate let attackers o
 - **No Response Strategy**: Detecting instrumentation but continuing to expose sensitive functionality.
 
 ## Impact
-
-Attackers can observe and modify the running app without resistance by:
-
-- Using dynamic instrumentation.
-
-This can lead to:
 
 - **Bypass of Protection Mechanisms**: Attackers can hook and replace the app's security checks at runtime, resulting in the circumvention of its client-side defenses, including root, debugger, and integrity checks.
 - **Compromise of Sensitive Data**: Attackers can intercept function arguments and memory contents during instrumentation, resulting in exposure of credentials, keys, and user data.

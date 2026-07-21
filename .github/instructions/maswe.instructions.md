@@ -50,6 +50,8 @@ alias: <shortened alias of the title, in lowercase with dashes instead of spaces
 requirement: "<One-sentence positive requirement the app must fulfill>"
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-XXXX
+attacks: [MAS-ATTACK-XXXX, MAS-ATTACK-YYYY]
 mappings:
   masvs-v1: [MSTG-<CATEGORY>-<N>]
   masvs-v2: [MASVS-<CATEGORY>-<N>]
@@ -72,6 +74,8 @@ Field rules:
 - **requirement**: A single sentence, in quotes, stating the positive security requirement that the app must fulfill (the inverse of the weakness). Example: `"The app encrypts all network traffic."`
 - **platform**: List of affected platforms. Use `[android, ios]` if the weakness applies to both. Use a single-item list if it is platform-specific (e.g. `[android]` for StrandHogg).
 - **profiles**: MAS Testing Profiles that the weakness is relevant for. Most weaknesses apply to `L1` and `L2`. Resilience weaknesses apply to `R` and Privacy to `P`. Use the current profile values defined in <https://github.com/OWASP/mastg/blob/master/Document/0x03b-Testing-Profiles.md>
+- **threat**: Exactly one threat ID from `.github/instructions/threats.yaml`. The threat states the immediate outcome attackers (or, for privacy weaknesses, apps and third-party components) can achieve when the weakness is present. Each MASWE references exactly one threat. If no existing threat fits, add a new one at the end of `threats.yaml` with the next free `MAS-THREAT-XXXX` ID and reference it here. Never reuse or renumber an existing ID.
+- **attacks**: List of attack IDs from `.github/instructions/attacks.yaml`, describing the paths through which the threat can be realized. List them in ascending ID order, e.g. `attacks: [MAS-ATTACK-0005, MAS-ATTACK-0006]`. At least one entry is required. If no existing attack fits, add a new one at the end of `attacks.yaml` with the next free `MAS-ATTACK-XXXX` ID and reuse it, rather than inventing per-weakness wording. Never reuse or renumber an existing ID.
 - **mappings**: Cross-references to related controls and weaknesses in other standards. At least one MASVS v2 control is required. Mappings to MASVS v1, CWE, and Android risks are optional but encouraged when applicable.
   - **masvs-v1**: One or more MSTG v1 controls that covered this topic. This helps identify content to port from MASTG v1.
   - **masvs-v2**: One or more MASVS v2 controls this weakness helps verify. At least one entry is required. Example: `masvs-v2: [MASVS-STORAGE-1]` which will be rendered as <https://mas.owasp.org/MASVS/controls/MASVS-STORAGE-1>
@@ -119,48 +123,16 @@ For example:
 
 ### `## Impact`
 
-The Impact section describes what attackers can achieve, how they can achieve it, and the consequences that may follow.
+What attackers can achieve and how they get there is **not** written in this section. It lives in the front matter.
 
-Use these files.
+- The immediate outcome is the `threat:` field, referencing `.github/instructions/threats.yaml`.
+- The paths to that outcome are the `attacks:` field, referencing `.github/instructions/attacks.yaml`.
 
-- `.github/instructions/impact-patterns.yaml`, reusable patterns for the opening sentence.
-- `.github/instructions/impact-attacks.yaml`, reusable descriptions of attack paths.
-- `.github/instructions/impact-labels.yaml`, canonical labels for consequences.
+The `## Impact` section therefore contains **only** the consequences that follow, as a bulleted list. Do not add an opening sentence, do not repeat the threat or the attack paths, and do not add a `This can lead to:` line.
 
-Reuse the same language and terms across MASWEs whenever the outcome, attack path, or consequence is equivalent.
+Use `.github/instructions/impact.yaml` for the canonical consequence labels. Reuse the same language and terms across MASWEs whenever a consequence is equivalent.
 
 #### Structure
-
-Start with the immediate outcome attackers can achieve, using a pattern from `impact-patterns.yaml`.
-
-```md
-Attackers can [obtain, expose, modify, bypass, or disrupt something] by:
-```
-
-List all relevant attack paths, using wording from `impact-attacks.yaml` whenever applicable.
-
-```md
-- [Attack path].
-- [Alternative attack path].
-```
-
-Each attack path must.
-
-- Name a concrete attacker action or a precondition the attacker needs (installing an app, accessing storage, obtaining the package, running the app in a controlled environment), never restate the outcome already given in the opening sentence. The opening sentence says *what* attackers achieve; the bullets say *how* they get there.
-- Be an action someone could observe or attempt, not a property of the app. "Leveraging legacy platform behaviors applied to apps targeting outdated platform versions" describes the weakness; "Accessing app data exposed by legacy compatibility behaviors that the platform still applies to apps targeting an old version" describes the attack.
-- Reuse the opening sentence's verb only when the bullet adds a distinct actor, interface, or precondition. A bullet that repeats the opener's verb and its object ("Attackers can exploit flaws in non-standard security implementations by: - Exploiting flaws in custom or unproven security implementations.") is a restatement and must be rewritten or dropped.
-
-Do not repeat consequences for each attack path when they are the same.
-
-If no entry in `impact-attacks.yaml` fits, add one there in the same style and reuse it, rather than inventing per-weakness wording.
-
-Then add.
-
-```md
-This can lead to:
-```
-
-List the consequences using this pattern.
 
 ```md
 - **[Canonical Impact Label]**: [Concrete attacker action or consequence], resulting in [specific harm].
@@ -168,39 +140,48 @@ List the consequences using this pattern.
 
 Each consequence must.
 
-- Use an exact label from `impact-labels.yaml`.
-- Explain what attackers can do after achieving the stated outcome.
+- Use an exact label from `impact.yaml`.
+- Explain what attackers can do after achieving the outcome stated by the weakness's `threat:`.
 - Include a `resulting in` clause.
 - Be specific to the affected user, app, service, or organization.
 - Avoid unsupported, duplicate, or generic consequences.
 
 #### Example 1
 
+For a weakness with `threat: MAS-THREAT-0006` ("Attackers can extract hardcoded secrets, credentials, and internal information.") and `attacks: [MAS-ATTACK-0001]`:
+
 ```md
-Attackers can extract hardcoded secrets, credentials, and internal information by:
+## Impact
 
-- Obtaining the app package and reverse engineering it.
-
-This can lead to:
-
-- **Financial Loss**: Attackers can abuse compromised API keys to make unauthorized billed API calls, resulting in unexpected charges to the app owner.
-- **Compromise of System Integrity and Business Operations**: Attackers can use extracted credentials to access backend services, resulting in service disruption, account suspension, or denial of service.
+- **Financial Loss**: Attackers can abuse compromised API keys to make unauthorized billed API calls (e.g., AI/ML services), resulting in unexpected charges to the app owner.
+- **Compromise of System Integrity and Business Operations**: Attackers can use extracted credentials to access backend services, resulting in service disruption, policy-violation suspensions, or denial of service.
 ```
 
 #### Example 2
 
+For a weakness with `threat: MAS-THREAT-0010` ("Attackers can use the app's cryptographic keys without authorization.") and `attacks: [MAS-ATTACK-0002, MAS-ATTACK-0003, MAS-ATTACK-0027]`:
+
 ```md
-Attackers can obtain cryptographic keys while they are in use by:
+## Impact
 
-- Using a debugger.
-- Using dynamic instrumentation.
-- Accessing the device storage on a compromised device.
-
-This can lead to:
-
-- **Compromise of Sensitive Data**: Attackers can decrypt protected information or forge encrypted data, resulting in unauthorized disclosure or modification of sensitive data.
-- **Authentication or Authorization Bypass**: Attackers can create valid cryptographic values or impersonate trusted parties, resulting in unauthorized access to protected accounts, data, or functionality.
+- **Compromise of Sensitive Data**: Attackers can decrypt protected information or forge encrypted data without ever extracting the key, resulting in unauthorized disclosure or modification of sensitive data.
+- **Authentication or Authorization Bypass**: Attackers can perform signing or authentication operations reserved for the legitimate user, resulting in unauthorized transactions or access to protected functionality.
 ```
+
+### Writing threats and attacks
+
+New entries in `threats.yaml` and `attacks.yaml` are appended, never renumbered. Keep them reusable and platform-agnostic.
+
+A threat states _what_ the actor achieves, as a full sentence ending in a period.
+
+- Attacker-driven weaknesses: `Attackers can [obtain, expose, modify, bypass, or disrupt something].`
+- Privacy weaknesses, where the app itself is the actor: `Apps and embedded third-party components can [collect, share, or track something].`
+
+An attack states _how_ they get there, as a gerund phrase ending in a period. Each attack must.
+
+- Name a concrete actor action or a precondition the actor needs (installing an app, accessing storage, obtaining the package, running the app in a controlled environment), never restate the outcome already given by the threat. The threat says _what_; the attack says _how_.
+- Be an action someone could observe or attempt, not a property of the app. "Leveraging legacy platform behaviors applied to apps targeting outdated platform versions" describes the weakness; "Accessing app data exposed by legacy compatibility behaviors that the platform still applies to apps targeting an old version" describes the attack.
+- Reuse the threat's verb only when the attack adds a distinct actor, interface, or precondition. An attack that repeats the threat's verb and its object (threat "Attackers can exploit flaws in non-standard security implementations." with attack "Exploiting flaws in custom or unproven security implementations.") is a restatement and must be rewritten or dropped.
 
 ### `## Mitigations`
 

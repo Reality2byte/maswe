@@ -5,6 +5,8 @@ alias: data-hardcoded-app-package
 requirement: "The app does not hardcode sensitive data in the application package."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0006
+attacks: [MAS-ATTACK-0001]
 mappings:
   masvs-v1: [MSTG-STORAGE-1, MSTG-CODE-2]
   masvs-v2: [MASVS-STORAGE-1]
@@ -35,12 +37,6 @@ Note that developer _debug_ artifacts (verbose logging, backdoors, testing utili
 - **Build and Developer Leftovers**: Inadvertently packaging staging/integration endpoints, developer identities, and source files with the app.
 
 ## Impact
-
-Attackers can extract hardcoded secrets, credentials, and internal information by:
-
-- Obtaining the app package and reverse engineering it.
-
-This can lead to:
 
 - **Financial Loss**: Attackers can abuse compromised API keys to make unauthorized billed API calls (e.g., AI/ML services), resulting in unexpected charges to the app owner.
 - **Compromise of System Integrity and Business Operations**: Attackers can use extracted credentials to access backend services, resulting in service disruption, policy-violation suspensions, or denial of service.

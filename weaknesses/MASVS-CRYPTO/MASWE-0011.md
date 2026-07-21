@@ -5,6 +5,8 @@ alias: weak-encryption
 requirement: "The app properly encrypts sensitive data."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0011
+attacks: [MAS-ATTACK-0018, MAS-ATTACK-0021, MAS-ATTACK-0022, MAS-ATTACK-0023]
 mappings:
   masvs-v1: [MSTG-CRYPTO-4, MSTG-CRYPTO-5]
   masvs-v2: [MASVS-CRYPTO-1, MASVS-CRYPTO-2]
@@ -41,15 +43,6 @@ Encryption is only as strong as its weakest component: the algorithm, the mode o
 - **Non-Cryptographic Operations**: Relying on techniques such as XOR, Base64 encoding, or simple obfuscation methods for security purposes. These methods provide no actual encryption.
 
 ## Impact
-
-Attackers can decrypt or forge improperly encrypted data by:
-
-- Performing cryptanalysis of broken algorithms, modes, or parameters.
-- Exploiting predictable or reused IVs or nonces to detect patterns or recover plaintext.
-- Exploiting padding oracles exposed through observable error signals or timing differences.
-- Brute-forcing cryptographic material generated with insufficient length.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can decipher protected information or alter it without detection, resulting in unauthorized disclosure or manipulation of sensitive data.
 - **Authentication or Authorization Bypass**: Attackers can forge ciphertexts, tokens, or signatures accepted by the app or its backend, resulting in unauthorized access to protected accounts, data, or functionality.

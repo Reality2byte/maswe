@@ -5,6 +5,8 @@ alias: weak-crypto-key-generation
 requirement: "The app securely generates cryptographic keys."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0007
+attacks: [MAS-ATTACK-0018, MAS-ATTACK-0019, MAS-ATTACK-0020]
 mappings:
   masvs-v1: [MSTG-CRYPTO-2]
   masvs-v2: [MASVS-CRYPTO-2]
@@ -38,14 +40,6 @@ In cryptography, security strength is heavily influenced by how keys are generat
 - **Insecure Key Export**: Exporting a key in plaintext when it must leave the secure environment in which it was created (for example, to be backed up or shared with another device), instead of "wrapping" it (encrypting it with another key) as specified in [NIST.SP.800-175Br1 5.3.5](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-175Br1.pdf), even when the key is sent over a secure channel.
 
 ## Impact
-
-Attackers can predict or reproduce improperly generated cryptographic keys by:
-
-- Brute-forcing cryptographic material generated with insufficient length.
-- Recovering or guessing the seed used by the generator to reproduce its output.
-- Intercepting cryptographic keys exported in plaintext.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can decrypt protected information or forge encrypted data, resulting in unauthorized disclosure or modification of sensitive data.
 - **Authentication or Authorization Bypass**: Attackers can create valid cryptographic values or impersonate trusted parties, resulting in unauthorized access to protected accounts, data, or functionality.

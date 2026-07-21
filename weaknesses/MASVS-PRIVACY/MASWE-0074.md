@@ -5,6 +5,8 @@ alias: non-privacy-preserving-functionality
 requirement: "The app uses privacy-preserving functionality."
 platform: [android, ios]
 profiles: [P]
+threat: MAS-THREAT-0074
+attacks: [MAS-ATTACK-0076, MAS-ATTACK-0088]
 mappings:
   masvs-v2: [MASVS-PRIVACY-2]
   cwe: [359]
@@ -30,13 +32,6 @@ Platforms increasingly offer least-exposing APIs for common tasks: system authen
 - **Over-Exposing API Choices**: Choosing APIs that reveal more user data than the feature requires when a least-exposing platform alternative exists (see also @MASWE-0072).
 
 ## Impact
-
-Apps and embedded third-party components can access more user data than the feature requires by:
-
-- Handling credentials and browsing state inside the app instead of isolated system flows.
-- Holding excessive or no-longer-needed permissions granted to the app.
-
-This can lead to:
 
 - **Violation of User Privacy**: The app and its embedded components can observe credentials, browsing state, or whole data collections (e.g. the entire photo library) that a privacy-preserving alternative would never have exposed, resulting in avoidable over-collection of personal data.
 - **Compromise of Sensitive Data**: Data unnecessarily accessible to the app can be leaked through any other weakness or through embedded third parties, resulting in exposure of user data that the app never needed to hold.

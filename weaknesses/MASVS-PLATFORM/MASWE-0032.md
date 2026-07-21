@@ -5,6 +5,8 @@ alias: insecure-deep-links
 requirement: "The app securely handles deep links."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0032
+attacks: [MAS-ATTACK-0046, MAS-ATTACK-0047]
 mappings:
   masvs-v1: [MSTG-PLATFORM-3]
   masvs-v2: [MASVS-PLATFORM-1, MASVS-STORAGE-2, MASVS-CODE-4]
@@ -31,13 +33,6 @@ Deep links (Android App Links and custom URL schemes, iOS Universal Links and cu
 - **Unvalidated Deep-Link Input**: Passing the deep-link URL and its parameters into navigation decisions, WebViews, or queries without validation and sanitization.
 
 ## Impact
-
-Attackers can hijack deep links or inject malicious input into the app by:
-
-- Registering the same custom URL scheme to intercept links intended for the app.
-- Delivering crafted deep links or intents from a malicious app or web page.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can intercept tokens or personal data carried in deep links, or exfiltrate data through injected parameters, resulting in unauthorized disclosure of user data.
 - **Authentication or Authorization Bypass**: Attackers can capture authentication material delivered via hijacked links (e.g. login or password-reset links), resulting in account takeover.

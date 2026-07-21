@@ -5,6 +5,8 @@ alias: improper-mac
 requirement: "The app properly uses Message Authentication Codes (MACs)."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0013
+attacks: [MAS-ATTACK-0018, MAS-ATTACK-0021, MAS-ATTACK-0029]
 mappings:
   masvs-v1: [MSTG-CRYPTO-4, MSTG-CRYPTO-5]
   masvs-v2: [MASVS-CRYPTO-1, MASVS-CRYPTO-2]
@@ -37,14 +39,6 @@ A MAC provides integrity and authenticity for a message using a shared secret ke
 - **Observable Verification Failures**: Exposing timing differences or detailed error messages during MAC verification that can serve as an oracle.
 
 ## Impact
-
-Attackers can forge or replay messages that the app or its backend accepts as authentic by:
-
-- Replaying previously captured valid messages or tags.
-- Performing cryptanalysis of broken algorithms, modes, or parameters.
-- Brute-forcing cryptographic material generated with insufficient length.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can modify protected messages or stored data without detection, resulting in undetected manipulation of sensitive information.
 - **Authentication or Authorization Bypass**: Attackers can forge or replay authenticated messages, such as commands or transactions, resulting in unauthorized actions being executed on behalf of the user.

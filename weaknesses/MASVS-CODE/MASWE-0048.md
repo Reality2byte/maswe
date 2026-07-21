@@ -5,6 +5,8 @@ alias: unsafe-untrusted-data
 requirement: "The app securely handles untrusted data."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0048
+attacks: [MAS-ATTACK-0047, MAS-ATTACK-0059]
 mappings:
   masvs-v1: [MSTG-PLATFORM-2]
   masvs-v2: [MASVS-CODE-4]
@@ -42,13 +44,6 @@ Untrusted data is any data the app did not create itself, regardless of how it a
 - **Weakly Validated URI Handling**: Relying on URI parsing classes that apply little to no validation of untrusted input when making security decisions.
 
 ## Impact
-
-Attackers can execute injection attacks against the app by:
-
-- Supplying crafted input through any external interface (network, IPC, files, UI, or peripherals).
-- Delivering crafted deep links or intents from a malicious app or web page.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can extract or overwrite private files and database contents through path traversal, SQL injection, or XXE, resulting in unauthorized disclosure or modification of user and app data.
 - **Execution of Unauthorized Code**: Attackers can exploit insecure deserialization or memory corruption in parsers, resulting in attacker-controlled code running in the app's context.

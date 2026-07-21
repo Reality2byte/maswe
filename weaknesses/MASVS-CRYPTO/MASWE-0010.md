@@ -5,6 +5,8 @@ alias: crypto-key-access-not-restricted
 requirement: "The app restricts access to cryptographic keys."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0010
+attacks: [MAS-ATTACK-0002, MAS-ATTACK-0003, MAS-ATTACK-0027]
 mappings:
   masvs-v2: [MASVS-CRYPTO-2, MASVS-AUTH-2, MASVS-AUTH-3]
   cwe: [284]
@@ -34,14 +36,6 @@ Platform keystores allow developers to bind key usage to strict conditions, such
 - **Assuming Hardware Implies Restriction**: Generating keys inside StrongBox or the Secure Enclave without configuring access restrictions, assuming the hardware alone limits who can use the key.
 
 ## Impact
-
-Attackers can use the app's cryptographic keys without authorization by:
-
-- Invoking keystore operations on a compromised or stolen device when key use does not require user authentication.
-- Using dynamic instrumentation.
-- Debugging the app at runtime.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can decrypt protected information or forge encrypted data without ever extracting the key, resulting in unauthorized disclosure or modification of sensitive data.
 - **Authentication or Authorization Bypass**: Attackers can perform signing or authentication operations reserved for the legitimate user, resulting in unauthorized transactions or access to protected functionality.

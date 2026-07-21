@@ -5,6 +5,8 @@ alias: debugger-detection
 requirement: "The app terminates if a debugger is detected."
 platform: [android, ios]
 profiles: [R]
+threat: MAS-THREAT-0060
+attacks: [MAS-ATTACK-0002]
 mappings:
   masvs-v1: [MSTG-RESILIENCE-2]
   masvs-v2: [MASVS-RESILIENCE-4]
@@ -26,12 +28,6 @@ A debugger lets an attacker inspect memory, set breakpoints, and alter control f
 - **No Response Strategy**: Detecting a debugger but not reacting in a way that protects the app's sensitive operations.
 
 ## Impact
-
-Attackers can inspect and manipulate the running app without resistance by:
-
-- Debugging the app at runtime.
-
-This can lead to:
 
 - **Bypass of Protection Mechanisms**: Attackers can alter control flow at breakpoints to skip the app's client-side checks, resulting in the circumvention of its defenses.
 - **Compromise of Sensitive Data**: Attackers can read secrets and user data from process memory during debugging, resulting in exposure of credentials, keys, and tokens.

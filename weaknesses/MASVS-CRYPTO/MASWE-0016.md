@@ -5,6 +5,8 @@ alias: improper-random-number-generation
 requirement: "The app properly generates random numbers."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0016
+attacks: [MAS-ATTACK-0001, MAS-ATTACK-0019, MAS-ATTACK-0024]
 mappings:
   masvs-v1: [MSTG-CRYPTO-6]
   masvs-v2: [MASVS-CRYPTO-1]
@@ -32,14 +34,6 @@ A [PRNG](https://en.wikipedia.org/wiki/Pseudorandom_number_generator) generates 
 - **Hardcoded or Predictable Seeds**: Seeding a generator deterministically, e.g. with a hardcoded seed value shipped in the app.
 
 ## Impact
-
-Attackers can predict or reproduce random values used in security contexts by:
-
-- Observing enough outputs to recover the internal state of a non-cryptographic PRNG.
-- Recovering or guessing the seed used by the generator to reproduce its output.
-- Obtaining the app package and reverse engineering it.
-
-This can lead to:
 
 - **Authentication or Authorization Bypass**: Attackers can predict session tokens, one-time passwords, or password-reset codes, resulting in unauthorized access to user accounts or privileged functionality.
 - **Compromise of Sensitive Data**: Attackers can reproduce cryptographic material derived from predictable values and decrypt protected information, resulting in unauthorized disclosure of sensitive data.

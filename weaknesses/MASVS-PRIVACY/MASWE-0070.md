@@ -5,6 +5,8 @@ alias: data-visibility-control
 requirement: "The app provides adequate controls over the visibility of user data."
 platform: [android, ios]
 profiles: [P]
+threat: MAS-THREAT-0070
+attacks: [MAS-ATTACK-0084, MAS-ATTACK-0087]
 mappings:
   masvs-v2: [MASVS-PRIVACY-4]
   cwe: [359]
@@ -27,13 +29,6 @@ Examples of such information include last connection status, read receipts, birt
 - **Oversharing by Default**: Designing sharing flows that expose more than the user intends because privacy-reducing options are off by default or hard to find. For example, forwarding a message or picture that reveals the original sender's name unless the user explicitly enables an option such as "Hide Sender Name".
 
 ## Impact
-
-Apps and their users' counterparts can expose personal information beyond the user's intent by:
-
-- Making profile details, activity status, or discoverability visible to other users or third parties by default.
-- Exporting or sharing data through flows whose privacy consequences are not evident to the user.
-
-This can lead to:
 
 - **Violation of User Privacy**: Users can unintentionally expose personal information, such as their email address, birthday, or online status, to others without their consent, resulting in an increased risk of harassment, stalking, or identity theft.
 - **Loss of User Trust**: Users can feel they have inadequate control over what information is shared and with whom, resulting in negative reviews and decreased app engagement for the app owner.

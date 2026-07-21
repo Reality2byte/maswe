@@ -5,6 +5,8 @@ alias: crypto-keys-not-protected-at-rest
 requirement: "The app stores cryptographic keys inside the platform-provided secure keystore."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0005
+attacks: [MAS-ATTACK-0001, MAS-ATTACK-0005, MAS-ATTACK-0008]
 mappings:
   masvs-v1: [MSTG-STORAGE-1, MSTG-CRYPTO-1]
   masvs-v2: [MASVS-STORAGE-1, MASVS-CRYPTO-2]
@@ -33,14 +35,6 @@ Cryptographic keys are essential for securing sensitive data in mobile applicati
 - **Insecure Imported Keys**: Importing cryptographic keys from untrusted sources or without validating their integrity.
 
 ## Impact
-
-Attackers can extract cryptographic keys stored outside the platform keystore by:
-
-- Obtaining the app package and reverse engineering it.
-- Accessing the device storage on a compromised device.
-- Extracting local or cloud backups of the device.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can decrypt protected information or forge encrypted data, resulting in unauthorized disclosure or modification of sensitive data.
 - **Authentication or Authorization Bypass**: Attackers can create valid cryptographic values or impersonate trusted parties, resulting in unauthorized access to protected accounts, data, or functionality.

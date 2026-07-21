@@ -5,6 +5,8 @@ alias: weak-crypto-key-derivation
 requirement: "The app derives cryptographic keys using approved key derivation functions."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0008
+attacks: [MAS-ATTACK-0025, MAS-ATTACK-0026]
 mappings:
   masvs-v1: [MSTG-CRYPTO-2]
   masvs-v2: [MASVS-CRYPTO-2]
@@ -31,13 +33,6 @@ Dedicated password-based KDFs, such as PBKDF2, scrypt, or Argon2, are deliberate
 - **Low-Entropy Input**: Deriving keys from inputs with insufficient entropy, such as short PINs or predictable device values, without combining them with additional secret material.
 
 ## Impact
-
-Attackers can predict or reproduce improperly derived cryptographic keys by:
-
-- Performing offline brute-force or dictionary attacks against keys derived from low-entropy inputs.
-- Precomputing derived keys when salts are missing, hardcoded, or reused.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can decrypt protected information or forge encrypted data, resulting in unauthorized disclosure or modification of sensitive data.
 - **Authentication or Authorization Bypass**: Attackers can recover passwords or derived credentials, resulting in unauthorized access to protected accounts, data, or functionality.

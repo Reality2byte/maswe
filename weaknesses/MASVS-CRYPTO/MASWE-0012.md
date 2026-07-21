@@ -5,6 +5,8 @@ alias: improper-hashing
 requirement: "The app properly hashes sensitive data."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0012
+attacks: [MAS-ATTACK-0028]
 mappings:
   masvs-v1: [MSTG-CRYPTO-4]
   masvs-v2: [MASVS-CRYPTO-1]
@@ -32,12 +34,6 @@ Broken algorithms such as MD5 and SHA-1 are vulnerable to collision attacks and 
 - **Truncated Digests**: Truncating hash output below the security strength required by the use case, reducing collision and preimage resistance.
 
 ## Impact
-
-Attackers can forge or replay data that passes hash-based integrity or authenticity checks by:
-
-- Crafting collisions or second preimages for broken hash functions.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can substitute or modify data without invalidating its hash, resulting in undetected manipulation of sensitive information.
 - **Authentication or Authorization Bypass**: Attackers can forge artifacts whose authenticity is established via hashes, such as signed payloads or fingerprinted certificates, resulting in impersonation or unauthorized access.

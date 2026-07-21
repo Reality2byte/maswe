@@ -5,6 +5,8 @@ alias: missing-auth-app-components
 requirement: "The app enforces authentication and authorization on its components."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0020
+attacks: [MAS-ATTACK-0038, MAS-ATTACK-0039]
 mappings:
   masvs-v1: [MSTG-PLATFORM-4, MSTG-AUTH-3, MSTG-NETWORK-2, MSTG-STORAGE-6]
   masvs-v2: [MASVS-AUTH-1, MASVS-PLATFORM-1, MASVS-STORAGE-2]
@@ -44,13 +46,6 @@ It covers any component reachable by other apps or processes without adequate ac
 - **Authentication Material Not Validated**: Accepting authentication tokens without proper validation (e.g. missing signature or claim checks, no PKCE in OAuth flows) or handling authentication inside WebViews instead of secure system flows.
 
 ## Impact
-
-Attackers can access sensitive data and functionality exposed by app components by:
-
-- Invoking exported or unprotected app components from another app installed on the device.
-- Connecting to open ports or local services exposed by the app.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can query unprotected content providers or receive broadcast data, resulting in unauthorized disclosure of user or app data to other apps on the device.
 - **Authentication or Authorization Bypass**: Attackers can invoke privileged functionality, such as internal services or unvalidated token flows, without authenticating, resulting in actions being executed on behalf of the user.

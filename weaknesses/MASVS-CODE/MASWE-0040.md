@@ -5,6 +5,8 @@ alias: enforced-updating
 requirement: "The app terminates if an outdated app version is detected."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0040
+attacks: [MAS-ATTACK-0040, MAS-ATTACK-0053]
 mappings:
   masvs-v1: [MSTG-ARCH-9]
   masvs-v2: [MASVS-CODE-2]
@@ -30,13 +32,6 @@ When a critical vulnerability is found in a production app, the developer needs 
 - **Client-Side-Only Enforcement**: Enforcing the update requirement only in app code, without the backend rejecting requests from versions below the minimum supported one.
 
 ## Impact
-
-Attackers can exploit vulnerabilities that remain reachable in outdated app versions by:
-
-- Targeting users who remain on an app version with publicly known vulnerabilities.
-- Patching or repackaging the app to remove or alter client-side checks.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can exploit already-fixed vulnerabilities against users stuck on old versions, resulting in exposure of user data long after a patch was published.
 - **Compromise of System Integrity and Business Operations**: The app owner cannot retire vulnerable versions from the installed base, resulting in a prolonged attack window, extended incident response, and continued abuse of backend services.

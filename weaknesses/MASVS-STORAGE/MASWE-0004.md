@@ -5,6 +5,8 @@ alias: data-unencrypted-shared-storage-no-user-interaction
 requirement: "The app encrypts sensitive data stored outside of private storage."
 platform: [android]
 profiles: [L1, L2]
+threat: MAS-THREAT-0004
+attacks: [MAS-ATTACK-0010, MAS-ATTACK-0011]
 mappings:
   masvs-v1: [MSTG-STORAGE-2]
   masvs-v2: [MASVS-STORAGE-1, MASVS-STORAGE-2]
@@ -36,13 +38,6 @@ This weakness primarily concerns Android, which permits the use of shared and ex
 - **Reuse of Encryption Key**: Sharing the encryption key between two devices owned by a single user, enabling data cloning between those devices via external storage.
 
 ## Impact
-
-Attackers can access or tamper with sensitive data stored in shared or external storage by:
-
-- Accessing shared or external storage from any app holding the corresponding permissions.
-- Physically removing and reading external storage media such as SD cards.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can extract personal information and media such as photos, documents, and audio files, resulting in unauthorized disclosure of user data.
 - **Authentication or Authorization Bypass**: Attackers can extract passwords, cryptographic keys, and session tokens, resulting in identity theft or account takeover.

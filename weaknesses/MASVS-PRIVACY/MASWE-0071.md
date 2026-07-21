@@ -5,6 +5,8 @@ alias: ambiguous-consent-mechanisms
 requirement: "The app requests user consent prior to any data processing."
 platform: [android, ios]
 profiles: [P]
+threat: MAS-THREAT-0071
+attacks: [MAS-ATTACK-0085, MAS-ATTACK-0086, MAS-ATTACK-0087]
 mappings:
   masvs-v2: [MASVS-PRIVACY-4]
   cwe: [200, 285, 358, 359]
@@ -31,14 +33,6 @@ In addition, users must be able to easily withdraw their consent at any time and
 - **Lack of User Awareness When Exporting Data**: Designing sharing or exporting flows that do not make the user aware of the privacy consequences of their action. For example, when a user "Saves" a picture, not warning them that the data will be exported to public/shared storage, or when using the share sheet, not being explicit about which items are shared.
 
 ## Impact
-
-Apps and embedded third-party components can process personal data without valid user consent by:
-
-- Collecting data under consent that is bundled, implied, or otherwise not freely and specifically given.
-- Continuing to collect data under an outdated consent after practices have changed.
-- Exporting or sharing data through flows whose privacy consequences are not evident to the user.
-
-This can lead to:
 
 - **Violation of User Privacy**: Users can unknowingly give up control over their data, resulting in its use for purposes they may find objectionable or harmful, such as targeted advertising, profiling, discrimination, or even identity theft.
 - **Loss of User Trust**: Users can lose trust in the app and abandon it, share negative reviews, or discourage others from using it, resulting in reputational damage and potential loss of business for the app owner.

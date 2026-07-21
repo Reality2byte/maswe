@@ -5,6 +5,8 @@ alias: webviews-local-resources
 requirement: "The app does not allow WebViews loading untrusted content to access local resources."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0037
+attacks: [MAS-ATTACK-0047, MAS-ATTACK-0051]
 mappings:
   masvs-v1: [MSTG-PLATFORM-6]
   masvs-v2: [MASVS-PLATFORM-2, MASVS-STORAGE-2, MASVS-CODE-4]
@@ -32,13 +34,6 @@ Settings that enable file or content access (e.g. `setAllowFileAccess`, `setAllo
 - **Overly Broad File Read Grants**: Granting the WebView read access to broader directories than the specific content it needs to display.
 
 ## Impact
-
-Attackers can access local files and app-private data from web content by:
-
-- Injecting malicious JavaScript into WebView content (e.g., via MITM on insecure connections or a compromised website).
-- Delivering crafted deep links or intents from a malicious app or web page.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can read and exfiltrate app-private files, such as databases, preferences, or cached tokens, resulting in unauthorized disclosure of user and app data.
 - **Authentication or Authorization Bypass**: Attackers can steal session material stored in reachable files or WebView storage, resulting in account takeover.

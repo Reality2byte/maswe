@@ -5,6 +5,8 @@ alias: no-biometric-fallback
 requirement: "The app does not allow fallback to non-biometric credentials for sensitive transactions."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0022
+attacks: [MAS-ATTACK-0034]
 mappings:
   masvs-v2: [MASVS-AUTH-2]
   cwe: [288, 287]
@@ -30,12 +32,6 @@ Device credentials are typically short, reusable, and observable, so allowing th
 - **Operation Not Bound to a Biometric-Only Key**: Protecting the sensitive operation with a UI-level prompt rather than a keystore key that only unlocks with strong biometric authentication.
 
 ## Impact
-
-Attackers can authenticate sensitive transactions without the user's biometrics by:
-
-- Using a known, guessed, or shoulder-surfed device credential (PIN, pattern, or password).
-
-This can lead to:
 
 - **Authentication or Authorization Bypass**: Attackers can complete authentication challenges intended to require the user's biometrics, resulting in unauthorized approval of sensitive operations.
 - **Financial Loss**: Attackers can authorize payments or transfers with a stolen device and its credential, resulting in direct financial harm to the user.

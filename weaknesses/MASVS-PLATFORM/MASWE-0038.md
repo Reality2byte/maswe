@@ -5,6 +5,8 @@ alias: webviews-untrusted-content
 requirement: "The app does not allow WebViews to load untrusted content."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0038
+attacks: [MAS-ATTACK-0047, MAS-ATTACK-0051]
 mappings:
   masvs-v2: [MASVS-PLATFORM-2, MASVS-CODE-4]
   cwe: [79, 601, 829]
@@ -32,13 +34,6 @@ WebViews often run with app-specific privileges, such as JavaScript bridges, coo
 - **Deprecated WebView Components**: Using deprecated WebView implementations that lack modern process isolation and security protections.
 
 ## Impact
-
-Attackers can execute malicious web content inside the app's WebView by:
-
-- Delivering crafted deep links or intents from a malicious app or web page.
-- Injecting malicious JavaScript into WebView content (e.g., via MITM on insecure connections or a compromised website).
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can steal cookies, tokens, or displayed data from any origin via cross-site scripting in the privileged WebView, resulting in unauthorized disclosure of session material and user data.
 - **Authentication or Authorization Bypass**: Attackers can reuse stolen session cookies or tokens, resulting in account takeover across the sites the WebView had sessions with.

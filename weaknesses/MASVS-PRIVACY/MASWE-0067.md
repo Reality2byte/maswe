@@ -5,6 +5,8 @@ alias: privacy-policy
 requirement: "The app provides an adequate privacy policy."
 platform: [android, ios]
 profiles: [P]
+threat: MAS-THREAT-0067
+attacks: [MAS-ATTACK-0079, MAS-ATTACK-0080]
 mappings:
   masvs-v1: [MSTG-STORAGE-12]
   masvs-v2: [MASVS-PRIVACY-3]
@@ -29,13 +31,6 @@ Privacy policies should be easily accessible, tailored specifically to the app i
 - **Discrepancies in Policy vs Behavior**: Collecting, processing, or sharing data in ways that differ from what the privacy policy states.
 
 ## Impact
-
-Apps and embedded third-party components can collect, process, or share personal data in ways users cannot anticipate by:
-
-- Operating without a privacy policy or under a vague, generic, or inaccessible one.
-- Deviating from the practices stated in the published privacy policy.
-
-This can lead to:
 
 - **Violation of User Privacy**: Users can unknowingly provide data that is shared with third parties, used for profiling, or used for targeted advertising without explicit consent, resulting in the loss of control over their personal information.
 - **Loss of User Trust**: Users can perceive the app as non-transparent, resulting in negative reviews, decreased user engagement, and reduced retention for the app owner.

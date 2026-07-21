@@ -5,6 +5,8 @@ alias: app-virtualization-detection
 requirement: "The app detects when it is running inside an app-virtualization environment."
 platform: [android, ios]
 profiles: [R]
+threat: MAS-THREAT-0057
+attacks: [MAS-ATTACK-0067]
 mappings:
   masvs-v2: [MASVS-RESILIENCE-1]
   cwe: [693]
@@ -25,12 +27,6 @@ App virtualization and "dual-app" container frameworks run an app inside another
 - **No Response Strategy**: Detecting a virtualized environment but continuing to operate normally with sensitive functionality enabled.
 
 ## Impact
-
-Attackers can observe and manipulate the app from a hosting process by:
-
-- Running the app inside an app-virtualization or cloning framework.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can intercept the virtualized app's files, credentials, and API calls from the hosting app, resulting in exposure of user data without requiring root access.
 - **Bypass of Protection Mechanisms**: Attackers can instrument the app inside the container to defeat its client-side controls, resulting in the circumvention of its defenses on unrooted devices.

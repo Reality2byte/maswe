@@ -5,6 +5,8 @@ alias: data-in-logs
 requirement: "The app excludes sensitive data from application logs."
 platform: [android, ios]
 profiles: [L1, L2, P]
+threat: MAS-THREAT-0001
+attacks: [MAS-ATTACK-0005, MAS-ATTACK-0006]
 mappings:
   masvs-v1: [MSTG-STORAGE-7]
   masvs-v2: [MASVS-STORAGE-2, MASVS-PRIVACY-1]
@@ -32,13 +34,6 @@ Logging all possible information is very useful at development time, especially 
 - **Verbose Logging in Production**: Shipping release builds with debug or verbose log levels still enabled, so diagnostic details containing sensitive data end up in production logs.
 
 ## Impact
-
-Attackers can access sensitive data written to logs by:
-
-- Accessing the system logs on a compromised device or from an app holding log-access permissions.
-- Accessing the device storage on a compromised device.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can read passwords, credit card numbers, or PII from log output, resulting in unauthorized disclosure of user data and enabling further attacks such as identity theft.
 - **Authentication or Authorization Bypass**: Attackers can reuse leaked credentials or session tokens, resulting in unauthorized access to the user's account and the app's backend services.

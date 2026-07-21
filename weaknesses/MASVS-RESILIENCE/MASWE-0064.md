@@ -5,6 +5,8 @@ alias: runtime-code-integrity
 requirement: "The app verifies the integrity of its code."
 platform: [android, ios]
 profiles: [R]
+threat: MAS-THREAT-0064
+attacks: [MAS-ATTACK-0002, MAS-ATTACK-0003]
 mappings:
   masvs-v1: [MSTG-RESILIENCE-6]
   masvs-v2: [MASVS-RESILIENCE-2]
@@ -27,13 +29,6 @@ Even a correctly signed app can be modified while it runs: attackers can patch i
 - **No Response to Tampering**: Detecting modifications but not reacting to protect sensitive operations.
 
 ## Impact
-
-Attackers can modify the app's code while it runs by:
-
-- Using dynamic instrumentation.
-- Debugging the app at runtime.
-
-This can lead to:
 
 - **Bypass of Protection Mechanisms**: Attackers can patch or hook the functions implementing the app's security checks, resulting in the circumvention of its client-side defenses.
 - **Compromise of Sensitive Data**: Attackers can redirect or wrap data-handling functions to siphon their inputs and outputs, resulting in exposure of credentials and user data processed by the app.

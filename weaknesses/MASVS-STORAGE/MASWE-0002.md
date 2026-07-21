@@ -5,6 +5,8 @@ alias: data-not-excluded-backup
 requirement: "The app excludes sensitive data from backups."
 platform: [android, ios]
 profiles: [L1, L2, P]
+threat: MAS-THREAT-0002
+attacks: [MAS-ATTACK-0008, MAS-ATTACK-0009]
 mappings:
   masvs-v1: [MSTG-STORAGE-8]
   masvs-v2: [MASVS-STORAGE-2, MASVS-PRIVACY-1]
@@ -33,13 +35,6 @@ iOS and Android automatically back up app data to cloud services, users can crea
 - **Sensitive Data Unencrypted in Backups**: Storing sensitive data in backed-up locations without additional encryption, so it is readable by anyone who obtains the backup.
 
 ## Impact
-
-Attackers can extract or tamper with sensitive data included in backups by:
-
-- Extracting local or cloud backups of the device.
-- Tampering with backup contents and restoring the modified backup to a device.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can extract personal information, photos, documents, or audio files from backups, resulting in unauthorized disclosure of user data.
 - **Authentication or Authorization Bypass**: Attackers can extract passwords, cryptographic keys, and session tokens from backups, resulting in identity theft, account takeover, or unauthorized access to backend services.

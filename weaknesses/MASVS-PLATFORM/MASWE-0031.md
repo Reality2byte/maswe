@@ -5,6 +5,8 @@ alias: tapjacking-attacks
 requirement: "The app protects its sensitive screens against overlay attacks."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0031
+attacks: [MAS-ATTACK-0036]
 mappings:
   masvs-v1: [MSTG-PLATFORM-9]
   masvs-v2: [MASVS-PLATFORM-3, MASVS-CODE-1]
@@ -29,12 +31,6 @@ In an overlay attack, a malicious app draws content on top of the target app to 
 - **Sensitive Screens Not Protected**: Presenting confirmation dialogs or security-relevant screens without any occlusion defense, so their content can be covered or mimicked by an overlay.
 
 ## Impact
-
-Attackers can hijack user interactions with the app by:
-
-- Displaying overlays or tampering with the UI to alter what the user sees while approving an action.
-
-This can lead to:
 
 - **Financial Loss**: Attackers can trick users into confirming payments or transfers they believe to be something else, resulting in direct financial harm to the user.
 - **Authentication or Authorization Bypass**: Attackers can trick users into granting permissions or approving security prompts, resulting in unauthorized access to protected data or functionality.

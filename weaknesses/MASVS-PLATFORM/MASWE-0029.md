@@ -5,6 +5,8 @@ alias: data-leak-notifications
 requirement: "The app does not unnecessarily expose sensitive data through system notifications."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0029
+attacks: [MAS-ATTACK-0044, MAS-ATTACK-0045]
 mappings:
   masvs-v2: [MASVS-PLATFORM-3, MASVS-STORAGE-2]
   cwe: [200, 359]
@@ -27,13 +29,6 @@ Notifications are rendered on the lock screen, where anyone holding the device c
 - **No Lock-Screen Redaction**: Not configuring notification visibility so that sensitive content is redacted or hidden on the lock screen.
 
 ## Impact
-
-Attackers can access sensitive data shown in notifications by:
-
-- Reading notification content shown on the lock screen without unlocking the device.
-- Reading notification content from another app holding notification-access permissions.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can read message contents or account details from notifications, resulting in unauthorized disclosure of user data.
 - **Authentication or Authorization Bypass**: Attackers can capture one-time codes delivered via notifications, resulting in the defeat of SMS- or push-based authentication factors and unauthorized account access.

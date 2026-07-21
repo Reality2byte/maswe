@@ -5,6 +5,8 @@ alias: anonymization-pseudonymization-measures
 requirement: "The app uses anonymization or pseudonymisation measures."
 platform: [android, ios]
 profiles: [P]
+threat: MAS-THREAT-0065
+attacks: [MAS-ATTACK-0074, MAS-ATTACK-0078]
 mappings:
   masvs-v2: [MASVS-PRIVACY-2]
   cwe: [359]
@@ -31,13 +33,6 @@ Anonymization, through methods like randomization or generalization, irreversibl
 - **Sensitive Data Not Redacted Before Passing to AI**: Sending unredacted sensitive or personal data to AI/ML services (on-device or cloud) without first removing or masking identifiers, where it may also be retained and used to train models.
 
 ## Impact
-
-Apps and embedded third-party components, as well as any party that later obtains the collected data, can identify and track users by:
-
-- Linking directly identifiable data to real-world identities.
-- Collecting and correlating identifiers and usage data across apps, devices, and services.
-
-This can lead to:
 
 - **Violation of User Privacy**: Third parties can profile users and target them with advertising without consent, resulting in the loss of users' control over their personal information and its unforeseen use, e.g. to train AI models.
 - **Legal and Regulatory Non-Compliance**: Processing personal data without de-identification safeguards can violate data protection laws and regulations (like GDPR), resulting in legal consequences and fines for the app owner.

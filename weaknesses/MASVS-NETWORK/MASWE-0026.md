@@ -5,6 +5,8 @@ alias: insecure-cert-val
 requirement: "The app validates certificates for all network traffic."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0026
+attacks: [MAS-ATTACK-0014, MAS-ATTACK-0015]
 mappings:
   masvs-v1: [MSTG-NETWORK-3]
   masvs-v2: [MASVS-NETWORK-1]
@@ -44,13 +46,6 @@ Certificate validation is the mechanism through which a TLS client establishes t
 - **Trusting All Certificates**: Configuring the application to trust all certificates by default, without any validation.
 
 ## Impact
-
-Attackers can intercept or modify TLS-protected network traffic by:
-
-- Performing a Machine-in-the-Middle (MITM) attack, e.g., via ARP poisoning, DNS spoofing, or a rogue access point.
-- Presenting a fraudulent or otherwise invalid certificate that the app accepts.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can capture, read, or alter sensitive information transmitted over the network, resulting in unauthorized disclosure or manipulation of user data.
 - **Authentication or Authorization Bypass**: Attackers can capture credentials or session tokens in transit, resulting in user impersonation and unauthorized access to accounts or backend systems.

@@ -5,6 +5,8 @@ alias: secured-device-detection-not-implemented
 requirement: "The app verifies that the device has a secure lock screen configured before enabling sensitive functionality."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0049
+attacks: [MAS-ATTACK-0063]
 mappings:
   masvs-v1: [MSTG-STORAGE-11]
   masvs-v2: [MASVS-RESILIENCE-1]
@@ -28,12 +30,6 @@ Many of the platform's data-protection guarantees assume a device credential exi
 - **Data Protection Not Tied to the Passcode**: Storing sensitive items on iOS without passcode-dependent protection classes (e.g. `kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly`), so the data remains available even when no passcode is set.
 
 ## Impact
-
-Attackers can access sensitive data and functionality on unprotected devices by:
-
-- Accessing a lost or stolen device that has no secure lock screen configured.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can open the app and read its data on a device with no lock, resulting in unauthorized disclosure of user data whose protection assumed a device credential.
 - **Authentication or Authorization Bypass**: Attackers can act within the app's active sessions on an unprotected device, resulting in unauthorized use of the victim's accounts.

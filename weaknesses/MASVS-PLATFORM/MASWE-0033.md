@@ -5,6 +5,8 @@ alias: improper-clipboard
 requirement: "The app avoids placing sensitive data on the system clipboard."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0033
+attacks: [MAS-ATTACK-0041]
 mappings:
   masvs-v2: [MASVS-PLATFORM-1, MASVS-STORAGE-2]
   cwe: [200, 668]
@@ -32,12 +34,6 @@ The clipboard is a shared resource: other apps can read its contents, and on som
 - **Untrusted Clipboard Input**: Processing pasted clipboard data without validation, even though any app can have written it.
 
 ## Impact
-
-Attackers can capture sensitive data placed on the clipboard by:
-
-- Reading sensitive data from the clipboard when users copy it between apps.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can read personal or financial data from the clipboard, resulting in unauthorized disclosure of user data.
 - **Authentication or Authorization Bypass**: Attackers can capture copied credentials or one-time codes, resulting in unauthorized access to the user's accounts.

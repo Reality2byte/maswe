@@ -5,6 +5,8 @@ alias: reauth-state-changes
 requirement: "The app makes sensitive data inaccessible after session termination."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0018
+attacks: [MAS-ATTACK-0005, MAS-ATTACK-0032, MAS-ATTACK-0033]
 mappings:
   masvs-v2: [MASVS-AUTH-3]
   cwe: [285, 287, 613]
@@ -29,14 +31,6 @@ Session termination is not limited to the user tapping "log out": inactivity tim
 - **Missing Inactivity Timeout**: Allowing sessions to remain valid indefinitely without inactivity or absolute expiration limits.
 
 ## Impact
-
-Attackers can access sensitive data or resume a session after it should have ended by:
-
-- Using a victim's device with an active session (e.g., an unlocked or stolen device).
-- Reusing stolen session tokens obtained through other attacks.
-- Accessing the device storage on a compromised device.
-
-This can lead to:
 
 - **Authentication or Authorization Bypass**: Attackers can resume the victim's session and act as the user without authenticating, resulting in unauthorized access to the account and its functionality.
 - **Compromise of Sensitive Data**: Attackers can read cached or leftover personal data from a terminated session, resulting in unauthorized disclosure of user information.

@@ -5,6 +5,8 @@ alias: event-bound-biometric-auth
 requirement: "The app implements local authentication securely."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0021
+attacks: [MAS-ATTACK-0002, MAS-ATTACK-0003, MAS-ATTACK-0027, MAS-ATTACK-0040]
 mappings:
   masvs-v1: [MSTG-AUTH-8, MSTG-AUTH-1, MSTG-AUTH-12]
   masvs-v2: [MASVS-AUTH-2, MASVS-CRYPTO-2]
@@ -36,15 +38,6 @@ Local authentication is only as strong as what it unlocks. When the app merely r
 - **Custom Credentials Not Keystore-Bound**: Implementing a custom app PIN or password as a plain comparison in code instead of binding it to the platform keystore (e.g. via the Keychain's `applicationPassword` access control).
 
 ## Impact
-
-Attackers can bypass local authentication and access protected data or functionality by:
-
-- Using dynamic instrumentation.
-- Debugging the app at runtime.
-- Patching or repackaging the app to remove or alter client-side checks.
-- Invoking keystore operations on a compromised or stolen device when key use does not require user authentication.
-
-This can lead to:
 
 - **Authentication or Authorization Bypass**: Attackers can trigger the protected functionality without valid biometrics or credentials, resulting in unauthorized access to the user's account and sensitive operations.
 - **Compromise of Sensitive Data**: Attackers can retrieve data that was supposed to be gated by local authentication, resulting in unauthorized disclosure of sensitive user information.

@@ -5,6 +5,8 @@ alias: insecure-intents
 requirement: "The app securely handles intents."
 platform: [android]
 profiles: [L1, L2]
+threat: MAS-THREAT-0035
+attacks: [MAS-ATTACK-0047, MAS-ATTACK-0049, MAS-ATTACK-0050]
 mappings:
   masvs-v2: [MASVS-PLATFORM-1, MASVS-STORAGE-2]
   cwe: [927, 940]
@@ -41,14 +43,6 @@ Intents are Android's primary inter- and intra-app messaging mechanism. Insecure
 - **Sticky Broadcasts**: Using sticky broadcasts, which remain accessible after delivery and can be read or replaced by any app.
 
 ## Impact
-
-Attackers can intercept or manipulate the app's intents by:
-
-- Registering intent filters to intercept implicit intents sent by the app.
-- Modifying or replaying mutable PendingIntents obtained from the app.
-- Delivering crafted deep links or intents from a malicious app or web page.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can receive sensitive extras carried in implicit intents or broadcasts, resulting in unauthorized disclosure of user or app data to other apps.
 - **Authentication or Authorization Bypass**: Attackers can reach non-exported components through intent redirection or execute actions with the app's identity through manipulated PendingIntents, resulting in privileged operations performed on the attacker's behalf.

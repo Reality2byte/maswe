@@ -5,6 +5,8 @@ alias: root-jailbreak-detection
 requirement: "The app terminates if a rooted/jailbroken device is detected."
 platform: [android, ios]
 profiles: [R]
+threat: MAS-THREAT-0056
+attacks: [MAS-ATTACK-0003, MAS-ATTACK-0005, MAS-ATTACK-0065]
 mappings:
   masvs-v1: [MSTG-RESILIENCE-1, MSTG-RESILIENCE-8]
   masvs-v2: [MASVS-RESILIENCE-1, MASVS-RESILIENCE-4]
@@ -26,14 +28,6 @@ On a rooted or jailbroken device, the platform's sandboxing and permission guara
 - **No Response Strategy**: Detecting a compromised environment but not responding to it in a way appropriate to the app's risk profile.
 
 ## Impact
-
-Attackers can run and manipulate the app in a privileged environment without resistance by:
-
-- Running the app on a rooted or jailbroken device they control.
-- Using dynamic instrumentation.
-- Accessing the device storage on a compromised device.
-
-This can lead to:
 
 - **Bypass of Protection Mechanisms**: Attackers can use elevated privileges to defeat the app's client-side security controls, resulting in the circumvention of protections such as anti-tampering, licensing, or fraud controls.
 - **Compromise of Sensitive Data**: Attackers can read the app's private data and intercept its runtime state without sandbox restrictions, resulting in exposure of user data, keys, and tokens.

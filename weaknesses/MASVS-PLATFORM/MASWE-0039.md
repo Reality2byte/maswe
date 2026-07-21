@@ -5,6 +5,8 @@ alias: data-leak-accessibility
 requirement: "The app prevents sensitive data from being exposed to, or captured by, accessibility services."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0039
+attacks: [MAS-ATTACK-0052]
 mappings:
   masvs-v2: [MASVS-PLATFORM-3, MASVS-STORAGE-2]
   cwe: [200, 359]
@@ -28,12 +30,6 @@ Accessibility services (e.g. Android's `AccessibilityService`) can observe scree
 - **High-Risk Flows Fully Automatable**: Designing sensitive flows (e.g. payments) so that they can be completed entirely through programmatic UI interaction without any additional verification.
 
 ## Impact
-
-Attackers can capture sensitive data displayed or entered in the app by:
-
-- Harvesting on-screen content through a malicious accessibility service the user was tricked into enabling.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can read messages, personal data, and financial details from on-screen content, resulting in unauthorized disclosure of user data.
 - **Authentication or Authorization Bypass**: Attackers can harvest credentials and one-time codes as they are displayed or entered, resulting in account takeover.

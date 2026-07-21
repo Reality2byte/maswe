@@ -5,6 +5,8 @@ alias: unsafe-code-loading
 requirement: "The app loads dynamic code safely from trusted sources."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0044
+attacks: [MAS-ATTACK-0014, MAS-ATTACK-0057]
 mappings:
   masvs-v2: [MASVS-CODE-4]
   cwe: [494]
@@ -31,13 +33,6 @@ Dynamic code loading includes loading native libraries via `dlopen`, loading DEX
 - **Code from Other Packages**: Executing code from other installed packages (e.g. via package contexts with code inclusion) whose identity and integrity are not verified.
 
 ## Impact
-
-Attackers can execute arbitrary code within the app's context by:
-
-- Substituting or modifying code that the app loads at runtime from writable or unverified locations.
-- Performing a Machine-in-the-Middle (MITM) attack, e.g., via ARP poisoning, DNS spoofing, or a rogue access point.
-
-This can lead to:
 
 - **Execution of Unauthorized Code**: Attackers can run attacker-controlled code with the app's identity, permissions, and data access, resulting in full compromise of the app's functionality on the device.
 - **Compromise of Sensitive Data**: Attackers can use the injected code to read the app's private data and credentials, resulting in unauthorized disclosure of user and app data.

@@ -5,6 +5,8 @@ alias: emulator-detection
 requirement: "The app detects when it is running on an emulator."
 platform: [android, ios]
 profiles: [R]
+threat: MAS-THREAT-0058
+attacks: [MAS-ATTACK-0003, MAS-ATTACK-0066]
 mappings:
   masvs-v1: [MSTG-RESILIENCE-5, MSTG-RESILIENCE-8]
   masvs-v2: [MASVS-RESILIENCE-1, MASVS-RESILIENCE-4]
@@ -26,13 +28,6 @@ Emulators give attackers a fully controlled, snapshottable environment for analy
 - **No Response Strategy**: Detecting an emulated environment but not adapting the app's behavior in response.
 
 ## Impact
-
-Attackers can analyze and automate the app in a fully controlled environment by:
-
-- Running the app in an emulator or virtual device.
-- Using dynamic instrumentation.
-
-This can lead to:
 
 - **Bypass of Protection Mechanisms**: Attackers can iterate on bypasses of the app's defenses with snapshots and full inspection, resulting in faster and cheaper circumvention of its protections.
 - **Compromise of System Integrity and Business Operations**: Attackers can run automated fleets of emulated instances, resulting in bot-driven fraud, fake accounts, and abuse of the app owner's services.

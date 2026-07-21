@@ -5,6 +5,8 @@ alias: tracking-domains-declarations
 requirement: "The app adequately declares all tracking domains it connects to."
 platform: [android, ios]
 profiles: [P]
+threat: MAS-THREAT-0073
+attacks: [MAS-ATTACK-0074, MAS-ATTACK-0075]
 mappings:
   masvs-v2: [MASVS-PRIVACY-3]
   cwe: [359]
@@ -30,13 +32,6 @@ Platforms increasingly require apps to declare their tracking domains so the sys
 - **Declarations Inconsistent with Behavior**: Declaring domains that do not match the app's observed network connections, e.g. after adding new tracking endpoints without updating the manifest.
 
 ## Impact
-
-Apps and embedded third-party components can track users against their expressed preferences by:
-
-- Contacting undeclared tracking domains that platform enforcement cannot block.
-- Collecting and correlating identifiers and usage data across apps, devices, and services.
-
-This can lead to:
 
 - **Violation of User Privacy**: Tracking traffic can bypass the platform's enforcement of the user's tracking choice, resulting in users being tracked despite having refused permission.
 - **Loss of User Trust**: Users and researchers can discover undeclared tracking connections, resulting in negative publicity and reduced trust in the app.

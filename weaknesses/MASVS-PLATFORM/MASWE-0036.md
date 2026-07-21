@@ -5,6 +5,8 @@ alias: js-bridges-webviews
 requirement: "The app does not expose sensitive native functionality to WebView content."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0036
+attacks: [MAS-ATTACK-0047, MAS-ATTACK-0051]
 mappings:
   masvs-v1: [MSTG-PLATFORM-7]
   masvs-v2: [MASVS-PLATFORM-2, MASVS-STORAGE-2]
@@ -31,13 +33,6 @@ Bridges such as `addJavascriptInterface` on Android or script message handlers a
 - **Sensitive Data in Bridge Replies**: Returning sensitive data into the WebView's JavaScript context in a way that any content running in the page can read.
 
 ## Impact
-
-Attackers can invoke exposed native functionality from web content by:
-
-- Injecting malicious JavaScript into WebView content (e.g., via MITM on insecure connections or a compromised website).
-- Delivering crafted deep links or intents from a malicious app or web page.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can call bridge methods that return user or app data, resulting in exfiltration of sensitive information to attacker-controlled servers.
 - **Execution of Unauthorized Code**: Attackers can drive native functionality exposed through the bridge, resulting in privileged actions performed within the app's context.

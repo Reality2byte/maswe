@@ -5,6 +5,8 @@ alias: code-obfuscation
 requirement: "The app applies code obfuscation to hinder reverse engineering."
 platform: [android, ios]
 profiles: [R]
+threat: MAS-THREAT-0051
+attacks: [MAS-ATTACK-0001]
 mappings:
   masvs-v1: [MSTG-RESILIENCE-9]
   masvs-v2: [MASVS-RESILIENCE-3]
@@ -28,12 +30,6 @@ Obfuscation does not prevent reverse engineering, but it raises its cost. Effect
 - **Effectiveness Never Assessed**: Never testing the obfuscation against current decompilers and deobfuscation tooling, so its actual strength is unknown.
 
 ## Impact
-
-Attackers can analyze the app's logic and security controls with minimal effort by:
-
-- Obtaining the app package and reverse engineering it.
-
-This can lead to:
 
 - **Bypass of Protection Mechanisms**: Attackers can quickly locate and defeat client-side checks such as root detection, licensing, or anti-tampering logic, resulting in the circumvention of the app's defenses.
 - **Compromise of Sensitive Data**: Attackers can recover proprietary algorithms and embedded secrets from readable code, resulting in intellectual property theft and easier planning of further attacks.

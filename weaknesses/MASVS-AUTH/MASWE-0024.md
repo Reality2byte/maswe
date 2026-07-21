@@ -5,6 +5,8 @@ alias: autofill-authenticators
 requirement: "The app enables auto-fill support for authenticators."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0024
+attacks: [MAS-ATTACK-0041, MAS-ATTACK-0042]
 mappings:
   masvs-v1: [MSTG-AUTH-9]
   masvs-v2: [MASVS-AUTH-1, MASVS-AUTH-3]
@@ -34,13 +36,6 @@ Platforms provide secure flows for supplying credentials, one-time codes, and pa
 - **No Support for Passwordless Authentication**: Not offering passkeys or other multi-device FIDO/WebAuthn credentials where they could replace passwords.
 
 ## Impact
-
-Attackers can capture credentials that users handle manually by:
-
-- Reading sensitive data from the clipboard when users copy it between apps.
-- Phishing credentials through lookalike apps or pages when users must type them manually.
-
-This can lead to:
 
 - **Authentication or Authorization Bypass**: Attackers can reuse captured credentials or one-time codes, resulting in account takeover and unauthorized access to the user's data and functionality.
 - **Compromise of Sensitive Data**: Attackers can read credentials exposed through clipboard-based workarounds, resulting in disclosure of authentication material that protects sensitive information.

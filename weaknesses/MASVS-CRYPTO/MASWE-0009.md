@@ -5,6 +5,8 @@ alias: no-key-rotation
 requirement: "The app rotates cryptographic keys regularly."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0009
+attacks: [MAS-ATTACK-0001, MAS-ATTACK-0005]
 mappings:
   masvs-v2: [MASVS-CRYPTO-2]
   cwe: [262, 324]
@@ -28,13 +30,6 @@ Cryptographic keys have a limited cryptoperiod, as defined in [NIST.SP.800-57pt1
 - **Superseded Keys Not Retired**: Keeping old keys active and usable for new operations after rotation, instead of restricting them to decryption or verification of existing data and eventually destroying them.
 
 ## Impact
-
-Attackers can decrypt or forge all data ever protected with a compromised key by:
-
-- Obtaining the app package and reverse engineering it.
-- Accessing the device storage on a compromised device.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can decrypt the entire history of data protected with the compromised key, resulting in a much larger disclosure than a rotation-bounded compromise would allow.
 - **Authentication or Authorization Bypass**: Attackers can keep forging valid cryptographic values indefinitely with a long-lived compromised key, resulting in persistent unauthorized access that is not curtailed by key expiry.

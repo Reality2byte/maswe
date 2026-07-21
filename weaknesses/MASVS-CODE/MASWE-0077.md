@@ -5,6 +5,8 @@ alias: non-reproducible-builds
 requirement: "The app offers reproducible builds."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0077
+attacks: [MAS-ATTACK-0060, MAS-ATTACK-0062]
 mappings:
   masvs-v2: [MASVS-CODE-3]
   cwe: [1357, 494]
@@ -28,13 +30,6 @@ Reproducible builds allow third parties, and the developers themselves, to detec
 - **No Provenance or Attestation**: Publishing releases without provenance describing what was built, from which source, and by which pipeline.
 
 ## Impact
-
-Attackers can conceal tampering with the app's released binaries by:
-
-- Distributing tampered builds that cannot be distinguished from legitimate ones.
-- Compromising a dependency, SDK, or build tool in the app's supply chain.
-
-This can lead to:
 
 - **Execution of Unauthorized Code**: Attackers can inject code during the build or distribution process without detection, since no independent party can verify the binary against the source, resulting in malicious code shipping to the entire user base.
 - **Loss of User Trust**: Users and auditors cannot verify that the shipped app matches the published source, resulting in weakened trust in the app, particularly for security- and privacy-sensitive apps.

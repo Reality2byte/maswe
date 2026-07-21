@@ -5,6 +5,8 @@ alias: device-attestation
 requirement: "The app implements device attestation."
 platform: [android, ios]
 profiles: [R]
+threat: MAS-THREAT-0059
+attacks: [MAS-ATTACK-0065, MAS-ATTACK-0066, MAS-ATTACK-0068]
 mappings:
   masvs-v1: [MSTG-RESILIENCE-10]
   masvs-v2: [MASVS-RESILIENCE-1]
@@ -37,14 +39,6 @@ Device attestation uses platform services, such as the Android Play Integrity AP
 - **Verdicts Not Enforced**: Collecting attestation results but not gating sensitive operations on them.
 
 ## Impact
-
-Attackers can interact with the backend from untrusted environments by:
-
-- Impersonating the app with scripts, bots, or tampered clients when interacting with the backend.
-- Running the app on a rooted or jailbroken device they control.
-- Running the app in an emulator or virtual device.
-
-This can lead to:
 
 - **Compromise of System Integrity and Business Operations**: Attackers can drive the backend with automated or tampered clients, resulting in fraud, scraping, fake accounts, and abuse of the app owner's services.
 - **Financial Loss**: Attackers can abuse promotions, premium features, or transaction flows from unattested environments, resulting in direct monetary loss to the app owner.

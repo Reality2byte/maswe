@@ -5,6 +5,8 @@ alias: data-leak-ui
 requirement: "The app does not unnecessarily expose sensitive data through the app user interface."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0028
+attacks: [MAS-ATTACK-0005, MAS-ATTACK-0041, MAS-ATTACK-0043]
 mappings:
   masvs-v1: [MSTG-STORAGE-7]
   masvs-v2: [MASVS-PLATFORM-3, MASVS-STORAGE-2]
@@ -30,14 +32,6 @@ Typical exposure paths include displaying values in cleartext when masking would
 - **Unmasked Sensitive Values**: Displaying full values (e.g. complete card numbers or personal identifiers) where a masked or partial representation would suffice.
 
 ## Impact
-
-Attackers can capture sensitive data displayed or entered in the user interface by:
-
-- Observing the device screen while sensitive data is displayed or entered (shoulder surfing).
-- Reading sensitive data from the clipboard when users copy it between apps.
-- Accessing the device storage on a compromised device.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can read personal or financial information from the screen, the clipboard, or keyboard cache files, resulting in unauthorized disclosure of user data.
 - **Authentication or Authorization Bypass**: Attackers can capture credentials, PINs, or one-time codes exposed through the UI, resulting in unauthorized access to the user's accounts.

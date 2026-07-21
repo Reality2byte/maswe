@@ -5,6 +5,8 @@ alias: anti-deobfuscation
 requirement: "The app implements anti-deobfuscation techniques to protect its obfuscation."
 platform: [android, ios]
 profiles: [R]
+threat: MAS-THREAT-0053
+attacks: [MAS-ATTACK-0001]
 mappings:
   masvs-v1: [MSTG-RESILIENCE-12]
   masvs-v2: [MASVS-RESILIENCE-3]
@@ -27,12 +29,6 @@ Obfuscation alone is a moving target: publicly available deobfuscators, decompil
 - **Effectiveness Never Assessed**: Never attempting deobfuscation with current tooling to measure how long the protection actually holds.
 
 ## Impact
-
-Attackers can undo the app's obfuscation with automated tooling by:
-
-- Obtaining the app package and reverse engineering it.
-
-This can lead to:
 
 - **Bypass of Protection Mechanisms**: Attackers can recover near-original code and then locate and defeat the app's client-side defenses, resulting in the circumvention of protections the obfuscation was meant to shield.
 - **Compromise of Sensitive Data**: Attackers can recover proprietary algorithms and embedded secrets despite the obfuscation, resulting in intellectual property exposure.

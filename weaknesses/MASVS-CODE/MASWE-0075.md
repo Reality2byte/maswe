@@ -5,6 +5,8 @@ alias: malicious-code-included
 requirement: "The app package does not contain malicious code."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0075
+attacks: [MAS-ATTACK-0060, MAS-ATTACK-0061]
 mappings:
   masvs-v2: [MASVS-CODE-3]
   cwe: [506, 507, 511]
@@ -29,13 +31,6 @@ Malicious code can exfiltrate data, execute hidden or backdoored functionality, 
 - **Hidden Functionality**: Backdoors, hidden switches, or undisclosed capabilities shipped in the app or its components.
 
 ## Impact
-
-Attackers can run malicious functionality inside the trusted app by:
-
-- Compromising a dependency, SDK, or build tool in the app's supply chain.
-- Introducing malicious code through an insider or compromised developer account.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can exfiltrate user data and credentials from inside the app's trust boundary, resulting in large-scale disclosure across the entire user base.
 - **Execution of Unauthorized Code**: Attackers can trigger backdoored or hidden functionality at will, resulting in attacker-controlled behavior running with the app's identity and permissions.

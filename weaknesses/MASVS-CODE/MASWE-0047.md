@@ -5,6 +5,8 @@ alias: non-standard-security-apis
 requirement: "The app does not use non-standard APIs for security-critical functionality."
 platform: [android, ios]
 profiles: [L2]
+threat: MAS-THREAT-0047
+attacks: [MAS-ATTACK-0001, MAS-ATTACK-0014, MAS-ATTACK-0021]
 mappings:
   masvs-v1: [MSTG-CRYPTO-2, MSTG-NETWORK-6]
   masvs-v2: [MASVS-CODE-3, MASVS-AUTH-1, MASVS-CRYPTO-1, MASVS-NETWORK-1]
@@ -36,14 +38,6 @@ Platform APIs and vetted libraries are designed and maintained by experts, incor
 - **Unmaintained Security Libraries**: Depending on unproven or unmaintained third-party components for security-critical functionality.
 
 ## Impact
-
-Attackers can exploit flaws in non-standard security implementations by:
-
-- Obtaining the app package and reverse engineering it.
-- Performing cryptanalysis of broken algorithms, modes, or parameters.
-- Performing a Machine-in-the-Middle (MITM) attack, e.g., via ARP poisoning, DNS spoofing, or a rogue access point.
-
-This can lead to:
 
 - **Compromise of Sensitive Data**: Attackers can break weak custom cryptography or intercept traffic handled by flawed custom stacks, resulting in unauthorized disclosure or modification of sensitive data.
 - **Authentication or Authorization Bypass**: Attackers can exploit logic flaws in custom authentication implementations, resulting in unauthorized access to user accounts and protected functionality.

@@ -5,6 +5,8 @@ alias: improper-signature-verification
 requirement: "The app properly verifies cryptographic signatures."
 platform: [android, ios]
 profiles: [L1, L2]
+threat: MAS-THREAT-0015
+attacks: [MAS-ATTACK-0031]
 mappings:
   masvs-v1: [MSTG-CRYPTO-4]
   masvs-v2: [MASVS-CRYPTO-1]
@@ -29,12 +31,6 @@ Signature verification protects the integrity and authenticity of data such as u
 - **Algorithm Confusion**: Accepting the algorithm declared by the data being verified (e.g. a token header), including weak, deprecated, or "none" algorithms, instead of enforcing the expected one.
 
 ## Impact
-
-Attackers can present forged or tampered data as authentic by:
-
-- Presenting data with invalid, stripped, or attacker-signed signatures that the app accepts.
-
-This can lead to:
 
 - **Execution of Unauthorized Code**: Attackers can deliver tampered updates, plugins, or configuration that the app accepts as genuine, resulting in attacker-controlled code or behavior running within the app.
 - **Authentication or Authorization Bypass**: Attackers can forge signed tokens or assertions (e.g. session or license tokens), resulting in unauthorized access to protected accounts, data, or functionality.
