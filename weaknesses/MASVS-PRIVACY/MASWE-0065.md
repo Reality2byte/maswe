@@ -16,6 +16,8 @@ refs:
 - https://gdpr-info.eu/recitals/no-26/
 - https://gdpr-info.eu/recitals/no-28/
 - https://gdpr-info.eu/art-4-gdpr/
+- 
+https://www.edpb.europa.eu/topics/ai-and-technology/anonymisation-pseudonymisation_en
 - https://ec.europa.eu/justice/article-29/documentation/opinion-recommendation/files/2014/wp216_en.pdf
 - https://www.statista.com/topics/9460/app-tracking-and-mobile-privacy/
 status: new
@@ -25,12 +27,15 @@ status: new
 
 This weakness occurs when an app processes or shares user data without applying unlinkability techniques such as data abstraction, anonymization, or pseudonymization, allowing individuals to be identified and tracked across different services and over time.
 
-Anonymization, through methods like randomization or generalization, irreversibly de-identifies individuals by removing or altering data, such as obfuscating location or scrambling sensitive attributes. In contrast, pseudonymization replaces identifiable data with tokens or hashed values, making it more secure but still technically reversible under certain conditions.
+This weakness occurs when an app processes or shares user data without applying privacy measures such as data abstraction, anonymization, pseudonymization, or unlinkability protocols. This can allow individuals to be identified and tracked across services and over time.
+
+Anonymization uses techniques such as randomization or generalization to irreversibly prevent identification. Pseudonymization replaces identifiable data with tokens or hashed values, but may remain reversible when additional information is available. Privacy preserving protocols can provide further unlinkability. [Private Information Retrieval (PIR)](https://en.wikipedia.org/wiki/Private_information_retrieval) hides which data a user retrieves, while [Oblivious HTTP (OHTTP)](https://www.ietf.org/rfc/rfc9458.html) separates the user identity from the request content.
 
 ## Modes of Introduction
 
-- **Direct Identifiers Not Removed**: Failing to remove or transform direct identifiers, such as user ID or name, before server-side collection, or to manipulate the data to prevent linkage to real-world identities. This also includes not implementing protocols like Private Information Retrieval or Oblivious HTTP (OHTTP) to enhance privacy.
-- **Sensitive Data Not Redacted Before Passing to AI**: Sending unredacted sensitive or personal data to AI/ML services (on-device or cloud) without first removing or masking identifiers, where it may also be retained and used to train models.
+- **Direct Identifiers Not Removed**: Failing to remove or transform direct identifiers, such as user ID or name, before server-side collection, or to manipulate the data to prevent linkage to real-world identities.
+- **Not Implementing Privacy-Preserving Protocols**: Failing to use protocols such as PIR or OHTTP.
+- **Sensitive Data Not Redacted Before Passing to AI**: Sending unredacted sensitive or personal data to AI services without first removing or masking identifiers, where it may also be retained and used to train models.
 
 ## Impact
 
@@ -40,4 +45,5 @@ Anonymization, through methods like randomization or generalization, irreversibl
 ## Mitigations
 
 - **Use Anonymisation and Pseudonymisation**: Ensure techniques like anonymisation and pseudonymisation are implemented to prevent user identification.
-- **Redact Sensitive Data Before Passing to AI**: Before sending data to AI/ML services, redact or mask sensitive fields and identifiers so that personal data is not exposed to (or used to train) third-party models.
+- **Implement Privacy-Preserving Protocols**: Use protocols such as PIR or OHTTP.
+- **Redact Sensitive Data Before Passing to AI**: Before sending data to AI services, redact or mask sensitive fields and identifiers so that personal data is not exposed to (or used to train) third-party models.
