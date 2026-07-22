@@ -28,8 +28,6 @@ Platforms increasingly require apps to declare their tracking domains so the sys
 ## Modes of Introduction
 
 - **Missing or Incomplete Declarations**: Not declaring tracking domains at all, or declaring only a subset of the domains the app actually contacts for tracking purposes.
-- **Undeclared Third-Party SDK Domains**: Omitting tracking domains contacted by embedded third-party SDKs, whose network behavior the developer may not have audited.
-- **Declarations Inconsistent with Behavior**: Declaring domains that do not match the app's observed network connections, e.g. after adding new tracking endpoints without updating the manifest.
 
 ## Impact
 
@@ -40,6 +38,3 @@ Platforms increasingly require apps to declare their tracking domains so the sys
 ## Mitigations
 
 - **Declare All Tracking Domains**: Enumerate every domain used for tracking, including those contacted by third-party SDKs, in the platform's declaration mechanism (e.g. the privacy manifest's `NSPrivacyTrackingDomains`).
-- **Audit Network Behavior**: Regularly capture and review the app's network traffic to verify that its actual connections match the declared tracking domains.
-- **Track SDK Changes**: Re-review declarations when adding or updating SDKs, using the SDKs' own privacy manifests where provided.
-- **Respect the User's Tracking Choice**: Gate all tracking activity on the user's platform-level tracking permission rather than relying on enforcement alone (see @MASWE-0066).
