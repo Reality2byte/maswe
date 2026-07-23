@@ -36,8 +36,7 @@ These declarations must clearly outline what data is collected, how it is used, 
 ## Modes of Introduction
 
 - **Undeclared Data Collection and Purpose**: Failing to declare what data is being collected (e.g., location, contacts, identifiers) and for what purposes (e.g., analytics, personalization).
-- **Discrepancies in Declarations vs Behavior**: Publishing privacy label declarations (such as Apple's Privacy Nutrition Labels or Google's Data Safety Section) that differ from the app's actual behavior, including undeclared data collection, sharing with third parties not mentioned in privacy labels, or using data for purposes not disclosed, which are against both Apple and Google guidelines.
-- **Undeclared Data Sent in Network Traffic**: Transmitting data over the network, even over HTTPS, that goes beyond what is declared, such as over-collection beyond functional needs, detailed location/behavior analytics, unnecessary identifiers (e.g. IMEI, email, phone number), or sharing with third-party analytics/advertising services not reflected in the declarations.
+- **Discrepancies in Declarations vs Behavior**: Publishing declarations that differ from the app's actual behavior by using data for purposes other than those disclosed.
 
 ## Impact
 
@@ -47,5 +46,4 @@ These declarations must clearly outline what data is collected, how it is used, 
 
 ## Mitigations
 
-- **Maintain Accurate Privacy Labels**: Comply with Apple's Privacy Nutrition Labels and Google's Data Safety Section requirements by providing accurate and transparent information about your data practices, including data collection and sharing with third parties.
-- **Ensure Consistency in Declarations vs Behavior**: Keep your data collection practices documented and up to date in privacy policies, privacy labels, and app store listings. Ensure that these documents match the app's actual behavior to avoid discrepancies that could mislead users or violate platform policies.
+- **Maintain Accurate Privacy Labels**: Comply with Apple's Privacy Nutrition Labels and Google's Data Safety Section requirements by providing accurate, up to date and transparent information about your data practices, including data collection and sharing with third parties.
