@@ -42,6 +42,5 @@ Logging all possible information is very useful at development time, especially 
 
 - **Avoid Logging Sensitive Data**: Do not log sensitive data at all; treat any user or system secret as unloggable by default.
 - **Redact Sensitive Data**: Where log statements are needed around sensitive values, redact or mask those values before writing them.
-- **Remove Unnecessary Logging**: Strip logging statements from release builds unless they are deemed necessary to the app and explicitly identified as safe, e.g. as a result of a security audit.
 - **Use Log Levels Properly**: Assign debug-only details to debug or verbose levels and ensure those levels are disabled in production releases.
 - **Disable Logging in Production**: Use build flags or configuration to disable logging in production releases, following the platform guidance for [Android](log-info-disclosure#mitigations) and [iOS](https://developer.apple.com/documentation/os/logging/generating_log_messages_from_your_code#3665948).
