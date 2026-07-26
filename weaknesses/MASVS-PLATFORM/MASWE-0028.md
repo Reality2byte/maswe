@@ -20,9 +20,9 @@ status: new
 
 ## Overview
 
-This weakness occurs when an app exposes more sensitive data than is necessary for the user's current task through UI components or UI-mediated platform services (like the clipboard or the autocompletion feature).
+This weakness occurs when an app exposes sensitive data beyond what is required for the user's current task, or exposes required data without protections proportionate to its sensitivity, through UI components or UI-mediated platform services, such as the clipboard or autocompletion features.
 
-Typical exposure paths include displaying secrets or complete identifiers in cleartext when masking or a partial representation would suffice, using unprotected input fields for passwords or PINs, permitting unnecessary copy to the system clipboard, and enabling keyboard or IME (Input Method Editor) features that may retain or later suggest sensitive input.
+Typical exposure paths include displaying secrets or complete identifiers in cleartext when masking or a partial representation would suffice, using unprotected input fields for passwords or PINs, permitting unnecessary copying to the system clipboard, and enabling keyboard or IME (Input Method Editor) features that may retain or later suggest sensitive input.
 
 ## Modes of Introduction
 
