@@ -8,9 +8,9 @@ profiles: [L1, L2]
 threat: MAS-THREAT-0025
 attacks: [MAS-ATTACK-0012, MAS-ATTACK-0013, MAS-ATTACK-0014]
 mappings:
-  masvs-v1: [MSTG-NETWORK-2, MSTG-NETWORK-1]
+  masvs-v1: [MSTG-NETWORK-1, MSTG-NETWORK-2]
   masvs-v2: [MASVS-NETWORK-1]
-  cwe: [311, 319]
+  cwe: [319]
   android-risks:
   - cleartext-communications
   - insecure-machine-to-machine
@@ -25,14 +25,12 @@ refs:
 - https://developer.apple.com/forums/thread/707320
 - https://developer.android.com/privacy-and-security/security-best-practices#secure-communication
 - https://developer.android.com/privacy-and-security/security-tips#networking
-- https://developer.android.com/privacy-and-security/security-config#CleartextTrafficPermitted
+- https://developer.android.com/privacy-and-security/security-config#CleartextTraffic
 - https://developer.android.com/reference/javax/net/ssl/SSLSocket
 - https://developer.android.com/reference/android/security/NetworkSecurityPolicy#isCleartextTrafficPermitted()
 - https://developer.android.com/reference/java/net/Socket
 - https://developer.android.com/reference/android/webkit/WebView
 - https://developer.android.com/reference/javax/net/ssl/HttpsURLConnection
-- https://github.com/MicrosoftDocs/xamarin-docs/blob/live/docs/android/app-fundamentals/http-stack.md
-- https://github.com/MicrosoftDocs/xamarin-docs/blob/live/docs/ios/app-fundamentals/ats.md
 status: new
 ---
 
@@ -49,9 +47,8 @@ Secure network protocols not only provide confidentiality but also ensure data i
 - **Cleartext Traffic Allowed in Platform-Provided Settings**: Configuring platform-provided settings (e.g. Network Security Configuration on Android or App Transport Security on iOS) to explicitly allow cleartext traffic (globally or per-domain), making it the default behavior for all network connections managed by those settings.
 - **Usage of HTTP**: Using HTTP instead of HTTPS for communication, which does not encrypt data in transit.
 - **Usage of Non-HTTP Insecure Protocols**: Using insecure protocols such as FTP, SMTP without TLS, TCP sockets, or custom protocols which do not encrypt data in transit.
-- **Unencrypted Non-IP Interfaces**: Transferring data over local/proximity interfaces such as Bluetooth/BLE, NFC, USB, or Wi-Fi Direct without encryption. These machine-to-machine channels are often overlooked.
-- **Authentication Material over Insecure Channels**: Sending session IDs, tokens, passwords, or API keys over any of the above unencrypted channels.
-- **Usage of Low-Level Network APIs**: Using low-level network APIs that do not enforce encryption and do not honor the platform's network security settings, such as `Socket` on Android or `NSURLConnection` on iOS.
+- **Unencrypted Machine-to-Machine Channels**: Transferring data over local/proximity interfaces such as Bluetooth/BLE, NFC, USB, or Wi-Fi Direct without encryption, or relying solely on link-layer protection such as BLE "Just Works" pairing instead of application-layer encryption.
+- **Usage of Low-Level Network APIs**: Using low-level network APIs that do not enforce encryption and do not honor the platform's network security settings, such as [`Socket`](https://developer.android.com/reference/java/net/Socket) on Android or [`NWConnection`](https://developer.apple.com/documentation/network/nwconnection) on iOS.
 - **Cross-Platform Framework Misconfiguration**: Configuring cross-platform frameworks improperly so that cleartext traffic is allowed for both Android and iOS versions of an app.
 - **Third-Party Libraries**: Using third-party libraries or SDKs that default to insecure communication methods or are improperly configured.
 
@@ -60,7 +57,7 @@ Secure network protocols not only provide confidentiality but also ensure data i
 - **Compromise of Sensitive Data**: Attackers can capture, read, or alter sensitive information transmitted over the network, resulting in unauthorized disclosure or manipulation of user data.
 - **Authentication or Authorization Bypass**: Attackers can capture session tokens or credentials sent over cleartext channels, resulting in user impersonation and unauthorized access to accounts or backend systems.
 - **Compromise of System Integrity and Business Operations**: Attackers can inject malicious content or redirect users to impersonated services, resulting in altered app behavior, phishing, and reputational damage for the app owner.
-- **Legal and Regulatory Non-Compliance**: Exposing personal data in transit can violate laws such as GDPR or HIPAA, resulting in legal penalties and mandatory disclosures for the app owner.
+- **Legal and Regulatory Non-Compliance**: Attackers can capture personal data in transit, resulting in reportable breaches and regulatory penalties for the app owner under laws such as GDPR or HIPAA.
 
 ## Mitigations
 

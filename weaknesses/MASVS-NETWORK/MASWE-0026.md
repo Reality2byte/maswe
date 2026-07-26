@@ -1,7 +1,7 @@
 ---
 title: Insecure Certificate Validation
 id: MASWE-0026
-alias: insecure-cert-val
+alias: insecure-cert-validation
 requirement: "The app validates certificates for all network traffic."
 platform: [android, ios]
 profiles: [L1, L2]
@@ -22,7 +22,6 @@ refs:
 - https://support.google.com/faqs/answer/7071387?hl=en
 - https://developer.android.com/reference/android/webkit/WebViewClient.html?sjid=15211564825735678155-EU#onReceivedSslError(android.webkit.WebView,%20android.webkit.SslErrorHandler,%20android.net.http.SslError)
 - https://developer.android.com/privacy-and-security/security-ssl#WarningsSslSocket
-- https://wiki.sei.cmu.edu/confluence/display/java/MSC00-J.+Use+SSLSocket+rather+than+Socket+for+secure+data+exchange
 - https://developer.apple.com/forums/thread/67493
 - https://developer.apple.com/forums/thread/707320
 - https://support.apple.com/en-us/102390
@@ -43,13 +42,14 @@ Certificate validation is the mechanism through which a TLS client establishes t
 - **Ignoring Hostname Verification**: Failing to verify that the certificate's hostname matches the server's hostname.
 - **Using Insecure Custom Trust Managers**: Implementing custom certificate validation logic that is incomplete, incorrect, or insecure.
 - **Incorrect Error Handling**: Proceeding with connections even when certificate validation errors occur, without alerting the user or terminating the connection.
-- **Trusting All Certificates**: Configuring the application to trust all certificates by default, without any validation.
+- **Third-Party Libraries**: Using third-party libraries or SDKs that disable or weaken certificate validation internally, or that default to permissive trust settings.
 
 ## Impact
 
 - **Compromise of Sensitive Data**: Attackers can capture, read, or alter sensitive information transmitted over the network, resulting in unauthorized disclosure or manipulation of user data.
 - **Authentication or Authorization Bypass**: Attackers can capture credentials or session tokens in transit, resulting in user impersonation and unauthorized access to accounts or backend systems.
 - **Compromise of System Integrity and Business Operations**: Attackers can impersonate legitimate servers and feed altered or malicious data to the app, resulting in unreliable or malicious app behavior and reputational damage for the app owner.
+- **Legal and Regulatory Non-Compliance**: Attackers can capture personal data in transit, resulting in reportable breaches and regulatory penalties for the app owner under laws such as GDPR or HIPAA.
 
 ## Mitigations
 

@@ -24,13 +24,13 @@ status: new
 
 This weakness occurs when identity pinning (also known as certificate pinning, public key pinning, or TLS pinning) is not implemented, or is implemented incorrectly, so the app cannot guarantee that it only communicates with servers presenting a specific, pre-determined cryptographic identity.
 
-Identity pinning associates a mobile app with a specific certificate or public key, adding a layer of trust verification on top of standard certificate validation. This reduces the risk of unauthorized interception even if a trusted Certificate Authority (CA) is compromised. Without it, the app trusts any certificate that chains to any CA in the trust store, so a single compromised or coerced CA is enough to intercept its traffic.
+Identity pinning associates a mobile app with a specific certificate or public key, adding a layer of trust verification on top of standard certificate validation. This reduces the risk of unauthorized interception even if a trusted Certificate Authority (CA) is compromised. Compromise of a public CA is rare, but pinning narrows trust to identities the app operator controls, and raises the effort required to intercept, inspect, or replay the app's traffic.
 
 Pinning is not foolproof: attackers who can reverse-engineer the app may remove or modify the pre-defined pins or the pinning logic, and attackers using runtime hooking and dynamic instrumentation may bypass the pinning checks on a device they control. This highlights the importance of implementing pinning **alongside other security measures** to enhance the app's resistance to advanced threats.
 
 ## Modes of Introduction
 
-- **Improper Configuration of Pinning Libraries**: Misconfiguring libraries like TrustKit, OkHttp's `CertificatePinner`, Volley, or AFNetworking's `SSLPinningMode`, leading to ineffective pinning.
+- **Improper Configuration of Pinning Libraries**: Misconfiguring libraries like TrustKit or OkHttp's `CertificatePinner` leading to ineffective pinning.
 - **Dynamic Pinning without Security**: Retrieving pins dynamically over insecure channels without proper validation.
 - **Improper Validation Logic**: Implementing custom pinning logic that does not correctly validate the certificate chain or public key. For example, accepting any certificate that chains to a trusted root CA instead of a specific certificate or public key.
 - **Lack of Backup Pins**: Not including backup pins, so the app cannot establish connections if the primary pin is no longer valid.
