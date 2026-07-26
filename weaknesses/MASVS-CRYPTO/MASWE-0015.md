@@ -10,7 +10,7 @@ attacks: [MAS-ATTACK-0031]
 mappings:
   masvs-v1: [MSTG-CRYPTO-4]
   masvs-v2: [MASVS-CRYPTO-1]
-  cwe: [347]
+  cwe: [295, 347]
   maswe-beta: [MASWE-0026]
 refs:
 - https://cwe.mitre.org/data/definitions/347.html

@@ -9,7 +9,7 @@ threat: MAS-THREAT-0009
 attacks: [MAS-ATTACK-0001, MAS-ATTACK-0005]
 mappings:
   masvs-v2: [MASVS-CRYPTO-2]
-  cwe: [262, 324]
+  cwe: [324]
   maswe-beta: [MASWE-0011]
 refs:
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf

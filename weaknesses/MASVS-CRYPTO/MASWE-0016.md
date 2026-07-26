@@ -16,7 +16,7 @@ mappings:
   android-core-app-quality: [Cryptographic_Algorithms]
   maswe-beta: [MASWE-0027]
 refs:
-- https://www.ietf.org/rfc/rfc1750.txt
+- https://datatracker.ietf.org/doc/html/rfc4086
 - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#secure-random-number-generation
 status: new
 ---
@@ -42,4 +42,4 @@ A [PRNG](https://en.wikipedia.org/wiki/Pseudorandom_number_generator) generates 
 
 - **Use Cryptographically Secure RNGs**: For security-relevant contexts, always generate random values with a cryptographically secure random number generator provided by the platform.
 - **Avoid Deterministic Seeding**: Do not use any random function in a deterministic way, even a secure one, and especially avoid hardcoded seed values, which can be recovered by decompiling the app.
-- **Follow Established Guidance**: Refer to [RFC 1750 - Randomness Recommendations for Security](https://www.ietf.org/rfc/rfc1750.txt) and the [OWASP Cryptographic Storage Cheat Sheet - Secure Random Number Generation](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#secure-random-number-generation) for recommendations on random number generation.
+- **Follow Established Guidance**: Refer to [RFC 4086 - Randomness Requirements for Security](https://datatracker.ietf.org/doc/html/rfc4086) and the [OWASP Cryptographic Storage Cheat Sheet - Secure Random Number Generation](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#secure-random-number-generation) for recommendations on random number generation.

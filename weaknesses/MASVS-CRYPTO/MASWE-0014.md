@@ -10,7 +10,7 @@ attacks: [MAS-ATTACK-0018, MAS-ATTACK-0021, MAS-ATTACK-0030]
 mappings:
   masvs-v1: [MSTG-CRYPTO-4, MSTG-CRYPTO-5]
   masvs-v2: [MASVS-CRYPTO-1, MASVS-CRYPTO-2]
-  cwe: [323, 327]
+  cwe: [323, 326, 327, 330]
   maswe-beta: [MASWE-0025, MASWE-0012]
 refs:
 - https://developer.android.com/privacy-and-security/cryptography#deprecated-functionality

@@ -25,7 +25,7 @@ status: new
 
 This weakness occurs when a broken or unsuitable hash function is used in a security-sensitive context, such as integrity checks, digital signatures, or certificate fingerprints.
 
-Broken algorithms such as MD5 and SHA-1 are vulnerable to collision attacks and must not be used where collision or second-preimage resistance is required. Using an otherwise sound hash function for the wrong job is equally problematic: passwords and passphrases require a dedicated password-based key derivation function rather than a plain hash (see @MASWE-0008), and non-cryptographic checksums provide no security at all.
+Broken algorithms such as MD5 and SHA-1 have practical collision attacks, and NIST has deprecated both for all security purposes; they must not be used in any security-sensitive context. Using an otherwise sound hash function for the wrong job is equally problematic: passwords and passphrases require a dedicated password-based key derivation function rather than a plain hash (see @MASWE-0008), and non-cryptographic checksums provide no security at all.
 
 ## Modes of Introduction
 

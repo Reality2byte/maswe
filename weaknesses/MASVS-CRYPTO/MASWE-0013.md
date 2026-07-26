@@ -6,11 +6,11 @@ requirement: "The app properly uses Message Authentication Codes (MACs)."
 platform: [android, ios]
 profiles: [L1, L2]
 threat: MAS-THREAT-0013
-attacks: [MAS-ATTACK-0018, MAS-ATTACK-0021, MAS-ATTACK-0029]
+attacks: [MAS-ATTACK-0018, MAS-ATTACK-0021, MAS-ATTACK-0029, MAS-ATTACK-0090]
 mappings:
   masvs-v1: [MSTG-CRYPTO-4, MSTG-CRYPTO-5]
   masvs-v2: [MASVS-CRYPTO-1, MASVS-CRYPTO-2]
-  cwe: [323, 327, 807, 915]
+  cwe: [208, 323, 327, 354, 807]
   maswe-beta: [MASWE-0024, MASWE-0012]
 refs:
 - https://developer.android.com/privacy-and-security/cryptography#deprecated-functionality
@@ -31,7 +31,7 @@ A MAC provides integrity and authenticity for a message using a shared secret ke
 ## Modes of Introduction
 
 - **Non-Cryptographic Checksums**: Using checksums such as CRC-32 where a MAC is required; checksums detect accidental corruption but can be trivially recomputed by an attacker.
-- **MACs Built on Broken Hashes**: Building MACs on hash functions lacking collision resistance, such as MD5 or SHA-1.
+- **MACs Built on Weak Hashes**: Building MACs on deprecated hash functions such as MD5 or SHA-1, or using naive constructions such as `hash(key ‖ message)` that are vulnerable to length-extension attacks.
 - **Weak or Reused MAC Keys**: Using MAC keys with insufficient entropy, or using a MAC key for more than one purpose or with an unauthorized algorithm, violating key-separation principles.
 - **Fragile Constructions**: Using constructions that fail outside narrow assumptions, such as raw CBC-MAC on variable-length messages, or composing encryption and authentication incorrectly (e.g. MAC-then-encrypt where encrypt-then-MAC is required).
 - **Truncated Tags**: Using authentication tags that are too short, significantly lowering the effort required for forgery.

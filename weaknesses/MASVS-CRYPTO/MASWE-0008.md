@@ -1,7 +1,7 @@
 ---
 title: Improper Cryptographic Key Derivation
 id: MASWE-0008
-alias: weak-crypto-key-derivation
+alias: improper-crypto-key-derivation
 requirement: "The app derives cryptographic keys using approved key derivation functions."
 platform: [android, ios]
 profiles: [L1, L2]
@@ -10,7 +10,7 @@ attacks: [MAS-ATTACK-0025, MAS-ATTACK-0026]
 mappings:
   masvs-v1: [MSTG-CRYPTO-2]
   masvs-v2: [MASVS-CRYPTO-2]
-  cwe: [326, 327, 916]
+  cwe: [326, 327, 759, 760, 916]
   maswe-beta: [MASWE-0010]
 refs:
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf
