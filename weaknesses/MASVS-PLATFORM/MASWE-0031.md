@@ -28,6 +28,7 @@ In an overlay attack, a malicious app draws content on top of the target app to 
 ## Modes of Introduction
 
 - **Touch Filtering Not Enabled**: Not enabling touch filtering on sensitive views (e.g. `setFilterTouchesWhenObscured(true)` or `android:filterTouchesWhenObscured="true"`) and not discarding touch events flagged as obscured (e.g. `FLAG_WINDOW_IS_PARTIALLY_OBSCURED`).
+- **External Overlays Not Hidden**: Not using `setHideOverlayWindows(true)` to hide external overlays
 - **Sensitive Screens Not Protected**: Presenting confirmation dialogs or security-relevant screens without any occlusion defense, so their content can be covered or mimicked by an overlay.
 
 ## Impact
@@ -39,5 +40,6 @@ In an overlay attack, a malicious app draws content on top of the target app to 
 ## Mitigations
 
 - **Enable Touch Filtering on Sensitive Views**: Configure sensitive views to ignore touches delivered while the window is obscured, and discard motion events flagged as (partially) obscured.
+- **Hide External Overlays**: Configure sensitive activities to hide all external overlays.
 - **Protect Sensitive Screens**: Apply overlay defenses to confirmation and authentication screens specifically, and consider pausing or hiding sensitive content when the app detects it is being drawn over.
 - **Use Trusted Confirmation Paths for Critical Actions**: For the most critical approvals, use hardware-protected confirmation mechanisms that overlays cannot forge (see @MASWE-0019).
