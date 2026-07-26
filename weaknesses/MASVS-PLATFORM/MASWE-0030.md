@@ -2,7 +2,7 @@
 title: Sensitive Data Leaked via Screenshots or Screen Recordings
 id: MASWE-0030
 alias: data-leak-screenshots
-requirement: "The app removes sensitive data from views when moved to the background or when being recorded."
+requirement: "The app removes or masks sensitive data from its views when moved to the background, when being recorded or when a screenshot is taken."
 platform: [android, ios]
 profiles: [L2]
 threat: MAS-THREAT-0030
@@ -26,11 +26,12 @@ Mobile platforms allow users, other apps, and external tools to capture screensh
 ## Modes of Introduction
 
 - **Screenshots and Screen Recordings Not Prevented**: Not implementing measures (such as setting secure window flags) to prevent the operating system or other apps from capturing screenshots or screen recordings of sensitive views.
-- **Unredacted Sensitive On-Screen Content**: Displaying sensitive information directly on the screen without masking or redacting it, including in the view snapshot the system takes when the app moves to the background.
+- **Missing Capture-State Redaction**: Continuing to display sensitive information while the app or scene is being recorded, mirrored, or shared, despite the platform providing an API to detect the active capture state.
+- **Excessive On-Screen Disclosure**: Displaying complete sensitive values when a masked, partial, temporary, or user-initiated representation would be sufficient for the current task.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Attackers can obtain sensitive data previously displayed on the screen, such as account details, personal information, or one-time codes, resulting in unauthorized disclosure and enabling further attacks such as identity theft or account takeover.
+- **Compromise of Sensitive Data**: Sensitive information may be retained in an image or video after the app session ends and may later be viewed, shared, synchronized, backed up, or accessed by another person or service.
 
 ## Mitigations
 
