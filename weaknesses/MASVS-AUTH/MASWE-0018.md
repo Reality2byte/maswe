@@ -1,7 +1,7 @@
 ---
 title: Sensitive Data Accessible After Session Termination
 id: MASWE-0018
-alias: reauth-state-changes
+alias: session-termination
 requirement: "The app makes sensitive data inaccessible after session termination."
 platform: [android, ios]
 profiles: [L2]
@@ -12,7 +12,7 @@ mappings:
   cwe: [285, 287, 613]
   maswe-beta: [MASWE-0030]
 refs:
-- https://developers.google.com/identity/sign-in/android/disconnect
+- https://developer.android.com/identity/sign-in/credential-manager-siwg-implementation#handle-sign-out
 - https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html
 status: new
 ---
@@ -25,8 +25,9 @@ Session termination is not limited to the user tapping "log out": inactivity tim
 
 ## Modes of Introduction
 
-- **Sessions Not Invalidated**: Terminating sessions only client-side, leaving session tokens valid on the server after logout or timeout.
-- **No Re-Authentication on State Changes**: Resuming the app from the background or continuing after remarkable context changes (e.g. a significant change in the user's location or profile) without requiring re-authentication.
+- **Sessions Not Invalidated Server-Side**: Terminating sessions only client-side, leaving session tokens valid on the server after logout or timeout.
+- **Missing Client-Side Session Termination**: The app provides no way to terminate user sessions (e.g. no logout button or timeout).
+- **No Re-Authentication on State Changes**: Resuming the app from the background or continuing after remarkable context changes (e.g. a significant change in the user's location or profile) without invalidating the current session and requiring re-authentication.
 - **Cached Data Not Cleared**: Retaining session tokens, cached personal data, in-memory state, or on-screen content after the session ends.
 - **Missing Inactivity Timeout**: Allowing sessions to remain valid indefinitely without inactivity or absolute expiration limits.
 
