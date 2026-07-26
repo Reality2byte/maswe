@@ -25,13 +25,13 @@ status: new
 
 This weakness occurs when an app stores sensitive data unencrypted in shared or external storage, where other apps can access it without any user interaction.
 
-Apps frequently opt to store data in external storage due to its larger capacity. However, once another app is granted the relevant permissions, it can access this data at any time. External storage such as SD cards can also be physically removed and read. Even when external storage is emulated by the system, improper file permissions or misuse of file-saving APIs can leave files open to unauthorized access, modification, or deletion.
+On Android, apps can store data explicitly in an app-specific external storage (`getExternalFilesDir()`), use the `MediaStore`-API  or Storage Access Framework (SAF) to access shared folders. The app-specific external storage can not be accessed by other apps. However, if the external storage is located on a physical SD card, it can be removed and read. If the external storage is emulated by the system, actors with access to an unlocked phone can access it using _Android Debug Bridge (ADB)_.
 
-This weakness primarily concerns Android, which permits the use of shared and external storage. On iOS, apps cannot directly write to or read from arbitrary locations; the system enforces strict sandboxing so apps can only access their own sandboxed file directories.
+This weakness primarily concerns Android, which permits the explicit use of shared and external storage.  However, while it is not possible to directly read and write an external folder on iOS, apps can use the by default pre-installed Files app or the document picker to read and write to a system-wide shared location.
 
 ## Modes of Introduction
 
-- **Data Stored Unencrypted**: Writing sensitive data to shared or external storage unencrypted.
+- **Data Stored Unencrypted**: Writing sensitive data to shared or external storage unencrypted. On Android, this also includes the app-specific external storage.
 - **Hardcoded Encryption Key**: Encrypting sensitive data stored in external storage with a key that is hardcoded inside the application.
 - **Encryption Key Stored on Filesystem**: Encrypting sensitive data stored in external storage but storing the key alongside it or in another easily accessible location.
 - **Insufficient Encryption**: Encrypting sensitive data with an algorithm or configuration that is not considered strong.
@@ -42,11 +42,11 @@ This weakness primarily concerns Android, which permits the use of shared and ex
 - **Compromise of Sensitive Data**: Attackers can extract personal information and media such as photos, documents, and audio files, resulting in unauthorized disclosure of user data.
 - **Authentication or Authorization Bypass**: Attackers can extract passwords, cryptographic keys, and session tokens, resulting in identity theft or account takeover.
 - **Bypass of Protection Mechanisms**: Attackers can tamper with data used by the app, e.g. a database describing the state of premium features, resulting in circumvention of business logic and revenue loss for the app owner.
-- **Execution of Unauthorized Code**: Attackers can modify executable code or inject malicious payloads (e.g. enabling SQL injection or path traversal) into files that the app loads or processes from external storage, resulting in code execution or further compromise within the app's context.
 
 ## Mitigations
 
-- **Prefer Private Storage**: Store files in the [private app sandbox or internal storage](https://developer.android.com/training/data-storage/app-specific#internal) whenever possible, or use shared storage mechanisms that require user interaction for access.
+- **Prefer Private Storage**: Store files in the [private internal storage](https://developer.android.com/training/data-storage/app-specific#internal) whenever possible.
+- **Limit Platform File Sharing**: Prohibit sensitive data to be shared using the platform's storage sharing frameworks such as Storage Access Framework (SAF) on Android or document picker on iOS whenever possible.
 - **Encrypt Data Before Writing**: Encrypt any sensitive data stored in shared or external storage, e.g. using [Android's `EncryptedFile` API](https://developer.android.com/reference/androidx/security/crypto/EncryptedFile).
 - **Protect Encryption Keys**: Protect any keys used for data encryption with the device's hardware-backed keystore where available, and never hardcode them inside the application.
 

@@ -10,7 +10,7 @@ attacks: [MAS-ATTACK-0001]
 mappings:
   masvs-v1: [MSTG-STORAGE-1, MSTG-CODE-2]
   masvs-v2: [MASVS-STORAGE-1]
-  cwe: [312, 540, 798]
+  cwe: [312, 321, 540, 798]
   android-risks:
   - insecure-api-usage
   maswe-beta: [MASWE-0005, MASWE-0013, MASWE-0036]
@@ -41,14 +41,14 @@ Note that developer _debug_ artifacts (verbose logging, backdoors, testing utili
 - **Financial Loss**: Attackers can abuse compromised API keys to make unauthorized billed API calls (e.g., AI/ML services), resulting in unexpected charges to the app owner.
 - **Compromise of System Integrity and Business Operations**: Attackers can use extracted credentials to access backend services, resulting in service disruption, policy-violation suspensions, or denial of service.
 - **Compromise of Sensitive Data**: Attackers can use extracted cryptographic material to decrypt protected data, resulting in unauthorized disclosure of user or app data.
-- **Bypass of Protection Mechanisms**: Attackers can use hardcoded keys to unlock paid features or access restricted content, resulting in circumvention of app protections and revenue loss for the app owner.
+- **Bypass of Protection Mechanisms**: Attackers can use hardcoded keys to unlock paid features or access restricted content, resulting in circumvention of the protections the app enforces.
 
 ## Mitigations
 
-- **Use Stateful API Services**: Prefer API services that provide secure authentication, client validation, and session controls. Implement dynamic tokens that expire after a reasonably short time (e.g., 1 hour) to reduce the impact of key exposure, and ensure proper error handling and logging to detect unauthorized access attempts. Consider OAuth 2.0 and libraries such as AppAuth to simplify secure OAuth flows.
 - **Proxy Static Secrets Through a Middleware**: If a stateful API service is not viable, front the stateless API with a middleware solution (API proxy or gateway) that proxies requests between the app and the API endpoint, keeping the static secret server-side rather than in the client. Use JSON Web Tokens (JWT) and JSON Web Signature (JWS) as appropriate.
+- **Use Stateful API Services**: Prefer API services that provide secure authentication, client validation, and session controls. Implement dynamic tokens that expire after a reasonably short time (e.g., 1 hour) to reduce the impact of key exposure, and ensure proper error handling and logging to detect unauthorized access attempts. Consider OAuth 2.0 and libraries such as AppAuth to simplify secure OAuth flows.
+- **Retrieve Secrets at Runtime**: Consider using a [Key Management Service](https://cloud.google.com/kms/docs/key-management-service) behind a middleware solution (API proxy or gateway) to retrieve secrets at runtime after validating device and app integrity and over a secure, pinned channel that protects the transferred secrets (see @MASWE-0027).
 - **Restrict Unavoidable Hardcoded Secrets**: If secrets must be hardcoded, configure them with the minimum required permissions and restrictions to reduce the impact in case of exposure.
-- **Retrieve Secrets at Runtime**: Consider using a [Key Management Service](https://cloud.google.com/kms/docs/key-management-service) to retrieve secrets at runtime after validating app integrity.
 - **Use Platform Keystores**: Store cryptographic keys and authentication material using the platform's hardware-backed keystore (Android Keystore, iOS Keychain) instead of embedding them in the package. See @MASWE-0005.
-- **Audit for Leftover Secrets**: Regularly audit the codebase and dependencies for hardcoded sensitive data and developer leftovers (e.g. using tools such as [gitleaks](https://github.com/gitleaks/gitleaks)) and strip build artifacts and source files from release packages.
+- **Audit for Leftover Secrets**: Regularly audit the codebase and dependencies for hardcoded sensitive data and developer leftovers (e.g., using tools such as [gitleaks](https://github.com/gitleaks/gitleaks)) and strip build artifacts and source files from release packages.
 - **Harden Only as a Last Resort**: When no other secure option is available, use white-box cryptography, code/resource obfuscation, and RASP to raise the effort required to extract secrets, ensuring keys are only assembled in memory when needed. These techniques deter but do not prevent extraction and must not replace the mitigations above.

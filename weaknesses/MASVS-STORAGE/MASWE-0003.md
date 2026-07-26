@@ -31,9 +31,9 @@ Sensitive data may include personally identifiable information (PII), passwords,
 
 - **Data Stored Unencrypted**: Writing sensitive data to the app's private data directory (sandbox) unencrypted.
 - **Hardcoded Encryption Key**: Encrypting sensitive data with a key that is hardcoded inside the application.
-- **Encryption Key Stored on Filesystem**: Encrypting sensitive data but storing the key alongside it or in another easily accessible location.
+- **Encryption Key Stored on Filesystem**: Encrypting sensitive data but storing the generated key alongside it or in another easily accessible location.
 - **Insufficient Encryption**: Encrypting sensitive data with an algorithm or configuration that is not considered strong.
-- **Insufficient Access Restrictions**: Exposing private files to other apps through incorrect file permissions (e.g. the deprecated `MODE_WORLD_READABLE`/`MODE_WORLD_WRITEABLE` modes on Android), a misconfigured `FileProvider`, or Keychain items protected with weak accessibility attributes on iOS (e.g. `kSecAttrAccessibleAlways`).
+- **Insufficient Access Restrictions**: Exposing private files to other apps through incorrect file permissions (e.g. the deprecated `MODE_WORLD_READABLE`/`MODE_WORLD_WRITEABLE` file permission modes on Android), a misconfigured `FileProvider`, or Keychain items protected with weak accessibility attributes on iOS (e.g. `kSecAttrAccessibleAlways`).
 - **Data Not Removed After Use**: Retaining sensitive data in private storage (including caches, temporary files, WebView state, and network caches) longer than needed.
 
 ## Impact
@@ -44,7 +44,7 @@ Sensitive data may include personally identifiable information (PII), passwords,
 ## Mitigations
 
 - **Minimize Local Storage of Sensitive Data**: Avoid storing sensitive data locally if it is not required for app functionality, e.g. keep PII server-side, render it at time of use, and remove any cached data on logout.
-- **Restrict File Access**: Never use `MODE_WORLD_READABLE`/`MODE_WORLD_WRITEABLE`; share data through a properly configured `ContentProvider`/`FileProvider` with per-grant permissions instead, and on iOS store Keychain items with the strictest viable accessibility attribute (e.g. `kSecAttrAccessibleWhenUnlockedThisDeviceOnly`).
+- **Restrict File Access**: Use platform APIs to restrict file access as much as possible (least privilege principle). On Android, share data through a properly configured `ContentProvider`/ `FileProvider` with per-grant permissions instead of the deprecated `MODE_WORLD_READABLE`/`MODE_WORLD_WRITEABLE` file permission modes. On iOS, store Keychain items with the strictest viable accessibility attribute (e.g. `kSecAttrAccessibleWhenUnlockedThisDeviceOnly`).
 - **Remove Data When No Longer Needed**: Clear sensitive data, caches, and temporary files as soon as they are no longer needed (e.g. on logout or when leaving a sensitive flow) to limit the window during which they can be exposed.
 - **Use Platform Keystores**: Store cryptographic keys exclusively using the platform's hardware-backed keystore solution, such as the Android Keystore or the iOS Keychain.
 - **Encrypt Data at Rest**: For other files and preferences, use platform-provided features for encrypting data at rest or techniques implementing envelope encryption with Data Encryption Keys (DEK) and Key Encryption Keys (KEK) or equivalent methods. For example, on Android, use [`EncryptedFile`](https://developer.android.com/reference/androidx/security/crypto/EncryptedFile) or [`EncryptedSharedPreferences`](https://developer.android.com/reference/androidx/security/crypto/EncryptedSharedPreferences); on iOS, use [iOS Data Protection](https://developer.apple.com/documentation/uikit/protecting_the_user_s_privacy/encrypting_your_app_s_files).

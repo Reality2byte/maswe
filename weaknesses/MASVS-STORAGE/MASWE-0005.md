@@ -10,7 +10,7 @@ attacks: [MAS-ATTACK-0001, MAS-ATTACK-0005, MAS-ATTACK-0008]
 mappings:
   masvs-v1: [MSTG-STORAGE-1, MSTG-CRYPTO-1]
   masvs-v2: [MASVS-STORAGE-1, MASVS-CRYPTO-2]
-  cwe: [312, 318, 321, 322]
+  cwe: [312, 318, 321]
   android-risks:
   - hardcoded-cryptographic-secrets
   maswe-beta: [MASWE-0013, MASWE-0014, MASWE-0016]
@@ -32,12 +32,14 @@ Cryptographic keys are essential for securing sensitive data in mobile applicati
 
 - **Insecure Storage Locations**: Storing cryptographic keys in locations that are not designed for secure storage, such as regular configuration or user preferences files, application data directories, or other areas lacking encryption and access control mechanisms.
 - **Hardcoded Cryptographic Keys**: Including cryptographic keys directly in the application code or in resources shipped with the app package.
-- **Insecure Imported Keys**: Importing cryptographic keys from untrusted sources or without validating their integrity.
+- **Insecure Key Import**: Importing keys into the keystore in plaintext instead of using secure wrapped or encrypted import, exposing the key material outside the secure environment.
 
 ## Impact
 
 - **Compromise of Sensitive Data**: Attackers can decrypt protected information or forge encrypted data, resulting in unauthorized disclosure or modification of sensitive data.
 - **Authentication or Authorization Bypass**: Attackers can create valid cryptographic values or impersonate trusted parties, resulting in unauthorized access to protected accounts, data, or functionality.
+- **Bypass of Protection Mechanisms**: Attackers can forge licensing, entitlement, or integrity tokens signed with a compromised key to unlock restricted features or defeat client-side checks, resulting in circumvention of the protections the app enforces.
+- **Financial Loss**: Attackers can abuse a compromised key that authenticates to a paid or metered backend service to run up usage on the owner's account, resulting in unexpected charges to the app owner.
 
 ## Mitigations
 
