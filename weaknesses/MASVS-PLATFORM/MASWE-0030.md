@@ -19,7 +19,7 @@ status: new
 
 ## Overview
 
-This weakness occurs when sensitive data displayed by the app can be captured in screenshots or screen recordings, or persists in system-generated snapshots, without the app preventing or redacting it.
+This weakness occurs when sensitive data displayed by an app can be captured in screenshots or screen recordings, and the app does not prevent the capture or conceal or redact the data when such protection is warranted.
 
 Mobile platforms allow users, privileged apps, and external tools to capture screenshots or record the screen. In addition, when an app enters the background, the system may capture a snapshot of the app's current view for display in the app switcher. Sensitive content that remains visible without appropriate protection can be retained in these images or recordings.
 

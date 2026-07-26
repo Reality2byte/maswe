@@ -21,7 +21,7 @@ status: new
 
 This weakness occurs when an app includes more sensitive data (such as one-time codes, message contents, or account details) than necessary in a system notification.
 
-Notifications can be rendered on the lock screen, and therefore, anyone holding the device can read them without unlocking it. They also can be read by other apps that hold notification access (e.g. an Android [`NotificationListenerService`](https://developer.android.com/reference/android/service/notification/NotificationListenerService)). Any sensitive value included in a notification therefore leaves the app's control the moment it is posted.
+Notifications can be rendered on the lock screen, and therefore, anyone holding the device can read them without unlocking it. They also can be read by other apps that hold notification access, if the platform allows it (e.g. an Android [`NotificationListenerService`](https://developer.android.com/reference/android/service/notification/NotificationListenerService)). Any sensitive value included in a notification therefore leaves the app's control the moment it is posted.
 
 ## Modes of Introduction
 
