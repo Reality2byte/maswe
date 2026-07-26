@@ -10,8 +10,14 @@ attacks: [MAS-ATTACK-0009, MAS-ATTACK-0070]
 mappings:
   masvs-v1: [MSTG-RESILIENCE-3]
   masvs-v2: [MASVS-RESILIENCE-2, MASVS-CODE-4]
-  cwe: [693]
+  cwe: [471]
   maswe-beta: [MASWE-0105]
+refs:
+- https://developer.android.com/privacy-and-security/cryptography
+- https://developer.android.com/privacy-and-security/keystore
+- https://developer.apple.com/documentation/cryptokit/hmac
+- https://developer.apple.com/documentation/cryptokit/storing-cryptokit-keys-in-the-keychain
+- https://developer.apple.com/documentation/security/restricting-keychain-item-accessibility
 status: new
 ---
 
@@ -19,14 +25,14 @@ status: new
 
 This weakness occurs when an app does not verify that the resources it relies on have not been tampered with.
 
-Beyond executable code, apps depend on resources whose integrity matters: files in the app sandbox, configuration, downloaded content, and dynamically loaded resources, including data restored from backups. An attacker who can alter these resources can change the app's behavior or inject malicious content without touching its code, sidestepping code-focused integrity checks (see @MASWE-0062, @MASWE-0064).
+Beyond the app package, apps depend on non-executable resources whose integrity matters: files in the app sandbox, configuration, downloaded content, and data restored from backups. An attacker who can alter these resources can change the app's behavior or inject malicious content without modifying its packaged code, sidestepping package- and code-integrity checks (see @MASWE-0062, @MASWE-0064). Safe dynamic code loading is covered by @MASWE-0044.
 
 ## Modes of Introduction
 
-- **Sandbox Files Not Verified**: Trusting files in the app's data directory without integrity checks, although they can be modified on compromised devices or through backup manipulation.
+- **Sandbox Files Not Verified**: Trusting files in the app's data directory without verifying their integrity.
 - **Downloaded Resources Not Verified**: Using downloaded content or configuration without verifying its integrity and authenticity.
-- **Restored Data Trusted Implicitly**: Loading data restored from backups or transfers as if the app had written it moments ago.
-- **No Response to Tampering**: Having no defined behavior for when a resource fails validation.
+- **Restored Data Not Revalidated**: Using data restored from backups or device transfers without revalidating its integrity.
+- **Verification Result Ignored**: Continuing to use a resource after its integrity verification fails.
 
 ## Impact
 
@@ -35,7 +41,7 @@ Beyond executable code, apps depend on resources whose integrity matters: files 
 
 ## Mitigations
 
-- **Verify Resource Integrity**: Validate hashes or signatures of security-relevant files in the sandbox before trusting them, keeping reference values out of the attacker's reach (e.g. signed or server-held).
+- **Verify Resource Integrity**: Compare security-relevant files against a trusted expected hash, HMAC, or digital signature before use. Protect keys and reference values from modification, and treat local verification as a defense-in-depth control on compromised devices.
 - **Authenticate Downloaded Content**: Verify integrity and authenticity (e.g. a signature, see @MASWE-0015) of downloaded resources before use.
 - **Treat Restored Data as Untrusted**: Re-validate data that reappears via backup restore or device transfer before acting on it (see @MASWE-0048).
 - **Respond to Failed Checks**: Discard or re-fetch tampered resources, restrict functionality, or alert the backend when validation fails.

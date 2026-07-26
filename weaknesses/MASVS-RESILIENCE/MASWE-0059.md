@@ -10,26 +10,30 @@ attacks: [MAS-ATTACK-0065, MAS-ATTACK-0066, MAS-ATTACK-0068]
 mappings:
   masvs-v1: [MSTG-RESILIENCE-10]
   masvs-v2: [MASVS-RESILIENCE-1]
-  cwe: [693]
   maswe-beta: [MASWE-0100]
 refs:
 - https://developer.android.com/google/play/integrity
-- https://support.google.com/googleplay/android-developer/answer/11395166?hl=en
-- https://www.youtube.com/watch?v=TyxL78e5Bag
-- https://github.com/1nikolas/play-integrity-checker-app
-- https://developer.apple.com/videos/play/wwdc2021/10244/
-- https://developer.apple.com/documentation/devicecheck/preparing-to-use-the-app-attest-service
-- https://github.com/iansampson/AppAttest
-- https://github.com/firebase/firebase-ios-sdk/blob/v8.15.0/FirebaseAppCheck/Sources/AppAttestProvider/DCAppAttestService%2BFIRAppAttestService.h
-- https://blog.restlesslabs.com/john/ios-app-attest
+- https://developer.android.com/google/play/integrity/verdicts
+- https://developer.android.com/google/play/integrity/standard
+- https://developer.android.com/google/play/integrity/classic
+- https://developer.apple.com/documentation/devicecheck
+- https://developer.apple.com/documentation/devicecheck/accessing-and-modifying-per-device-data
+- https://developer.apple.com/documentation/devicecheck/establishing-your-app-s-integrity
+- https://developer.apple.com/documentation/devicecheck/validating-apps-that-connect-to-your-server
+- https://github.com/Oliver-Binns/app-attest
+- https://github.com/VisionR1/KeyAttestation
+- https://github.com/JingMatrix/TEESimulator
+- https://github.com/5ec1cff/TrickyStore
 status: new
 ---
 
 ## Overview
 
-This weakness occurs when an app does not implement device attestation, so its backend cannot distinguish requests from genuine, uncompromised devices from those coming from rooted, emulated, tampered, or automated environments.
+This weakness occurs when an app does not implement device attestation, so its backend cannot distinguish requests made from genuine, uncompromised devices from those coming from rooted, emulated, tampered, or automated environments.
 
-Device attestation uses platform services, such as the Android Play Integrity API or iOS DeviceCheck and App Attest, to give the backend cryptographic assurance about the integrity of the device and platform the app runs on. Without it, the backend must trust whatever the client claims. Attestation results must be verified server-side, including nonce-based freshness, to be meaningful; a verdict checked only on the client is just another bypassable local check.
+Device attestation uses platform services, such as the Android Play Integrity API or iOS DeviceCheck and App Attest, to provide the backend with cryptographically verifiable evidence about the device associated with a request. The evidence and security properties differ by platform and service. Without device attestation, the backend cannot independently verify device-origin claims made by the client. The backend must validate attestation evidence and apply the service-specific request-binding, freshness, and replay protections; client-side evaluation is another bypassable local check.
+
+On Android, Play Integrity can provide server-verifiable assurance that the device has not been compromised in ways covered by its device-integrity verdicts, such as an unlocked bootloader or an unrecognized operating-system image. On iOS, DeviceCheck and App Attest do not provide equivalent assurance about operating-system compromise. They can establish that evidence originates from genuine Apple hardware; App Attest also binds that evidence to a legitimate app instance, but neither service attests the integrity of iOS.
 
 ## Modes of Introduction
 
@@ -37,10 +41,12 @@ Device attestation uses platform services, such as the Android Play Integrity AP
 - **Client-Side-Only Verification**: Requesting attestation but evaluating the verdict in the app instead of verifying it server-side.
 - **Missing Freshness Guarantees**: Verifying attestation without a server-issued nonce or timeliness check, allowing verdicts to be replayed.
 - **Verdicts Not Enforced**: Collecting attestation results but not gating sensitive operations on them.
+- **Incomplete Evidence Validation**: Accepting device-attestation evidence without applying the service-specific checks for request binding, replay protection, and the device claims required by the backend's policy.
 
 ## Impact
 
 - **Compromise of System Integrity and Business Operations**: Attackers can drive the backend with automated or tampered clients, resulting in fraud, scraping, fake accounts, and abuse of the app owner's services.
+- **Bypass of Protection Mechanisms**: Attackers can leverage tampered running environments to bypass the app's security checks or feature restrictions, resulting in unauthorized access to protected app functionality.
 - **Financial Loss**: Attackers can abuse promotions, premium features, or transaction flows from unattested environments, resulting in direct monetary loss to the app owner.
 
 ## Mitigations

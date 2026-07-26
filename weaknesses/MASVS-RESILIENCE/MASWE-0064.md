@@ -1,8 +1,8 @@
 ---
-title: Code Integrity Not Verified
+title: Runtime Code Integrity Not Verified
 id: MASWE-0064
 alias: runtime-code-integrity
-requirement: "The app verifies the integrity of its code."
+requirement: "The app detects unauthorized changes to its code and execution flow at runtime."
 platform: [android, ios]
 profiles: [R]
 threat: MAS-THREAT-0064
@@ -10,21 +10,22 @@ attacks: [MAS-ATTACK-0002, MAS-ATTACK-0003]
 mappings:
   masvs-v1: [MSTG-RESILIENCE-6]
   masvs-v2: [MASVS-RESILIENCE-2]
-  cwe: [693]
   maswe-beta: [MASWE-0107]
 status: new
 ---
 
 ## Overview
 
-This weakness occurs when an app does not verify the integrity of its own code at runtime, allowing in-memory patching, code injection, and hooking to go undetected.
+This weakness occurs when an app is running in an unsafe environment (rooted or jailbroken device) and does not verify the integrity of its own code at runtime, allowing in-memory patching, code injection, and hooking to go undetected.
 
-Even a correctly signed app can be modified while it runs: attackers can patch instructions in memory, inject libraries into the process, or hook functions to change their behavior. Runtime code integrity verification, such as checking loaded code segments, detecting injected libraries, and spotting patched function prologues, complements static app attestation (see @MASWE-0062) by covering tampering that happens after the app has launched.
+Even a correctly signed app can be modified while it runs: attackers can patch instructions in memory, inject libraries into the process, or hook functions to change their behavior. Runtime code integrity verification, such as checking loaded code segments, detecting injected libraries, and spotting patched function prologues, complements packaged-app integrity verification (see @MASWE-0062) by covering tampering that happens after the app has launched.
+
+Unlike dynamic-analysis tool detection (see @MASWE-0061), runtime integrity verification detects unauthorized changes to the app's memory and execution state without relying on tool-specific artifacts.
 
 ## Modes of Introduction
 
 - **No Runtime Code Checks**: Not verifying the integrity of loaded code segments or executable memory at runtime.
-- **Injected Libraries Not Detected**: Not inspecting the process for libraries that are not part of the app or platform.
+- **Injected Libraries or Executable Mappings Not Detected**: Not inspecting the process for executable memory mappings or libraries that are unexpected for the app or platform.
 - **Hooked Functions Not Detected**: Not checking security-critical functions for patched prologues or redirected implementations.
 - **No Response to Tampering**: Detecting modifications but not reacting to protect sensitive operations.
 
