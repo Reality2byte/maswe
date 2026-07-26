@@ -9,7 +9,6 @@ threat: MAS-THREAT-0045
 attacks: [MAS-ATTACK-0001, MAS-ATTACK-0059]
 mappings:
   masvs-v2: [MASVS-CODE-3, MASVS-CODE-4]
-  cwe: [693]
   android-risks:
   - use-of-native-code
   maswe-beta: [MASWE-0116]
@@ -24,7 +23,7 @@ status: new
 
 This weakness occurs when an app's native code is built without the exploit-mitigation features that compilers and toolchains provide.
 
-Mitigations such as stack canaries (stack-smashing protection), Address Space Layout Randomization via Position-Independent Executables (PIE/PIC), non-executable memory (NX/DEP), fortified (bounds-checked) libc functions, and Automatic Reference Counting on iOS do not remove memory-corruption bugs, but they substantially raise the effort required to exploit them. Binaries built without these features make any memory-corruption vulnerability, in the app's own code or its native dependencies, far easier to turn into code execution.
+Mitigations such as stack canaries (stack-smashing protection), Address Space Layout Randomization (ASLR) via Position-Independent Executables (PIE/PIC), non-executable memory (NX/DEP), fortified (bounds-checked) libc functions, and Automatic Reference Counting (ARC) on iOS do not remove memory-corruption bugs, but they substantially raise the effort required to exploit them. Binaries built without these features make any memory-corruption vulnerability, in the app's own code or its native dependencies, far easier to turn into code execution.
 
 ## Modes of Introduction
 
@@ -42,4 +41,3 @@ Mitigations such as stack canaries (stack-smashing protection), Address Space La
 
 - **Enable Compiler Mitigations**: Build all native code and dependencies with stack canaries, PIE/PIC, non-executable memory, and fortified functions enabled, and verify the flags in release binaries rather than assuming toolchain defaults.
 - **Keep Memory-Safety Features On**: Use Automatic Reference Counting on iOS and prefer memory-safe languages for new code where feasible.
-- **Cover Third-Party Native Libraries**: Verify that prebuilt native dependencies were also compiled with these mitigations, since a single unprotected library weakens the whole process.
