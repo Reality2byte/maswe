@@ -31,6 +31,7 @@ App virtualization and "dual-app" container frameworks run an app inside another
 - **Compromise of Sensitive Data**: Attackers can intercept the virtualized app's files, credentials, and API calls from the hosting app, resulting in exposure of user data without requiring root access.
 - **Bypass of Protection Mechanisms**: Attackers can instrument the app inside the container to defeat its client-side controls, resulting in the circumvention of its defenses on unrooted devices.
 - **Compromise of System Integrity and Business Operations**: Attackers can run multiple cloned instances to abuse promotions or multi-account limits, resulting in fraud against the app owner.
+- **Lack of Server-Verified Platform Attestation**: Failing to validate the app's package identity, signing certificate via hardware-backed platform attestation (e.g., Play Integrity or App Attest) on a backend server, allowing the app to execute unchecked inside virtual containers or cloned spaces.
 
 ## Mitigations
 
@@ -38,3 +39,4 @@ App virtualization and "dual-app" container frameworks run an app inside another
 - **Check for Known Frameworks**: Detect artifacts of known virtualization and cloning frameworks and their hosting packages.
 - **Respond to Detection**: Restrict sensitive functionality, notify the backend, or terminate when a virtualized environment is detected, according to the app's risk profile.
 - **Assess Effectiveness**: Test the detection against current virtualization frameworks and update it as they evolve.
+- **Attest Application Integrity**: Use platform attestation frameworks such as Play Integrity on Android or App Attest on iOS (see @MASWE-0059) with backend nonce verification to validate the official package name, signing certificate, and application integrity.
