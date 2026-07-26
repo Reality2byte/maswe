@@ -1,5 +1,5 @@
 ---
-title: Sensitive Data Leaked via Notifications
+title: Unnecessary Exposure of Sensitive Data via Notifications
 id: MASWE-0029
 alias: data-leak-notifications
 requirement: "The app does not unnecessarily expose sensitive data through system notifications."
@@ -19,22 +19,21 @@ status: new
 
 ## Overview
 
-This weakness occurs when an app places sensitive data, such as one-time codes, message contents, or account details, into system notifications without restricting where and to whom they are visible.
+This weakness occurs when an app includes more sensitive data (such as one-time codes, message contents, or account details) than necessary in a system notification.
 
-Notifications are rendered on the lock screen, where anyone holding the device can read them without unlocking it, and they can be read by other apps that hold notification access (e.g. an Android `NotificationListenerService`). Any sensitive value included in a notification therefore leaves the app's control the moment it is posted.
+Notifications can be rendered on the lock screen, and therefore, anyone holding the device can read them without unlocking it. They also can be read by other apps that hold notification access (e.g. an Android [`NotificationListenerService`](https://developer.android.com/reference/android/service/notification/NotificationListenerService)). Any sensitive value included in a notification therefore leaves the app's control the moment it is posted.
 
 ## Modes of Introduction
 
-- **Sensitive Content in Notifications**: Including one-time codes, message contents, financial details, or other sensitive values directly in notification titles or bodies.
+- **Sensitive Content in Notifications**: Including one-time codes, message contents, financial details, or other sensitive values directly in notification titles or bodies when a generic notification would suffice.
 - **No Lock-Screen Redaction**: Not configuring notification visibility so that sensitive content is redacted or hidden on the lock screen.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Attackers can read message contents or account details from notifications, resulting in unauthorized disclosure of user data.
-- **Authentication or Authorization Bypass**: Attackers can capture one-time codes delivered via notifications, resulting in the defeat of SMS- or push-based authentication factors and unauthorized account access.
+- **Compromise of Sensitive Data**: Unauthorized observers or, where applicable, apps with notification-listener access may obtain personal, financial, authentication, or account information contained in notifications.
+- **Authentication or Authorization Bypass**: Attackers may use exposed credentials or still-valid one-time codes to access an account, perform unauthorized transactions, or carry out other sensitive actions.
 
 ## Mitigations
 
-- **Keep Sensitive Data Out of Notifications**: Use notifications to signal that something happened and reveal the sensitive details only inside the app after unlocking it.
-- **Redact Notifications on the Lock Screen**: Configure notification visibility (e.g. private visibility with a public redacted version on Android) so sensitive content is hidden until the device is unlocked.
-- **Review Notification Content Regularly**: Audit which notifications the app posts and ensure new features do not introduce sensitive values into them.
+- **Minimize Notification Content**: Use notifications only to indicate that an event occurred, and retrieve sensitive details inside the app after appropriate authentication and authorization. For iOS remote notifications, follow Apple's [remote-notification payload guidance](https://developer.apple.com/documentation/usernotifications/generating-a-remote-notification) and keep user-visible alert content non-sensitive by default.
+- **Configure Android Lock-Screen Visibility**: Use [`NotificationCompat.Builder.setVisibility()` and `setPublicVersion()`](https://developer.android.com/develop/ui/views/notifications/build-notification#lockscreenNotification) to modify the presentation of sensitive notifications. Use `VISIBILITY_PRIVATE` together with a generic public version when a redacted notification may be shown, and use `VISIBILITY_SECRET` when the notification should not appear on a secure lock screen. Do not place sensitive data in the title because private notifications may still display basic information including the title.
