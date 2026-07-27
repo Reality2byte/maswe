@@ -35,7 +35,7 @@ Obfuscation does not prevent reverse engineering, but it raises its cost. Identi
 
 ## Mitigations
 
-- **Enable Obfuscation for Release Builds**: Apply the platform's minification and obfuscation tooling (e.g. R8) or established commercial obfuscators to all release builds.
+- **Enable Obfuscation for Release Builds**: Apply the platform's minification and obfuscation tooling or established commercial obfuscators to all release builds.
 - **Harden Security-Relevant Code**: Apply stronger transformations (opaque predicates, instruction substitution, control-flow obfuscation, method inlining) to the code implementing security checks and proprietary logic.
 - **Assess Obfuscation Effectiveness**: Regularly attempt to reverse engineer the release build with state-of-the-art decompilers and deobfuscators to validate that the protection meets its goal.
 - **Combine with Runtime Protections**: Pair obfuscation with runtime integrity and anti-instrumentation checks (see @MASWE-0053, @MASWE-0061, @MASWE-0064), since obfuscation alone only delays attackers.
