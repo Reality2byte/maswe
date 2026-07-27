@@ -21,7 +21,7 @@ status: new
 
 This weakness occurs when an app's code, particularly its security-relevant logic, ships without effective obfuscation, facilitating reverse engineering and static analysis.
 
-Obfuscation does not prevent reverse engineering, but it raises its cost. Effective schemes go beyond default identifier renaming and include techniques such as control-flow transformations, opaque predicates, instruction substitution, instruction block chopping, and method inlining, as well as hindering decompilers from producing usable output. Without them, attackers can quickly understand and locate the app's defenses and proprietary logic.
+Obfuscation does not prevent reverse engineering, but it raises its cost. Identifier renaming or string encryption are easier to implement and are considered common obfuscation techniques. However, there are other obfuscation techniques, like control-flow transformations, opaque predicates, instruction substitution, instruction block chopping, and method inlining, as well as hindering decompilers from producing usable output. Most of these techniques can be combined together.
 
 ## Modes of Introduction
 
