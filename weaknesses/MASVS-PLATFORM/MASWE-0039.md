@@ -41,3 +41,4 @@ Accessibility services (e.g. Android's `AccessibilityService`) can observe scree
 - **Use Secure Input Fields**: Mark secret fields as password/secure entry so platforms mask their content from accessibility reading.
 - **Add Friction to High-Risk Flows**: Require verification that UI automation cannot satisfy (e.g. biometric-bound confirmation, see @MASWE-0021) for the most sensitive actions.
 - **Preserve Legitimate Accessibility**: Minimize only the sensitive values exposed; never degrade the app's overall accessibility for assistive-technology users.
+- **Use Custom Passcode Inputs**: Replace standard system keyboards with an in-app custom keypad for sensitive entry fields, preventing accessibility services from capturing or announcing typed credentials.
