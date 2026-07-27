@@ -29,7 +29,7 @@ Even when the connection uses HTTPS, an attacker who controls the device can byp
 ## Impact
 
 - **Compromise of System Integrity and Business Operations**: Attackers can map the app's API and craft or tamper with requests, resulting in fraud, scraping, and abuse of backend services at the app owner's expense.
-- **Bypass of Protection Mechanisms**: Attackers can modify payloads that carry security-relevant state, resulting in the circumvention of client-reported controls and business logic.
+- **Bypass of Protection Mechanisms**: Attackers can easily modify payloads that carry security-relevant state, without having to reverse-engineer the application to first circumvent the additional encryption.
 
 ## Mitigations
 

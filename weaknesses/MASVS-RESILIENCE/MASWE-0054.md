@@ -22,14 +22,14 @@ status: new
 
 This weakness occurs when an app ships to production containing developer debug artifacts, such as verbose logging, testing utilities, debugging symbols, or leftover debug and test code.
 
-Such artifacts help adversaries understand the app's behavior and internals, may include sensitive implementation details, and, most critically, may include backdoors, such as hidden switches or an insecure trust manager, that can disable security controls like TLS certificate validation. Note the distinction from @MASWE-0006: that weakness covers developer leftover artifacts that leak confidentiality (staging URLs, developer identities, source files), while this one covers debug artifacts that weaken the app's resilience.
+Such artifacts help adversaries understand the app's behavior and internals, may include sensitive implementation details, and, most critically, may include backdoors, such as hidden switches enabling debug menus or an insecure trust manager, that can disable security controls like TLS certificate validation. Note the distinction from @MASWE-0006: that weakness covers developer leftover artifacts that leak confidentiality (staging URLs, developer identities, source files), while this one covers debug artifacts that weaken the app's resilience.
 
 ## Modes of Introduction
 
 - **Verbose Logging and Debug Flows**: Leaving verbose or debug-level logging and diagnostic code paths active in production builds.
 - **Testing Utilities Enabled**: Shipping with development-time utilities enabled, such as StrictMode on Android.
 - **Debugging Symbols Not Stripped**: Releasing binaries with debugging symbols that map the code for reverse engineers.
-- **Backdoors and Hidden Switches**: Leaving debug or test code that can disable security controls, e.g. an insecure trust manager or a hidden configuration flag that turns off TLS verification.
+- **Backdoors or Hidden Switches and Debug Menus**: Leaving debug or test code that can disable security controls, e.g. an insecure trust manager or a hidden configuration flag that turns off TLS verification.
 
 ## Impact
 

@@ -28,20 +28,20 @@ This weakness occurs when the application has debug mechanisms enabled in produc
 
 Mobile apps typically include configuration flags and mechanisms that enable debugging. While these are essential during development, leaving them enabled in production makes the app inspectable and manipulable.
 
-Beyond the application-level debuggable flag, this weakness also covers WebView content debugging, which lets a remote inspector attach to the app's web content (e.g. Android's `WebView.setWebContentsDebuggingEnabled(true)` or iOS's `WKWebView.isInspectable`). Like the debuggable flag, this must be disabled in production builds.
+Beyond the application-level debuggable flag, this weakness also covers web-content debugging, which lets a remote inspector attach to the app's web content (e.g. Android's [`WebView.setWebContentsDebuggingEnabled(true)`](https://developer.android.com/reference/android/webkit/WebView#setWebContentsDebuggingEnabled(boolean)) or iOS's [`WKWebView.isInspectable`](https://developer.apple.com/documentation/webkit/wkwebview/isinspectable)). Like the debuggable flag, this must be disabled in production builds.
 
 ## Modes of Introduction
 
 - **Misconfigured Build Settings**: Accidentally leaving the app in a debuggable state through improper selection of build variants, errors in CI/CD configurations, or mistakenly applying debug settings to production environments.
-- **WebView Content Debugging Left Enabled**: Leaving WebView content debugging enabled in production (e.g. `setWebContentsDebuggingEnabled(true)` on Android or `isInspectable = true` on iOS).
+- **WebView or JavaScript Debugging Enabled**: Leaving WebView content debugging enabled in production (e.g. `setWebContentsDebuggingEnabled(true)` on Android or `isInspectable = true` on iOS).
 
 ## Impact
 
 - **Compromise of Sensitive Data**: Attackers can read the app's memory and logs to obtain encryption keys, API keys, user credentials, or tokens that are never written to the app's code or disk, resulting in unauthorized disclosure of secrets and user data.
 - **Authentication or Authorization Bypass**: Attackers can manipulate the app's execution flow to skip authentication and authorization checks, resulting in unauthorized access to protected functionality.
-- **Execution of Unauthorized Code**: Attackers can inject and execute arbitrary code within the app's context, e.g. by injecting reverse engineering tools like Frida, resulting in further exploitation of the app or the device.
+- **Facilitated Reverse Engineering and Instrumentation**: Debug access reduces the effort required to observe and manipulate the application's behavior and may facilitate further dynamic analysis or instrumentation.
 
 ## Mitigations
 
-- **Disable the Debuggable Flag in Release Builds**: Ensure that the debuggable flag in the app's configuration file is not enabled for production builds, e.g. by using build variants or flavors to separate debug and release configurations so the flag is enabled only for debug builds.
-- **Disable WebView Content Debugging in Release Builds**: Do not call `setWebContentsDebuggingEnabled(true)` on Android and keep `WKWebView.isInspectable` set to `false` on iOS in production builds.
+- **Disable Application Debugging in Release Builds**: Ensure that the debuggable flag in the app's configuration file is not enabled for production builds. For example, set [`isDebuggable = false` or `debuggable false`](https://developer.android.com/studio/publish/preparing) in Android or ensure that the `get-task-allow` entitlement is absent or set to `false` in iOS applications.
+- **Disable WebView and JavaScript Content Debugging in Release Builds**: Ensure that the WebViews and JavaScript contexts in the application are not debuggable. For example, do not call `setWebContentsDebuggingEnabled(true)` on Android and keep `WKWebView.isInspectable` set to `false` on iOS.
