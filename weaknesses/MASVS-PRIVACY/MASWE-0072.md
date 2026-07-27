@@ -23,6 +23,8 @@ refs:
 - https://arxiv.org/pdf/2203.10583
 - https://ieeexplore.ieee.org/document/9001128
 - https://www.enisa.europa.eu/sites/default/files/publications/WP2017%20O-2-2-4%20GDPR%20Mobile.pdf
+- https://developer.android.com/privacy-and-security/risks/ai-risks/excessive-agency
+- https://developer.android.com/privacy-and-security/risks/ai-risks/sensitive-information-disclosure
 status: new
 ---
 
@@ -34,25 +36,27 @@ Permissions control access to sensitive device features such as the camera, micr
 
 Developers face the challenge of balancing functionality with privacy: while some permissions are essential for core features (e.g., a camera app requiring camera access), excessive permissions enable unnecessary data collection. From the user's perspective, privacy concerns may lead to reluctance in granting permissions, forcing them to choose between privacy and app functionality, while other users may grant permissions without fully understanding the implications. Pre-installed apps aggravate the problem, as they frequently come with excessive permissions that are granted by default and that users cannot control or revoke.
 
-Third-party libraries (SDKs) further complicate permission management by inheriting app permissions and introducing privacy and security risks that are difficult to audit and control. Mobile permission models often fail to distinguish between permissions granted to an app and those assigned to third-party components, a challenge highlighted in the [IEEE research paper "Engineering Privacy in Smartphone Apps"](https://ieeexplore.ieee.org/document/9001128) (Section IV, _"Third-party content"_). Furthermore, third-party services behind these SDKs may continue accessing data collected over the network even after permissions are revoked or the app is deleted.
+Third-party libraries (SDKs) further complicate permission management by requiring permissions that the app itself does not need and by using the app's granted permissions to collect data. Similarly, AI-enabled features can be given permission-backed tools that allow them to access sensitive data or act on the user's behalf beyond what the feature requires. Mobile permission models often fail to distinguish between permissions granted to an app and those assigned to third-party components, a challenge highlighted in the [IEEE research paper "Engineering Privacy in Smartphone Apps"](https://ieeexplore.ieee.org/document/9001128) (Section IV, _"Third-party content"_). Furthermore, third-party services behind these SDKs may continue accessing data collected over the network even after permissions are revoked or the app is deleted.
 
 ## Modes of Introduction
 
 - **Requesting Excessive Permissions**: Requesting more permissions than necessary for the app's core functionality.
-- **Lack of Use of Privacy-Friendly Alternatives**: Failing to use privacy-friendly alternatives that are less intrusive than permissions. For example, using coarse location instead of fine location, or using an image picker instead of requesting access to the camera and photo gallery.
-- **Lack of Proactive Permission Revocation**: Not relinquishing or revoking permissions that are no longer necessary, resulting in unnecessary data access over time.
+- **Lack of Use of Privacy-Friendly Alternatives**: Failing to use less intrusive alternatives, such as requesting fine location when coarse location would suffice or requesting camera and photo-library access instead of using an image picker.
+- **Retaining Unneeded Permissions**: Not revoking permissions that are no longer necessary.
 - **Inadequate Permission Explanations**: Failing to provide clear explanations for why each permission is required.
+- **Third-Party Permission Requirements**: Including SDKs that require permissions beyond the app's functional needs or use granted permissions to collect and analyze data.
+- **Excessive AI Agent Permissions**: Giving an AI-enabled feature permission-backed tools or data access beyond what it requires for its intended task.
 
 ## Impact
 
-- **Violation of User Privacy**: Apps and embedded components can unnecessarily access personal data such as location, contacts, or media, resulting in misuse, surveillance, or profiling of the user.
-- **Compromise of Sensitive Data**: Third-party services can collect and retain data obtained through inherited permissions; once that data leaves the app its security can no longer be guaranteed, resulting in an increased risk of large-scale exposure via data breaches.
+- **Violation of User Privacy**: Apps and embedded components can use unnecessarily granted access to collect location, contacts, or media, resulting in tracking, surveillance, or profiling of the user.
+- **Compromise of Sensitive Data**: Apps and embedded components can retain sensitive data collected through unnecessary permissions, resulting in broader exposure of that data when the app or a third-party service suffers a data breach.
 - **Loss of User Trust**: Users can perceive permission requests as unjustified, resulting in refused permissions, negative reviews, lower user engagement, and reduced retention for the app owner.
 - **Legal and Regulatory Non-Compliance**: Requesting or retaining unnecessary permissions can violate data minimization requirements in regulations like GDPR or CCPA, resulting in fines, legal action, or removal from app stores for the app owner.
 
 ## Mitigations
 
-- **Limit Permissions to Essential Needs**: Ensure the app only requests permissions necessary for core functionality, avoiding the collection of unnecessary data and adhering to the principle of data minimization.
+- **Limit Permissions to Essential Needs**: Ensure the app and any AI-enabled features only request permissions necessary for core functionality, avoiding the collection of unnecessary data and adhering to the principle of data minimization.
 - **Prefer Privacy-Friendly Alternatives**: Use privacy-friendly alternatives to permissions that are less intrusive and provide users with more control over their data. For example, use coarse location instead of fine location, or use an image picker instead of requesting access to the camera and photo gallery.
 - **Enable Proactive Permission Revocation**: Automatically relinquish permissions that are no longer necessary to minimize unnecessary data access over time, and ensure that users can manually revoke permissions at any time through a clear and accessible interface.
 - **Implement Just-in-Time Permission Requests**: Request permissions only when they are needed, providing clear explanations for why each permission is required. This approach helps build user trust and ensures users understand the implications of granting access to their data.
