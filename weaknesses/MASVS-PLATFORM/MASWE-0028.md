@@ -22,7 +22,7 @@ status: new
 
 This weakness occurs when an app exposes sensitive data beyond what is required for the user's current task, or exposes required data without protections proportionate to its sensitivity through its user interface.
 
-Typical exposure paths include displaying secrets or complete identifiers in cleartext when masking or a partial representation would suffice, using unprotected input fields for passwords or PINs, permitting unnecessary copying to the system clipboard, and enabling keyboard or IME (Input Method Editor) features that may retain or later suggest sensitive input.
+The typical exposure path involves displaying secrets or sensitive information in cleartext when masking or a partial representation would suffice, (e.g., using unprotected input fields for passwords or PINs).
 
 ## Modes of Introduction
 
