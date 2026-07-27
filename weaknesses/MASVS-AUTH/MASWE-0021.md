@@ -44,7 +44,7 @@ Local authentication is only as strong as what it unlocks. When the app merely r
 
 ## Mitigations
 
-- **Bind Authentication to Keystore Keys**: Gate protected operations on keys stored in the platform keystore that require user authentication, using `CryptoObject` on Android and Keychain access control (e.g. `.biometryCurrentSet`, `.userPresence`) on iOS, so success cannot be simulated in software.
+- **Bind Authentication to Keystore Keys**: Protect sensitive actions by requiring a cryptographic operation (such as decryption or signing) using keys stored in the platform keystore. Use mechanisms like `CryptoObject` on Android or Keychain access control on iOS (such as `.biometryCurrentSet`) so attackers cannot bypass authentication by hooking software callbacks.
 - **Use Strict Access Control Flags**: Choose Keychain and keystore parameters that enforce the intended factor and invalidate on enrollment changes (see @MASWE-0023), avoiding weak flags and long authentication validity windows.
 - **Enforce Authentication Server-Side**: For connected apps, gate server resources on server-verified evidence of authentication (e.g. a signed challenge produced with an authentication-bound key), never on a client-side boolean.
 - **Bind Custom Credentials to the Keystore**: Implement custom PINs or passwords via keystore- or Keychain-backed mechanisms (e.g. `applicationPassword`) instead of comparing values in app code.
