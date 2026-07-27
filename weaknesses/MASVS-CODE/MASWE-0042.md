@@ -2,7 +2,7 @@
 title: Running on a Recent Platform Version Not Ensured
 id: MASWE-0042
 alias: run-on-recent-platform-version
-requirement: "The app terminates if an unsupported OS version is detected."
+requirement: "The app detects if it is running on an unsupported OS version and reacts appropriately."
 platform: [android, ios]
 profiles: [L2]
 threat: MAS-THREAT-0042

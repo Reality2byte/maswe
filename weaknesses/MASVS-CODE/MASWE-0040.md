@@ -2,7 +2,7 @@
 title: Enforced Updating Not Implemented
 id: MASWE-0040
 alias: enforced-updating
-requirement: "The app terminates if an outdated app version is detected."
+requirement: "The app detects if it must be updated and reacts appropriately."
 platform: [android, ios]
 profiles: [L2]
 threat: MAS-THREAT-0040
