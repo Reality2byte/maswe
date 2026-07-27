@@ -18,14 +18,15 @@ refs:
 - https://developer.android.com/guide/topics/manifest/application-element
 - https://developer.android.com/reference/android/webkit/WebView#setWebContentsDebuggingEnabled(boolean)
 - https://developer.apple.com/documentation/webkit/wkwebview/4111163-isinspectable
+- https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.security.cs.debugger
 status: new
 ---
 
 ## Overview
 
-This weakness occurs when debug mechanisms, such as the platform's debuggable flag or WebView content debugging, remain enabled in production builds.
+This weakness occurs when the application has debug mechanisms enabled in production builds, allowing the usage of platform debuggers, or exposes embedded web or JavaScript content to developer inspection tools.
 
-Mobile apps typically include configuration flags and mechanisms that enable debugging. While these are essential during development, leaving them enabled in production makes the app inspectable and manipulable, even on non-rooted or non-jailbroken devices, and may expose sensitive information through verbose logging or developer tools that would otherwise be inaccessible.
+Mobile apps typically include configuration flags and mechanisms that enable debugging. While these are essential during development, leaving them enabled in production makes the app inspectable and manipulable.
 
 Beyond the application-level debuggable flag, this weakness also covers WebView content debugging, which lets a remote inspector attach to the app's web content (e.g. Android's `WebView.setWebContentsDebuggingEnabled(true)` or iOS's `WKWebView.isInspectable`). Like the debuggable flag, this must be disabled in production builds.
 
