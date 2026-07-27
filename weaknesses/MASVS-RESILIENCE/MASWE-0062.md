@@ -6,7 +6,7 @@ requirement: "The app implements app attestation."
 platform: [android, ios]
 profiles: [R]
 threat: MAS-THREAT-0062
-attacks: [MAS-ATTACK-0040, MAS-ATTACK-0069]
+attacks: [MAS-ATTACK-0040, MAS-ATTACK-0068, MAS-ATTACK-0069]
 mappings:
   masvs-v1: [MSTG-CODE-1]
   masvs-v2: [MASVS-RESILIENCE-2]
