@@ -2,7 +2,7 @@
 title: Root/Jailbreak Detection Not Implemented
 id: MASWE-0056
 alias: root-jailbreak-detection
-requirement: "The app terminates if a rooted/jailbroken device is detected."
+requirement: "The app detects if it runs on a rooted/jailbroken device and reacts appropriately."
 platform: [android, ios]
 profiles: [R]
 threat: MAS-THREAT-0056
