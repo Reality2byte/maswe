@@ -26,7 +26,7 @@ Obfuscation does not prevent reverse engineering, but it raises its cost. Identi
 ## Modes of Introduction
 
 - **No Obfuscation Applied**: Shipping release builds without any minification or obfuscation, leaving class, method, and symbol names intact.
-- **Security-Relevant Logic Left Readable**: Applying only default renaming while leaving security checks, licensing logic, and proprietary algorithms trivially analyzable, without stronger techniques such as opaque predicates, instruction substitution, or control-flow transformations.
+- **Security-Relevant Logic Left Readable**: Not applying enough obfuscation to security-relevant code, leaving code sections like security checks, licensing logic, and proprietary algorithms trivially analyzable.
 
 ## Impact
 
