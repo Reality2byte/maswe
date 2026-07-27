@@ -28,6 +28,7 @@ Accessibility services (e.g. Android's `AccessibilityService`) can observe scree
 - **Secrets in Accessibility Metadata**: Exposing sensitive values through accessibility node text, labels, or hints beyond what assistive technology needs.
 - **Sensitive Fields Not Using Secure Input**: Presenting secret input in fields that are not marked as password/secure entry, so their content is readable through accessibility APIs.
 - **High-Risk Flows Fully Automatable**: Designing sensitive flows (e.g. payments) so that they can be completed entirely through programmatic UI interaction without any additional verification.
+- **System Keyboards Exposing Sensitive Input**: Relying on standard system keyboards for passcode or PIN entry, which allows keyboard events and typed credentials to be captured by accessibility services.
 
 ## Impact
 
@@ -41,4 +42,5 @@ Accessibility services (e.g. Android's `AccessibilityService`) can observe scree
 - **Use Secure Input Fields**: Mark secret fields as password/secure entry so platforms mask their content from accessibility reading.
 - **Add Friction to High-Risk Flows**: Require verification that UI automation cannot satisfy (e.g. biometric-bound confirmation, see @MASWE-0021) for the most sensitive actions.
 - **Preserve Legitimate Accessibility**: Minimize only the sensitive values exposed; never degrade the app's overall accessibility for assistive-technology users.
+- **Use Custom Passcode Inputs**: Replace standard system keyboards with an in-app custom keypad for sensitive entry fields, preventing accessibility services from capturing or announcing typed credentials.
 - **Use Custom Passcode Inputs**: Replace standard system keyboards with an in-app custom keypad for sensitive entry fields, preventing accessibility services from capturing or announcing typed credentials.
