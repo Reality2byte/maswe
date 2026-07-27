@@ -6,7 +6,7 @@ requirement: "The app requests user consent prior to any data processing."
 platform: [android, ios]
 profiles: [P]
 threat: MAS-THREAT-0071
-attacks: [MAS-ATTACK-0085, MAS-ATTACK-0086, MAS-ATTACK-0087]
+attacks: [MAS-ATTACK-0085, MAS-ATTACK-0086]
 mappings:
   masvs-v2: [MASVS-PRIVACY-4]
   cwe: [200, 285, 358, 359]
@@ -30,7 +30,6 @@ In addition, users must be able to easily withdraw their consent at any time and
 
 - **Failure to Prompt for Consent Changes**: Failing to prompt the user for consent when data collection practices change or when additional data is collected beyond what was originally specified.
 - **Ambiguous Consent Mechanisms**: Bundling consent with terms of service, often covering future use cases without notifying the user again, or implying consent when the user doesn't explicitly deny access.
-- **Lack of User Awareness When Exporting Data**: Designing sharing or exporting flows that do not make the user aware of the privacy consequences of their action. For example, when a user "Saves" a picture, not warning them that the data will be exported to public/shared storage, or when using the share sheet, not being explicit about which items are shared.
 
 ## Impact
 
@@ -43,4 +42,3 @@ In addition, users must be able to easily withdraw their consent at any time and
 - **Prompt for Consent on Changes**: Establish mechanisms for prompting users for consent if data collection practices change or if additional data is being collected, ensuring transparency when app functionality evolves.
 - **Obtain Clear and Explicit User Consent for Immediate Actions**: Before accessing sensitive resources like sensors or local data (e.g., camera, location), always request explicit permission from the user. Clearly explain why the permission is needed, using mechanisms like [purpose strings](https://developer.apple.com/documentation/uikit/protecting_the_user_s_privacy/requesting_access_to_protected_resources) on iOS or [similar prompts](https://developer.android.com/training/permissions/requesting#explain) on Android, to ensure users understand the immediate use of their data.
 - **Ensure Informed and Transparent Consent**: Provide users with clear, specific information about what data will be collected, how it will be used, and the potential impact. Consent should not be hidden in terms of service or bundled for future uses. Users must confirm consent separately for each purpose, especially when permissions extend beyond the initial request.
-- **Make Users Aware When Exporting or Sharing Data**: When the user shares or exports data (e.g. saving media to shared storage or using the system share sheet), surface the privacy consequences so they can make an informed choice, and default share flows to the least-exposing option.
