@@ -1,5 +1,5 @@
 ---
-title: Lack of Auto-fill Support for Authenticators
+title: Lack of Auto-fill Support for Credential Providers
 id: MASWE-0024
 alias: autofill-authenticators
 requirement: "The app enables auto-fill support for authenticators."
@@ -31,8 +31,8 @@ Platforms provide secure flows for supplying credentials, one-time codes, and pa
 
 - **No Auto-Fill Support in Credential Fields**: Building login fields that are not recognized by or are incompatible with the platform's auto-fill framework and password managers.
 - **No One-Time-Code Auto-Fill**: Requiring users to manually read and copy one-time codes (e.g. from SMS) instead of supporting the platform's code auto-fill.
-- **Missing Website Association**: Not associating the app with its domain, preventing secure credential sharing between the app and its website counterpart.
-- **Embedded Third-Party Login Instead of System Flows**: Handling third-party authentication in embedded views instead of system-provided authentication sessions (e.g. `ASWebAuthenticationSession`).
+- **Missing Website Association**: Not associating the app with its domain, preventing frictionless secure credential sharing between the app and its website counterpart.
+- **Embedded Custom Login Instead of System Flows**: Handling custom authentication, such as using third-party logins in embedded views, instead of system-provided authentication sessions (e.g. `ASWebAuthenticationSession`).
 - **No Support for Passwordless Authentication**: Not offering passkeys or other multi-device FIDO/WebAuthn credentials where they could replace passwords.
 
 ## Impact
@@ -46,4 +46,4 @@ Platforms provide secure flows for supplying credentials, one-time codes, and pa
 - **Support One-Time-Code Auto-Fill**: Use the platform mechanisms that deliver one-time codes directly into the app, removing the need for manual copying.
 - **Associate the App with Its Domain**: Configure website association (e.g. iOS Password AutoFill with associated domains, shared web credentials) so credentials flow securely between the app and its website.
 - **Use System Authentication Sessions for Third-Party Logins**: Authenticate against third-party services with system flows such as `ASWebAuthenticationSession` instead of embedded views.
-- **Adopt Passkeys**: Offer passkeys or other WebAuthn-based passwordless authentication to remove shared secrets from the login flow entirely.
+- **Support Passkeys**: Offer passkeys or other WebAuthn-based passwordless authentication to remove shared secrets from the login flow entirely.
