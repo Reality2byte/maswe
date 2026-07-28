@@ -22,22 +22,21 @@ status: new
 
 ## Overview
 
-This weakness occurs when an app has no mechanism to force users onto a fixed version after a critical vulnerability is discovered, or when the update requirement is enforced only on the client side.
+This weakness occurs when an app has no mechanism to force users to update to a more secure version after a critical vulnerability has been remediated.
 
-When a critical vulnerability is found in a production app, the developer needs a way to move the installed base to a patched version quickly. Platforms provide building blocks for this, such as Android In-App Updates (`AppUpdateManager`) and store version checks on iOS, but robust enforcement requires the backend to signal and enforce the minimum acceptable version: a purely client-side check can be bypassed by the very attackers it is meant to stop.
+When a critical vulnerability is found in a production app, the developer needs a way to migrate existing users to the latest version as quickly as possible. Platforms provide building blocks for this, such as Android In-App Updates (`AppUpdateManager`) and store version checks on iOS, but robust enforcement requires the backend to signal and enforce the minimum acceptable version.
 
 ## Modes of Introduction
 
 - **No Enforced-Update Mechanism**: Shipping the app without any in-app or enforced update flow, so vulnerable versions keep working indefinitely.
-- **Client-Side-Only Enforcement**: Enforcing the update requirement only in app code, without the backend rejecting requests from versions below the minimum supported one.
 
 ## Impact
 
 - **Compromise of Sensitive Data**: Attackers can exploit already-fixed vulnerabilities against users stuck on old versions, resulting in exposure of user data long after a patch was published.
-- **Compromise of System Integrity and Business Operations**: The app owner cannot retire vulnerable versions from the installed base, resulting in a prolonged attack window, extended incident response, and continued abuse of backend services.
+- **Compromise of System Integrity and Business Operations**: The app owner cannot retire vulnerable versions from the installed base, resulting in a prolonged attack window.
 
 ## Mitigations
 
 - **Implement an Enforced Update Flow**: Use platform mechanisms such as Android In-App Updates or a version check against the app store on iOS to require updating when a critical fix ships.
-- **Enforce the Minimum Version Server-Side**: Have the backend declare the minimum supported app version and reject requests from older clients, so bypassing the client-side prompt does not restore access.
+- **Enforce the Minimum Version Server-Side**: Have the backend declare the minimum supported app version and reject requests from older clients.
 - **Distinguish Flexible and Immediate Updates**: Reserve blocking (immediate) updates for security-critical releases and use flexible updates otherwise, so users accept the mechanism when it matters.

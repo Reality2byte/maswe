@@ -2,7 +2,7 @@
 title: Lack of Auto-fill Support for Credential Providers
 id: MASWE-0024
 alias: autofill-authenticators
-requirement: "The app enables auto-fill support for authenticators."
+requirement: "The app enables auto-fill support for credential providers."
 platform: [android, ios]
 profiles: [L2]
 threat: MAS-THREAT-0024

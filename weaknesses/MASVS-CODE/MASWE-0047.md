@@ -2,7 +2,7 @@
 title: Using Non-Standard APIs for Security-Critical Functionality
 id: MASWE-0047
 alias: non-standard-security-apis
-requirement: "The app does not use non-standard APIs for security-critical functionality."
+requirement: "The app uses standard APIs for security-critical functionality."
 platform: [android, ios]
 profiles: [L2]
 threat: MAS-THREAT-0047

@@ -23,7 +23,7 @@ status: new
 
 This weakness occurs when an app relies on deprecated APIs or functionality that are no longer maintained, may lack security fixes, or have been superseded by safer alternatives.
 
-Platforms deprecate APIs precisely because better-designed replacements exist, often fixing security shortcomings of the old API. Continuing to use deprecated security-relevant APIs can leave the app exposed to weaknesses the platform has already addressed. A representative example is the use of deprecated Android KeyStore implementations such as Bouncy Castle (BKS), but this weakness covers deprecated APIs and functionality in general, including cryptography, storage, networking, and platform features.
+Platforms deprecate APIs for various reasons. It may be architectural changes, lack of developer adoption, reduced hardware support, or a better-designed replacement that fixes security shortcomings of the old API. Continuing to use deprecated security-relevant APIs can leave the app exposed to weaknesses the platform has already addressed. A representative example is the use of deprecated Android KeyStore implementations such as Bouncy Castle (BKS), but this weakness covers deprecated APIs and functionality in general, including cryptography, storage, networking, and platform features.
 
 ## Modes of Introduction
 
@@ -38,6 +38,7 @@ Platforms deprecate APIs precisely because better-designed replacements exist, o
 
 ## Mitigations
 
-- **Migrate Off Deprecated APIs**: Replace deprecated security-relevant APIs with the platform's recommended alternatives as part of regular maintenance.
+- **Migrate Off Deprecated APIs**: Replace deprecated APIs with the platform's recommended alternatives as part of regular maintenance. Prioritize migration of security-relevant APIs.
 - **Treat Deprecation Warnings as Actionable**: Surface deprecation warnings in builds and reviews, and track migrations for security-relevant APIs with priority.
 - **Follow Platform Release Notes**: Review each platform release's deprecation and behavior-change notes to plan migrations before old functionality is removed or breaks.
+- **Test the App on All Supported Platforms**: Run the app on all platform API versions supported during development.

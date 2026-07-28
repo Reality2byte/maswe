@@ -34,7 +34,7 @@ status: new
 
 This weakness occurs when app components that expose functionality or data do not enforce proper authentication or authorization on their callers.
 
-It covers any component reachable by other apps or processes without adequate access control, including services, broadcast receivers, activities, and content providers, as well as local web services or open ports exposed by the app, which are also considered app components. It also covers the handling of authentication material on such surfaces, for example authentication tokens accepted without validation or authentication flows handled insecurely inside WebViews.
+It covers any component reachable by other apps or processes without adequate access control, including services, broadcast receivers, activities, and content providers, as well as local web services or open ports exposed by the app. It also covers the handling of authentication material on such surfaces, for example authentication tokens accepted without validation or authentication flows handled insecurely inside WebViews.
 
 ## Modes of Introduction
 
@@ -44,6 +44,7 @@ It covers any component reachable by other apps or processes without adequate ac
 - **Over-Broad Data Grants**: Using sticky broadcasts, over-broad or persistable URI permission grants, or persistent data sharing where one-time, scoped sharing would suffice.
 - **Unprotected Local Network Services**: Binding a local web service or open port that accepts connections without authentication.
 - **Authentication Material Not Validated**: Accepting authentication tokens without proper validation (e.g. missing signature or claim checks, no PKCE in OAuth flows) or handling authentication inside WebViews instead of secure system flows.
+- **Missing Authentication or Authorization on Deep Links**: App-defined URI scheme, Android App Link, or iOS Universal Link triggers a sensitive action (e.g., password reset, fund transfer, account linking) without verifying that the request came from an authenticated or authorized source.
 
 ## Impact
 

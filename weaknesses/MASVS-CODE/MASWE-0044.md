@@ -28,7 +28,7 @@ Dynamic code loading includes loading native libraries via `dlopen`, loading DEX
 
 ## Modes of Introduction
 
-- **Loading from Writable or External Locations**: Loading native libraries or DEX/JAR files from writable, external, or world-accessible storage where other apps or actors can replace them.
+- **Loading from Writable or External Locations**: Loading native libraries or DEX/JAR files from writable, external, or world-accessible storage where other malicious apps can replace them.
 - **Downloaded Code Without Verification**: Downloading and executing code, plugins, or scripts without verifying their integrity and authenticity (e.g. signature verification, see @MASWE-0015).
 - **Code from Other Packages**: Executing code from other installed packages (e.g. via package contexts with code inclusion) whose identity and integrity are not verified.
 

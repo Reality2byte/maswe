@@ -38,9 +38,9 @@ When the untrusted data reaches a dangerous sink that has not been validated or 
 
 ## Modes of Introduction
 
-- **Missing Validation at Trust Boundaries**: Consuming data from the network, backups, external interfaces, files, UI, or IPC without validating type, length, format, and range before use.
-- **Untrusted Data in Queries**: Concatenating untrusted input into SQL or other queries instead of using parameterized APIs.
-- **Untrusted Paths and Archives**: Using externally supplied file names or paths (e.g. from content providers or zip entries) without canonicalization and containment checks.
+- **Missing Validation at Trust Boundaries**: Consuming untrusted data from the network, backups, external interfaces, files, UI, or platform IPC without validating type, length, format, and range before use.
+- **Untrusted Data in Queries**: Concatenating untrusted input into queries like SQL queries instead of using parameterized APIs.
+- **Untrusted Paths and Archives**: Using externally supplied file names or paths (e.g. from ZIP entries) without canonicalization and containment checks.
 - **Insecure Parsing**: Parsing untrusted XML with external entities enabled, or emitting untrusted data without proper output encoding.
 - **Insecure Deserialization**: Deserializing untrusted data into rich object types (e.g. `Serializable`, `Parcelable`, `NSCoding`, XML/JSON object mappers) without restricting the allowed types.
 - **Weakly Validated URI Handling**: Relying on URI parsing classes that apply little to no validation of untrusted input when making security decisions.
@@ -55,9 +55,9 @@ When the untrusted data reaches a dangerous sink that has not been validated or 
 
 ## Mitigations
 
-- **Validate at Every Trust Boundary**: Treat all externally originated data as untrusted, including data received over TLS or restored from backups, and validate it against strict expectations before use.
-- **Use Parameterized Queries**: Access databases exclusively through parameterized or prepared statements; never build queries by concatenating untrusted input.
-- **Canonicalize and Contain Paths**: Canonicalize externally supplied file names and paths and verify they resolve inside the intended directory before any file operation, including when extracting archives.
+- **Validate at Every Trust Boundary**: Treat all externally originated data as untrusted and validate it against strict expectations before use.
+- **Use Parameterized Queries**: Access databases exclusively through parameterized or prepared statements. Do not build queries by concatenating untrusted input.
+- **Canonicalize and Contain Paths**: Canonicalize externally supplied file names and paths and verify they resolve inside the intended directory before any file operation.
 - **Harden Parsers**: Disable external entity resolution for XML, apply correct output encoding for the destination context, and prefer hardened platform parsers.
 - **Deserialize Safely**: Avoid deserializing untrusted data into rich object graphs; prefer simple data formats and safe APIs with explicit type allow-lists.
 - **Distinguish Untrusted Data From Application-Generated Content**: Distinguish externally-provided values from trusted application content, especially in notifications and security-sensitive interfaces. Apply context-appropriate length, line, and formatting restrictions so untrusted data cannot obscure or alter the apparent meaning of the information presented.

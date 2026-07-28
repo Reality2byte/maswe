@@ -2,7 +2,7 @@
 title: Latest Platform Version Not Targeted
 id: MASWE-0043
 alias: target-latest-platform-version
-requirement: "The app targets a recent OS version."
+requirement: "The app targets the latest platform version."
 platform: [android, ios]
 profiles: [L2]
 threat: MAS-THREAT-0043
@@ -20,9 +20,9 @@ status: new
 
 ## Overview
 
-This weakness occurs when an app does not target a recent platform version, missing the newest platform-enforced security protections and behavior changes.
+This weakness occurs when an app does not target the latest platform version, missing the newest platform-enforced security protections and behavior changes.
 
-Targeting the latest platform version, via `targetSdkVersion` on Android or by building with a recent Xcode/SDK on iOS, opts the app into protections such as scoped storage, stricter runtime-permission handling, permission auto-reset, and modern TLS defaults. When an app targets an old version, the OS applies backward-compatibility behaviors and the app silently misses these protections. This is distinct from the minimum supported version (see @MASWE-0042): here the concern is the target/compiled version.
+Targeting the latest platform version, via `targetSdkVersion` on Android or by building with the latest Xcode/SDK on iOS, opts the app into protections such as scoped storage, stricter runtime-permission handling, permission auto-reset, and modern TLS defaults. When an app targets an old version, the OS applies backward-compatibility behaviors and the app silently misses these protections. This is distinct from the minimum supported version (see @MASWE-0042): here the concern is the target/compiled version.
 
 ## Modes of Introduction
 
@@ -36,5 +36,5 @@ Targeting the latest platform version, via `targetSdkVersion` on Android or by b
 
 ## Mitigations
 
-- **Target the Latest Platform Version**: Update `targetSdkVersion` and build with a recent SDK promptly each platform cycle, following the store requirements for [Android](https://developer.android.com/google/play/requirements/target-sdk) and [iOS](https://developer.apple.com/news/upcoming-requirements/).
-- **Adopt New Protections Deliberately**: Review each platform release's behavior changes and migrate off legacy behaviors instead of suppressing or postponing them.
+- **Target the Latest Platform Version**: Update `targetSdkVersion` and build with the latest SDK promptly each platform cycle, following the store requirements for [Android](https://developer.android.com/google/play/requirements/target-sdk) and [iOS](https://developer.apple.com/news/upcoming-requirements/).
+- **Adopt New Protections**: Review each platform release's behavior changes and migrate off legacy behaviors.
