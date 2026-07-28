@@ -32,7 +32,7 @@ status: new
 
 This weakness occurs when an app creates or handles Android intents insecurely, allowing other apps to intercept, redirect, or manipulate its communication.
 
-Intents are Android's primary inter- and intra-app messaging mechanism. Insecure handling includes sending sensitive data via implicit intents that any matching app can receive, acting on untrusted intents (e.g. calling `startActivity`, `startService`, `sendBroadcast`, or `setResult` on intents received from other apps) without validation, creating PendingIntents that other apps can modify or replay, and using sticky broadcasts, which any app can read and replace.
+Intents are Android's primary inter- and intra-app messaging mechanism. Insecure handling includes sending sensitive data via implicit intents that any matching app can receive, acting on untrusted intents and their extended data (e.g. calling `startActivity`, `startService`, `sendBroadcast`, or `setResult` on intents received from other apps) without validation, creating PendingIntents that other apps can modify or replay, and using sticky broadcasts, which any app can read and replace.
 
 ## Modes of Introduction
 
@@ -52,4 +52,5 @@ Intents are Android's primary inter- and intra-app messaging mechanism. Insecure
 - **Use Explicit Intents Internally**: Address internal communication to explicit component targets so no other app can receive it, and never place sensitive data in implicit intents.
 - **Validate Redirected Intents**: Before forwarding a nested intent from untrusted input, validate its destination against an allowlist and strip unexpected flags.
 - **Create Immutable, Explicit PendingIntents**: Build PendingIntents with `FLAG_IMMUTABLE` over explicit base intents, and add `FLAG_ONE_SHOT` where a single use is intended.
-- **Avoid Sticky Broadcasts**: Use regular broadcasts protected with permissions, or more targeted mechanisms, instead of sticky broadcasts.
+- **Avoid Sticky Broadcasts**: Use regular broadcasts protected with permissions, or more targeted mechanisms, instead of [deprecated](https://developer.android.com/privacy-and-security/risks/sticky-broadcast#overview) sticky broadcasts.
+-**Validate Incoming Intent Data**: Treat all extended intent data entering the app through exported components as untrusted. Validate it before further processing (@MASWE-0048).

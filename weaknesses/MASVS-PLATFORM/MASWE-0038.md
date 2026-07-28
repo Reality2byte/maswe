@@ -2,7 +2,7 @@
 title: WebViews Loading Untrusted Content
 id: MASWE-0038
 alias: webviews-untrusted-content
-requirement: "The app does not allow WebViews to load untrusted content."
+requirement: "The app only allows trusted content in WebViews."
 platform: [android, ios]
 profiles: [L1, L2]
 threat: MAS-THREAT-0038
@@ -23,11 +23,13 @@ status: new
 
 This weakness occurs when a WebView loads URLs, HTML, or JavaScript from untrusted sources, or lets users navigate to arbitrary sites outside the developer's control.
 
-WebViews often run with app-specific privileges, such as JavaScript bridges, cookies, and stored sessions, so loading untrusted content into them is far more dangerous than opening it in the system browser. A URL received via an intent or deep link, or JavaScript fetched from an unverified source, can lead to cross-site scripting, including Universal XSS, allowing an attacker to steal cookies and tokens from any site, perform phishing, or trigger drive-by downloads.
+WebViews run with app-specific privileges and often use JavaScript bridges to communicate between the web sandbox and the app to access contacts, local files, the device location, or its camera. Loading untrusted content into WebViews is therefore more dangerous than opening it in an external browser.
+ 
+A URL received via an intent or deep link, or JavaScript fetched from an unverified source, can lead to cross-site scripting, including Universal XSS, allowing an attacker to steal cookies and tokens from any site, perform phishing attacks, or trigger drive-by downloads. Actors can also access functionality outside the web sandbox using JavaScript bridges declared by the developers.
 
 ## Modes of Introduction
 
-- **Unrestricted Navigation**: Not restricting which origins the WebView may load (e.g. via `WebViewClient.shouldOverrideUrlLoading` or navigation delegates), letting users or content navigate anywhere.
+- **Unrestricted Navigation**: Not restricting which origins the WebView may load (e.g. via `WebViewClient.shouldOverrideUrlLoading` or navigation delegates), letting users or content navigate anywhere directly, or loading domains that can be used to navigate to attacker-controlled domains.
 - **Untrusted URLs from External Input**: Loading URLs received through intents, deep links, or other external input without validating them against an allowlist.
 - **Untrusted Script Inclusion**: Loading JavaScript from unverified sources into pages rendered by the WebView.
 - **Safe Browsing Disabled**: Disabling platform protections such as Safe Browsing that warn about known-malicious sites.
