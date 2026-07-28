@@ -21,11 +21,11 @@ status: new
 
 This weakness occurs when an app ships with malicious code, introduced either intentionally by an insider or unintentionally through a compromised dependency, SDK, build tool, or other supply-chain attack.
 
-Malicious code can exfiltrate data, execute hidden or backdoored functionality, display unwanted content, or perform actions against the user's interest. Because the developer is responsible for all code shipped in the app, including third-party SDKs, the codebase must be reviewed and the supply chain controlled to detect and prevent the inclusion of malicious code. This complements @MASWE-0041, which covers dependencies with known vulnerabilities, and @MASWE-0077, which covers the inability to verify what was actually built.
+Malicious code can exfiltrate data, execute hidden or backdoored functionality, display unwanted content, or perform actions against the user's interest. Because the developer is responsible for all code shipped in the app, including third-party SDKs, the codebase must be reviewed and the supply chain examined to detect and prevent the inclusion of malicious code. This complements @MASWE-0041, which covers dependencies with known vulnerabilities, and @MASWE-0077, which covers the inability to verify what was actually built.
 
 ## Modes of Introduction
 
-- **Insider-Introduced Code**: Malicious code committed intentionally by someone with access to the codebase or through a compromised developer account.
+- **Malicious Developer**: Malicious code committed intentionally by someone with access to the codebase or through a compromised developer account.
 - **Compromised Dependencies**: Malicious or trojanized third-party SDKs and libraries pulled into the app, including through typosquatting or hijacked packages.
 - **Compromised Build Pipeline**: Build tools, plugins, or CI/CD infrastructure that inject code into the app during compilation or packaging.
 - **Hidden Functionality**: Backdoors, hidden switches, or undisclosed capabilities shipped in the app or its components.
@@ -39,6 +39,6 @@ Malicious code can exfiltrate data, execute hidden or backdoored functionality, 
 ## Mitigations
 
 - **Review Code and Changes**: Enforce code review for all changes, restrict and monitor access to the codebase, and require strong authentication for developer accounts.
-- **Control the Supply Chain**: Pin dependency versions, verify package integrity and provenance, source components only from reputable publishers, and monitor them with Software Composition Analysis (see @MASWE-0041).
+- **Examine the Supply Chain**: Pin dependency versions, verify package integrity and provenance, source components only from reputable publishers, and monitor them with Software Composition Analysis (see @MASWE-0041).
 - **Protect the Build Pipeline**: Harden and monitor CI/CD infrastructure, restrict who and what can alter build configurations, and generate build provenance attestations (see @MASWE-0077).
 - **Analyze the Shipped Artifact**: Scan and behaviorally analyze release builds to detect unexpected code, permissions, or network endpoints before distribution.
