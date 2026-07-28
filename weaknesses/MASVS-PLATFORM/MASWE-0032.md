@@ -24,7 +24,7 @@ status: new
 
 This weakness occurs when an app handles deep links insecurely, relying on unverified schemes or trusting the attacker-controllable data they carry.
 
-Deep links (Android App Links and custom URL schemes, iOS Universal Links and custom schemes) let other apps and websites launch the app at a specific screen and pass parameters. They become insecure when the app relies on custom URL schemes that any app can claim, does not verify App Links or Universal Links through domain association, or fails to validate and sanitize the incoming URL and its parameters. Because deep-link input is attacker-controllable, a malformed URI or parameter can trigger injection or logic abuse at various points in the app.
+Deep links (Android App Links and custom URL schemes, iOS Universal Links and custom schemes) let other apps and websites launch the app, trigger an in-app action and pass parameters. They become insecure when the app relies on custom URL schemes that any app can claim, does not verify App Links or Universal Links through domain association, or fails to validate and sanitize the incoming URL and its parameters. Because deep-link input is attacker-controllable, a malformed URI or parameter can trigger injection or logic abuse at various points in the app.
 
 ## Modes of Introduction
 

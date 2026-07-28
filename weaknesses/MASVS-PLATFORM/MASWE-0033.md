@@ -2,7 +2,7 @@
 title: Improper Use of the Clipboard
 id: MASWE-0033
 alias: improper-clipboard
-requirement: "The app avoids placing sensitive data on the system clipboard."
+requirement: "The app uses the clipboard securely and only with user consent."
 platform: [android, ios]
 profiles: [L1, L2]
 threat: MAS-THREAT-0033
@@ -23,11 +23,11 @@ status: new
 
 This weakness occurs when an app places sensitive data on the system clipboard, or handles clipboard content insecurely, exposing that data beyond the app's control.
 
-The clipboard is a shared resource: other apps can read its contents, and on some platforms clipboard content synchronizes to nearby devices via a universal clipboard. Copying sensitive data such as passwords, one-time codes, card numbers, or tokens to the clipboard, failing to mark it as sensitive, or leaving it there indefinitely can leak that data to other apps and devices.
+The clipboard is a shared resource: other apps can read its contents, and on some platforms, clipboard content synchronizes to nearby devices via a universal clipboard. Copying sensitive data such as passwords, one-time codes, card numbers, or tokens to the clipboard, failing to mark it as sensitive, or leaving it there indefinitely can leak that data to other apps and devices.
 
 ## Modes of Introduction
 
-- **Sensitive Data Copyable**: Allowing sensitive values such as passwords, one-time codes, or card numbers to be copied to the clipboard.
+- **Sensitive Data Copyable Without User Consent**: Allowing sensitive values such as passwords, one-time codes, or card numbers to be copied to the clipboard without user consent.
 - **Clipboard Content Not Marked Sensitive**: Not flagging copied sensitive content as sensitive where the platform supports it (e.g. `EXTRA_IS_SENSITIVE` on Android), so previews and clipboard history show it in cleartext.
 - **Universal Clipboard Not Restricted**: Not restricting sensitive clipboard items to the local device or setting an expiration on iOS, letting them sync to other devices.
 - **Clipboard Not Cleared**: Leaving sensitive content on the clipboard after it has served its purpose.
