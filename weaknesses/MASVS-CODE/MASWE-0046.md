@@ -23,7 +23,7 @@ status: new
 
 This weakness occurs when an app relies on deprecated APIs or functionality that are no longer maintained, may lack security fixes, or have been superseded by safer alternatives.
 
-Platforms deprecate APIs for various reasons. It may be architectural changes, lack of developer adoption, reduced hardware support, or a better-designed replacement that fixes security shortcomings of the old API. Continuing to use deprecated security-relevant APIs can leave the app exposed to weaknesses the platform has already addressed. A representative example is the use of deprecated Android KeyStore implementations such as Bouncy Castle (BKS), but this weakness covers deprecated APIs and functionality in general, including cryptography, storage, networking, and platform features.
+APIs may become deprecated for various reasons. This may be due to architectural changes, lack of developer adoption, reduced hardware support, or a better-designed replacement that addresses security shortcomings in the old API. Continuing to use deprecated security-relevant APIs can leave the app exposed to weaknesses that the platform has already addressed. A representative example is the use of deprecated Android KeyStore implementations such as Bouncy Castle (BKS), but this weakness covers deprecated APIs and functionality in general, including cryptography, storage, networking, and platform features.
 
 ## Modes of Introduction
 
