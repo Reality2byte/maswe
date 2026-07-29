@@ -1,12 +1,12 @@
 ---
-title: Inadequate Awareness and Unsafe Defaults for Privacy Relevant Actions
+title: Inadequate Awareness for Privacy Relevant Actions
 id: MASWE-0078
-alias: user-awareness-unsafe-defaults-privacy-actions
-requirement: "Before completing a privacy relevant action, the app clearly communicates the affected data, destination, audience, and material privacy consequences, and defaults to the least exposing option appropriate for the requested functionality."
+alias: inadequate-awareness-privacy-actions
+requirement: "Before completing a privacy relevant action, the app clearly communicates the affected data, destination, audience, and material privacy consequences, and allows the user to review and control the resulting disclosure."
 platform: [android, ios]
 profiles: [P]
 threat: MAS-THREAT-0070
-attacks: [MAS-ATTACK-0084, MAS-ATTACK-0087]
+attacks: [MAS-ATTACK-0084]
 mappings:
   masvs-v2: [MASVS-PRIVACY-2]
   cwe: [359]
@@ -24,16 +24,15 @@ status: new
 
 ## Overview
 
-This weakness occurs when an app performs a privacy relevant action without making its scope or material consequences reasonably apparent to the user, or when the app uses defaults that expose more data than is necessary for the expected functionality.
+This weakness occurs when an app performs a privacy relevant action without making its scope or material consequences reasonably apparent to the user.
 
 Privacy relevant actions include sharing, exporting, publishing, synchronizing, backing up, changing visibility, responding to a request from another party, or moving data from private app storage to storage or services accessible by other applications, users, or third parties.
 
-The weakness may cause users to disclose different data, disclose data to a broader audience, or create more persistent copies than they reasonably intended. It includes flows where the app honors another party's request for data without clearly showing the user what will be shared and with whom, or allowing the user to control the disclosure. It does not require the underlying processing to rely on consent. The issue is whether the interface and defaults allow the user to understand and control the resulting privacy state.
+The weakness may cause users to disclose different data, disclose data to a broader audience, or create more persistent copies than they reasonably intended. It includes flows where the app honors another party's request for data without clearly showing the user what will be shared and with whom, or allowing the user to control the disclosure. It does not require the underlying processing to rely on consent. The issue is whether the interface allows the user to understand and control the resulting privacy state.
 
 ## Modes of Introduction
 
 - **Unclear Disclosure Context**: The interface or action labels do not clearly identify the affected records, files, accounts, data elements, included metadata, destination, audience, or resulting privacy state, including when responding to another party's request for data.
-- **Overly Exposing Defaults**: The app preselects broader audiences, more data, longer retention, public visibility, or additional recipients when a less exposing default would satisfy the expected functionality.
 - **Insufficient Disclosure Review and Feedback**: The app does not allow the user to review, control, or confirm a consequential disclosure, or clearly indicate that a high impact or difficult to reverse disclosure has occurred.
 
 ## Impact
@@ -45,5 +44,4 @@ The weakness may cause users to disclose different data, disclose data to a broa
 ## Mitigations
 
 - **Provide Clear Disclosure Context and Control**: At the point of action, show the affected data, included metadata, destination, audience, and material privacy consequences; before responding to another party's request for data, identify the requester and recipient and allow the user to approve, limit, or decline the disclosure.
-- **Use Privacy Protective Defaults**: Default to the narrowest audience, smallest data set, shortest appropriate persistence, and least exposing destination that supports the requested functionality.
 - **Support Review and Reversal of Consequential Disclosures**: Before completion, allow users to review selected items, recipients, audience, included metadata, and visibility; make the resulting privacy state visible and provide proportionate confirmation or undo mechanisms when practical.
