@@ -36,4 +36,3 @@ Examples of such information include last connection status, read receipts, date
 
 - **Offer Granular Privacy Settings**: Provide privacy settings with sufficient granularity, allowing users to control individual data collection categories (e.g., location, contacts) and manage their sharing preferences. Allow users to choose what information is visible to others, such as connection status or discoverability.
 - **Educate Users on Privacy Options**: Clearly inform users about available privacy settings and how to use them effectively to manage data visibility. This can be done through tutorials, help sections, or contextual tips within the app.
-- **Default to Privacy-Friendly Settings**: Set default privacy settings to the most restrictive options, allowing users to opt in to sharing specific information rather than having to opt out, which helps to ensure user privacy by default.
