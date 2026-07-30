@@ -41,7 +41,7 @@ The clipboard is a shared resource: other apps can read its contents, and on som
 ## Mitigations
 
 - **Avoid the Clipboard for Secrets**: Disable copying for sensitive fields and provide secure alternatives such as auto-fill (see @MASWE-0024) so users never need to copy secrets.
-- **Only copy with User Consent**: If copying is required, ask the user for consent before placing sensitive data on the clipboard, or only act as a result of a user-chosen action (e.g. a "Copy" button).
+- **Only Copy with User Consent**: If copying is required, ask the user for consent before placing sensitive data on the clipboard, or only act as a result of a user-chosen action (e.g. a "Copy" button).
 - **Mark Clipboard Content as Sensitive**: When sensitive content must be copied, flag it as sensitive so the platform masks previews and treats it accordingly.
 - **Specify an appropriate expiration**: When sensitive content must be copied, set an expiration so it is removed from the clipboard after a short time.
 - **Restrict Clipboard Exposure**: When copying, follow the platform's [secure clipboard handling guidance on Android](https://developer.android.com/privacy-and-security/risks/secure-clipboard-handling) and mark the content using [`ClipDescription.EXTRA_IS_SENSITIVE`](https://developer.android.com/reference/android/content/ClipDescription#EXTRA_IS_SENSITIVE) to obscure clipboard previews. On iOS, use pasteboard options such as [`localOnly`](https://developer.apple.com/documentation/uikit/uipasteboard/optionskey/localonly) and [`expirationDate`](https://developer.apple.com/documentation/uikit/uipasteboard/optionskey/expirationdate) to limit cross-device propagation and content lifetime.
