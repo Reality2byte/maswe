@@ -10,7 +10,7 @@ attacks: [MAS-ATTACK-0038, MAS-ATTACK-0039]
 mappings:
   masvs-v1: [MSTG-PLATFORM-4, MSTG-AUTH-3, MSTG-NETWORK-2, MSTG-STORAGE-6]
   masvs-v2: [MASVS-AUTH-1, MASVS-PLATFORM-1, MASVS-STORAGE-2]
-  cwe: [200, 276, 284, 285, 287, 732, 749, 923, 925, 926]
+  cwe: [306, 749, 862, 863, 923, 926, 939, 940]
   android-risks:
   - content-resolver
   - insecure-broadcast-receiver
