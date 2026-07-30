@@ -38,7 +38,6 @@ Beyond the technical aspect, non-repudiation has a legal dimension: a signed, us
 
 - **No Trusted Confirmation Path**: Confirming critical actions through the regular app UI, which a compromised OS or a tampered app can render differently from what is actually executed.
 - **No Cryptographic Evidence of Approval**: Completing critical actions without obtaining a hardware-backed signature that binds the displayed message to the user's approval, leaving the app owner unable to prove what was approved.
-- **Sensitive Data in the Confirmation Prompt**: Displaying sensitive information through the trusted confirmation prompt, which protects the integrity of the confirmation but is not a secure display channel for secrets.
 
 ## Impact
 
