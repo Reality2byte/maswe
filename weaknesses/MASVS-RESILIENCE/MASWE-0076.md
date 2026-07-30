@@ -27,6 +27,7 @@ Mobile malware commonly attacks other apps indirectly: abusing accessibility ser
 - **No Hostile-Environment Checks**: Not checking for known malicious packages or platform threat signals before enabling sensitive functionality.
 - **Abuse-Prone Capabilities Ignored**: Not considering apps holding accessibility or overlay capabilities in the app's risk decisions for sensitive flows (see @MASWE-0031, @MASWE-0039).
 - **No Response Strategy**: Detecting a hostile environment but not warning the user or restricting sensitive functionality.
+- **Insufficient Response Strategy**: Only responding on the current device, rather than on the account level. Malware will often intercept credentials and use them to onboard a legitimate app onto an attacker-controlled device. As part of the response strategy, risky behaviour (such as onboarding the app on a new device) must be blocked in case of a suspected compromise.
 
 ## Impact
 
@@ -38,4 +39,5 @@ Mobile malware commonly attacks other apps indirectly: abusing accessibility ser
 - **Integrate Platform Threat Signals**: Use available platform services (e.g. Play Protect status, Play Integrity verdicts) to learn about known malware and a compromised environment.
 - **Assess Risky Capabilities**: Factor the presence of accessibility- or overlay-capable apps into risk decisions for sensitive flows, combined with the UI-level defenses of @MASWE-0031 and @MASWE-0039.
 - **Respond Proportionately**: Warn the user, require additional verification, restrict functionality, or block sensitive operations when a hostile environment is detected.
+- **Lock Down Account**: Apply restrictions to the account, not just the local client. This will prevent attackers from performing actions on a non-hostile environment after the initial compromise.
 - **Assess Effectiveness**: Validate the detection against current malware behaviors and update it as the threat landscape evolves.

@@ -30,7 +30,7 @@ status: new
 
 ## Overview
 
-This weakness occurs when an app requests more permissions than it needs, keeps permissions it no longer needs, or fails to explain why permissions are required.
+This weakness occurs when an app requests more permissions than needed, keeps permissions it no longer needs, or fails to explain why permissions are required.
 
 Permissions control access to sensitive device features such as the camera, microphone, location, and storage, making them a crucial aspect of mobile app privacy. They serve as the gateway for data collection and processing, so proper permission management is essential to protect user privacy and comply with regulations.
 

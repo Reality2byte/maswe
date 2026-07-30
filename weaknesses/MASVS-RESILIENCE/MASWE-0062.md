@@ -32,9 +32,9 @@ App attestation includes verifying the app's signature and binaries at runtime, 
 
 ## Impact
 
-- **Bypass of Protection Mechanisms**: Attackers can strip security controls from a repackaged copy that still works against the backend, resulting in the circumvention of the app's defenses at scale.
+- **Bypass of Protection Mechanisms**: Attackers can strip resiliency controls from a repackaged copy, making it easier to further analyze and reverse-engineer the application.
 - **Compromise of Sensitive Data**: Attackers can distribute trojanized versions of the app that harvest credentials and data from the users they deceive, resulting in account compromise attributed to the app.
-- **Compromise of System Integrity and Business Operations**: Modified clients, cracked features, and clone apps circulate under the app's brand, resulting in revenue loss and reputational damage for the app owner.
+- **Compromise of System Integrity and Business Operations**: Modified clients, cracked features, and cloned apps circulate under the app's brand, resulting in revenue loss and reputational damage for the app owner.
 
 ## Mitigations
 
