@@ -10,7 +10,7 @@ attacks: [MAS-ATTACK-0048]
 mappings:
   masvs-v1: [MSTG-PLATFORM-11]
   masvs-v2: [MASVS-PLATFORM-1, MASVS-STORAGE-2]
-  cwe: [200]
+  cwe: [829]
   maswe-beta: [MASWE-0061]
 refs:
 - https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623122-application
