@@ -40,7 +40,7 @@ Intents are Android's primary inter- and intra-app messaging mechanism. Insecure
 - **Intent Redirection**: Extracting a nested intent from untrusted extras and forwarding it (e.g. via `startActivity`) without validating its destination, letting other apps reach the app's non-exported components.
 - **Mutable PendingIntents**: Creating PendingIntents without `FLAG_IMMUTABLE`, allowing the receiving app to modify the underlying intent and execute it with the app's identity.
 - **Replayable PendingIntents**: Creating one-off PendingIntents without `FLAG_ONE_SHOT`, allowing them to be reused.
-- **Sticky Broadcasts**: Using sticky broadcasts, which remain accessible after delivery and can be read or replaced by any app.
+- **Sticky Broadcasts**: Using [sticky broadcasts](https://developer.android.com/privacy-and-security/risks/sticky-broadcast), which remain accessible after delivery and can be read or replaced by any app.
 
 ## Impact
 
@@ -52,5 +52,5 @@ Intents are Android's primary inter- and intra-app messaging mechanism. Insecure
 - **Use Explicit Intents Internally**: Address internal communication to explicit component targets so no other app can receive it, and never place sensitive data in implicit intents.
 - **Validate Redirected Intents**: Before forwarding a nested intent from untrusted input, validate its destination against an allowlist and strip unexpected flags.
 - **Create Immutable, Explicit PendingIntents**: Build PendingIntents with `FLAG_IMMUTABLE` over explicit base intents, and add `FLAG_ONE_SHOT` where a single use is intended.
-- **Avoid Sticky Broadcasts**: Use regular broadcasts protected with permissions, or more targeted mechanisms, instead of [deprecated](https://developer.android.com/privacy-and-security/risks/sticky-broadcast#overview) sticky broadcasts.
+- **Avoid Sticky Broadcasts**: Use regular broadcasts protected with permissions, or more targeted mechanisms, instead of deprecated sticky broadcasts.
 -**Validate Incoming Intent Data**: Treat all extended intent data entering the app through exported components as untrusted. Validate it before further processing (@MASWE-0048).

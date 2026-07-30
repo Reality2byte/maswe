@@ -51,6 +51,7 @@ When the untrusted data reaches a dangerous sink that has not been validated or 
 - **Compromise of Sensitive Data**: Attackers can extract or overwrite private files and database contents through path traversal, SQL injection, or XXE, resulting in unauthorized disclosure or modification of user and app data.
 - **Execution of Unauthorized Code**: Attackers can exploit insecure deserialization or memory corruption in parsers, resulting in attacker-controlled code running in the app's context.
 - **Authentication or Authorization Bypass**: Attackers can manipulate queries or logic through injected input, resulting in access to data or functionality beyond what the caller is authorized for.
+- **Compromise of Content or UI Integrity**: Attackers can obscure, alter, or impersonate trusted application content in interfaces or notifications, resulting in users approving unintended actions or ignoring legitimate security alerts.
 - **Application Content Spoofing**: Attackers can obscure, alter, or impersonate trusted application content in interfaces or notifications, resulting in users approving unintended actions or ignoring legitimate security alerts.
 
 ## Mitigations

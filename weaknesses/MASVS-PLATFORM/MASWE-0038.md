@@ -23,7 +23,7 @@ status: new
 
 This weakness occurs when a WebView loads URLs, HTML, or JavaScript from untrusted sources, or lets users navigate to arbitrary sites outside the developer's control.
 
-WebViews run with app-specific privileges and often use JavaScript bridges to communicate between the web sandbox and the app to access contacts, local files, the device location, or its camera. Loading untrusted content into WebViews is therefore more dangerous than opening it in an external browser.
+WebViews run with app-specific privileges and often use JavaScript bridges (see @MASWE-0036) to communicate between the web sandbox and the app to access contacts, local files, the device location, or its camera. Loading untrusted content into WebViews is therefore more dangerous than opening it in an external browser.
  
 A URL received via an intent or deep link, or JavaScript fetched from an unverified source, can lead to cross-site scripting, including Universal XSS, allowing an attacker to steal cookies and tokens from any site, perform phishing attacks, or trigger drive-by downloads. Actors can also access functionality outside the web sandbox using JavaScript bridges declared by the developers.
 
@@ -44,6 +44,6 @@ A URL received via an intent or deep link, or JavaScript fetched from an unverif
 ## Mitigations
 
 - **Allowlist Navigation**: Restrict the WebView to an allowlist of trusted origins and open everything else in the system browser.
-- **Validate Externally Supplied URLs**: Treat URLs arriving via intents or deep links as untrusted input and validate them before loading (see @MASWE-0032).
+- **Validate Externally Supplied URLs**: Treat URLs arriving via intents or deep links as untrusted input and validate them before loading (see @MASWE-0038).
 - **Load Scripts Only from Trusted Sources**: Never inject or include JavaScript fetched from unverified sources.
 - **Keep Platform Protections Enabled**: Leave Safe Browsing and equivalent protections enabled and use current, supported WebView components.
