@@ -21,13 +21,11 @@ status: new
 
 This weakness occurs when an app does not give users sufficient control over how their personal information is shared with other users or the broader environment.
 
-Examples of such information include last connection status, read receipts, birthday, email address, or discoverability settings. Ensuring that users have clear and granular options, typically in the form of app settings, to control data visibility is critical to maintaining their privacy and building trust in the app.
+Examples of such information include last connection status, read receipts, date of birth, email address, or discoverability settings. Ensuring that users have clear and granular options, typically in the form of app settings, to control data visibility is critical to maintaining their privacy and building trust in the app.
 
 ## Modes of Introduction
 
 - **Lack of Granular Privacy Settings**: Failing to provide privacy settings with sufficient granularity to allow users to control specific aspects of data collection and sharing, such as differentiating between location services, contacts, or media access, or to decide which types of information are shared and with whom.
-- **Oversharing by Default**: Designing sharing flows that expose more than the user intends because privacy-reducing options are off by default or hard to find. For example, forwarding a message or picture that reveals the original sender's name unless the user explicitly enables an option such as "Hide Sender Name".
-
 ## Impact
 
 - **Violation of User Privacy**: Users can unintentionally expose personal information, such as their email address, birthday, or online status, to others without their consent, resulting in an increased risk of harassment, stalking, or identity theft.

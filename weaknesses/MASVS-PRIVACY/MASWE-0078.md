@@ -2,7 +2,7 @@
 title: Inadequate Awareness for Privacy Relevant Actions
 id: MASWE-0078
 alias: inadequate-awareness-privacy-actions
-requirement: "Before completing a privacy relevant action, the app clearly communicates the affected data, destination, audience, and material privacy consequences, and allows the user to review and control the resulting disclosure."
+requirement: "The app informs the user about the privacy implications before performing an action."
 platform: [android, ios]
 profiles: [P]
 threat: MAS-THREAT-0070

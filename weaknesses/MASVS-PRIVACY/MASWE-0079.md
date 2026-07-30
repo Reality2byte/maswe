@@ -1,8 +1,8 @@
 ---
-title: Unsafe Defaults for Privacy Relevant Actions
+title: Inadequate Defaults for Privacy Relevant Actions
 id: MASWE-0079
 alias: unsafe-defaults-privacy-actions
-requirement: "For privacy relevant actions, the app defaults to the least exposing option appropriate for the requested functionality."
+requirement: "The app uses adequate defaults for privacy relevant actions."
 platform: [android, ios]
 profiles: [P]
 threat: MAS-THREAT-0070
@@ -32,7 +32,7 @@ The weakness may cause users to disclose different data, disclose data to a broa
 
 ## Modes of Introduction
 
-- **Overly Exposing Defaults**: The app preselects broader audiences, more data, longer retention, public visibility, or additional recipients when a less exposing default would satisfy the expected functionality.
+- **Oversharing by Default**: Designing sharing flows that expose more than the user intends because privacy-reducing options are off by default or hard to find. For example, forwarding a message or picture that reveals the original sender's name unless the user explicitly enables an option such as "Hide Sender Name".
 
 ## Impact
 
@@ -42,4 +42,4 @@ The weakness may cause users to disclose different data, disclose data to a broa
 
 ## Mitigations
 
-- **Use Privacy Protective Defaults**: Default to the narrowest audience, smallest data set, shortest appropriate persistence, and least exposing destination that supports the requested functionality.
+- **Use Privacy Protective Defaults**: Default to the configuration that shares the least amount of necessary data.
