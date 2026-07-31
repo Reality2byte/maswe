@@ -9,7 +9,7 @@ threat: MAS-THREAT-0049
 attacks: [MAS-ATTACK-0063]
 mappings:
   masvs-v1: [MSTG-STORAGE-11]
-  masvs-v2: [MASVS-RESILIENCE-1]
+  masvs-v2: [MASVS-CRYPTO-2]
   maswe-beta: [MASWE-0008]
 refs:
 - https://developer.apple.com/documentation/localauthentication/logging_a_user_into_your_app_with_face_id_or_touch_id
@@ -40,4 +40,6 @@ If the app does not check for a secure device lock before performing sensitive f
 
 ## Mitigations
 
-- **Verify the Device Lock State**: Check that a secure lock screen is configured (e.g. `isDeviceSecure()` on Android, `canEvaluatePolicy` on iOS) before enabling sensitive functionality, and guide users to set one when missing.
+- **Verify the Device Lock State**: Use platform APIs (e.g. `isDeviceSecure()` on Android, `canEvaluatePolicy` on iOS) to determine whether the current user has configured a PIN, pattern, or password.
+- **Re-check Before Enabling Protected Functionality**: Evaluate the current device-lock configuration before enabling or accessing any high-risk functionality.
+- **Bind Sensitive Key Use to Platform Authentication**: Where a sensitive operation depends on local cryptographic material, enforce authentication at the key-access layer rather than relying only on application UI state. For example, use the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) or the [iOS Keychain](https://developer.apple.com/documentation/localauthentication/accessing-keychain-items-with-face-id-or-touch-id) to force a biometric or passcode prompt before performing cryptographic operations.
