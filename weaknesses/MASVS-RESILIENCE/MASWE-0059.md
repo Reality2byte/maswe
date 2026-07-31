@@ -36,7 +36,12 @@ This weakness occurs when an app does not implement device attestation, so its b
 
 Device attestation uses platform services, such as the standard Android hardware attestation API, the Play Integrity API or iOS DeviceCheck and App Attest, to provide the backend with cryptographically verifiable evidence about the device associated with a request. The evidence and security properties differ by platform and service. Without device attestation, the backend cannot independently verify device-origin claims made by the client. The backend must validate attestation evidence and apply the service-specific request-binding, freshness, and replay protections; client-side evaluation is another bypassable local check.
 
-On Android, Play Integrity can provide server-verifiable assurance that the device has not been compromised in ways covered by its device-integrity verdicts, such as an unlocked bootloader or an unrecognized operating-system image. On iOS, DeviceCheck and App Attest do not provide equivalent assurance about operating-system compromise. They can establish that evidence originates from genuine Apple hardware; App Attest also binds that evidence to a legitimate app instance, but neither service attests the integrity of iOS.
+On Android, both the hardware-backed attestation and Play Integrity APIs can provide server-verifiable assurance that the device has not been compromised in ways covered by its device-integrity verdicts or signals, such as an unlocked bootloader, an unrecognized operating-system image or an outdated security patch level. Their main differences include:
+
+- **Google Mobile Services (GMS) Requirement**: Direct hardware-backed key attestation uses Android Keystore and does not require Google Play services on the device to request an attestation. Play Integrity depends on Google Play components and Google services.
+- **Verdict Generation and Policy Enforcement**: With direct key attestation, the backend receives signed properties and defines which boot states, operating-system signing keys, patch levels, and application identities it accepts. Play Integrity evaluates the available signals and returns Google-defined verdict labels. In both cases, the developer decides how the backend responds.
+
+On iOS, DeviceCheck and App Attest do not provide equivalent assurance about operating-system compromise. They can establish that evidence originates from genuine Apple hardware; App Attest also binds that evidence to a legitimate app instance, but neither service attests the integrity of iOS.
 
 ## Modes of Introduction
 
