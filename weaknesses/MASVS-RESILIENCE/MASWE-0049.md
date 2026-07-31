@@ -1,8 +1,8 @@
 ---
-title: Sensitive Functionality Enabled Without a Secure Device Lock
+title: Device Secure Lock Not Enforced
 id: MASWE-0049
-alias: secured-device-detection-not-implemented
-requirement: "The app verifies that the device has a secure lock screen configured before enabling or performing sensitive functionality."
+alias: device-secure-lock-not-enforced
+requirement: "The app verifies that the device has a secure lock configured."
 platform: [android, ios]
 profiles: [L2]
 threat: MAS-THREAT-0049
@@ -21,11 +21,9 @@ status: new
 
 ## Overview
 
-This weakness occurs when an app enables sensitive functionality without verifying that the device has a secure lock screen (passcode, PIN, pattern, or biometric) configured and without enforcing authentication using such lock screen mechanism.
+This weakness occurs when an app enables sensitive functionality without verifying that the device has a secure lock screen (passcode, PIN, pattern, or biometric) configured. Without a secure lock screen, cryptographic material cannot be protected with the highest level of security, and sensitive data may be exposed to anyone with physical access to the device.
 
-Many of the platform's data-protection mechanisms assume a device credential exists: on iOS, file encryption classes tied to the passcode only protect data if a passcode is set, and on Android, keystore protections such as unlocked-device requirements are meaningless on a device with no lock. 
-
-If the app does not check for a secure device lock before performing sensitive functionality, it might expose sensitive data or enable sensitive actions for anyone that unlocks the device.
+Many of the platform's data-protection mechanisms assume a device credential exists: on iOS, file encryption classes tied to the passcode only protect data if a passcode is set, and on Android, keystore protections such as unlocked-device requirements are meaningless on a device with no lock.
 
 ## Modes of Introduction
 
