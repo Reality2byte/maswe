@@ -1,6 +1,6 @@
 ---
 title: Non-Reproducible Builds
-id: MASWE-0077
+id: MASWE-0076
 alias: non-reproducible-builds
 requirement: "The app offers reproducible builds."
 platform: [android, ios]

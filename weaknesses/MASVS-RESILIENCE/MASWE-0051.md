@@ -8,10 +8,10 @@ profiles: [R]
 threat: MAS-THREAT-0051
 attacks: [MAS-ATTACK-0001]
 mappings:
-  masvs-v1: [MSTG-RESILIENCE-9]
+  masvs-v1: [MSTG-RESILIENCE-9, MSTG-RESILIENCE-12]
   masvs-v2: [MASVS-RESILIENCE-3]
   cwe: [693]
-  maswe-beta: [MASWE-0089, MASWE-0092]
+  maswe-beta: [MASWE-0089, MASWE-0091, MASWE-0092]
 refs:
 - https://developer.android.com/topic/performance/app-optimization/enable-app-optimization#overview
 status: new
@@ -27,6 +27,7 @@ Obfuscation does not prevent reverse engineering, but it raises its cost. Identi
 
 - **No Obfuscation Applied**: Shipping release builds without any minification or obfuscation, leaving class, method, and symbol names intact.
 - **Security-Relevant Logic Left Readable**: Not applying enough obfuscation to security-relevant code, leaving code sections like security checks, licensing logic, and proprietary algorithms trivially analyzable.
+- **Obfuscation Without Hardening**: Applying standard obfuscation whose transformations are automatically reversible by publicly available tooling.
 
 ## Impact
 
@@ -37,5 +38,6 @@ Obfuscation does not prevent reverse engineering, but it raises its cost. Identi
 
 - **Enable Obfuscation for Release Builds**: Apply the platform's minification and obfuscation tooling or established commercial obfuscators to all release builds.
 - **Harden Security-Relevant Code**: Apply stronger transformations (opaque predicates, instruction substitution, control-flow obfuscation, method inlining) to the security-relevant code.
+- **Implement Lossy Obfuscation**: Implement obfuscation in a way that intentionally removes information from the code, rather than only shift things around.
 - **Assess Obfuscation Effectiveness**: Regularly attempt to reverse engineer the release build with state-of-the-art decompilers and deobfuscators to validate that the protection meets its goal.
 - **Combine with Runtime Protections**: Pair obfuscation with runtime integrity and anti-instrumentation checks (see the mitigations in @MASWE-0053, @MASWE-0061, @MASWE-0064), since obfuscation alone only delays attackers.
