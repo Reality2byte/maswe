@@ -2,7 +2,7 @@
 title: Debug Artifacts Not Removed
 id: MASWE-0054
 alias: non-production-resources
-requirement: "The app removes debug artifacts."
+requirement: "The app does not contain debug artifacts."
 platform: [android, ios]
 profiles: [R]
 threat: MAS-THREAT-0054
