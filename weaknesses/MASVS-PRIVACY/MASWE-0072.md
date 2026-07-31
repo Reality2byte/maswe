@@ -25,12 +25,13 @@ refs:
 - https://www.enisa.europa.eu/sites/default/files/publications/WP2017%20O-2-2-4%20GDPR%20Mobile.pdf
 - https://developer.android.com/privacy-and-security/risks/ai-risks/excessive-agency
 - https://developer.android.com/privacy-and-security/risks/ai-risks/sensitive-information-disclosure
+- https://developer.apple.com/documentation/bundleresources/information_property_list/nsextension/nsextensionattributes/requestsopenaccess
 status: new
 ---
 
 ## Overview
 
-This weakness occurs when an app requests more permissions than needed, keeps permissions it no longer needs, or fails to explain why permissions are required.
+This weakness occurs when an app requests more permissions than it needs, keeps permissions it no longer needs, or fails to explain why permissions are required.
 
 Permissions control access to sensitive device features such as the camera, microphone, location, and storage, making them a crucial aspect of mobile app privacy. They serve as the gateway for data collection and processing, so proper permission management is essential to protect user privacy and comply with regulations.
 
@@ -46,6 +47,7 @@ Third-party libraries (SDKs) further complicate permission management by requiri
 - **Inadequate Permission Explanations**: Failing to provide clear explanations for why each permission is required.
 - **Third-Party Permission Requirements**: Including SDKs that require permissions beyond the app's functional needs or use granted permissions to collect and analyze data.
 - **Excessive AI Agent Permissions**: Giving an AI-enabled feature permission-backed tools or data access beyond what it requires for its intended task.
+- **Unjustified Full Access in a Bundled Keyboard**: Shipping a custom keyboard extension that sets `RequestsOpenAccess` to `true` without a feature that requires it, allowing the keyboard to transmit typed input or write it to a shared container.
 
 ## Impact
 
@@ -60,4 +62,5 @@ Third-party libraries (SDKs) further complicate permission management by requiri
 - **Prefer Privacy-Friendly Alternatives**: Use privacy-friendly alternatives to permissions that are less intrusive and provide users with more control over their data. For example, use coarse location instead of fine location, or use an image picker instead of requesting access to the camera and photo gallery.
 - **Enable Proactive Permission Revocation**: Automatically relinquish permissions that are no longer necessary to minimize unnecessary data access over time, and ensure that users can manually revoke permissions at any time through a clear and accessible interface.
 - **Implement Just-in-Time Permission Requests**: Request permissions only when they are needed, providing clear explanations for why each permission is required. This approach helps build user trust and ensures users understand the implications of granting access to their data.
-- **Educate Users on Permissions**: Explain why specific permissions are needed and how users can manage them. Providing transparency builds user trust and ensures users understand the importance and relevance of each permission.
+- **Add Proper Permission Explanations**: Provide clear explanations for why each permission is required, helping users understand the necessity and scope of the requested access.
+- **Avoid Full Access in Bundled Keyboards**: Do not set `RequestsOpenAccess` in a custom keyboard extension unless a user-facing feature requires it, and never use it to transmit or store the characters the keyboard receives.
