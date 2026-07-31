@@ -12,7 +12,7 @@ mappings:
   cwe: [693]
 refs:
 - https://developers.google.com/android/play-protect
-- https://support.google.com/googleplay/android-developer/answer/13375539
+- https://developers.google.com/android/play-protect/client-protections
 status: new
 ---
 

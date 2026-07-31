@@ -25,7 +25,7 @@ Mobile platforms allow users, privileged apps, and external tools to capture scr
 
 ## Modes of Introduction
 
-- **Missing Platform Screenshot Protection**: Displaying sensitive fields without applying the related platform protections that can avoid the field information from appearing in screenshots or screen recordings (e.g., in Android, applying the [`FLAG_SECURE`]("https://developer.android.com/reference/android/view/WindowManager.LayoutParams#FLAG_SECURE") flag).
+- **Missing Platform Screenshot Protection**: Displaying sensitive fields without applying the related platform protections that can avoid the field information from appearing in screenshots or screen recordings (e.g., in Android, applying the [`FLAG_SECURE`](https://developer.android.com/reference/android/view/WindowManager.LayoutParams#FLAG_SECURE) flag).
 - **Missing Capture-State Redaction**: Continuing to display sensitive information while the app or scene is being recorded, mirrored, or shared, despite the platform providing an API to detect the active capture state.
 - **Excessive On-Screen Disclosure**: Displaying complete sensitive values when a masked, partial, temporary, or user-initiated representation would be sufficient for the current task.
 
@@ -36,4 +36,4 @@ Mobile platforms allow users, privileged apps, and external tools to capture scr
 ## Mitigations
 
 - **Redact Sensitive On-Screen Content**: Display only the portion of a sensitive value required for the current task. Mask values by default and unmask the values only for the needed actions, masking them again once they have been used for the task.
-- **Anti-Screenshot Platform Protections**: Apply platform protections that prevent elements containing sensitive content from appearing in screenshots or on non-secure displays (for example, in Android, applying the [`FLAG_SECURE`]("https://developer.android.com/reference/android/view/WindowManager.LayoutParams#FLAG_SECURE") flag).
+- **Anti-Screenshot Platform Protections**: Apply platform protections that prevent elements containing sensitive content from appearing in screenshots or on non-secure displays (for example, in Android, applying the [`FLAG_SECURE`](https://developer.android.com/reference/android/view/WindowManager.LayoutParams#FLAG_SECURE) flag).

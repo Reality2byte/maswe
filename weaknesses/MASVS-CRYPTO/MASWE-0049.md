@@ -13,7 +13,7 @@ mappings:
   maswe-beta: [MASWE-0008]
 refs:
 - https://developer.apple.com/documentation/localauthentication/logging_a_user_into_your_app_with_face_id_or_touch_id
-- https://developer.apple.com/documentation/localauthentication/lacontext/canevaluatepolicy(_:error:)
+- https://developer.apple.com/documentation/localauthentication/lacontext/canevaluatepolicy%28_%3Aerror%3A%29
 - https://developer.android.com/reference/android/app/KeyguardManager#isDeviceSecure()
 - https://developer.android.com/reference/android/hardware/biometrics/BiometricManager#canAuthenticate(int)
 status: new

@@ -14,7 +14,7 @@ mappings:
   maswe-beta: [MASWE-0010]
 refs:
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf
-- https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-132.pdf
+- https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-132.pdf
 - https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
 status: new
 ---
@@ -39,7 +39,7 @@ Dedicated password-based KDFs, such as PBKDF2, scrypt, or Argon2, are deliberate
 
 ## Mitigations
 
-- **Use a Password-Based KDF**: Derive keys from passwords or passphrases only with a dedicated password-based KDF such as PBKDF2, scrypt, or Argon2, following [NIST.SP.800-132](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-132.pdf) and the current [OWASP Password Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html) recommendations.
+- **Use a Password-Based KDF**: Derive keys from passwords or passphrases only with a dedicated password-based KDF such as PBKDF2, scrypt, or Argon2, following [NIST.SP.800-132](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-132.pdf) and the current [OWASP Password Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html) recommendations.
 - **Use an Adequate Work Factor**: Configure iteration counts, memory, and parallelism parameters according to current guidance, and revisit them periodically as hardware improves.
 - **Use Unique Random Salts**: Generate a unique salt with a cryptographically secure random number generator for every derivation and store it alongside the derived material; never hardcode or reuse salts.
 - **Strengthen Low-Entropy Inputs**: When the input has low entropy (e.g. a PIN), combine the derived key with additional secret material, such as a random key stored in the platform keystore, so the result cannot be brute-forced from the user input alone.

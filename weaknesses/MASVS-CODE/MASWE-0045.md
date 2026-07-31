@@ -13,7 +13,7 @@ mappings:
   - use-of-native-code
   maswe-beta: [MASWE-0116]
 refs:
-- https://partners.trellix.com/enterprise/en-us/assets/white-papers/wp-secure-coding-android-applications.pdf
+- https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md
 - https://sensepost.com/blog/2021/on-ios-binary-protections/
 - https://www.sans.org/blog/stack-canaries-gingerly-sidestepping-the-cage/
 status: new

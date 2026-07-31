@@ -16,7 +16,7 @@ refs:
 - https://developer.apple.com/documentation/security/ksecattraccessiblewhenunlockedthisdeviceonly
 - https://developer.android.com/training/sign-in/biometric-auth#prompt-the-user-to-authenticate-with-biometrics
 - https://developer.apple.com/documentation/security/restricting-keychain-item-accessibility
-- https://source.android.com/docs/security/features/keystore/strongbox
+- https://developer.android.com/privacy-and-security/keystore#StrongBoxKeyMint
 - https://developer.apple.com/documentation/security/ksecattrtokenidsecureenclave
 status: new
 ---
