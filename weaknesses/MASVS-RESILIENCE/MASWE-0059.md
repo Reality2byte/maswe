@@ -59,7 +59,7 @@ On iOS, DeviceCheck and App Attest do not provide equivalent assurance about ope
 
 ## Mitigations
 
-- **Integrate Platform Attestation**: Use the Android Play Integrity API and iOS DeviceCheck / App Attest to obtain device- and app-integrity verdicts.
+- **Integrate Platform Attestation**: Validate the [rootOfTrust](https://source.android.com/docs/security/features/keystore/attestation#rootoftrust-fields) fields from the key attestation extension or use Play Integrity API and iOS DeviceCheck / App Attest to obtain device- and app-integrity verdicts.
 - **Verify Server-Side with Freshness**: Have the backend verify attestation tokens cryptographically, bind them to a server-issued nonce, and check timeliness before trusting them.
 - **Gate Sensitive Operations on Verdicts**: Require valid attestation for high-risk API calls and degrade or deny service to unattested clients.
 - **Layer with Local Checks**: Combine attestation with local environment checks (see @MASWE-0056, @MASWE-0058) for defense in depth, and assess the overall scheme against known bypasses.
