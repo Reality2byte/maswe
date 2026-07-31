@@ -16,6 +16,9 @@ refs:
 - https://developer.android.com/google/play/integrity/verdicts
 - https://developer.android.com/google/play/integrity/standard
 - https://developer.android.com/google/play/integrity/classic
+- https://github.com/android/keyattestation
+- https://source.android.com/docs/security/features/keystore/attestation
+- https://grapheneos.org/articles/attestation-compatibility-guide
 - https://developer.apple.com/documentation/devicecheck
 - https://developer.apple.com/documentation/devicecheck/accessing-and-modifying-per-device-data
 - https://developer.apple.com/documentation/devicecheck/establishing-your-app-s-integrity
