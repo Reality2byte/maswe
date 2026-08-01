@@ -15,7 +15,6 @@ mappings:
   - test-debug
   android-core-app-quality: [Production_Build_Quality]
   maswe-beta: [MASWE-0094, MASWE-0093, MASWE-0095]
-status: new
 ---
 
 ## Overview

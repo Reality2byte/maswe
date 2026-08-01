@@ -27,7 +27,6 @@ refs:
 - https://developer.apple.com/app-store/ad-attribution/
 - https://developer.apple.com/documentation/adattributionkit
 - https://gdpr-info.eu/recitals/no-30/
-status: new
 ---
 
 ## Overview

@@ -27,7 +27,6 @@ refs:
 - https://developer.android.com/privacy-and-security/security-tips#binder-and-messenger-interfaces
 - https://developer.android.com/topic/security/risks/content-resolver
 - https://developer.android.com/topic/security/risks/file-providers
-status: new
 ---
 
 ## Overview

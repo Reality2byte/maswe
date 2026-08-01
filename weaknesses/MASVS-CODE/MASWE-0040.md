@@ -17,7 +17,6 @@ refs:
 - https://developer.android.com/reference/com/google/android/play/core/appupdate/AppUpdateManager
 - https://medium.com/swlh/updating-users-to-the-latest-app-release-on-ios-ed96e4c76705
 - https://gist.github.com/DineshKachhot/f63fcebceca6351fc982cafd38f6f05c
-status: new
 ---
 
 ## Overview

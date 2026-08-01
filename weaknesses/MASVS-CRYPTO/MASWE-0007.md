@@ -23,7 +23,6 @@ refs:
 - https://developer.android.com/reference/javax/crypto/KeyGenerator
 - https://developer.android.com/reference/kotlin/android/security/keystore/KeyProtection
 - https://developer.apple.com/documentation/cryptokit/aes/keywrap
-status: new
 ---
 
 ## Overview

@@ -14,7 +14,6 @@ mappings:
 refs:
 - https://developer.android.com/identity/sign-in/credential-manager-siwg-implementation#handle-sign-out
 - https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html
-status: new
 ---
 
 ## Overview

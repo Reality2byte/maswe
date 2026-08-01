@@ -23,7 +23,6 @@ refs:
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Br2.pdf
 - https://www.usenix.org/legacy/event/woot10/tech/full_papers/Rizzo.pdf
-status: new
 ---
 
 ## Overview

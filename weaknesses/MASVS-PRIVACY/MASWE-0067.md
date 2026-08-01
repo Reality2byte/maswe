@@ -16,7 +16,6 @@ refs:
 - https://support.google.com/googleplay/android-developer/answer/9859455#privacy_policy
 - https://developer.apple.com/app-store/app-privacy-details/#privacy-links
 - https://developer.apple.com/app-store/review/guidelines/#5.1.1
-status: new
 ---
 
 ## Overview

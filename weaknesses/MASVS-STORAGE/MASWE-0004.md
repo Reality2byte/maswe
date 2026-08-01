@@ -18,7 +18,6 @@ mappings:
 refs:
 - https://developer.android.com/training/data-storage
 - https://developer.android.com/privacy-and-security/security-tips#external-storage
-status: new
 ---
 
 ## Overview

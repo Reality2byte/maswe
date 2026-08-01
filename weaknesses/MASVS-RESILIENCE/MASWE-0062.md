@@ -15,7 +15,6 @@ mappings:
 refs:
 - https://developer.apple.com/documentation/xcode/using-the-latest-code-signature-format
 - https://developer.apple.com/documentation/devicecheck/preparing-to-use-the-app-attest-service
-status: new
 ---
 
 ## Overview

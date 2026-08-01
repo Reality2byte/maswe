@@ -14,7 +14,6 @@ mappings:
   maswe-beta: [MASWE-0055]
 refs:
 - https://developer.android.com/about/versions/14/features/screenshot-detection
-status: new
 ---
 
 ## Overview

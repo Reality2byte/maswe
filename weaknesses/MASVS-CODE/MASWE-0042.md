@@ -16,7 +16,6 @@ mappings:
   maswe-beta: [MASWE-0077, MASWE-0057]
 refs:
 - https://developer.android.com/topic/security/risks/strandhogg
-status: new
 ---
 
 ## Overview

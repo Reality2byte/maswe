@@ -16,7 +16,6 @@ mappings:
   maswe-beta: [MASWE-0056]
 refs:
 - https://developer.android.com/topic/security/risks/tapjacking
-status: new
 ---
 
 ## Overview

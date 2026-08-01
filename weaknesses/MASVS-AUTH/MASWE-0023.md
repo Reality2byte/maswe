@@ -14,7 +14,6 @@ mappings:
 refs:
 - https://developer.android.com/reference/android/security/keystore/KeyGenParameterSpec.Builder#setInvalidatedByBiometricEnrollment(boolean)
 - https://developer.apple.com/documentation/security/secaccesscontrolcreateflags/biometrycurrentset
-status: new
 ---
 
 ## Overview

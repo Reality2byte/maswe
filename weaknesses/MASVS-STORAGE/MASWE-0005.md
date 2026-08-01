@@ -20,7 +20,6 @@ refs:
 - https://developer.android.com/privacy-and-security/keystore#ImportingEncryptedKeys
 - https://developer.apple.com/documentation/security/certificate_key_and_trust_services/keys/storing_keys_as_data
 - https://developer.android.com/privacy-and-security/keystore#StrongBoxKeyMint
-status: new
 ---
 
 ## Overview

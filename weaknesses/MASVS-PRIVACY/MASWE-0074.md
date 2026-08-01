@@ -16,7 +16,6 @@ refs:
 - https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession
 - https://developer.android.com/training/data-storage/shared/photopicker
 - https://developer.apple.com/documentation/photokit/phpickerviewcontroller
-status: new
 ---
 
 ## Overview

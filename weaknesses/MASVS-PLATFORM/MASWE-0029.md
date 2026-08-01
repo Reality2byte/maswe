@@ -14,7 +14,6 @@ mappings:
 refs:
 - https://developer.android.com/develop/ui/views/notifications/build-notification#lockscreenNotification
 - https://developer.apple.com/documentation/usernotifications
-status: new
 ---
 
 ## Overview

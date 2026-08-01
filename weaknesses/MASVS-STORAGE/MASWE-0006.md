@@ -18,7 +18,6 @@ refs:
 - https://cloud.google.com/docs/authentication/api-keys#securing
 - https://cloud.google.com/docs/authentication/api-keys#api_key_restrictions
 - https://github.com/gitleaks/gitleaks
-status: new
 ---
 
 ## Overview

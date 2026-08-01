@@ -16,7 +16,6 @@ refs:
 - https://android.googlesource.com/platform/ndk/+/master/docs/BuildSystemMaintainers.md
 - https://sensepost.com/blog/2021/on-ios-binary-protections/
 - https://www.sans.org/blog/stack-canaries-gingerly-sidestepping-the-cage/
-status: new
 ---
 
 ## Overview

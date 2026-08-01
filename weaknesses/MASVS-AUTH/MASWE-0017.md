@@ -17,7 +17,6 @@ refs:
 - https://developer.apple.com/documentation/localauthentication
 - https://auth0.com/blog/what-is-step-up-authentication-when-to-use-it/
 - https://pages.nist.gov/800-63-4/sp800-63b.html
-status: new
 ---
 
 ## Overview

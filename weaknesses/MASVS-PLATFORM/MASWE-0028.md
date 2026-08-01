@@ -15,7 +15,6 @@ mappings:
 refs:
 - https://developer.android.com/develop/ui/views/touch-and-input/keyboard-input/style#Type
 - https://developer.apple.com/documentation/uikit/uitextinputtraits/1624427-issecuretextentry
-status: new
 ---
 
 ## Overview

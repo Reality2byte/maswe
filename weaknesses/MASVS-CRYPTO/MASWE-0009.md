@@ -14,7 +14,6 @@ mappings:
 refs:
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf
 - https://developers.google.com/tink/managing-key-rotation
-status: new
 ---
 
 ## Overview

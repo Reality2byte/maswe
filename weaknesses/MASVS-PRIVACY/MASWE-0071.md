@@ -15,7 +15,6 @@ refs:
 - https://developer.apple.com/design/human-interface-guidelines/privacy#Requesting-permission
 - https://developer.apple.com/documentation/uikit/protecting_the_user_s_privacy/requesting_access_to_protected_resources
 - https://developer.android.com/training/permissions/requesting#explain
-status: new
 ---
 
 ## Overview

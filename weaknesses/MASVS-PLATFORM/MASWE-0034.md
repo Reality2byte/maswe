@@ -15,7 +15,6 @@ mappings:
 refs:
 - https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623122-application
 - https://developer.apple.com/documentation/uikit/uiapplication/extensionpointidentifier/keyboard
-status: new
 ---
 
 ## Overview

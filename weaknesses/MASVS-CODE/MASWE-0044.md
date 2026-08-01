@@ -17,7 +17,6 @@ mappings:
   maswe-beta: [MASWE-0085]
 refs:
 - dynamic-code-loading
-status: new
 ---
 
 ## Overview

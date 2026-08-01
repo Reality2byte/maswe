@@ -27,7 +27,6 @@ refs:
 - https://developer.apple.com/support/third-party-SDK-requirements/
 - https://www.youtube.com/watch?v=3klmiHX0uVQ
 - https://developer.apple.com/videos/play/wwdc2023/10060/
-status: new
 ---
 
 ## Overview

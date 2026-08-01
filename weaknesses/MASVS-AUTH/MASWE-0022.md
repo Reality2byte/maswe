@@ -16,7 +16,6 @@ refs:
 - https://developer.android.com/training/sign-in/biometric-auth#allow-fallback
 - https://developer.apple.com/documentation/localauthentication/logging_a_user_into_your_app_with_face_id_or_touch_id#3148834
 - https://developer.apple.com/documentation/localauthentication/lapolicy/deviceownerauthenticationwithbiometrics/
-status: new
 ---
 
 ## Overview

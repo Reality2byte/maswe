@@ -12,7 +12,6 @@ mappings:
   masvs-v2: [MASVS-RESILIENCE-3]
   cwe: [693]
   maswe-beta: [MASWE-0090]
-status: new
 ---
 
 ## Overview

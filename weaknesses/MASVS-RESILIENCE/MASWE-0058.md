@@ -19,7 +19,6 @@ refs:
 - https://developer.apple.com/documentation/devicecheck
 - https://ieeexplore.ieee.org/document/10935812
 
-status: new
 ---
 
 ## Overview

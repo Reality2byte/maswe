@@ -19,7 +19,6 @@ refs:
 - https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession
 - https://developer.android.com/guide/topics/text/autofill
 - https://developer.apple.com/documentation/authenticationservices/public-private_key_authentication/supporting_passkeys
-status: new
 ---
 
 ## Overview

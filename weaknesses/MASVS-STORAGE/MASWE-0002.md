@@ -18,7 +18,6 @@ refs:
 - https://developer.android.com/guide/topics/data/autobackup#include-exclude-android-11
 - https://developer.android.com/guide/topics/data/autobackup#include-exclude-android-12
 - https://developer.android.com/guide/topics/data/autobackup#define-device-conditions
-status: new
 ---
 
 ## Overview

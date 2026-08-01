@@ -27,7 +27,6 @@ refs:
 - https://github.com/VisionR1/KeyAttestation
 - https://github.com/JingMatrix/TEESimulator
 - https://github.com/5ec1cff/TrickyStore
-status: new
 ---
 
 ## Overview

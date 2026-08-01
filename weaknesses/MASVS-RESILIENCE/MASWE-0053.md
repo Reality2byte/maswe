@@ -13,7 +13,6 @@ mappings:
 refs:
 - https://developers.google.com/android/play-protect
 - https://developers.google.com/android/play-protect/client-protections
-status: new
 ---
 
 ## Overview

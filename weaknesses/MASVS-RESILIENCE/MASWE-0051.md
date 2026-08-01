@@ -14,7 +14,6 @@ mappings:
   maswe-beta: [MASWE-0089, MASWE-0091, MASWE-0092]
 refs:
 - https://developer.android.com/topic/performance/app-optimization/enable-app-optimization#overview
-status: new
 ---
 
 ## Overview

@@ -13,7 +13,6 @@ mappings:
   maswe-beta: [MASWE-0113]
 refs:
 - https://developer.apple.com/app-store/app-privacy-details/#privacy-links
-status: new
 ---
 
 ## Overview

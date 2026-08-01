@@ -16,7 +16,6 @@ refs:
 - https://developer.apple.com/documentation/localauthentication/lacontext/canevaluatepolicy%28_%3Aerror%3A%29
 - https://developer.android.com/reference/android/app/KeyguardManager#isDeviceSecure()
 - https://developer.android.com/reference/android/hardware/biometrics/BiometricManager#canAuthenticate(int)
-status: new
 ---
 
 ## Overview

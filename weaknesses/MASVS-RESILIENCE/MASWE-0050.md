@@ -19,7 +19,6 @@ refs:
 - https://developer.android.com/reference/android/webkit/WebView#setWebContentsDebuggingEnabled(boolean)
 - https://developer.apple.com/documentation/webkit/wkwebview/4111163-isinspectable
 - https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.security.cs.debugger
-status: new
 ---
 
 ## Overview

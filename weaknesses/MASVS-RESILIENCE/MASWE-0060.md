@@ -17,7 +17,6 @@ refs:
 - https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/ptrace.2.html
 - https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/sysctl.3.html
 - https://www.youtube.com/watch?v=ih6gWZDuNME
-status: new
 ---
 
 ## Overview

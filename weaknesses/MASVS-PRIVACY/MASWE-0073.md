@@ -16,7 +16,6 @@ refs:
 - https://developer.apple.com/documentation/bundleresources/privacy_manifest_files
 - https://developer.apple.com/app-store/app-privacy-details/#user-tracking
 - https://developer.apple.com/documentation/apptrackingtransparency/
-status: new
 ---
 
 ## Overview

@@ -14,7 +14,6 @@ refs:
 - insecure-library
 - https://support.google.com/googleplay/android-developer/answer/13326895
 - https://developer.apple.com/support/third-party-SDK-requirements/
-status: new
 ---
 
 ## Overview

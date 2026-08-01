@@ -15,7 +15,6 @@ mappings:
 refs:
 - https://developer.android.com/google/play/requirements/target-sdk
 - https://developer.apple.com/news/upcoming-requirements/
-status: new
 ---
 
 ## Overview

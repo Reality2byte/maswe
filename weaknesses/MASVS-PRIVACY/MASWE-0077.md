@@ -19,7 +19,6 @@ refs:
 - https://www.edpb.europa.eu/topics/ai-and-technology/anonymisation-pseudonymisation_en
 - https://ec.europa.eu/justice/article-29/documentation/opinion-recommendation/files/2014/wp216_en.pdf
 - https://www.statista.com/topics/9460/app-tracking-and-mobile-privacy/
-status: new
 ---
 
 ## Overview

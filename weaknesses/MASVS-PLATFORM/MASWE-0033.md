@@ -16,7 +16,6 @@ mappings:
 refs:
 - https://developer.android.com/develop/ui/views/touch-and-input/copy-paste#PreventingSensitiveData
 - https://developer.apple.com/documentation/uikit/uipasteboard
-status: new
 ---
 
 ## Overview

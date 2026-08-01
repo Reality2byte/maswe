@@ -16,7 +16,6 @@ mappings:
   maswe-beta: [MASWE-0071, MASWE-0070, MASWE-0072]
 refs:
 - https://blog.oversecured.com/Evernote-Universal-XSS-theft-of-all-cookies-from-all-sites-and-more/
-status: new
 ---
 
 ## Overview

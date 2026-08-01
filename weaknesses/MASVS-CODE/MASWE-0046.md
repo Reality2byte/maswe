@@ -16,7 +16,6 @@ refs:
 - https://developer.android.com/about/versions/12/behavior-changes-all#bouncy-castle
 - https://developer.android.com/reference/java/security/KeyStore
 - https://labs.withsecure.com/publications/how-secure-is-your-android-keystore-authentication
-status: new
 ---
 
 ## Overview

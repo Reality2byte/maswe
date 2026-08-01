@@ -20,7 +20,6 @@ refs:
 - https://developer.android.com/develop/ui/views/layout/webapps/native-api-access-jsbridge
 - https://developer.android.com/reference/androidx/webkit/WebViewCompat#addWebMessageListener(android.webkit.WebView,java.lang.String,java.util.Set%3Cjava.lang.String%3E,androidx.webkit.WebViewCompat.WebMessageListener)
 - https://developer.apple.com/documentation/webkit/wkscriptmessagehandler
-status: new
 ---
 
 ## Overview

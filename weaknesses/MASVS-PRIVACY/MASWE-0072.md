@@ -26,7 +26,6 @@ refs:
 - https://developer.android.com/privacy-and-security/risks/ai-risks/excessive-agency
 - https://developer.android.com/privacy-and-security/risks/ai-risks/sensitive-information-disclosure
 - https://developer.apple.com/documentation/bundleresources/information_property_list/nsextension/nsextensionattributes/requestsopenaccess
-status: new
 ---
 
 ## Overview

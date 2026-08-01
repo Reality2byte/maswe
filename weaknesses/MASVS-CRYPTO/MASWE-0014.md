@@ -17,7 +17,6 @@ refs:
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf
 - https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-5.pdf
 - https://csrc.nist.gov/pubs/ir/8547/ipd
-status: new
 ---
 
 ## Overview

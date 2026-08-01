@@ -26,7 +26,6 @@ refs:
 - https://developer.apple.com/forums/thread/707320
 - https://support.apple.com/en-us/102390
 - https://developer.apple.com/documentation/foundation/performing-manual-server-trust-authentication
-status: new
 ---
 
 ## Overview

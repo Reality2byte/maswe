@@ -20,7 +20,6 @@ refs:
 - https://developer.apple.com/documentation/security/password_autofill
 - https://developer.android.com/privacy-and-security/cryptography#crypto_provider
 - https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TG02102/BSI-TR-02102-1.pdf?__blob=publicationFile
-status: new
 ---
 
 ## Overview

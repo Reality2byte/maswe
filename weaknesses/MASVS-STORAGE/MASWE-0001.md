@@ -18,7 +18,6 @@ mappings:
 refs:
 - log-info-disclosure
 - https://developer.apple.com/documentation/os/logging/generating_log_messages_from_your_code
-status: new
 ---
 
 ## Overview

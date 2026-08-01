@@ -19,7 +19,6 @@ refs:
 - https://github.com/tealbathingsuit/ellekit
 - https://github.com/roothide/Bootstrap
 - https://burjcdigital.urjc.es/server/api/core/bitstreams/d249ebbb-5923-48ea-9215-af14cf2cc0b9/content
-status: new
 ---
 
 ## Overview

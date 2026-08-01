@@ -20,7 +20,6 @@ refs:
 - https://github.com/sensepost/objection/issues/136#issuecomment-419664574
 - https://github.com/sensepost/objection/wiki/Understanding-the-iOS-Biometrics-Bypass
 - https://developer.apple.com/documentation/security/secaccesscontrolcreateflags/applicationpassword
-status: new
 ---
 
 ## Overview

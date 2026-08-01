@@ -17,7 +17,6 @@ mappings:
   maswe-beta: [MASWE-0069, MASWE-0073]
 refs:
 - https://blog.oversecured.com/Android-Exploring-vulnerabilities-in-WebResourceResponse/
-status: new
 ---
 
 ## Overview

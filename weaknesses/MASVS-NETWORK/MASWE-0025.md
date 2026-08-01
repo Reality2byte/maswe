@@ -31,7 +31,6 @@ refs:
 - https://developer.android.com/reference/java/net/Socket
 - https://developer.android.com/reference/android/webkit/WebView
 - https://developer.android.com/reference/javax/net/ssl/HttpsURLConnection
-status: new
 ---
 
 ## Overview

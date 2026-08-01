@@ -14,7 +14,6 @@ mappings:
 refs:
 - https://firebase.google.com/support/privacy/storing-privacy-settings
 - https://www.researchgate.net/publication/335863205_Demystifying_Hidden_Privacy_Settings_in_Mobile_Apps
-status: new
 ---
 
 ## Overview

@@ -14,7 +14,6 @@ mappings:
 refs:
 - https://developer.android.com/training/articles/security-android-protected-confirmation
 - https://source.android.com/docs/security/features/protected-confirmation
-status: new
 ---
 
 ## Overview

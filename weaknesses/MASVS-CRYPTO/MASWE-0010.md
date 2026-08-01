@@ -18,7 +18,6 @@ refs:
 - https://developer.apple.com/documentation/security/restricting-keychain-item-accessibility
 - https://developer.android.com/privacy-and-security/keystore#StrongBoxKeyMint
 - https://developer.apple.com/documentation/security/ksecattrtokenidsecureenclave
-status: new
 ---
 
 ## Overview

@@ -14,7 +14,6 @@ refs:
 - https://reproducible-builds.org/
 - https://slsa.dev/
 - https://github.com/signalapp/Signal-Android/blob/main/reproducible-builds/README.md
-status: new
 ---
 
 ## Overview

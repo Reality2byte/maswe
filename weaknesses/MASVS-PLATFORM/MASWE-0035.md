@@ -25,7 +25,6 @@ refs:
 - https://developer.android.com/topic/security/risks/implicit-intent-hijacking
 - https://developer.android.com/topic/security/risks/pending-intent
 - https://developer.android.com/topic/security/risks/sticky-broadcast
-status: new
 ---
 
 ## Overview

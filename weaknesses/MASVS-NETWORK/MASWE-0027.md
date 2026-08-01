@@ -17,7 +17,6 @@ refs:
 - https://developer.android.com/privacy-and-security/security-config#CertificatePinning
 - https://developer.apple.com/news/?id=g9ejcf8y
 - https://cheatsheetseries.owasp.org/cheatsheets/Pinning_Cheat_Sheet.html
-status: new
 ---
 
 ## Overview

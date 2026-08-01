@@ -22,7 +22,6 @@ refs:
 - https://support.google.com/googleplay/answer/11416267
 - https://www.youtube.com/watch?v=J7TM0Yy0aTQ
 - https://www.youtube.com/watch?v=4rfF3y4xchU
-status: new
 ---
 
 ## Overview

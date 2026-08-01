@@ -17,7 +17,6 @@ mappings:
 refs:
 - https://developer.apple.com/documentation/technotes/tn3155-debugging-universal-links
 - https://developer.android.com/training/app-links/verify-android-applinks
-status: new
 ---
 
 ## Overview

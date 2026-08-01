@@ -10,8 +10,8 @@ attacks: [MAS-ATTACK-0003, MAS-ATTACK-0005, MAS-ATTACK-0065]
 mappings:
   masvs-v1: [MSTG-RESILIENCE-1, MSTG-RESILIENCE-8]
   masvs-v2: [MASVS-RESILIENCE-1, MASVS-RESILIENCE-4]
-  cwe: [1326]
-  maswe-beta: [MASWE-0097, MASWE-0103]
+  cwe: [1326]
+
 status: new
 ---
 

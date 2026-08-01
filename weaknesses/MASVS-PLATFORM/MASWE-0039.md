@@ -14,7 +14,6 @@ refs:
 - https://developer.android.com/guide/topics/ui/accessibility/service
 - https://support.google.com/googleplay/android-developer/answer/10964491
 - https://developer.apple.com/documentation/uikit/uiaccessibility
-status: new
 ---
 
 ## Overview

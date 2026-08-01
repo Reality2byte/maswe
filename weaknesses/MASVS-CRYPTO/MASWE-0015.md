@@ -15,7 +15,6 @@ mappings:
 refs:
 - https://cwe.mitre.org/data/definitions/347.html
 - https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-5.pdf
-status: new
 ---
 
 ## Overview

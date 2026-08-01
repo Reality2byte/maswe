@@ -18,7 +18,6 @@ refs:
 - https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf
 - https://en.wikipedia.org/wiki/Collision_attack
 - https://csrc.nist.gov/pubs/ir/8547/ipd
-status: new
 ---
 
 ## Overview

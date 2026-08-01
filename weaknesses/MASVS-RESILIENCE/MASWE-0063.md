@@ -18,7 +18,6 @@ refs:
 - https://developer.apple.com/documentation/cryptokit/hmac
 - https://developer.apple.com/documentation/cryptokit/storing-cryptokit-keys-in-the-keychain
 - https://developer.apple.com/documentation/security/restricting-keychain-item-accessibility
-status: new
 ---
 
 ## Overview

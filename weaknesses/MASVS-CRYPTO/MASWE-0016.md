@@ -18,7 +18,6 @@ mappings:
 refs:
 - https://datatracker.ietf.org/doc/html/rfc4086
 - https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#secure-random-number-generation
-status: new
 ---
 
 ## Overview
