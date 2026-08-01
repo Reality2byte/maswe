@@ -10,7 +10,7 @@ attacks: [MAS-ATTACK-0040, MAS-ATTACK-0068, MAS-ATTACK-0069]
 mappings:
   masvs-v1: [MSTG-CODE-1]
   masvs-v2: [MASVS-RESILIENCE-2]
-  cwe: [347, 693]
+  cwe: [347]
   maswe-beta: [MASWE-0104, MASWE-0106]
 refs:
 - https://developer.apple.com/documentation/xcode/using-the-latest-code-signature-format
