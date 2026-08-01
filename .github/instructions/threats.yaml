@@ -46,7 +46,7 @@ MAS-THREAT-0045: Attackers can exploit memory-corruption bugs with substantially
 MAS-THREAT-0046: Attackers can exploit weaknesses that maintained APIs have already addressed.
 MAS-THREAT-0047: Attackers can exploit flaws in non-standard security implementations.
 MAS-THREAT-0048: Attackers can execute injection attacks against the app.
-MAS-THREAT-0049: Attackers can access sensitive data and functionality on unprotected devices.
+MAS-THREAT-0049: Attackers with physical access to the device can read the app's data and use its keys when no device credential protects them.```
 MAS-THREAT-0050: Attackers can inspect and manipulate a debuggable app at runtime, even on non-rooted or non-jailbroken devices.
 MAS-THREAT-0051: Attackers can analyze the app's logic and security controls with minimal effort.
 MAS-THREAT-0052: Attackers can analyze the app's inner workings through its resources.
