@@ -11,8 +11,6 @@ mappings:
   masvs-v1: [MSTG-RESILIENCE-1, MSTG-RESILIENCE-8]
   masvs-v2: [MASVS-RESILIENCE-1, MASVS-RESILIENCE-4]
   cwe: [1326]
-
-status: new
 ---
 
 ## Overview
