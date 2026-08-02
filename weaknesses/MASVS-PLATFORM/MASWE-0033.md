@@ -1,47 +1,51 @@
 ---
-title: Improper Use of the Clipboard
+title: Sensitive Native Functionality Exposed in WebViews
 id: MASWE-0033
-alias: improper-clipboard
-requirement: "The app uses the clipboard securely and only with user consent."
+alias: js-bridges-webviews
+requirement: "The app does not expose sensitive native functionality to WebView content."
 platform: [android, ios]
 profiles: [L1, L2]
 threat: MAS-THREAT-0033
-attacks: [MAS-ATTACK-0041]
+attacks: [MAS-ATTACK-0047, MAS-ATTACK-0051]
 mappings:
-  masvs-v2: [MASVS-PLATFORM-1, MASVS-STORAGE-2]
-  cwe: [200, 668]
+  masvs-v1: [MSTG-PLATFORM-7]
+  masvs-v2: [MASVS-PLATFORM-2, MASVS-STORAGE-2]
+  cwe: [749, 94]
   android-risks:
-  - secure-clipboard-handling
-  maswe-beta: [MASWE-0059]
+  - insecure-webview-native-bridges
+  android-core-app-quality: [WebView_JavaScript]
+  maswe-beta: [MASWE-0068]
 refs:
-- https://developer.android.com/develop/ui/views/touch-and-input/copy-paste#PreventingSensitiveData
-- https://developer.apple.com/documentation/uikit/uipasteboard
+- https://support.google.com/faqs/answer/9095419
+- https://developer.android.com/develop/ui/views/layout/webapps/native-api-access-jsbridge
+- https://developer.android.com/reference/androidx/webkit/WebViewCompat#addWebMessageListener(android.webkit.WebView,java.lang.String,java.util.Set%3Cjava.lang.String%3E,androidx.webkit.WebViewCompat.WebMessageListener)
+- https://developer.apple.com/documentation/webkit/wkscriptmessagehandler
 ---
 
 ## Overview
 
-This weakness occurs when an app places sensitive data on the system clipboard, or handles clipboard content insecurely, exposing that data beyond the app's control.
+This weakness occurs when an app exposes sensitive native functionality to content loaded in its WebViews, most commonly through JavaScript bridges.
 
-The clipboard is a shared resource: other apps can read its contents, and on some platforms, clipboard content synchronizes to nearby devices via a universal clipboard. Copying sensitive data such as passwords, one-time codes, card numbers, or tokens to the clipboard, failing to mark it as sensitive, or leaving it there indefinitely can leak that data to other apps and devices.
+Bridges such as [`addWebMessageListener`](https://developer.android.com/reference/androidx/webkit/WebViewCompat#addWebMessageListener%28android.webkit.WebView,java.lang.String,java.util.Set%3Cjava.lang.String%3E,androidx.webkit.WebViewCompat.WebMessageListener%29) on Android and [`WKScriptMessageHandler`](https://developer.apple.com/documentation/webkit/wkscriptmessagehandler) on iOS allow web content to send messages to native code. When these bridges expose more capability than necessary, or are reachable by untrusted content, malicious JavaScript can invoke native functionality, access sensitive data, or perform privileged actions using the app's permissions and privileges.
 
 ## Modes of Introduction
 
-- **Sensitive Data Copyable Without User Consent**: Copying sensitive values such as passwords, one-time codes, or card numbers to the clipboard without user consent.
-- **Clipboard Content Not Marked Sensitive**: Not flagging copied sensitive content as sensitive where the platform supports it (e.g. `EXTRA_IS_SENSITIVE` on Android), so previews and clipboard history show it in cleartext.
-- **Universal Clipboard Not Restricted**: Not restricting sensitive clipboard items to the local device or setting an expiration on iOS, letting them sync to other devices.
-- **Clipboard Not Cleared**: Leaving sensitive content on the clipboard after it has served its purpose.
-- **Untrusted Clipboard Input**: Processing pasted clipboard data without validation, even though any app can have written it.
+- **Bridges Reachable by Untrusted Content**: Making bridge interfaces available to any page, origin, or frame the WebView loads instead of restricting them to trusted origins.
+- **Unvalidated Bridge Messages**: Accepting message names, arguments, or payloads without validating their structure, types, values, authorization, and expected application state.
+- **Globally Exposed Bridge Mechanisms**: Using bridge mechanisms that expose native interfaces broadly across the WebView, such as Android `addJavascriptInterface`, when origin-scoped messaging APIs are available.
+- **App-Owned Bridge Scripts in the Page World**: Running injected bridge scripts in the same JavaScript execution world as page content, allowing page scripts, including third-party scripts, to access or interfere with the bridge.
+- **Sensitive Data in Bridge Replies**: Returning sensitive data into the WebView JavaScript context in a way that any untrusted scripts can read, regardless of user authentication state.
+- **Over-Exposed Bridges**: Exposing more native functionality through the bridge than the web content actually needs.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Attackers can read personal or financial data from the clipboard, resulting in unauthorized disclosure of user data.
-- **Authentication or Authorization Bypass**: Attackers can capture copied credentials or one-time codes, resulting in unauthorized access to the user's accounts.
+- **Compromise of Sensitive Data**: Attackers can call bridge methods that return user or app data, resulting in exfiltration of sensitive information to attacker-controlled servers.
+- **Execution of Unauthorized Code**: Attackers can drive native functionality exposed through the bridge, resulting in privileged actions performed within the app's context.
 
 ## Mitigations
 
-- **Avoid the Clipboard for Secrets**: Disable copying for sensitive fields and provide secure alternatives such as auto-fill (see @MASWE-0024) so users never need to copy secrets.
-- **Only Copy with User Consent**: If copying is required, ask the user for consent before placing sensitive data on the clipboard, or only act as a result of a user-chosen action (e.g. a "Copy" button).
-- **Mark Clipboard Content as Sensitive**: When sensitive content must be copied, flag it as sensitive so the platform masks previews and treats it accordingly.
-- **Specify an appropriate expiration**: When sensitive content must be copied, set an expiration so it is removed from the clipboard after a short time.
-- **Restrict Clipboard Exposure**: When copying, follow the platform's [secure clipboard handling guidance on Android](https://developer.android.com/privacy-and-security/risks/secure-clipboard-handling) and mark the content using [`ClipDescription.EXTRA_IS_SENSITIVE`](https://developer.android.com/reference/android/content/ClipDescription#EXTRA_IS_SENSITIVE) to obscure clipboard previews. On iOS, use pasteboard options such as [`localOnly`](https://developer.apple.com/documentation/uikit/uipasteboard/optionskey/localonly) and [`expirationDate`](https://developer.apple.com/documentation/uikit/uipasteboard/optionskey/expirationdate) to limit cross-device propagation and content lifetime.
-- **Validate Pasted Data**: Treat clipboard content as untrusted input and validate it before use.
+- **Minimize the Bridge Surface**: Expose only the specific methods the web content needs, and strip bridges entirely from WebViews that do not need them.
+- **Restrict Bridges to Trusted Origins**: Attach bridges only when loading trusted content and prefer origin-scoped messaging mechanisms over global bridges.
+- **Validate Bridge Messages**: Treat every message arriving over the bridge as untrusted input and validate it before acting on it.
+- **Prefer Modern Messaging APIs**: On Android, prefer [`WebViewCompat.addWebMessageListener`](https://developer.android.com/reference/androidx/webkit/WebViewCompat#addWebMessageListener%28android.webkit.WebView,java.lang.String,java.util.Set,androidx.webkit.JavaScriptExecutionWorld,androidx.webkit.WebViewCompat.WebMessageListener%29) over the legacy [`WebView.addJavascriptInterface`](https://developer.android.com/reference/android/webkit/WebView#addJavascriptInterface%28java.lang.Object,java.lang.String%29). On iOS, use [`WKScriptMessageHandlerWithReply`](https://developer.apple.com/documentation/webkit/wkscriptmessagehandlerwithreply) when JavaScript requires a native response, and use [`WKScriptMessageHandler`](https://developer.apple.com/documentation/webkit/wkscriptmessagehandler) for one way messages.
+- **Isolate App-Owned Bridge Scripts**: When the bridge is intended only for app-injected JavaScript, register the handler and injected script in a named execution world. Use [`JavaScriptExecutionWorld`](https://developer.android.com/reference/androidx/webkit/JavaScriptExecutionWorld) on Android and [`WKContentWorld`](https://developer.apple.com/documentation/webkit/wkcontentworld) on iOS, where supported. Keep origin restrictions, frame checks, and message validation in place, because execution world isolation is not origin authorization.

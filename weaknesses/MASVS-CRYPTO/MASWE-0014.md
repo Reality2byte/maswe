@@ -1,45 +1,44 @@
 ---
-title: Improper Generation of Cryptographic Signatures
+title: Improper Cryptographic Key Derivation
 id: MASWE-0014
-alias: improper-signature-generation
-requirement: "The app properly generates cryptographic signatures."
+alias: improper-crypto-key-derivation
+requirement: "The app derives cryptographic keys using approved key derivation functions."
 platform: [android, ios]
 profiles: [L1, L2]
 threat: MAS-THREAT-0014
-attacks: [MAS-ATTACK-0018, MAS-ATTACK-0021, MAS-ATTACK-0030]
+attacks: [MAS-ATTACK-0025, MAS-ATTACK-0026]
 mappings:
-  masvs-v1: [MSTG-CRYPTO-4, MSTG-CRYPTO-5]
-  masvs-v2: [MASVS-CRYPTO-1, MASVS-CRYPTO-2]
-  cwe: [323, 326, 327, 330]
-  maswe-beta: [MASWE-0025, MASWE-0012]
+  masvs-v1: [MSTG-CRYPTO-2]
+  masvs-v2: [MASVS-CRYPTO-2]
+  cwe: [326, 327, 759, 760, 916]
+  maswe-beta: [MASWE-0010]
 refs:
-- https://developer.android.com/privacy-and-security/cryptography#deprecated-functionality
-- https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf
-- https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-5.pdf
-- https://csrc.nist.gov/pubs/ir/8547/ipd
+- https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf
+- https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-132.pdf
+- https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
 ---
 
 ## Overview
 
-This weakness occurs when cryptographic signatures are generated with weak algorithms, insufficient parameters, or flawed randomness, undermining the integrity and authenticity guarantees they are meant to provide.
+This weakness occurs when cryptographic keys are derived from passwords, passphrases, or other low-entropy inputs using a key derivation function (KDF) that is missing, unsuitable, or misconfigured.
 
-Signatures are only as strong as the scheme and parameters behind them: deprecated combinations such as SHA1withRSA, keys that are too short, and signing keys reused for other purposes all weaken the guarantee. In addition, the randomness used during signing is critical: in (EC)DSA, a predictable or reused per-signature nonce allows the private key itself to be recovered from observed signatures.
+Dedicated password-based KDFs, such as PBKDF2, scrypt, or Argon2, are deliberately expensive to compute and combine the input with a unique random salt, so that each guess costs the attacker significant effort and precomputed tables become useless. When a fast, general-purpose hash is used instead, or when the KDF is configured with a weak work factor or salt, the derived key is far weaker than its nominal length suggests and can be recovered with far less effort than intended.
 
 ## Modes of Introduction
 
-- **Weak or Deprecated Signature Algorithms**: Generating signatures with deprecated schemes or digest combinations, such as SHA1withRSA.
-- **Insufficient Key Length**: Using signing keys shorter than the lengths recommended by current standards for the chosen algorithm.
-- **Predictable Signature Nonces**: Generating the per-signature nonce in (EC)DSA with insufficient entropy, or reusing it across signatures.
-- **Key Reuse Across Purposes**: Using a signing key for other purposes, such as encryption or key agreement, violating key-separation principles.
+- **Plain Hash Instead of a KDF**: Deriving keys by applying a fast, general-purpose hash function to a password or passphrase instead of using a dedicated password-based KDF.
+- **Insufficient Work Factor**: Configuring the KDF with too few iterations or with memory and parallelism parameters below current recommendations.
+- **Missing or Predictable Salt**: Omitting the salt, hardcoding it in the app, or reusing the same salt across users or installations.
+- **Low-Entropy Input**: Deriving keys from inputs with insufficient entropy, such as short PINs or predictable device values, without combining them with additional secret material.
 
 ## Impact
 
-- **Authentication or Authorization Bypass**: Attackers can sign arbitrary data as the app or user, resulting in impersonation and unauthorized transactions or API calls accepted by peers that trust the signature.
-- **Compromise of Sensitive Data**: Attackers can tamper with signed data while producing valid signatures for it, resulting in undetected manipulation of information whose integrity depends on the signature.
+- **Compromise of Sensitive Data**: Attackers can decrypt protected information or forge encrypted data, resulting in unauthorized disclosure or modification of sensitive data.
+- **Authentication or Authorization Bypass**: Attackers can recover passwords or derived credentials, resulting in unauthorized access to protected accounts, data, or functionality.
 
 ## Mitigations
 
-- **Use Approved Signature Schemes**: Generate signatures with schemes approved in [NIST FIPS 186-5](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-5.pdf), such as ECDSA, RSA-PSS, or EdDSA, with approved digests, and follow post-quantum migration guidance such as [NIST IR 8547](https://csrc.nist.gov/pubs/ir/8547/ipd).
-- **Use Sufficient Key Lengths**: Ensure signing keys meet or exceed the lengths recommended by [NIST.SP.800-131Ar2](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf) for the chosen algorithm.
-- **Ensure Nonce Uniqueness**: Generate (EC)DSA per-signature nonces with a cryptographically secure random number generator, or use deterministic schemes (e.g. RFC 6979 deterministic ECDSA or Ed25519) that eliminate nonce misuse.
-- **Use Signing Keys for a Single Purpose**: Keep signing keys dedicated to signing and generate separate keys for other operations.
+- **Use a Password-Based KDF**: Derive keys from passwords or passphrases only with a dedicated password-based KDF such as PBKDF2, scrypt, or Argon2, following [NIST.SP.800-132](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-132.pdf) and the current [OWASP Password Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html) recommendations.
+- **Use an Adequate Work Factor**: Configure iteration counts, memory, and parallelism parameters according to current guidance, and revisit them periodically as hardware improves.
+- **Use Unique Random Salts**: Generate a unique salt with a cryptographically secure random number generator for every derivation and store it alongside the derived material; never hardcode or reuse salts.
+- **Strengthen Low-Entropy Inputs**: When the input has low entropy (e.g. a PIN), combine the derived key with additional secret material, such as a random key stored in the platform keystore, so the result cannot be brute-forced from the user input alone.

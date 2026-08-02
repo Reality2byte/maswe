@@ -1,44 +1,42 @@
 ---
-title: Debugger Detection Not Implemented
+title: Code Obfuscation Not Implemented
 id: MASWE-0060
-alias: debugger-detection
-requirement: "The app detects debugger attachment at runtime and responds to protect sensitive operations."
+alias: code-obfuscation
+requirement: "The app implements code obfuscation."
 platform: [android, ios]
 profiles: [R]
 threat: MAS-THREAT-0060
-attacks: [MAS-ATTACK-0002]
+attacks: [MAS-ATTACK-0001]
 mappings:
-  masvs-v1: [MSTG-RESILIENCE-2]
-  masvs-v2: [MASVS-RESILIENCE-4]
-  maswe-beta: [MASWE-0101]
+  masvs-v1: [MSTG-RESILIENCE-9, MSTG-RESILIENCE-12]
+  masvs-v2: [MASVS-RESILIENCE-3]
+  cwe: [693]
+  maswe-beta: [MASWE-0089, MASWE-0091, MASWE-0092]
 refs:
-- https://developer.android.com/reference/android/os/Debug#isDebuggerConnected()
-- https://man7.org/linux/man-pages/man5/proc_pid_status.5.html
-- https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/ptrace.2.html
-- https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/sysctl.3.html
-- https://www.youtube.com/watch?v=ih6gWZDuNME
+- https://developer.android.com/topic/performance/app-optimization/enable-app-optimization#overview
 ---
 
 ## Overview
 
-This weakness occurs when an app does not detect the presence of a debugger attached to it at runtime.
+This weakness occurs when an app's code, particularly its security-relevant logic, ships without effective obfuscation, facilitating reverse engineering and static analysis.
 
-A debugger lets an attacker inspect memory, set breakpoints, and alter control flow to bypass client-side controls, even when the release build is not flagged as debuggable (see @MASWE-0050 for that case). Platforms offer detection primitives such as `Debug.isDebuggerConnected()` (Java debugging) and the `TracerPid` field in `/proc/self/status` on Android (Native debugging), or `sysctl`- and `ptrace`-based checks on iOS. Without such checks and a response, a debugger can be attached and used against the app unnoticed.
+Obfuscation does not prevent reverse engineering, but it raises its cost. Identifier renaming or string encryption are easier to implement and are considered common obfuscation techniques. However, there are other obfuscation techniques, like control-flow transformations, opaque predicates, instruction substitution, instruction block chopping, and method inlining, as well as hindering decompilers from producing usable output. Most of these techniques can be combined together.
 
 ## Modes of Introduction
 
-- **No Debugger Checks**: Shipping without any runtime verification that a debugger is attached to the process.
-- **One-Time or Single-Point Checks**: Checking only at startup or in a single code path instead of around sensitive operations and throughout runtime.
-- **No Response Strategy**: Detecting a debugger but not reacting in a way that protects the app's sensitive operations.
+- **No Obfuscation Applied**: Shipping release builds without any minification or obfuscation, leaving class, method, and symbol names intact.
+- **Security-Relevant Logic Left Readable**: Not applying enough obfuscation to security-relevant code, leaving code sections like security checks, licensing logic, and proprietary algorithms trivially analyzable.
+- **Obfuscation Without Hardening**: Applying standard obfuscation whose transformations are automatically reversible by publicly available tooling.
 
 ## Impact
 
-- **Bypass of Protection Mechanisms**: Attackers can alter control flow at breakpoints to skip the app's client-side checks, resulting in the circumvention of its defenses.
-- **Compromise of Sensitive Data**: Attackers can read secrets and user data from process memory during debugging, resulting in exposure of credentials, keys, and tokens.
+- **Bypass of Protection Mechanisms**: Attackers can quickly locate and defeat client-side checks such as root detection, licensing, or anti-tampering logic, resulting in the circumvention of the app's defenses.
+- **Compromise of Sensitive Data**: Attackers can recover proprietary algorithms and embedded secrets from readable code, resulting in intellectual property theft and easier planning of further attacks.
 
 ## Mitigations
 
-- **Implement Debugger Detection**: Use platform primitives (e.g. `Debug.isDebuggerConnected()`, `TracerPid`, `sysctl`/`ptrace`-based checks) implemented in multiple layers, including native code.
-- **Check Continuously**: Run detection periodically and around sensitive operations, not only at startup, so late attachment is also caught.
-- **Respond to Detection**: Terminate, wipe sensitive state, or restrict functionality when a debugger is detected, according to the app's risk profile.
-- **Assess Effectiveness**: Test the checks against common anti-anti-debugging techniques and refine them over time.
+- **Enable Obfuscation for Release Builds**: Apply the platform's minification and obfuscation tooling or established commercial obfuscators to all release builds.
+- **Harden Security-Relevant Code**: Apply stronger transformations (opaque predicates, instruction substitution, control-flow obfuscation, method inlining) to the security-relevant code.
+- **Implement Lossy Obfuscation**: Implement obfuscation in a way that intentionally removes information from the code, rather than only shift things around.
+- **Assess Obfuscation Effectiveness**: Regularly attempt to reverse engineer the release build with state-of-the-art decompilers and deobfuscators to validate that the protection meets its goal.
+- **Combine with Runtime Protections**: Pair obfuscation with runtime integrity and anti-instrumentation checks (see the mitigations in @MASWE-0056, @MASWE-0066, @MASWE-0059), since obfuscation alone only delays attackers.

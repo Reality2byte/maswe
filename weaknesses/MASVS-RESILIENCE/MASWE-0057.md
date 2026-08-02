@@ -1,41 +1,43 @@
 ---
-title: App Virtualization Environment Detection Not Implemented
+title: App Attestation Not Implemented
 id: MASWE-0057
-alias: app-virtualization-detection
-requirement: "The app detects when it is running inside an app-virtualization environment."
+alias: app-integrity
+requirement: "The app implements app attestation."
 platform: [android, ios]
 profiles: [R]
 threat: MAS-THREAT-0057
-attacks: [MAS-ATTACK-0067]
+attacks: [MAS-ATTACK-0040, MAS-ATTACK-0068, MAS-ATTACK-0069]
 mappings:
-  masvs-v2: [MASVS-RESILIENCE-1]
-  cwe: [693]
-  maswe-beta: [MASWE-0098]
+  masvs-v1: [MSTG-CODE-1]
+  masvs-v2: [MASVS-RESILIENCE-2]
+  cwe: [347]
+  maswe-beta: [MASWE-0104, MASWE-0106]
+refs:
+- https://developer.apple.com/documentation/xcode/using-the-latest-code-signature-format
+- https://developer.apple.com/documentation/devicecheck/preparing-to-use-the-app-attest-service
 ---
 
 ## Overview
 
-This weakness occurs when an app does not detect that it is running inside an app-virtualization or cloning environment.
+This weakness occurs when an app does not attest its own authenticity and integrity, i.e. it implements no effective techniques to verify that the running binary is a genuine, unmodified copy of the app.
 
-App virtualization and "dual-app" container frameworks run an app inside another app's process, letting the hosting app intercept its calls, access its data, and instrument it, all without rooting the device. They also enable running multiple cloned instances of the same app. An app that does not check for anomalies in its process path and package structure, or for known virtualization frameworks, cannot respond to running in such a hostile host.
+App attestation includes verifying the app's signature and binaries at runtime, detecting an invalid or unexpected signing certificate, and using platform attestation services that vouch for the app's identity (e.g. App Attest on iOS, Play Integrity app verdicts on Android). It also covers using current signing schemes: outdated formats, such as Android V1-only signatures or an iOS CodeDirectory version below 20400, weaken the platform's own integrity guarantees. Verifying the package or signature against expected values, which also provides official-store assurance, remains one of the applicable techniques.
 
 ## Modes of Introduction
 
-- **No Virtualization Checks**: Not verifying the app's process path, package structure, or runtime environment for signs of running inside another app's process.
-- **Known Frameworks Not Detected**: Not checking for artifacts of known virtualization and cloning frameworks.
-- **No Response Strategy**: Detecting a virtualized environment but continuing to operate normally with sensitive functionality enabled.
+- **No Runtime Integrity Verification**: Not verifying the app's signature, package identity, or binaries at runtime, so a repackaged copy runs unnoticed.
+- **No Platform App Attestation**: Not using platform services that attest the app's identity to the backend, so servers cannot distinguish genuine clients from modified ones.
+- **Outdated Signing Schemes**: Signing releases with outdated formats (e.g. Android V1-only signatures, iOS CodeDirectory below version 20400) that are easier to abuse.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Attackers can intercept the virtualized app's files, credentials, and API calls from the hosting app, resulting in exposure of user data without requiring root access.
-- **Bypass of Protection Mechanisms**: Attackers can instrument the app inside the container to defeat its client-side controls, resulting in the circumvention of its defenses on unrooted devices.
-- **Compromise of System Integrity and Business Operations**: Attackers can run multiple cloned instances to abuse promotions or multi-account limits, resulting in fraud against the app owner.
-- **Lack of Server-Verified Platform Attestation**: Failing to validate the app's package identity, signing certificate via hardware-backed platform attestation (e.g., Play Integrity or App Attest) on a backend server, allowing the app to execute unchecked inside virtual containers or cloned spaces.
+- **Bypass of Protection Mechanisms**: Attackers can strip resiliency controls from a repackaged copy, making it easier to further analyze and reverse-engineer the application.
+- **Compromise of Sensitive Data**: Attackers can distribute trojanized versions of the app that harvest credentials and data from the users they deceive, resulting in account compromise attributed to the app.
+- **Compromise of System Integrity and Business Operations**: Modified clients, cracked features, and cloned apps circulate under the app's brand, resulting in revenue loss and reputational damage for the app owner.
 
 ## Mitigations
 
-- **Detect Environment Anomalies**: Verify the app's process path, data directory, and package structure at runtime and treat mismatches as indicators of virtualization.
-- **Check for Known Frameworks**: Detect artifacts of known virtualization and cloning frameworks and their hosting packages.
-- **Respond to Detection**: Restrict sensitive functionality, notify the backend, or terminate when a virtualized environment is detected, according to the app's risk profile.
-- **Assess Effectiveness**: Test the detection against current virtualization frameworks and update it as they evolve.
-- **Attest Application Integrity**: Use platform attestation frameworks such as Play Integrity on Android or App Attest on iOS (see @MASWE-0059) with backend nonce verification to validate the official package name, signing certificate, and application integrity.
+- **Verify App Integrity at Runtime**: Check the app's signing certificate, package identity, and binaries at runtime against expected values, implementing checks in layers that are harder to patch out (e.g. native code).
+- **Use Platform App Attestation**: Integrate services such as iOS App Attest or Play Integrity app verdicts and verify their results server-side, so the backend rejects modified or repackaged clients.
+- **Use Current Signing Schemes**: Sign releases with up-to-date signature formats and rotate away from deprecated ones.
+- **Respond to Failed Checks**: Terminate, restrict functionality, or flag the session to the backend when integrity verification fails, and assess the checks against known bypass techniques.

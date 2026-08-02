@@ -1,41 +1,45 @@
 ---
-title: Allowing Untrusted App Extensions
+title: WebViews Allow Access to Local Resources with Untrusted Content
 id: MASWE-0034
-alias: insecure-app-extensions
-requirement: "The app only permits trusted app extensions to interact with it."
-platform: [ios]
+alias: webviews-local-resources
+requirement: "The app only allows trusted WebView content to access local resources."
+platform: [android, ios]
 profiles: [L1, L2]
 threat: MAS-THREAT-0034
-attacks: [MAS-ATTACK-0048]
+attacks: [MAS-ATTACK-0047, MAS-ATTACK-0051]
 mappings:
-  masvs-v1: [MSTG-PLATFORM-11]
-  masvs-v2: [MASVS-PLATFORM-1, MASVS-STORAGE-2]
-  cwe: [829]
-  maswe-beta: [MASWE-0061]
+  masvs-v1: [MSTG-PLATFORM-6]
+  masvs-v2: [MASVS-PLATFORM-2, MASVS-STORAGE-2, MASVS-CODE-4]
+  cwe: [22, 79, 200, 669]
+  android-risks:
+  - webview-unsafe-file-inclusion
+  android-core-app-quality: [WebView_Asset_Loader]
+  maswe-beta: [MASWE-0069, MASWE-0073]
 refs:
-- https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623122-application
-- https://developer.apple.com/documentation/uikit/uiapplication/extensionpointidentifier/keyboard
+- https://blog.oversecured.com/Android-Exploring-vulnerabilities-in-WebResourceResponse/
 ---
 
 ## Overview
 
-This weakness occurs when an app allows untrusted app extensions, such as custom keyboards or share and action extensions, to interact with it and observe the data it handles.
+This weakness occurs when a WebView is configured to access local resources while also rendering untrusted content, allowing that content to reach files and data outside the web sandbox.
 
-On iOS, app extensions run third-party code that can interact with the host app and observe or exfiltrate the data the app hands to them. A custom keyboard, for example, sees every keystroke typed while it is active. An app that handles sensitive data should restrict which extension point identifiers it allows, for example by implementing `application(_:shouldAllowExtensionPointIdentifier:)` to reject untrusted extension categories, and by disabling third-party keyboards for sensitive input.
+Settings that enable file or content access (e.g. `setAllowFileAccess`, `setAllowFileAccessFromFileURLs`, `setAllowUniversalAccessFromFileURLs`, `setAllowContentAccess` on Android, or overly broad file read access grants on iOS) let JavaScript running in the WebView read app-private files, traverse the filesystem, or exfiltrate data. Insecure custom resource loading, such as serving internal files through a hand-rolled `WebResourceResponse` instead of a safe asset loader, can likewise expose protected files to the less-trusted WebView JavaScript context or serve attacker-controllable content from the app's own origin.
 
 ## Modes of Introduction
 
-- **All Extension Points Allowed**: Not implementing `application(_:shouldAllowExtensionPointIdentifier:)`, so every extension category, including custom keyboards, can interact with the app.
-- **Third-Party Keyboards Allowed for Sensitive Input**: Allowing custom keyboards (the `keyboard` extension point) while users enter credentials, payment data, or other secrets.
-- **Sensitive Data Handed to Extensions**: Passing more data than necessary to share or action extensions, which can process and transmit it outside the app's control.
+- **File Access Enabled with Untrusted Content**: Enabling file or content access settings on WebViews that also render untrusted or externally influenced content.
+- **Universal Access from File URLs**: Allowing universal or file-URL cross-origin access, so a local HTML file can read other local files and send them to remote origins.
+- **Insecure Custom Resource Loading**: Serving internal files through custom response handlers without path validation, instead of a dedicated asset-loading mechanism with a restricted scope.
+- **Overly Broad File Read Grants**: Granting the WebView read access to broader directories than the specific content it needs to display.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Attackers can log keystrokes or read content handed to a malicious extension, resulting in unauthorized disclosure of personal data typed into or shared from the app.
-- **Authentication or Authorization Bypass**: Attackers can capture credentials or one-time codes typed on a malicious keyboard, resulting in unauthorized access to the user's accounts.
+- **Compromise of Sensitive Data**: Attackers can read and exfiltrate app-private files, such as databases, preferences, or cached tokens, resulting in unauthorized disclosure of user and app data.
+- **Authentication or Authorization Bypass**: Attackers can steal session material stored in reachable files or WebView storage, resulting in account takeover.
 
 ## Mitigations
 
-- **Restrict Extension Points**: Implement `application(_:shouldAllowExtensionPointIdentifier:)` and reject extension categories the app does not need to support.
-- **Keep Sensitive Input on the System Keyboard**: Disable third-party keyboards for sensitive fields; secure text entry fields automatically use the system keyboard.
-- **Minimize Data Shared with Extensions**: Hand share and action extensions only the specific items being shared, never broader app data.
+- **Disable File and Content Access**: Keep file, file-URL, and content access settings disabled unless strictly required, and never combine them with untrusted content.
+- **Use a Safe Asset Loader**: Serve local app resources through a dedicated asset-loading mechanism with a fixed, validated scope instead of custom response handlers over arbitrary paths.
+- **Scope File Read Access Narrowly**: When loading local files, grant read access only to the specific file or directory being displayed.
+- **Separate Trusted and Untrusted Content**: Render untrusted content only in WebViews with no local resource access and no privileged configuration.

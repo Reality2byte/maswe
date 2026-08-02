@@ -1,39 +1,41 @@
 ---
-title: Latest Platform Version Not Targeted
+title: Enforced Updating Not Implemented
 id: MASWE-0043
-alias: target-latest-platform-version
-requirement: "The app targets the latest platform version."
+alias: enforced-updating
+requirement: "The app detects if it must be updated and reacts appropriately."
 platform: [android, ios]
 profiles: [L2]
 threat: MAS-THREAT-0043
-attacks: [MAS-ATTACK-0056]
+attacks: [MAS-ATTACK-0040, MAS-ATTACK-0053]
 mappings:
-  masvs-v2: [MASVS-CODE-1]
-  cwe: [693, 1357]
-  android-core-app-quality: [Target_SDK_Version, Compile_SDK_Version]
-  maswe-beta: [MASWE-0078]
+  masvs-v1: [MSTG-ARCH-9]
+  masvs-v2: [MASVS-CODE-2]
+  cwe: [602, 693]
+  maswe-beta: [MASWE-0075]
 refs:
-- https://developer.android.com/google/play/requirements/target-sdk
-- https://developer.apple.com/news/upcoming-requirements/
+- https://developer.android.com/guide/playcore/in-app-updates
+- https://developer.android.com/reference/com/google/android/play/core/appupdate/AppUpdateManager
+- https://medium.com/swlh/updating-users-to-the-latest-app-release-on-ios-ed96e4c76705
+- https://gist.github.com/DineshKachhot/f63fcebceca6351fc982cafd38f6f05c
 ---
 
 ## Overview
 
-This weakness occurs when an app does not target the latest platform version, missing the newest platform-enforced security protections and behavior changes.
+This weakness occurs when an app has no mechanism to force users to update to a more secure version after a critical vulnerability has been remediated.
 
-Targeting the latest platform version, via `targetSdkVersion` on Android or by building with the latest Xcode/SDK on iOS, opts the app into protections such as scoped storage, stricter runtime-permission handling, permission auto-reset, and modern TLS defaults. When an app targets an old version, the OS applies backward-compatibility behaviors and the app silently misses these protections. This is distinct from the minimum supported version (see @MASWE-0042): here the concern is the target/compiled version.
+When a critical vulnerability is found in a production app, the developer needs a way to migrate existing users to the latest version as quickly as possible. Platforms provide building blocks for this, such as Android In-App Updates (`AppUpdateManager`) and store version checks on iOS, but robust enforcement requires the backend to signal and enforce the minimum acceptable version.
 
 ## Modes of Introduction
 
-- **Outdated Target Version**: Keeping `targetSdkVersion` on Android, or the Xcode/SDK used to build on iOS, below current requirements, so newer platform-enforced protections never apply to the app.
-- **Compatibility Behaviors Left in Place**: Relying on legacy behaviors (e.g. broad storage access or lenient permission handling) that only continue to work because the app targets an old version.
+- **No Enforced-Update Mechanism**: Shipping the app without any in-app or enforced update flow, so vulnerable versions keep working indefinitely.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Attackers can take advantage of legacy behaviors, such as broader file-system or permission access, resulting in exposure of user data that current platform defaults would have protected.
-- **Compromise of System Integrity and Business Operations**: The app can fall below app-store target-version requirements, resulting in blocked updates or removal from distribution for the app owner.
+- **Compromise of Sensitive Data**: Attackers can exploit already-fixed vulnerabilities against users stuck on old versions, resulting in exposure of user data long after a patch was published.
+- **Compromise of System Integrity and Business Operations**: The app owner cannot retire vulnerable versions from the installed base, resulting in a prolonged attack window.
 
 ## Mitigations
 
-- **Target the Latest Platform Version**: Update `targetSdkVersion` and build with the latest SDK promptly each platform cycle, following the store requirements for [Android](https://developer.android.com/google/play/requirements/target-sdk) and [iOS](https://developer.apple.com/news/upcoming-requirements/).
-- **Adopt New Protections**: Review each platform release's behavior changes and migrate off legacy behaviors.
+- **Implement an Enforced Update Flow**: Use platform mechanisms such as Android In-App Updates or a version check against the app store on iOS to require updating when a critical fix ships.
+- **Enforce the Minimum Version Server-Side**: Have the backend declare the minimum supported app version and reject requests from older clients.
+- **Distinguish Flexible and Immediate Updates**: Reserve blocking (immediate) updates for security-critical releases and use flexible updates otherwise, so users accept the mechanism when it matters.

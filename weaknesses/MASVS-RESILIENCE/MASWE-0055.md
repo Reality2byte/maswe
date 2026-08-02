@@ -1,37 +1,64 @@
 ---
-title: No Application-Level Payload Encryption
+title: Device Attestation Not Implemented
 id: MASWE-0055
-alias: data-unencrypted
-requirement: "The app applies application-level payload encryption in addition to transport-layer encryption."
+alias: device-attestation
+requirement: "The app implements device attestation."
 platform: [android, ios]
 profiles: [R]
 threat: MAS-THREAT-0055
-attacks: [MAS-ATTACK-0064]
+attacks: [MAS-ATTACK-0065, MAS-ATTACK-0066, MAS-ATTACK-0068]
 mappings:
-  masvs-v1: [MSTG-RESILIENCE-13]
-  masvs-v2: [MASVS-RESILIENCE-3, MASVS-NETWORK-1]
-  cwe: [319]
-  maswe-beta: [MASWE-0096]
+  masvs-v1: [MSTG-RESILIENCE-10]
+  masvs-v2: [MASVS-RESILIENCE-1]
+  maswe-beta: [MASWE-0100]
+refs:
+- https://developer.android.com/google/play/integrity
+- https://developer.android.com/google/play/integrity/verdicts
+- https://developer.android.com/google/play/integrity/standard
+- https://developer.android.com/google/play/integrity/classic
+- https://github.com/android/keyattestation
+- https://source.android.com/docs/security/features/keystore/attestation
+- https://grapheneos.org/articles/attestation-compatibility-guide
+- https://developer.apple.com/documentation/devicecheck
+- https://developer.apple.com/documentation/devicecheck/accessing-and-modifying-per-device-data
+- https://developer.apple.com/documentation/devicecheck/establishing-your-app-s-integrity
+- https://developer.apple.com/documentation/devicecheck/validating-apps-that-connect-to-your-server
+- https://github.com/Oliver-Binns/app-attest
+- https://github.com/VisionR1/KeyAttestation
+- https://github.com/JingMatrix/TEESimulator
+- https://github.com/5ec1cff/TrickyStore
 ---
 
 ## Overview
 
-This weakness occurs when an app relies solely on transport-layer encryption for its network traffic, without an additional layer of application-level payload encryption.
+This weakness occurs when an app does not implement device attestation, so its backend cannot distinguish requests made from genuine, uncompromised devices from those coming from rooted, emulated, tampered, or automated environments.
 
-Even when the connection uses HTTPS, an attacker who controls the device can bypass transport protections (for example by defeating certificate pinning with instrumentation) and observe or tamper with the plaintext payloads, revealing the inner workings of the app and its API. Application-level payload encryption raises the effort required to analyze and manipulate the app's traffic. This is a resilience measure aimed at hindering analysis and abuse; it complements rather than replaces transport security (see @MASWE-0025, @MASWE-0027).
+Device attestation uses platform services, such as the standard Android hardware attestation API, the Play Integrity API or iOS DeviceCheck and App Attest, to provide the backend with cryptographically verifiable evidence about the device associated with a request. The evidence and security properties differ by platform and service. Without device attestation, the backend cannot independently verify device-origin claims made by the client. The backend must validate attestation evidence and apply the service-specific request-binding, freshness, and replay protections; client-side evaluation is another bypassable local check.
+
+On Android, both the hardware-backed attestation and Play Integrity APIs can provide server-verifiable assurance that the device has not been compromised in ways covered by its device-integrity verdicts or signals, such as an unlocked bootloader, an unrecognized operating-system image or an outdated security patch level. Their main differences include:
+
+- **Google Mobile Services (GMS) Requirement**: Direct hardware-backed key attestation uses Android Keystore and does not require Google Play services on the device to request an attestation. Play Integrity depends on Google Play components and Google services.
+- **Verdict Generation and Policy Enforcement**: With direct key attestation, the backend receives signed properties and defines which boot states, operating-system signing keys, patch levels, and application identities it accepts. Play Integrity evaluates the available signals and returns Google-defined verdict labels. In both cases, the developer decides how the backend responds.
+
+On iOS, DeviceCheck and App Attest do not provide equivalent assurance about operating-system compromise. They can establish that evidence originates from genuine Apple hardware; App Attest also binds that evidence to a legitimate app instance, but neither service attests the integrity of iOS.
 
 ## Modes of Introduction
 
-- **TLS-Only Protection**: Sending security-relevant API payloads with no protection beyond the transport channel, so they appear in plaintext as soon as TLS is intercepted on a controlled device.
-- **No Integrity Binding on Requests**: Not signing or otherwise binding sensitive requests, so intercepted payloads can be modified and replayed once the transport layer is bypassed.
+- **No Attestation Integrated**: Not using the platform's attestation services at all, leaving the backend with no device-integrity signal.
+- **Client-Side-Only Verification**: Requesting attestation but evaluating the verdict in the app instead of verifying it server-side.
+- **Missing Freshness Guarantees**: Verifying attestation without a server-issued nonce or timeliness check, allowing verdicts to be replayed.
+- **Verdicts Not Enforced**: Collecting attestation results but not gating sensitive operations on them.
+- **Incomplete Evidence Validation**: Accepting device-attestation evidence without applying the service-specific checks for request binding, replay protection, and the device claims required by the backend's policy.
 
 ## Impact
 
-- **Compromise of System Integrity and Business Operations**: Attackers can map the app's API and craft or tamper with requests, resulting in fraud, scraping, and abuse of backend services at the app owner's expense.
-- **Bypass of Protection Mechanisms**: Attackers can easily modify payloads that carry security-relevant state, without having to reverse-engineer the application to first circumvent the additional encryption.
+- **Compromise of System Integrity and Business Operations**: Attackers can drive the backend with automated or tampered clients, resulting in fraud, scraping, fake accounts, and abuse of the app owner's services.
+- **Bypass of Protection Mechanisms**: Attackers can leverage tampered running environments to bypass the app's security checks or feature restrictions, resulting in unauthorized access to protected app functionality.
+- **Financial Loss**: Attackers can abuse promotions, premium features, or transaction flows from unattested environments, resulting in direct monetary loss to the app owner.
 
 ## Mitigations
 
-- **Encrypt Sensitive Payloads at the Application Layer**: Apply an additional layer of encryption to security-relevant payloads before they enter the transport channel, using keys managed via the platform keystore.
-- **Sign Security-Relevant Requests**: Authenticate and integrity-protect sensitive requests (e.g. with signatures bound to attested, hardware-backed keys) so tampered payloads are rejected server-side.
-- **Treat It as Defense in Depth**: Keep full transport security (TLS and pinning) in place; application-level encryption raises analysis effort but is still client-side and ultimately bypassable.
+- **Integrate Platform Attestation**: Validate the [rootOfTrust](https://source.android.com/docs/security/features/keystore/attestation#rootoftrust-fields) fields from the key attestation extension or use Play Integrity API and iOS DeviceCheck / App Attest to obtain device- and app-integrity verdicts.
+- **Verify Server-Side with Freshness**: Have the backend verify attestation tokens cryptographically, bind them to a server-issued nonce, and check timeliness before trusting them.
+- **Gate Sensitive Operations on Verdicts**: Require valid attestation for high-risk API calls and degrade or deny service to unattested clients.
+- **Layer with Local Checks**: Combine attestation with local environment checks (see @MASWE-0052, @MASWE-0054) for defense in depth, and assess the overall scheme against known bypasses.

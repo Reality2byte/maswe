@@ -1,43 +1,43 @@
 ---
-title: App Attestation Not Implemented
+title: Debug Artifacts Not Removed
 id: MASWE-0062
-alias: app-integrity
-requirement: "The app implements app attestation."
+alias: non-production-resources
+requirement: "The app does not contain debug artifacts."
 platform: [android, ios]
 profiles: [R]
 threat: MAS-THREAT-0062
-attacks: [MAS-ATTACK-0040, MAS-ATTACK-0068, MAS-ATTACK-0069]
+attacks: [MAS-ATTACK-0001, MAS-ATTACK-0006]
 mappings:
-  masvs-v1: [MSTG-CODE-1]
-  masvs-v2: [MASVS-RESILIENCE-2]
-  cwe: [347]
-  maswe-beta: [MASWE-0104, MASWE-0106]
-refs:
-- https://developer.apple.com/documentation/xcode/using-the-latest-code-signature-format
-- https://developer.apple.com/documentation/devicecheck/preparing-to-use-the-app-attest-service
+  masvs-v1: [MSTG-CODE-3, MSTG-CODE-4]
+  masvs-v2: [MASVS-RESILIENCE-3]
+  cwe: [489, 497, 540, 912, 1295]
+  android-risks:
+  - test-debug
+  android-core-app-quality: [Production_Build_Quality]
+  maswe-beta: [MASWE-0094, MASWE-0093, MASWE-0095]
 ---
 
 ## Overview
 
-This weakness occurs when an app does not attest its own authenticity and integrity, i.e. it implements no effective techniques to verify that the running binary is a genuine, unmodified copy of the app.
+This weakness occurs when an app ships to production containing developer debug artifacts, such as verbose logging, testing utilities, debugging symbols, or leftover debug and test code.
 
-App attestation includes verifying the app's signature and binaries at runtime, detecting an invalid or unexpected signing certificate, and using platform attestation services that vouch for the app's identity (e.g. App Attest on iOS, Play Integrity app verdicts on Android). It also covers using current signing schemes: outdated formats, such as Android V1-only signatures or an iOS CodeDirectory version below 20400, weaken the platform's own integrity guarantees. Verifying the package or signature against expected values, which also provides official-store assurance, remains one of the applicable techniques.
+Such artifacts help adversaries understand the app's behavior and internals, may include sensitive implementation details, and, most critically, may include backdoors, such as hidden switches enabling debug menus or an insecure trust manager, that can disable security controls like TLS certificate validation. Note the distinction from @MASWE-0004: that weakness covers developer leftover artifacts that leak confidentiality (staging URLs, developer identities, source files), while this one covers debug artifacts that weaken the app's resilience.
 
 ## Modes of Introduction
 
-- **No Runtime Integrity Verification**: Not verifying the app's signature, package identity, or binaries at runtime, so a repackaged copy runs unnoticed.
-- **No Platform App Attestation**: Not using platform services that attest the app's identity to the backend, so servers cannot distinguish genuine clients from modified ones.
-- **Outdated Signing Schemes**: Signing releases with outdated formats (e.g. Android V1-only signatures, iOS CodeDirectory below version 20400) that are easier to abuse.
+- **Verbose Logging and Debug Flows**: Leaving verbose or debug-level logging and diagnostic code paths active in production builds.
+- **Testing Utilities Enabled**: Shipping with development-time utilities enabled, such as StrictMode on Android.
+- **Debugging Symbols Not Stripped**: Releasing binaries with debugging symbols that map the code for reverse engineers.
+- **Backdoors or Hidden Switches and Debug Menus**: Leaving debug or test code that can disable security controls, e.g. an insecure trust manager or a hidden configuration flag that turns off TLS verification.
 
 ## Impact
 
-- **Bypass of Protection Mechanisms**: Attackers can strip resiliency controls from a repackaged copy, making it easier to further analyze and reverse-engineer the application.
-- **Compromise of Sensitive Data**: Attackers can distribute trojanized versions of the app that harvest credentials and data from the users they deceive, resulting in account compromise attributed to the app.
-- **Compromise of System Integrity and Business Operations**: Modified clients, cracked features, and cloned apps circulate under the app's brand, resulting in revenue loss and reputational damage for the app owner.
+- **Bypass of Protection Mechanisms**: Attackers can activate leftover debug switches or code paths that disable security controls such as certificate validation, resulting in the defeat of protections the production app is supposed to enforce.
+- **Compromise of Sensitive Data**: Attackers can use verbose logs, symbols, and debug flows to learn implementation details and extract sensitive values, resulting in information disclosure that enables further attacks.
 
 ## Mitigations
 
-- **Verify App Integrity at Runtime**: Check the app's signing certificate, package identity, and binaries at runtime against expected values, implementing checks in layers that are harder to patch out (e.g. native code).
-- **Use Platform App Attestation**: Integrate services such as iOS App Attest or Play Integrity app verdicts and verify their results server-side, so the backend rejects modified or repackaged clients.
-- **Use Current Signing Schemes**: Sign releases with up-to-date signature formats and rotate away from deprecated ones.
-- **Respond to Failed Checks**: Terminate, restrict functionality, or flag the session to the backend when integrity verification fails, and assess the checks against known bypass techniques.
+- **Strip Symbols and Debug Code**: Remove debugging symbols and compile debug-only code paths out of release builds using build variants and flags.
+- **Disable Verbose Logging in Production**: Ensure debug and verbose logging is removed or disabled in release configurations.
+- **Remove Testing Utilities**: Keep development-time utilities such as StrictMode out of production builds.
+- **Eliminate Backdoors**: Enforce code review and release checks that reject hidden switches, test hooks, or alternative code paths capable of weakening security controls in production.

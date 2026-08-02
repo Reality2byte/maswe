@@ -1,46 +1,54 @@
 ---
-title: Sensitive Data Not Excluded From Backup
+title: Sensitive Data Stored Unencrypted Outside of Private Storage
 id: MASWE-0002
-alias: data-not-excluded-backup
-requirement: "The app excludes sensitive data from backups."
+alias: data-unencrypted-shared-storage-no-user-interaction
+requirement: "The app encrypts sensitive data stored outside of private storage."
 platform: [android, ios]
-profiles: [L1, L2, P]
+profiles: [L1, L2]
 threat: MAS-THREAT-0002
-attacks: [MAS-ATTACK-0008, MAS-ATTACK-0009]
+attacks: [MAS-ATTACK-0010, MAS-ATTACK-0011]
 mappings:
-  masvs-v1: [MSTG-STORAGE-8]
-  masvs-v2: [MASVS-STORAGE-2, MASVS-PRIVACY-1]
-  cwe: [212, 313]
+  masvs-v1: [MSTG-STORAGE-2]
+  masvs-v2: [MASVS-STORAGE-1, MASVS-STORAGE-2]
+  cwe: [200, 284, 312, 313, 732, 921, 922]
   android-risks:
-  - backup-best-practices
-  maswe-beta: [MASWE-0004, MASWE-0003]
+  - sensitive-data-external-storage
+  android-core-app-quality: [Sensitive_Data_Storage]
+  maswe-beta: [MASWE-0007, MASWE-0002]
 refs:
-- https://developer.android.com/guide/topics/data/autobackup#include-exclude-android-11
-- https://developer.android.com/guide/topics/data/autobackup#include-exclude-android-12
-- https://developer.android.com/guide/topics/data/autobackup#define-device-conditions
+- https://developer.android.com/training/data-storage
+- https://developer.android.com/privacy-and-security/security-tips#external-storage
 ---
 
 ## Overview
 
-This weakness occurs when an app fails to exclude sensitive data from device backups, so that user and app secrets end up in cloud or local backup archives.
+This weakness occurs when an app stores sensitive data unencrypted in shared or external storage, where other apps can access it without any user interaction.
 
-iOS and Android automatically back up app data to cloud services, users can create local backups on physical machines, and backups are also created during data transfers when switching between phones. When developers do not properly configure how their app handles backups and neglect to exclude sensitive files, the backups may contain sensitive user and app data. Under certain conditions, the backups may not be adequately secured by the cloud provider, or a malicious actor could tamper with the backed-up files.
+On Android, apps can store data explicitly in an app-specific external storage (`getExternalFilesDir()`), use the `MediaStore`-API  or Storage Access Framework (SAF) to access shared folders. The app-specific external storage can not be accessed by other apps. However, if the external storage is located on a physical SD card, it can be removed and read. If the external storage is emulated by the system, actors with access to an unlocked phone can access it using _Android Debug Bridge (ADB)_.
+
+This weakness primarily concerns Android, which permits the explicit use of shared and external storage.  However, while it is not possible to directly read and write an external folder on iOS, apps can use the by default pre-installed Files app or the document picker to read and write to a system-wide shared location.
 
 ## Modes of Introduction
 
-- **Automatic System Backups**: Relying on the platform's default cloud backup behavior, which includes app data once the user consents during the initial device setup, without defining backup exclusion rules for sensitive files.
-- **Local Backups**: Allowing sensitive data to be included in backups that users create on local systems (e.g., laptops), where it may be stored unencrypted.
-- **Device-To-Device Transfer**: Allowing sensitive data to be included in device-to-device migrations (e.g., via iCloud or Google's migration tools) without restricting transfer conditions.
-- **Sensitive Data Unencrypted in Backups**: Storing sensitive data in backed-up locations without additional encryption, so it is readable by anyone who obtains the backup.
+- **Data Stored Unencrypted**: Writing sensitive data to shared or external storage unencrypted. On Android, this also includes the app-specific external storage.
+- **Hardcoded Encryption Key**: Encrypting sensitive data stored in external storage with a key that is hardcoded inside the application.
+- **Encryption Key Stored on Filesystem**: Encrypting sensitive data stored in external storage but storing the key alongside it or in another easily accessible location.
+- **Insufficient Encryption**: Encrypting sensitive data with an algorithm or configuration that is not considered strong.
+- **Reuse of Encryption Key**: Sharing the encryption key between two devices owned by a single user, enabling data cloning between those devices via external storage.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Attackers can extract personal information, photos, documents, or audio files from backups, resulting in unauthorized disclosure of user data.
-- **Authentication or Authorization Bypass**: Attackers can extract passwords, cryptographic keys, and session tokens from backups, resulting in identity theft, account takeover, or unauthorized access to backend services.
-- **Bypass of Protection Mechanisms**: Attackers can modify backed-up app state, e.g. a database tracking premium features, or restore a pre-redemption backup to reuse one-time coupons, resulting in circumvention of business logic and revenue loss for the app owner.
+- **Compromise of Sensitive Data**: Attackers can extract personal information and media such as photos, documents, and audio files, resulting in unauthorized disclosure of user data.
+- **Authentication or Authorization Bypass**: Attackers can extract passwords, cryptographic keys, and session tokens, resulting in identity theft or account takeover.
+- **Bypass of Protection Mechanisms**: Attackers can tamper with data used by the app, e.g. a database describing the state of premium features, resulting in circumvention of business logic and revenue loss for the app owner.
 
 ## Mitigations
 
-- **Exclude Sensitive Data from Backups**: Declare backup rules that exclude sensitive information, files, and key material from all backup mechanisms.
-- **Encrypt Data That Must Be Backed Up**: If sensitive data has to be included in backups, encrypt it with an algorithm strong enough to protect the data for its entire required lifetime, even if the backup is later compromised.
-- **Constrain Backup Conditions**: On Android, declare the appropriate [device conditions](https://developer.android.com/guide/topics/data/autobackup#define-device-conditions), such as requiring client-side encryption (`requireFlags="clientSideEncryption"`) and disabling device-to-device transfer (`deviceToDeviceTransfer`) for sensitive datasets, so that unencrypted copies are never produced.
+- **Prefer Private Storage**: Store files in the [private internal storage](https://developer.android.com/training/data-storage/app-specific#internal) whenever possible.
+- **Limit Platform File Sharing**: Prohibit sensitive data to be shared using the platform's storage sharing frameworks such as Storage Access Framework (SAF) on Android or document picker on iOS whenever possible.
+- **Encrypt Data Before Writing**: Encrypt any sensitive data stored in shared or external storage, e.g. using [Android's `EncryptedFile` API](https://developer.android.com/reference/androidx/security/crypto/EncryptedFile).
+- **Protect Encryption Keys**: Protect any keys used for data encryption with the device's hardware-backed keystore where available, and never hardcode them inside the application.
+
+!!! Warning
+
+    The **Jetpack security crypto library**, including the `EncryptedFile` and `EncryptedSharedPreferences` classes, has been [deprecated](https://developer.android.com/privacy-and-security/cryptography#jetpack_security_crypto_library). However, since an official replacement has not yet been released, we recommend using these classes until one is available.

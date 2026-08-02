@@ -1,46 +1,46 @@
 ---
-title: Emulated or Virtual Device Detection Not Implemented
+title: App Resources Integrity Not Verified
 id: MASWE-0058
-alias: emulated-virtual-device-detection
-requirement: "The app detects when it is running in an emulated or virtual device environment."
+alias: app-resources-integrity
+requirement: "The app verifies the integrity of its resources."
 platform: [android, ios]
 profiles: [R]
 threat: MAS-THREAT-0058
-attacks: [MAS-ATTACK-0003, MAS-ATTACK-0066]
+attacks: [MAS-ATTACK-0009, MAS-ATTACK-0070]
 mappings:
-  masvs-v1: [MSTG-RESILIENCE-5, MSTG-RESILIENCE-8]
-  masvs-v2: [MASVS-RESILIENCE-1, MASVS-RESILIENCE-4]
-  maswe-beta: [MASWE-0099, MASWE-0103]
+  masvs-v1: [MSTG-RESILIENCE-3]
+  masvs-v2: [MASVS-RESILIENCE-2, MASVS-CODE-4]
+  cwe: [471]
+  maswe-beta: [MASWE-0105]
 refs:
-- https://developer.android.com/google/play/integrity/overview
-- https://developer.android.com/google/play/integrity/verdicts
-- https://github.com/eltavine/Duck-Detector-Refactoring
-- https://github.com/Lakr233/vphone-cli
-- https://developer.apple.com/documentation/devicecheck
-- https://ieeexplore.ieee.org/document/10935812
-
+- https://developer.android.com/privacy-and-security/cryptography
+- https://developer.android.com/privacy-and-security/keystore
+- https://developer.apple.com/documentation/cryptokit/hmac
+- https://developer.apple.com/documentation/cryptokit/storing-cryptokit-keys-in-the-keychain
+- https://developer.apple.com/documentation/security/restricting-keychain-item-accessibility
 ---
 
 ## Overview
 
-This weakness occurs when an app does not implement effective techniques to detect that it is running in an emulator or virtual device.
+This weakness occurs when an app does not verify that the resources it relies on have not been tampered with.
 
-Emulators give attackers a fully controlled, snapshottable environment for analyzing the app, automating interactions, and running it at scale in bot farms. Detection typically relies on identifying the features and limitations of commonly used emulation solutions, such as characteristic device identifiers, emulator-specific file-paths, hardware properties, sensors, and timing behavior.
+Beyond the app package, apps depend on non-executable resources whose integrity matters: files in the app sandbox, configuration, downloaded content, and data restored from backups. An attacker who can alter these resources can change the app's behavior or inject malicious content without modifying its packaged code, sidestepping package- and code-integrity checks (see @MASWE-0057, @MASWE-0059). Safe dynamic code loading is covered by @MASWE-0050.
 
 ## Modes of Introduction
 
-- **No Emulator Checks**: Shipping without any verification of device properties, hardware features, or sensor behavior that distinguish emulators from real devices.
-- **Single-Source Detection Signals**: Relying on a single source of emulation or virtualization indicators (e.g. system properties) that emulators can trivially fake.
-- **No Response Strategy**: Detecting an emulated environment but not adapting the app's behavior in response.
+- **Sandbox Files Not Verified**: Trusting files in the app's data directory without verifying their integrity.
+- **Downloaded Resources Not Verified**: Using downloaded content or configuration without verifying its integrity and authenticity.
+- **Restored Data Not Revalidated**: Using data restored from backups or device transfers without revalidating its integrity.
+- **Verification Result Ignored**: Continuing to use a resource after its integrity verification fails.
 
 ## Impact
 
-- **Bypass of Protection Mechanisms**: Attackers can iterate on bypasses of the app's defenses with snapshots and full inspection, resulting in faster and cheaper circumvention of its protections.
-- **Compromise of System Integrity and Business Operations**: Attackers can run automated fleets of emulated instances, resulting in bot-driven fraud, fake accounts, and abuse of the app owner's services.
+- **Bypass of Protection Mechanisms**: Attackers can modify configuration or state files that drive security-relevant behavior, resulting in the circumvention of controls without modifying any code.
+- **Execution of Unauthorized Code**: Attackers can inject malicious content into resources the app renders or interprets (e.g. scripts or templates), resulting in attacker-controlled behavior inside the app.
 
 ## Mitigations
 
-- **Detect Emulator Characteristics**: Check device identifiers, hardware capabilities, sensor availability, file paths and behavioral traits that differ between emulators and physical devices, combining multiple signals.
-- **Respond to Detection**: Restrict sensitive functionality, require additional verification, or terminate when an emulated environment is detected, according to the app's risk profile.
-- **Combine with Attestation**: Use server-verified device attestation (see @MASWE-0059) so emulated environments are also flagged independently of local checks.
-- **Assess Effectiveness**: Test the detection against popular emulators and hardening/evasion tools and refine it over time.
+- **Verify Resource Integrity**: Compare security-relevant files against a trusted expected hash, HMAC, or digital signature before use. Protect keys and reference values from modification, and treat local verification as a defense-in-depth control on compromised devices.
+- **Authenticate Downloaded Content**: Verify integrity and authenticity (e.g. a signature, see @MASWE-0011) of downloaded resources before use.
+- **Treat Restored Data as Untrusted**: Re-validate data that reappears via backup restore or device transfer before acting on it (see @MASWE-0051).
+- **Respond to Failed Checks**: Discard or re-fetch tampered resources, restrict functionality, or alert the backend when validation fails.

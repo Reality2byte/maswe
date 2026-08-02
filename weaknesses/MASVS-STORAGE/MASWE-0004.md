@@ -1,54 +1,53 @@
 ---
-title: Sensitive Data Stored Unencrypted Outside of Private Storage
+title: Sensitive Data Hardcoded in the App Package
 id: MASWE-0004
-alias: data-unencrypted-shared-storage-no-user-interaction
-requirement: "The app encrypts sensitive data stored outside of private storage."
-platform: [android]
+alias: data-hardcoded-app-package
+requirement: "The app does not hardcode sensitive data in the application package."
+platform: [android, ios]
 profiles: [L1, L2]
 threat: MAS-THREAT-0004
-attacks: [MAS-ATTACK-0010, MAS-ATTACK-0011]
+attacks: [MAS-ATTACK-0001]
 mappings:
-  masvs-v1: [MSTG-STORAGE-2]
-  masvs-v2: [MASVS-STORAGE-1, MASVS-STORAGE-2]
-  cwe: [200, 284, 312, 313, 732, 921, 922]
+  masvs-v1: [MSTG-STORAGE-1, MSTG-CODE-2]
+  masvs-v2: [MASVS-STORAGE-1]
+  cwe: [312, 321, 540, 798]
   android-risks:
-  - sensitive-data-external-storage
-  android-core-app-quality: [Sensitive_Data_Storage]
-  maswe-beta: [MASWE-0007, MASWE-0002]
+  - insecure-api-usage
+  maswe-beta: [MASWE-0005, MASWE-0013, MASWE-0036]
 refs:
-- https://developer.android.com/training/data-storage
-- https://developer.android.com/privacy-and-security/security-tips#external-storage
+- https://cloud.google.com/docs/authentication/api-keys#securing
+- https://cloud.google.com/docs/authentication/api-keys#api_key_restrictions
+- https://github.com/gitleaks/gitleaks
 ---
 
 ## Overview
 
-This weakness occurs when an app stores sensitive data unencrypted in shared or external storage, where other apps can access it without any user interaction.
+This weakness occurs when sensitive data is embedded in the app package (APK/IPA) and shipped with the app, where anyone who downloads the package can recover it.
 
-On Android, apps can store data explicitly in an app-specific external storage (`getExternalFilesDir()`), use the `MediaStore`-API  or Storage Access Framework (SAF) to access shared folders. The app-specific external storage can not be accessed by other apps. However, if the external storage is located on a physical SD card, it can be removed and read. If the external storage is emulated by the system, actors with access to an unlocked phone can access it using _Android Debug Bridge (ADB)_.
+The hardcoded sensitive data may include API keys and secrets for first- or third-party services, credentials such as passwords or session tokens, and cryptographic material such as symmetric or private keys embedded directly in the package (as opposed to being generated and stored in a platform keystore, see @MASWE-0003). It also includes developer leftover artifacts, such as staging or integration URLs, developer emails and usernames, and source code files left in the package (e.g. `.swift`, `.cpp`, map files, or other build artifacts) that leak internal information.
 
-This weakness primarily concerns Android, which permits the explicit use of shared and external storage.  However, while it is not possible to directly read and write an external folder on iOS, apps can use the by default pre-installed Files app or the document picker to read and write to a system-wide shared location.
+Note that developer _debug_ artifacts (verbose logging, backdoors, testing utilities, hidden switches) are covered separately under resilience in @MASWE-0062. The focus here is on hardcoded sensitive data that leaks confidentiality regardless of any anti-tampering considerations.
 
 ## Modes of Introduction
 
-- **Data Stored Unencrypted**: Writing sensitive data to shared or external storage unencrypted. On Android, this also includes the app-specific external storage.
-- **Hardcoded Encryption Key**: Encrypting sensitive data stored in external storage with a key that is hardcoded inside the application.
-- **Encryption Key Stored on Filesystem**: Encrypting sensitive data stored in external storage but storing the key alongside it or in another easily accessible location.
-- **Insufficient Encryption**: Encrypting sensitive data with an algorithm or configuration that is not considered strong.
-- **Reuse of Encryption Key**: Sharing the encryption key between two devices owned by a single user, enabling data cloning between those devices via external storage.
+- **App Source Code**: Embedding secrets directly in the code that is compiled into the app.
+- **App Assets and Resources**: Including secrets in configuration files, manifests, property lists, string resources, and other bundled files.
+- **Libraries**: Including secrets in the configuration files or source code of first-party, third-party, or transitive dependencies.
+- **Build and Developer Leftovers**: Inadvertently packaging staging/integration endpoints, developer identities, and source files with the app.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Attackers can extract personal information and media such as photos, documents, and audio files, resulting in unauthorized disclosure of user data.
-- **Authentication or Authorization Bypass**: Attackers can extract passwords, cryptographic keys, and session tokens, resulting in identity theft or account takeover.
-- **Bypass of Protection Mechanisms**: Attackers can tamper with data used by the app, e.g. a database describing the state of premium features, resulting in circumvention of business logic and revenue loss for the app owner.
+- **Financial Loss**: Attackers can abuse compromised API keys to make unauthorized billed API calls (e.g., AI/ML services), resulting in unexpected charges to the app owner.
+- **Compromise of System Integrity and Business Operations**: Attackers can use extracted credentials to access backend services, resulting in service disruption, policy-violation suspensions, or denial of service.
+- **Compromise of Sensitive Data**: Attackers can use extracted cryptographic material to decrypt protected data, resulting in unauthorized disclosure of user or app data.
+- **Bypass of Protection Mechanisms**: Attackers can use hardcoded keys to unlock paid features or access restricted content, resulting in circumvention of the protections the app enforces.
 
 ## Mitigations
 
-- **Prefer Private Storage**: Store files in the [private internal storage](https://developer.android.com/training/data-storage/app-specific#internal) whenever possible.
-- **Limit Platform File Sharing**: Prohibit sensitive data to be shared using the platform's storage sharing frameworks such as Storage Access Framework (SAF) on Android or document picker on iOS whenever possible.
-- **Encrypt Data Before Writing**: Encrypt any sensitive data stored in shared or external storage, e.g. using [Android's `EncryptedFile` API](https://developer.android.com/reference/androidx/security/crypto/EncryptedFile).
-- **Protect Encryption Keys**: Protect any keys used for data encryption with the device's hardware-backed keystore where available, and never hardcode them inside the application.
-
-!!! Warning
-
-    The **Jetpack security crypto library**, including the `EncryptedFile` and `EncryptedSharedPreferences` classes, has been [deprecated](https://developer.android.com/privacy-and-security/cryptography#jetpack_security_crypto_library). However, since an official replacement has not yet been released, we recommend using these classes until one is available.
+- **Proxy Static Secrets Through a Middleware**: If a stateful API service is not viable, front the stateless API with a middleware solution (API proxy or gateway) that proxies requests between the app and the API endpoint, keeping the static secret server-side rather than in the client. Use JSON Web Tokens (JWT) and JSON Web Signature (JWS) as appropriate.
+- **Use Stateful API Services**: Prefer API services that provide secure authentication, client validation, and session controls. Implement dynamic tokens that expire after a reasonably short time (e.g., 1 hour) to reduce the impact of key exposure, and ensure proper error handling and logging to detect unauthorized access attempts. Consider OAuth 2.0 and libraries such as AppAuth to simplify secure OAuth flows.
+- **Retrieve Secrets at Runtime**: Consider using a [Key Management Service](https://cloud.google.com/kms/docs/key-management-service) behind a middleware solution (API proxy or gateway) to retrieve secrets at runtime after validating device and app integrity and over a secure, pinned channel that protects the transferred secrets (see @MASWE-0028).
+- **Restrict Unavoidable Hardcoded Secrets**: If secrets must be hardcoded, configure them with the minimum required permissions and restrictions to reduce the impact in case of exposure.
+- **Use Platform Keystores**: Store cryptographic keys and authentication material using the platform's hardware-backed keystore (Android Keystore, iOS Keychain) instead of embedding them in the package. See @MASWE-0003.
+- **Audit for Leftover Secrets**: Regularly audit the codebase and dependencies for hardcoded sensitive data and developer leftovers (e.g., using tools such as [gitleaks](https://github.com/gitleaks/gitleaks)) and strip build artifacts and source files from release packages.
+- **Harden Only as a Last Resort**: When no other secure option is available, use white-box cryptography, code/resource obfuscation, and RASP to raise the effort required to extract secrets, ensuring keys are only assembled in memory when needed. These techniques deter but do not prevent extraction and must not replace the mitigations above.

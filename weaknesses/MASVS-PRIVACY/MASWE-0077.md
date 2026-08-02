@@ -1,46 +1,37 @@
 ---
-title: Inadequate Awareness for Privacy Relevant Actions
+title: Inadequate Data Visibility Controls
 id: MASWE-0077
-alias: inadequate-awareness-privacy-actions
-requirement: "The app informs the user about the privacy implications before performing an action."
+alias: data-visibility-control
+requirement: "The app provides adequate controls over the visibility of user data."
 platform: [android, ios]
 profiles: [P]
 threat: MAS-THREAT-0077
-attacks: [MAS-ATTACK-0084]
+attacks: [MAS-ATTACK-0084, MAS-ATTACK-0087]
 mappings:
-  masvs-v2: [MASVS-PRIVACY-2]
+  masvs-v2: [MASVS-PRIVACY-4]
   cwe: [359]
-  maswe-beta: [MASWE-0109]
+  maswe-beta: [MASWE-0114]
 refs:
-- https://cloud.google.com/sensitive-data-protection/docs/classification-redaction
-- https://gdpr-info.eu/recitals/no-26/
-- https://gdpr-info.eu/recitals/no-28/
-- https://gdpr-info.eu/art-4-gdpr/
-- https://www.edpb.europa.eu/topics/ai-and-technology/anonymisation-pseudonymisation_en
-- https://ec.europa.eu/justice/article-29/documentation/opinion-recommendation/files/2014/wp216_en.pdf
-- https://www.statista.com/topics/9460/app-tracking-and-mobile-privacy/
+- https://firebase.google.com/support/privacy/storing-privacy-settings
+- https://www.researchgate.net/publication/335863205_Demystifying_Hidden_Privacy_Settings_in_Mobile_Apps
 ---
 
 ## Overview
 
-This weakness occurs when an app performs a privacy relevant action without making its scope or material consequences reasonably apparent to the user.
+This weakness occurs when an app does not give users sufficient control over how their personal information is shared with other users or the broader environment.
 
-Privacy relevant actions include sharing, exporting, publishing, synchronizing, backing up, changing visibility, responding to a request from another party, or moving data from private app storage to storage or services accessible by other applications, users, or third parties.
-
-The weakness may cause users to disclose different data, disclose data to a broader audience, or create more persistent copies than they reasonably intended. It includes flows where the app honors another party's request for data without clearly showing the user what will be shared and with whom, or allowing the user to control the disclosure. It does not require the underlying processing to rely on consent. The issue is whether the interface allows the user to understand and control the resulting privacy state.
+Examples of such information include last connection status, read receipts, date of birth, email address, or discoverability settings. Ensuring that users have clear and granular options, typically in the form of app settings, to control data visibility is critical to maintaining their privacy and building trust in the app.
 
 ## Modes of Introduction
 
-- **Unclear Disclosure Context**: The interface or action labels do not clearly identify the affected records, files, accounts, data elements, included metadata, destination, audience, or resulting privacy state, including when responding to another party's request for data.
-- **Insufficient Disclosure Review and Feedback**: The app does not allow the user to review, control, or confirm a consequential disclosure, or clearly indicate that a high impact or difficult to reverse disclosure has occurred.
-
+- **Lack of Granular Privacy Settings**: Failing to provide privacy settings with sufficient granularity to allow users to control specific aspects of data collection and sharing, such as differentiating between location services, contacts, or media access, or to decide which types of information are shared and with whom.
 ## Impact
 
-- **Violation of User Privacy**: The app can disclose personal or sensitive data to recipients who are not entitled to receive it under the user's sharing choices, resulting in unauthorized exposure of that data.
-- **Loss of User Trust**: Users can discover that the app shared data without their awareness or control, resulting in reduced confidence in the app and its owner.
-- **Legal and Regulatory Non-Compliance**: The app can share personal data without adequate transparency or user control, resulting in violations of privacy obligations and potential enforcement action.
+- **Violation of User Privacy**: Users can unintentionally expose personal information, such as their email address, birthday, or online status, to others without their consent, resulting in an increased risk of harassment, stalking, or identity theft.
+- **Loss of User Trust**: Users can feel they have inadequate control over what information is shared and with whom, resulting in negative reviews and decreased app engagement for the app owner.
+- **Legal and Regulatory Non-Compliance**: Failing to offer sufficient privacy controls can violate regulations like GDPR or CCPA, which require user control over data visibility and sharing, resulting in fines or legal action for the app owner.
 
 ## Mitigations
 
-- **Provide Clear Disclosure Context and Control**: At the point of action, show the affected data, included metadata, destination, audience, and material privacy consequences; before responding to another party's request for data, identify the requester and recipient and allow the user to approve, limit, or decline the disclosure.
-- **Support Review and Reversal of Consequential Disclosures**: Before completion, allow users to review selected items, recipients, audience, included metadata, and visibility; make the resulting privacy state visible and provide proportionate confirmation or undo mechanisms when practical.
+- **Offer Granular Privacy Settings**: Provide privacy settings with sufficient granularity, allowing users to control individual data collection categories (e.g., location, contacts) and manage their sharing preferences. Allow users to choose what information is visible to others, such as connection status or discoverability.
+- **Educate Users on Privacy Options**: Clearly inform users about available privacy settings and how to use them effectively to manage data visibility. This can be done through tutorials, help sections, or contextual tips within the app.

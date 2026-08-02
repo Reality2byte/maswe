@@ -1,42 +1,41 @@
 ---
-title: Malware Detection Not Implemented
+title: App Virtualization Environment Detection Not Implemented
 id: MASWE-0053
-alias: malware-detection
-requirement: "The app detects attacks by malware."
+alias: app-virtualization-detection
+requirement: "The app detects when it is running inside an app-virtualization environment."
 platform: [android, ios]
 profiles: [R]
-threat: MAS-THREAT-0076
-attacks: [MAS-ATTACK-0036, MAS-ATTACK-0052]
+threat: MAS-THREAT-0053
+attacks: [MAS-ATTACK-0067]
 mappings:
-  masvs-v2: [MASVS-RESILIENCE-2]
+  masvs-v2: [MASVS-RESILIENCE-1]
   cwe: [693]
-refs:
-- https://developers.google.com/android/play-protect
-- https://developers.google.com/android/play-protect/client-protections
+  maswe-beta: [MASWE-0098]
 ---
 
 ## Overview
 
-This weakness occurs when an app does not implement or integrate techniques to detect malware on the device or malicious apps and components that could target it.
+This weakness occurs when an app does not detect that it is running inside an app-virtualization or cloning environment.
 
-Mobile malware commonly attacks other apps indirectly: abusing accessibility services to read screens and drive the UI, drawing overlays to phish credentials, or exploiting a compromised runtime environment. For high-assurance apps, detecting a potentially hostile environment, e.g. known malicious packages, apps holding accessibility or overlay capabilities, or platform threat signals such as Google Play Protect status, allows the app to warn the user, restrict functionality, or trigger other protective responses. This complements environment-integrity checks such as @MASWE-0056 and platform services such as the Play Integrity API.
+App virtualization and "dual-app" container frameworks run an app inside another app's process, letting the hosting app intercept its calls, access its data, and instrument it, all without rooting the device. They also enable running multiple cloned instances of the same app. An app that does not check for anomalies in its process path and package structure, or for known virtualization frameworks, cannot respond to running in such a hostile host.
 
 ## Modes of Introduction
 
-- **No Hostile-Environment Checks**: Not checking for known malicious packages or platform threat signals before enabling sensitive functionality.
-- **Abuse-Prone Capabilities Ignored**: Not considering apps holding accessibility or overlay capabilities in the app's risk decisions for sensitive flows (see @MASWE-0031, @MASWE-0039).
-- **No Response Strategy**: Detecting a hostile environment but not warning the user or restricting sensitive functionality.
-- **Insufficient Response Strategy**: Only responding on the current device, rather than on the account level. Malware will often intercept credentials and use them to onboard a legitimate app onto an attacker-controlled device. As part of the response strategy, risky behaviour (such as onboarding the app on a new device) must be blocked in case of a suspected compromise.
+- **No Virtualization Checks**: Not verifying the app's process path, package structure, or runtime environment for signs of running inside another app's process.
+- **Known Frameworks Not Detected**: Not checking for artifacts of known virtualization and cloning frameworks.
+- **No Response Strategy**: Detecting a virtualized environment but continuing to operate normally with sensitive functionality enabled.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Malware can capture credentials, one-time codes, and displayed content while the app takes no protective action, resulting in exposure of user data the app could have defended.
-- **Financial Loss**: Malware can automate or manipulate transactions against the unprotected app, resulting in direct financial harm to users and fraud losses for the app owner.
+- **Compromise of Sensitive Data**: Attackers can intercept the virtualized app's files, credentials, and API calls from the hosting app, resulting in exposure of user data without requiring root access.
+- **Bypass of Protection Mechanisms**: Attackers can instrument the app inside the container to defeat its client-side controls, resulting in the circumvention of its defenses on unrooted devices.
+- **Compromise of System Integrity and Business Operations**: Attackers can run multiple cloned instances to abuse promotions or multi-account limits, resulting in fraud against the app owner.
+- **Lack of Server-Verified Platform Attestation**: Failing to validate the app's package identity, signing certificate via hardware-backed platform attestation (e.g., Play Integrity or App Attest) on a backend server, allowing the app to execute unchecked inside virtual containers or cloned spaces.
 
 ## Mitigations
 
-- **Integrate Platform Threat Signals**: Use available platform services (e.g. Play Protect status, Play Integrity verdicts) to learn about known malware and a compromised environment.
-- **Assess Risky Capabilities**: Factor the presence of accessibility- or overlay-capable apps into risk decisions for sensitive flows, combined with the UI-level defenses of @MASWE-0031 and @MASWE-0039.
-- **Respond Proportionately**: Warn the user, require additional verification, restrict functionality, or block sensitive operations when a hostile environment is detected.
-- **Lock Down Account**: Apply restrictions to the account, not just the local client. This will prevent attackers from performing actions on a non-hostile environment after the initial compromise.
-- **Assess Effectiveness**: Validate the detection against current malware behaviors and update it as the threat landscape evolves.
+- **Detect Environment Anomalies**: Verify the app's process path, data directory, and package structure at runtime and treat mismatches as indicators of virtualization.
+- **Check for Known Frameworks**: Detect artifacts of known virtualization and cloning frameworks and their hosting packages.
+- **Respond to Detection**: Restrict sensitive functionality, notify the backend, or terminate when a virtualized environment is detected, according to the app's risk profile.
+- **Assess Effectiveness**: Test the detection against current virtualization frameworks and update it as they evolve.
+- **Attest Application Integrity**: Use platform attestation frameworks such as Play Integrity on Android or App Attest on iOS (see @MASWE-0055) with backend nonce verification to validate the official package name, signing certificate, and application integrity.

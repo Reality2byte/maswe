@@ -1,59 +1,69 @@
 ---
-title: Insecure Certificate Validation
+title: Network Traffic Not Encrypted
 id: MASWE-0026
-alias: insecure-cert-validation
-requirement: "The app validates certificates for all network traffic."
+alias: cleartext-traffic
+requirement: "The app encrypts all network traffic."
 platform: [android, ios]
 profiles: [L1, L2]
 threat: MAS-THREAT-0026
-attacks: [MAS-ATTACK-0014, MAS-ATTACK-0015]
+attacks: [MAS-ATTACK-0012, MAS-ATTACK-0013, MAS-ATTACK-0014]
 mappings:
-  masvs-v1: [MSTG-NETWORK-3]
+  masvs-v1: [MSTG-NETWORK-1, MSTG-NETWORK-2]
   masvs-v2: [MASVS-NETWORK-1]
-  cwe: [295, 297]
+  cwe: [319]
   android-risks:
-  - unsafe-trustmanager
-  - unsafe-hostname
-  android-core-app-quality: [Network_Security_Configuration, Security_Provider_Initialization]
-  maswe-beta: [MASWE-0052]
+  - cleartext-communications
+  - insecure-machine-to-machine
+  android-core-app-quality: [Network_Security_Traffic, Network_Security_Configuration]
+  maswe-beta: [MASWE-0050, MASWE-0037, MASWE-0048]
 refs:
-- https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-52r2.pdf#page=17
-- https://developer.android.com/privacy-and-security/security-ssl#tls-1.3-enabled-by-default
-- https://support.google.com/faqs/answer/7071387?hl=en
-- https://developer.android.com/reference/android/webkit/WebViewClient.html?sjid=15211564825735678155-EU#onReceivedSslError(android.webkit.WebView,%20android.webkit.SslErrorHandler,%20android.net.http.SslError)
-- https://developer.android.com/privacy-and-security/security-ssl#WarningsSslSocket
+- https://developer.apple.com/documentation/security/preventing-insecure-network-connections
+- https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity/nsexceptiondomains
+- https://developer.apple.com/documentation/network
+- https://developer.apple.com/documentation/foundation/urlsession
 - https://developer.apple.com/forums/thread/67493
 - https://developer.apple.com/forums/thread/707320
-- https://support.apple.com/en-us/102390
-- https://developer.apple.com/documentation/foundation/performing-manual-server-trust-authentication
+- https://developer.android.com/privacy-and-security/security-best-practices#secure-communication
+- https://developer.android.com/privacy-and-security/security-tips#networking
+- https://developer.android.com/privacy-and-security/security-config#CleartextTraffic
+- https://developer.android.com/reference/javax/net/ssl/SSLSocket
+- https://developer.android.com/reference/android/security/NetworkSecurityPolicy#isCleartextTrafficPermitted()
+- https://developer.android.com/reference/java/net/Socket
+- https://developer.android.com/reference/android/webkit/WebView
+- https://developer.android.com/reference/javax/net/ssl/HttpsURLConnection
 ---
 
 ## Overview
 
-This weakness occurs when an app does not properly validate TLS certificates during secure communication, accepting invalid, expired, self-signed, or untrusted certificates without appropriate verification.
+This weakness occurs when an app transmits data over the network in cleartext, i.e. without encryption, making it accessible to anyone able to monitor the network channel.
 
-Certificate validation is the mechanism through which a TLS client establishes that it is talking to the intended server and not to an intermediary. When it is disabled, weakened, or implemented incorrectly, the confidentiality and integrity guarantees of TLS no longer hold, even though the connection itself is encrypted.
+This is especially concerning when sensitive information is transmitted, putting user privacy and security at direct risk. However, even when no sensitive data is being transmitted, cleartext communication remains a weakness: attackers who can intercept or redirect traffic may disrupt app functionality or deceive users by redirecting them to malicious sites that impersonate legitimate services.
+
+Secure network protocols not only provide confidentiality but also ensure data integrity and authenticity through encryption and certificate validation. When connections are properly secured, interception and manipulation attacks become much harder to perform because the attacker would need to bypass encryption and certificate validation.
 
 ## Modes of Introduction
 
-- **Disabling Certificate Validation**: Disabling or bypassing certificate validation checks to simplify development or troubleshoot connectivity issues, and shipping that configuration to production.
-- **Accepting Self-Signed Certificates**: Accepting self-signed or untrusted certificates without proper validation against trusted Certificate Authorities (CAs).
-- **Ignoring Hostname Verification**: Failing to verify that the certificate's hostname matches the server's hostname.
-- **Using Insecure Custom Trust Managers**: Implementing custom certificate validation logic that is incomplete, incorrect, or insecure.
-- **Incorrect Error Handling**: Proceeding with connections even when certificate validation errors occur, without alerting the user or terminating the connection.
-- **Third-Party Libraries**: Using third-party libraries or SDKs that disable or weaken certificate validation internally, or that default to permissive trust settings.
+- **Cleartext Traffic Allowed in Platform-Provided Settings**: Configuring platform-provided settings (e.g. Network Security Configuration on Android or App Transport Security on iOS) to explicitly allow cleartext traffic (globally or per-domain), making it the default behavior for all network connections managed by those settings.
+- **Usage of HTTP**: Using HTTP instead of HTTPS for communication, which does not encrypt data in transit.
+- **Usage of Non-HTTP Insecure Protocols**: Using insecure protocols such as FTP, SMTP without TLS, TCP sockets, or custom protocols which do not encrypt data in transit.
+- **Unencrypted Machine-to-Machine Channels**: Transferring data over local/proximity interfaces such as Bluetooth/BLE, NFC, USB, or Wi-Fi Direct without encryption, or relying solely on link-layer protection such as BLE "Just Works" pairing instead of application-layer encryption.
+- **Usage of Low-Level Network APIs**: Using low-level network APIs that do not enforce encryption and do not honor the platform's network security settings, such as [`Socket`](https://developer.android.com/reference/java/net/Socket) on Android or [`NWConnection`](https://developer.apple.com/documentation/network/nwconnection) on iOS.
+- **Cross-Platform Framework Misconfiguration**: Configuring cross-platform frameworks improperly so that cleartext traffic is allowed for both Android and iOS versions of an app.
+- **Third-Party Libraries**: Using third-party libraries or SDKs that default to insecure communication methods or are improperly configured.
 
 ## Impact
 
 - **Compromise of Sensitive Data**: Attackers can capture, read, or alter sensitive information transmitted over the network, resulting in unauthorized disclosure or manipulation of user data.
-- **Authentication or Authorization Bypass**: Attackers can capture credentials or session tokens in transit, resulting in user impersonation and unauthorized access to accounts or backend systems.
-- **Compromise of System Integrity and Business Operations**: Attackers can impersonate legitimate servers and feed altered or malicious data to the app, resulting in unreliable or malicious app behavior and reputational damage for the app owner.
+- **Authentication or Authorization Bypass**: Attackers can capture session tokens or credentials sent over cleartext channels, resulting in user impersonation and unauthorized access to accounts or backend systems.
+- **Compromise of System Integrity and Business Operations**: Attackers can inject malicious content or redirect users to impersonated services, resulting in altered app behavior, phishing, and reputational damage for the app owner.
 - **Legal and Regulatory Non-Compliance**: Attackers can capture personal data in transit, resulting in reportable breaches and regulatory penalties for the app owner under laws such as GDPR or HIPAA.
 
 ## Mitigations
 
-- **Enforce Strict Certificate Validation**: Always validate TLS certificates against a trusted set of Certificate Authorities (CAs) provided by the operating system or a trusted third party.
-- **Avoid Accepting Self-Signed Certificates**: Do not accept self-signed or untrusted certificates in production environments unless there is a secure mechanism to trust them explicitly.
-- **Enable Hostname Verification**: Ensure that the application's network layer verifies the server's hostname against the certificate's Subject Alternative Name (SAN) or Common Name (CN).
-- **Use Standard Trust Managers**: Utilize well-established libraries and platform-provided APIs for certificate validation instead of custom implementations.
-- **Handle Validation Errors Properly**: Terminate the connection and alert the user whenever certificate validation fails due to issues like expiration, revocation, or mismatch.
+- **Use Secure Protocols**: Always use secure protocols like HTTPS (which employs TLS for encryption), FTPS, SFTP, or SMTPS for all communication channels. Ensure these protocols are used consistently throughout the app.
+- **Explicitly Disable Cleartext Traffic**: Never allow cleartext traffic globally in the app configuration. Ensure that cleartext traffic is explicitly disabled using security settings like the Network Security Configuration on Android and App Transport Security (ATS) on iOS.
+- **Use Per-Domain Exceptions Sparingly**: If cleartext traffic is absolutely necessary for specific domains, ensure these domains are trusted and essential for the app's functionality, and conduct a thorough risk assessment before including them.
+- **Prefer Server Fixes**: Whenever possible, work with the server team to enable secure communication. Instead of adding network security exceptions to the mobile app, such as allowing cleartext traffic or lowering the minimum TLS version, update server configurations to support HTTPS with valid certificates and modern TLS protocols.
+- **Use High-Level Network APIs**: Use high-level network APIs that automatically handle encryption, certificate validation, and errors, such as [`HttpsURLConnection`](https://developer.android.com/reference/javax/net/ssl/HttpsURLConnection) on Android or [`URLSession`](https://developer.apple.com/documentation/foundation/urlsession) on iOS. Avoid using low-level network APIs or custom network stacks that bypass the platform-provided network security features.
+- **Use Secure Cross-Platform Frameworks**: Ensure that cross-platform frameworks are configured to enforce secure communication by default and do not allow cleartext traffic. Review the framework's documentation and adjust network security settings to align with best practices.
+- **Use Secure Third-Party Components**: Verify that any third-party libraries and SDKs used in the app enforce secure communication protocols, especially if they handle sensitive data or use low-level networking APIs. Ensure that these components are regularly updated to address any vulnerabilities.

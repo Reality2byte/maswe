@@ -1,43 +1,46 @@
 ---
-title: Debug Artifacts Not Removed
+title: Emulated or Virtual Device Detection Not Implemented
 id: MASWE-0054
-alias: non-production-resources
-requirement: "The app does not contain debug artifacts."
+alias: emulated-virtual-device-detection
+requirement: "The app detects when it is running in an emulated or virtual device environment."
 platform: [android, ios]
 profiles: [R]
 threat: MAS-THREAT-0054
-attacks: [MAS-ATTACK-0001, MAS-ATTACK-0006]
+attacks: [MAS-ATTACK-0003, MAS-ATTACK-0066]
 mappings:
-  masvs-v1: [MSTG-CODE-3, MSTG-CODE-4]
-  masvs-v2: [MASVS-RESILIENCE-3]
-  cwe: [489, 497, 540, 912, 1295]
-  android-risks:
-  - test-debug
-  android-core-app-quality: [Production_Build_Quality]
-  maswe-beta: [MASWE-0094, MASWE-0093, MASWE-0095]
+  masvs-v1: [MSTG-RESILIENCE-5, MSTG-RESILIENCE-8]
+  masvs-v2: [MASVS-RESILIENCE-1, MASVS-RESILIENCE-4]
+  maswe-beta: [MASWE-0099, MASWE-0103]
+refs:
+- https://developer.android.com/google/play/integrity/overview
+- https://developer.android.com/google/play/integrity/verdicts
+- https://github.com/eltavine/Duck-Detector-Refactoring
+- https://github.com/Lakr233/vphone-cli
+- https://developer.apple.com/documentation/devicecheck
+- https://ieeexplore.ieee.org/document/10935812
+
 ---
 
 ## Overview
 
-This weakness occurs when an app ships to production containing developer debug artifacts, such as verbose logging, testing utilities, debugging symbols, or leftover debug and test code.
+This weakness occurs when an app does not implement effective techniques to detect that it is running in an emulator or virtual device.
 
-Such artifacts help adversaries understand the app's behavior and internals, may include sensitive implementation details, and, most critically, may include backdoors, such as hidden switches enabling debug menus or an insecure trust manager, that can disable security controls like TLS certificate validation. Note the distinction from @MASWE-0006: that weakness covers developer leftover artifacts that leak confidentiality (staging URLs, developer identities, source files), while this one covers debug artifacts that weaken the app's resilience.
+Emulators give attackers a fully controlled, snapshottable environment for analyzing the app, automating interactions, and running it at scale in bot farms. Detection typically relies on identifying the features and limitations of commonly used emulation solutions, such as characteristic device identifiers, emulator-specific file-paths, hardware properties, sensors, and timing behavior.
 
 ## Modes of Introduction
 
-- **Verbose Logging and Debug Flows**: Leaving verbose or debug-level logging and diagnostic code paths active in production builds.
-- **Testing Utilities Enabled**: Shipping with development-time utilities enabled, such as StrictMode on Android.
-- **Debugging Symbols Not Stripped**: Releasing binaries with debugging symbols that map the code for reverse engineers.
-- **Backdoors or Hidden Switches and Debug Menus**: Leaving debug or test code that can disable security controls, e.g. an insecure trust manager or a hidden configuration flag that turns off TLS verification.
+- **No Emulator Checks**: Shipping without any verification of device properties, hardware features, or sensor behavior that distinguish emulators from real devices.
+- **Single-Source Detection Signals**: Relying on a single source of emulation or virtualization indicators (e.g. system properties) that emulators can trivially fake.
+- **No Response Strategy**: Detecting an emulated environment but not adapting the app's behavior in response.
 
 ## Impact
 
-- **Bypass of Protection Mechanisms**: Attackers can activate leftover debug switches or code paths that disable security controls such as certificate validation, resulting in the defeat of protections the production app is supposed to enforce.
-- **Compromise of Sensitive Data**: Attackers can use verbose logs, symbols, and debug flows to learn implementation details and extract sensitive values, resulting in information disclosure that enables further attacks.
+- **Bypass of Protection Mechanisms**: Attackers can iterate on bypasses of the app's defenses with snapshots and full inspection, resulting in faster and cheaper circumvention of its protections.
+- **Compromise of System Integrity and Business Operations**: Attackers can run automated fleets of emulated instances, resulting in bot-driven fraud, fake accounts, and abuse of the app owner's services.
 
 ## Mitigations
 
-- **Strip Symbols and Debug Code**: Remove debugging symbols and compile debug-only code paths out of release builds using build variants and flags.
-- **Disable Verbose Logging in Production**: Ensure debug and verbose logging is removed or disabled in release configurations.
-- **Remove Testing Utilities**: Keep development-time utilities such as StrictMode out of production builds.
-- **Eliminate Backdoors**: Enforce code review and release checks that reject hidden switches, test hooks, or alternative code paths capable of weakening security controls in production.
+- **Detect Emulator Characteristics**: Check device identifiers, hardware capabilities, sensor availability, file paths and behavioral traits that differ between emulators and physical devices, combining multiple signals.
+- **Respond to Detection**: Restrict sensitive functionality, require additional verification, or terminate when an emulated environment is detected, according to the app's risk profile.
+- **Combine with Attestation**: Use server-verified device attestation (see @MASWE-0055) so emulated environments are also flagged independently of local checks.
+- **Assess Effectiveness**: Test the detection against popular emulators and hardening/evasion tools and refine it over time.

@@ -1,43 +1,61 @@
 ---
-title: Sensitive Data Accessible After Session Termination
+title: Lack of Authentication or Authorization on App Components
 id: MASWE-0018
-alias: session-termination
-requirement: "The app makes sensitive data inaccessible after session termination."
+alias: missing-auth-app-components
+requirement: "The app enforces authentication and authorization on its components."
 platform: [android, ios]
-profiles: [L2]
+profiles: [L1, L2]
 threat: MAS-THREAT-0018
-attacks: [MAS-ATTACK-0005, MAS-ATTACK-0032, MAS-ATTACK-0033]
+attacks: [MAS-ATTACK-0038, MAS-ATTACK-0039]
 mappings:
-  masvs-v2: [MASVS-AUTH-3]
-  cwe: [285, 287, 613]
-  maswe-beta: [MASWE-0030]
+  masvs-v1: [MSTG-PLATFORM-4, MSTG-AUTH-3, MSTG-NETWORK-2, MSTG-STORAGE-6]
+  masvs-v2: [MASVS-AUTH-1, MASVS-PLATFORM-1, MASVS-STORAGE-2]
+  cwe: [306, 749, 862, 863, 923, 926, 939, 940]
+  android-risks:
+  - content-resolver
+  - insecure-broadcast-receiver
+  - access-control-to-exported-components
+  - android-exported
+  - custom-permissions
+  android-core-app-quality: [Component_Export, Component_Permissions, Component_Protection]
+  maswe-beta: [MASWE-0033, MASWE-0038, MASWE-0040, MASWE-0051, MASWE-0059, MASWE-0062, MASWE-0063, MASWE-0064, MASWE-0065, MASWE-0119]
 refs:
-- https://developer.android.com/identity/sign-in/credential-manager-siwg-implementation#handle-sign-out
-- https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html
+- https://developer.android.com/privacy-and-security/security-tips#IPNetworking
+- https://developer.android.com/privacy-and-security/security-tips#Services
+- https://developer.android.com/privacy-and-security/security-tips#BroadcastReceivers
+- https://developer.android.com/privacy-and-security/security-tips#ContentProviders
+- https://developer.android.com/privacy-and-security/security-tips#binder-and-messenger-interfaces
+- https://developer.android.com/topic/security/risks/content-resolver
+- https://developer.android.com/topic/security/risks/file-providers
 ---
 
 ## Overview
 
-This weakness occurs when sensitive data or an authenticated session remains accessible after the session should have ended, whether through explicit logout, a timeout, or a contextual state change.
+This weakness occurs when app components that expose functionality or data do not enforce proper authentication or authorization on their callers.
 
-Session termination is not limited to the user tapping "log out": inactivity timeouts, the app moving to the background, or remarkable changes in the user's context (such as location or profile changes) can all require the session to end or the user to re-authenticate. When the app fails to invalidate the session and clear the associated sensitive data (session tokens, cached personal data, in-memory state, on-screen content), anyone who gains access to the device or the leftover tokens can resume access without authenticating.
+It covers any component reachable by other apps or processes without adequate access control, including services, broadcast receivers, activities, and content providers, as well as local web services or open ports exposed by the app. It also covers the handling of authentication material on such surfaces, for example authentication tokens accepted without validation or authentication flows handled insecurely inside WebViews.
 
 ## Modes of Introduction
 
-- **Sessions Not Invalidated Server-Side**: Terminating sessions only client-side, leaving session tokens valid on the server after logout or timeout.
-- **Missing Client-Side Session Termination**: The app provides no way to terminate user sessions (e.g. no logout button or timeout).
-- **No Re-Authentication on State Changes**: Resuming the app from the background or continuing after remarkable context changes (e.g. a significant change in the user's location or profile) without invalidating the current session and requiring re-authentication.
-- **Cached Data Not Cleared**: Retaining session tokens, cached personal data, in-memory state, or on-screen content after the session ends.
-- **Missing Inactivity Timeout**: Allowing sessions to remain valid indefinitely without inactivity or absolute expiration limits.
+- **Unintentionally Exported Components**: Exporting services, broadcast receivers, activities, or content providers through defaults or misconfiguration when they are only meant for internal use.
+- **Missing or Weak Permissions on Exported Components**: Exporting components without permission requirements, with weak protection levels, or with misconfigured custom permissions.
+- **Caller Not Verified on IPC Interfaces**: Exposing Binder or Messenger interfaces that do not verify the caller's identity or permissions (e.g. not calling `checkCallingPermission()`).
+- **Over-Broad Data Grants**: Using sticky broadcasts, over-broad or persistable URI permission grants, or persistent data sharing where one-time, scoped sharing would suffice.
+- **Unprotected Local Network Services**: Binding a local web service or open port that accepts connections without authentication.
+- **Authentication Material Not Validated**: Accepting authentication tokens without proper validation (e.g. missing signature or claim checks, no PKCE in OAuth flows) or handling authentication inside WebViews instead of secure system flows.
+- **Missing Authentication or Authorization on Deep Links**: App-defined URI scheme, Android App Link, or iOS Universal Link triggers a sensitive action (e.g., password reset, fund transfer, account linking) without verifying that the request came from an authenticated or authorized source.
 
 ## Impact
 
-- **Authentication or Authorization Bypass**: Attackers can resume the victim's session and act as the user without authenticating, resulting in unauthorized access to the account and its functionality.
-- **Compromise of Sensitive Data**: Attackers can read cached or leftover personal data from a terminated session, resulting in unauthorized disclosure of user information.
+- **Compromise of Sensitive Data**: Attackers can query unprotected content providers or receive broadcast data, resulting in unauthorized disclosure of user or app data to other apps on the device.
+- **Authentication or Authorization Bypass**: Attackers can invoke privileged functionality, such as internal services or unvalidated token flows, without authenticating, resulting in actions being executed on behalf of the user.
+- **Bypass of Protection Mechanisms**: Attackers can launch internal activities directly, resulting in the circumvention of intended flows such as authentication screens or paywalls.
 
 ## Mitigations
 
-- **Invalidate Sessions Fully**: Invalidate the session server-side on logout, timeout, and account state changes, following the [OWASP Session Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html).
-- **Re-Authenticate on Context Changes**: Require re-authentication when the app returns to the foreground after a sensitive flow or when remarkable changes in the user's context (e.g. location or profile) are detected.
-- **Clear Sensitive Data on Termination**: Remove session tokens, cached personal data, and in-memory or on-screen sensitive content when the session ends, including disconnecting linked accounts where applicable.
-- **Enforce Timeouts**: Apply both inactivity and absolute session timeouts appropriate to the app's risk profile.
+- **Do Not Export Components Unnecessarily**: Explicitly mark internal components as not exported and keep the exposed surface minimal.
+- **Protect Exported Components with Permissions**: Guard intentionally exported components with permissions of an appropriate protection level (e.g. signature-level for same-developer apps) and define custom permissions correctly.
+- **Verify Callers on IPC Interfaces**: Check the caller's identity or permissions on Binder and Messenger interfaces before performing sensitive operations or returning data.
+- **Grant Minimal, Short-Lived Data Access**: Prefer one-time, narrowly scoped URI grants over persistable ones, avoid sticky broadcasts, and restrict content provider paths to exactly what must be shared.
+- **Authenticate Local Services**: Avoid opening local ports where possible; if required, authenticate every connection and bind only to the local interface.
+- **Validate Authentication Material**: Validate tokens server-side (signature, issuer, audience, expiry), use PKCE for OAuth flows, and use system-provided authentication sessions instead of handling credentials inside WebViews.

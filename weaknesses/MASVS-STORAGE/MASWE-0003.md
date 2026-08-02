@@ -1,53 +1,50 @@
 ---
-title: Sensitive Data Stored Unencrypted in Private Storage
+title: Cryptographic Keys Stored Outside of Platform Keystore
 id: MASWE-0003
-alias: data-unencrypted-private-storage
-requirement: "The app encrypts sensitive data stored in private storage."
+alias: crypto-keys-not-protected-at-rest
+requirement: "The app stores cryptographic keys inside the platform-provided secure keystore."
 platform: [android, ios]
-profiles: [L2]
+profiles: [L1, L2]
 threat: MAS-THREAT-0003
-attacks: [MAS-ATTACK-0005, MAS-ATTACK-0007, MAS-ATTACK-0008]
+attacks: [MAS-ATTACK-0001, MAS-ATTACK-0005, MAS-ATTACK-0008]
 mappings:
-  masvs-v1: [MSTG-STORAGE-2]
-  masvs-v2: [MASVS-STORAGE-1, MASVS-STORAGE-2, MASVS-CRYPTO-2, MASVS-PRIVACY-1]
-  cwe: [200, 284, 312, 313, 732, 922]
+  masvs-v1: [MSTG-STORAGE-1, MSTG-CRYPTO-1]
+  masvs-v2: [MASVS-STORAGE-1, MASVS-CRYPTO-2]
+  cwe: [312, 318, 321]
   android-risks:
-  - file-providers
-  maswe-beta: [MASWE-0006, MASWE-0002, MASWE-0118]
+  - hardcoded-cryptographic-secrets
+  maswe-beta: [MASWE-0013, MASWE-0014, MASWE-0016]
 refs:
-- https://developer.apple.com/documentation/uikit/protecting_the_user_s_privacy/encrypting_your_app_s_files
-- https://developer.android.com/about/versions/nougat/android-7.0-changes#permfilesys
-- https://developer.android.com/privacy-and-security/security-tips#internal-storage
+- https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf
+- https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-175Br1.pdf
+- https://developer.android.com/privacy-and-security/keystore#ImportingEncryptedKeys
+- https://developer.apple.com/documentation/security/certificate_key_and_trust_services/keys/storing_keys_as_data
+- https://developer.android.com/privacy-and-security/keystore#StrongBoxKeyMint
 ---
 
 ## Overview
 
-This weakness occurs when an app stores sensitive data unencrypted in private storage locations, such as the application sandbox, where it can be exposed via incorrect file permissions, an app or device vulnerability, or data backup mechanisms.
+This weakness occurs when cryptographic keys are stored outside the platform-provided secure keystore, in locations such as unencrypted preferences, unprotected files, or the application code itself.
 
-Sensitive data may include personally identifiable information (PII), passwords, cryptographic keys, or session tokens.
+Cryptographic keys are essential for securing sensitive data in mobile applications. Keys that are hardcoded in the app, included in source control and shipped in the final package, or written to insecure storage locations lack the access control and hardware-backed protection that platform keystores, such as the [Android Keystore](https://developer.android.com/training/articles/keystore) and the [iOS Keychain](https://developer.apple.com/documentation/security/keychain_services), are designed to provide.
 
 ## Modes of Introduction
 
-- **Data Stored Unencrypted**: Writing sensitive data to the app's private data directory (sandbox) unencrypted.
-- **Hardcoded Encryption Key**: Encrypting sensitive data with a key that is hardcoded inside the application.
-- **Encryption Key Stored on Filesystem**: Encrypting sensitive data but storing the generated key alongside it or in another easily accessible location.
-- **Insufficient Encryption**: Encrypting sensitive data with an algorithm or configuration that is not considered strong.
-- **Insufficient Access Restrictions**: Exposing private files to other apps through incorrect file permissions (e.g. the deprecated `MODE_WORLD_READABLE`/`MODE_WORLD_WRITEABLE` file permission modes on Android), a misconfigured `FileProvider`, or Keychain items protected with weak accessibility attributes on iOS (e.g. `kSecAttrAccessibleAlways`).
-- **Data Not Removed After Use**: Retaining sensitive data in private storage (including caches, temporary files, WebView state, and network caches) longer than needed.
+- **Insecure Storage Locations**: Storing cryptographic keys in locations that are not designed for secure storage, such as regular configuration or user preferences files, application data directories, or other areas lacking encryption and access control mechanisms.
+- **Hardcoded Cryptographic Keys**: Including cryptographic keys directly in the application code or in resources shipped with the app package.
+- **Insecure Key Import**: Importing keys into the keystore in plaintext instead of using secure wrapped or encrypted import, exposing the key material outside the secure environment.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Attackers can extract PII and other user data from the application sandbox, resulting in unauthorized disclosure and enabling further attacks such as identity theft.
-- **Authentication or Authorization Bypass**: Attackers can extract passwords, cryptographic keys, or session tokens, resulting in account takeover or unauthorized access to protected functionality.
+- **Compromise of Sensitive Data**: Attackers can decrypt protected information or forge encrypted data, resulting in unauthorized disclosure or modification of sensitive data.
+- **Authentication or Authorization Bypass**: Attackers can create valid cryptographic values or impersonate trusted parties, resulting in unauthorized access to protected accounts, data, or functionality.
+- **Bypass of Protection Mechanisms**: Attackers can forge licensing, entitlement, or integrity tokens signed with a compromised key to unlock restricted features or defeat client-side checks, resulting in circumvention of the protections the app enforces.
+- **Financial Loss**: Attackers can abuse a compromised key that authenticates to a paid or metered backend service to run up usage on the owner's account, resulting in unexpected charges to the app owner.
 
 ## Mitigations
 
-- **Minimize Local Storage of Sensitive Data**: Avoid storing sensitive data locally if it is not required for app functionality, e.g. keep PII server-side, render it at time of use, and remove any cached data on logout.
-- **Restrict File Access**: Use platform APIs to restrict file access as much as possible (least privilege principle). On Android, share data through a properly configured `ContentProvider`/ `FileProvider` with per-grant permissions instead of the deprecated `MODE_WORLD_READABLE`/`MODE_WORLD_WRITEABLE` file permission modes. On iOS, store Keychain items with the strictest viable accessibility attribute (e.g. `kSecAttrAccessibleWhenUnlockedThisDeviceOnly`).
-- **Remove Data When No Longer Needed**: Clear sensitive data, caches, and temporary files as soon as they are no longer needed (e.g. on logout or when leaving a sensitive flow) to limit the window during which they can be exposed.
-- **Use Platform Keystores**: Store cryptographic keys exclusively using the platform's hardware-backed keystore solution, such as the Android Keystore or the iOS Keychain.
-- **Encrypt Data at Rest**: For other files and preferences, use platform-provided features for encrypting data at rest or techniques implementing envelope encryption with Data Encryption Keys (DEK) and Key Encryption Keys (KEK) or equivalent methods. For example, on Android, use [`EncryptedFile`](https://developer.android.com/reference/androidx/security/crypto/EncryptedFile) or [`EncryptedSharedPreferences`](https://developer.android.com/reference/androidx/security/crypto/EncryptedSharedPreferences); on iOS, use [iOS Data Protection](https://developer.apple.com/documentation/uikit/protecting_the_user_s_privacy/encrypting_your_app_s_files).
-
-!!! Warning
-
-    The **Jetpack security crypto library**, including the `EncryptedFile` and `EncryptedSharedPreferences` classes, has been [deprecated](https://developer.android.com/privacy-and-security/cryptography#jetpack_security_crypto_library). However, since an official replacement has not yet been released, we recommend using these classes until one is available.
+- **Use Platform Keystores**: Where possible, generate cryptographic keys dynamically on the device, rather than using predefined keys, and ensure that they are securely stored after creation. For this you can use the platform-specific keystores, such as the [Android Keystore](https://developer.android.com/training/articles/keystore) or the [iOS Keychain](https://developer.apple.com/documentation/security/keychain_services).
+- **Implement Strongest Hardware Security Solutions**: For the most critical cases and whenever [available and compatible](https://developer.android.com/privacy-and-security/keystore#HardwareSecurityModule) for the use case at hand, leverage the strongest hardware-backed security options such as [Android StrongBox](https://developer.android.com/privacy-and-security/keystore#StrongBoxKeyMint) or iOS's Secure Enclave [`kSecAttrTokenIDSecureEnclave`](https://developer.apple.com/documentation/security/ksecattrtokenidsecureenclave) option to ensure the highest protection including physical and side-channel attacks.
+- **Use Cryptographic Key Management Systems**: Securely retrieve keys from server-side services that provide secure storage, access control, and auditing for sensitive data. For example, AWS Secrets Manager, Azure Key Vault, or Google Cloud Secret Manager are some popular managed secrets storage solutions. The app can securely retrieve the necessary secrets at runtime through secure, authenticated API calls.
+- **Encrypt and Wrap Keys**: Whenever storing keys in platform keystores is not suitable for the use case or keys need to be exported, use envelope encryption (DEK+KEK) and key wrapping techniques as specified in [NIST.SP.800-175Br1 5.3.5](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-175Br1.pdf) to protect cryptographic keys before storing them.
+- **Follow Standard Key Management Best Practices**: Implement proper key management practices, including key rotation and robust protection mechanisms for keys in storage as outlined in [NIST.SP.800-57pt1r5 6.2.2](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf), ensuring availability, integrity, confidentiality, and proper association with usage, entities, and related information.

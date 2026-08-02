@@ -1,48 +1,46 @@
 ---
-title: Inadequate Data Collection Declarations
+title: Lack of Anonymization or Pseudonymisation Measures
 id: MASWE-0068
-alias: data-collection-declarations
-requirement: "The app adequately declares all user collected data."
+alias: anonymization-pseudonymization-measures
+requirement: "The app uses anonymization or pseudonymisation measures."
 platform: [android, ios]
 profiles: [P]
 threat: MAS-THREAT-0068
-attacks: [MAS-ATTACK-0081, MAS-ATTACK-0082]
+attacks: [MAS-ATTACK-0074, MAS-ATTACK-0078]
 mappings:
-  masvs-v1: [MSTG-STORAGE-12, MSTG-NETWORK-1]
-  masvs-v2: [MASVS-PRIVACY-3, MASVS-PRIVACY-1]
+  masvs-v2: [MASVS-PRIVACY-2]
   cwe: [359]
-  maswe-beta: [MASWE-0112, MASWE-0108]
+  maswe-beta: [MASWE-0109]
 refs:
-- https://support.apple.com/en-us/102188
-- https://support.apple.com/kb/HT211970
-- https://developer.apple.com/app-store/review/guidelines/#5.1.2
-- https://developer.apple.com/app-store/app-privacy-details/#data-collection
-- https://support.google.com/googleplay/android-developer/answer/10787469
-- https://developer.apple.com/videos/play/wwdc2023/10060
-- https://support.google.com/googleplay/answer/11416267
-- https://www.youtube.com/watch?v=J7TM0Yy0aTQ
-- https://www.youtube.com/watch?v=4rfF3y4xchU
+- https://cloud.google.com/sensitive-data-protection/docs/classification-redaction
+- https://gdpr-info.eu/recitals/no-26/
+- https://gdpr-info.eu/recitals/no-28/
+- https://gdpr-info.eu/art-4-gdpr/
+- https://www.edpb.europa.eu/topics/ai-and-technology/anonymisation-pseudonymisation_en
+- https://ec.europa.eu/justice/article-29/documentation/opinion-recommendation/files/2014/wp216_en.pdf
+- https://www.statista.com/topics/9460/app-tracking-and-mobile-privacy/
 ---
 
 ## Overview
 
-This weakness occurs when an app's stated data collection practices, such as those documented in Apple's [App Privacy Report](https://support.apple.com/en-us/102188) and [Privacy Nutrition Labels](https://support.apple.com/kb/HT211970), or Google's [Data Safety section](https://support.google.com/googleplay/android-developer/answer/10787469?hl=en), are incomplete or inconsistent with the app's actual behavior.
+This weakness occurs when an app processes or shares user data without applying anonymization, or pseudonymization measures allowing individuals to be identified and potentially tracked across different services and over time.
 
-These declarations must clearly outline what data is collected, how it is used, whether it is linked to the user's identity, and whether it is shared with third parties in accordance with the platform's policies. When they are inaccurate, users are prevented from making informed decisions about their privacy, including understanding whether data will be linked to their identity, used for tracking, or shared with third parties.
-
-**Note about third-party libraries (SDKs)**: Developers, as data controllers, are legally responsible for ensuring that third-party components process sensitive data lawfully, fairly, and transparently, as highlighted in the [ENISA study on GDPR compliance](https://www.enisa.europa.eu/sites/default/files/publications/WP2017%20O-2-2-4%20GDPR%20Mobile.pdf) (Section 2.2.7, _"Data transfers and processing by third parties"_). However, in some cases, it may be challenging for mobile app developers to be fully aware of what data these third-party SDKs actually collect.
+Anonymization uses techniques such as randomization or generalization to irreversibly prevent identification. Pseudonymization replaces identifiable data with tokens or hashed values, but may remain reversible when additional information is available.
 
 ## Modes of Introduction
 
-- **Undeclared Data Collection and Purpose**: Failing to declare what data is being collected (e.g., location, contacts, identifiers) and for what purposes (e.g., analytics, personalization).
-- **Discrepancies in Declarations vs Behavior**: Publishing declarations that differ from the app's actual behavior by using data for purposes other than those disclosed.
+- **Identifiers Not Removed**: Failing to remove or transform identifiers, such as user ID or name, before server-side collection.
+- **Pseudonymization Implemented Insecurely**: Using predictable or stable hashes, reusing pseudonyms across unrelated contexts, or storing keys or mapping data together with the pseudonymized data.
+- **Sensitive Metadata Not Removed**: Failing to remove private or sensitive metadata, such as geolocation from Exif data, before server-side collection.
+- **Sensitive Data Not Redacted Before Sending to AI Services**: Sending unredacted sensitive or personal data to AI services.
 
 ## Impact
 
-- **Violation of User Privacy**: Users can unknowingly share data whose purpose they do not understand, resulting in unauthorized sharing, profiling, or targeted advertising.
-- **Loss of User Trust**: Users can discover the inconsistent declarations, resulting in negative reviews, lower user engagement, and reduced retention for the app owner.
-- **Legal and Regulatory Non-Compliance**: Inaccurate or inconsistent data declarations can violate regulations like GDPR or CCPA and platform policies, resulting in fines, legal action, or removal from app stores for the app owner.
+- **Violation of User Privacy**: Third parties can profile users and target them with advertising without consent, resulting in the loss of users' control over their personal information, retention and its unforeseen use, e.g. to train AI models.
+- **Legal and Regulatory Non-Compliance**: Processing personal data without de-identification safeguards can violate data protection laws and regulations (like GDPR), resulting in legal consequences and fines for the app owner.
+- **Loss of User Trust**: Unexpected identification, tracking, or secondary use of personal data can reduce user confidence in the app.
 
 ## Mitigations
 
-- **Maintain Accurate Privacy Labels**: Comply with Apple's Privacy Nutrition Labels and Google's Data Safety Section requirements by providing accurate, up to date and transparent information about your data practices, including data collection and sharing with third parties.
+- **Use Anonymisation and Pseudonymisation**: Ensure techniques like anonymisation and pseudonymisation are implemented to prevent user identification.
+- **Redact Sensitive Data Before Sending to AI Services**: Before sending data to AI services, redact or mask sensitive fields and identifiers so that personal data is not exposed to (or used to train) third-party models.

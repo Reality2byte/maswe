@@ -1,41 +1,39 @@
 ---
-title: Running on a Recent Platform Version Not Ensured
+title: Latest Platform Version Not Targeted
 id: MASWE-0042
-alias: run-on-recent-platform-version
-requirement: "The app detects if it is running on an unsupported OS version and reacts appropriately."
+alias: target-latest-platform-version
+requirement: "The app targets the latest platform version."
 platform: [android, ios]
 profiles: [L2]
 threat: MAS-THREAT-0042
-attacks: [MAS-ATTACK-0054, MAS-ATTACK-0055]
+attacks: [MAS-ATTACK-0056]
 mappings:
   masvs-v2: [MASVS-CODE-1]
-  cwe: [451, 693, 1104, 1357]
-  android-risks:
-  - strandhogg
-  - unsafe-download-manager
-  maswe-beta: [MASWE-0077, MASWE-0057]
+  cwe: [693, 1357]
+  android-core-app-quality: [Target_SDK_Version, Compile_SDK_Version]
+  maswe-beta: [MASWE-0078]
 refs:
-- https://developer.android.com/topic/security/risks/strandhogg
+- https://developer.android.com/google/play/requirements/target-sdk
+- https://developer.apple.com/news/upcoming-requirements/
 ---
 
 ## Overview
 
-This weakness occurs when an app does not ensure that it runs on a sufficiently recent platform version, e.g. via `minSdkVersion` on Android or `MinimumOSVersion` on iOS.
+This weakness occurs when an app does not target the latest platform version, missing the newest platform-enforced security protections and behavior changes.
 
-Ensuring a recent minimum platform version guarantees the availability of security features and components the app relies on, such as hardware-backed key storage, runtime permissions, Network Security Configuration (Android 7.0+), and App Transport Security (iOS 9+), as well as secure WebView behavior. Supporting older versions also exposes users to platform-level vulnerabilities that were fixed in later releases, such as the StrandHogg task-affinity attacks on older Android versions, which the app cannot fix on its own.
+Targeting the latest platform version, via `targetSdkVersion` on Android or by building with the latest Xcode/SDK on iOS, opts the app into protections such as scoped storage, stricter runtime-permission handling, permission auto-reset, and modern TLS defaults. When an app targets an old version, the OS applies backward-compatibility behaviors and the app silently misses these protections. This is distinct from the minimum supported version (see @MASWE-0041): here the concern is the target/compiled version.
 
 ## Modes of Introduction
 
-- **Low Minimum Version with Modern Assumptions**: Setting a low minimum OS version to support older devices while implicitly or explicitly relying on security features (e.g. runtime permissions, hardware-backed keystore, network security policies) that do not exist on those versions.
-- **Known-Vulnerable Platform Versions Supported**: Allowing the app to run on OS versions affected by relevant, unfixable platform vulnerabilities (e.g. StrandHogg v1/v2 task affinity and `allowTaskReparenting` abuse on older Android).
+- **Outdated Target Version**: Keeping `targetSdkVersion` on Android, or the Xcode/SDK used to build on iOS, below current requirements, so newer platform-enforced protections never apply to the app.
+- **Compatibility Behaviors Left in Place**: Relying on legacy behaviors (e.g. broad storage access or lenient permission handling) that only continue to work because the app targets an old version.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Attackers can leverage missing platform protections or unpatched OS vulnerabilities to reach the app's data, resulting in exposure of user data on outdated devices.
-- **Authentication or Authorization Bypass**: Attackers can abuse platform flaws such as task hijacking to phish credentials from the app's users on affected versions, resulting in account takeover.
+- **Compromise of Sensitive Data**: Attackers can take advantage of legacy behaviors, such as broader file-system or permission access, resulting in exposure of user data that current platform defaults would have protected.
+- **Compromise of System Integrity and Business Operations**: The app can fall below app-store target-version requirements, resulting in blocked updates or removal from distribution for the app owner.
 
 ## Mitigations
 
-- **Raise the Minimum Platform Version**: Set `minSdkVersion` / `MinimumOSVersion` high enough that every security feature the app depends on is guaranteed to be present.
-- **Gate Sensitive Features by Version**: Where supporting older versions is a hard business requirement, detect the platform version at runtime and disable sensitive functionality, or warn and terminate, on versions that cannot provide the required protections.
-- **Reassess the Minimum Regularly**: Revisit the supported version floor as platform vulnerabilities are published and usage of old versions declines.
+- **Target the Latest Platform Version**: Update `targetSdkVersion` and build with the latest SDK promptly each platform cycle, following the store requirements for [Android](https://developer.android.com/google/play/requirements/target-sdk) and [iOS](https://developer.apple.com/news/upcoming-requirements/).
+- **Adopt New Protections**: Review each platform release's behavior changes and migrate off legacy behaviors.

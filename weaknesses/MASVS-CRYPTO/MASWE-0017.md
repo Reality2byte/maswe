@@ -1,11 +1,11 @@
 ---
 title: Device Secure Lock Not Enforced
-id: MASWE-0049
+id: MASWE-0017
 alias: device-secure-lock-not-enforced
 requirement: "The app verifies that the device has a secure lock configured."
 platform: [android, ios]
 profiles: [L2]
-threat: MAS-THREAT-0049
+threat: MAS-THREAT-0017
 attacks: [MAS-ATTACK-0063]
 mappings:
   masvs-v1: [MSTG-STORAGE-11]

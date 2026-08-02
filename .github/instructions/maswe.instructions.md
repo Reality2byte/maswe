@@ -28,7 +28,7 @@ Keep the MASWE general. Platform specifics are used in the MASTG content.
 ## File layout and naming
 
 - Path: `weaknesses/<MASVS-CATEGORY>/MASWE-XXXX.md`
-  - Example: `weaknesses/MASVS-PLATFORM/MASWE-0064.md`
+  - Example: `weaknesses/MASVS-PLATFORM/MASWE-0029.md`
 - `<MASVS-CATEGORY>` must be one of: `MASVS-STORAGE`, `MASVS-CRYPTO`, `MASVS-AUTH`, `MASVS-NETWORK`, `MASVS-PLATFORM`, `MASVS-CODE`, `MASVS-RESILIENCE`, `MASVS-PRIVACY`.
 - Filename defines the weakness ID: `MASWE-\d{4}\.md`.
 - Use the next available four-digit number across the whole
@@ -148,7 +148,7 @@ Each consequence must.
 
 #### Example 1
 
-For a weakness with `threat: MAS-THREAT-0006` ("Attackers can extract hardcoded secrets, credentials, and internal information.") and `attacks: [MAS-ATTACK-0001]`:
+For a weakness with `threat: MAS-THREAT-0004` ("Attackers can extract hardcoded secrets, credentials, and internal information.") and `attacks: [MAS-ATTACK-0001]`:
 
 ```md
 ## Impact
@@ -159,7 +159,7 @@ For a weakness with `threat: MAS-THREAT-0006` ("Attackers can extract hardcoded 
 
 #### Example 2
 
-For a weakness with `threat: MAS-THREAT-0010` ("Attackers can use the app's cryptographic keys without authorization.") and `attacks: [MAS-ATTACK-0002, MAS-ATTACK-0003, MAS-ATTACK-0027]`:
+For a weakness with `threat: MAS-THREAT-0016` ("Attackers can use the app's cryptographic keys without authorization.") and `attacks: [MAS-ATTACK-0002, MAS-ATTACK-0003, MAS-ATTACK-0027]`:
 
 ```md
 ## Impact

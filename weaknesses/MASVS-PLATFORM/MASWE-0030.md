@@ -1,38 +1,47 @@
 ---
-title: Insufficient Protection of Sensitive Data from Screenshots or Screen Recordings
+title: Improper Use of the Clipboard
 id: MASWE-0030
-alias: data-leak-screenshots
-requirement: "The app removes or masks sensitive data from its views when moved to the background, when being recorded or when a screenshot is taken."
+alias: improper-clipboard
+requirement: "The app uses the clipboard securely and only with user consent."
 platform: [android, ios]
-profiles: [L2]
+profiles: [L1, L2]
 threat: MAS-THREAT-0030
-attacks: [MAS-ATTACK-0010, MAS-ATTACK-0071, MAS-ATTACK-0072]
+attacks: [MAS-ATTACK-0041]
 mappings:
-  masvs-v1: [MSTG-STORAGE-9]
-  masvs-v2: [MASVS-PLATFORM-3, MASVS-STORAGE-2]
-  cwe: [200, 359]
-  maswe-beta: [MASWE-0055]
+  masvs-v2: [MASVS-PLATFORM-1, MASVS-STORAGE-2]
+  cwe: [200, 668]
+  android-risks:
+  - secure-clipboard-handling
+  maswe-beta: [MASWE-0059]
 refs:
-- https://developer.android.com/about/versions/14/features/screenshot-detection
+- https://developer.android.com/develop/ui/views/touch-and-input/copy-paste#PreventingSensitiveData
+- https://developer.apple.com/documentation/uikit/uipasteboard
 ---
 
 ## Overview
 
-This weakness occurs when sensitive data displayed by an app can be captured in screenshots or screen recordings, and the app does not prevent the capture or conceal or redact the data when such protection is warranted.
+This weakness occurs when an app places sensitive data on the system clipboard, or handles clipboard content insecurely, exposing that data beyond the app's control.
 
-Mobile platforms allow users, privileged apps, and external tools to capture screenshots or record the screen. In addition, when an app enters the background, the system may capture a snapshot of the app's current view for display in the app switcher. Sensitive content that remains visible without appropriate protection can be retained in these images or recordings.
+The clipboard is a shared resource: other apps can read its contents, and on some platforms, clipboard content synchronizes to nearby devices via a universal clipboard. Copying sensitive data such as passwords, one-time codes, card numbers, or tokens to the clipboard, failing to mark it as sensitive, or leaving it there indefinitely can leak that data to other apps and devices.
 
 ## Modes of Introduction
 
-- **Missing Platform Screenshot Protection**: Displaying sensitive fields without applying the related platform protections that can avoid the field information from appearing in screenshots or screen recordings (e.g., in Android, applying the [`FLAG_SECURE`](https://developer.android.com/reference/android/view/WindowManager.LayoutParams#FLAG_SECURE) flag).
-- **Missing Capture-State Redaction**: Continuing to display sensitive information while the app or scene is being recorded, mirrored, or shared, despite the platform providing an API to detect the active capture state.
-- **Excessive On-Screen Disclosure**: Displaying complete sensitive values when a masked, partial, temporary, or user-initiated representation would be sufficient for the current task.
+- **Sensitive Data Copyable Without User Consent**: Copying sensitive values such as passwords, one-time codes, or card numbers to the clipboard without user consent.
+- **Clipboard Content Not Marked Sensitive**: Not flagging copied sensitive content as sensitive where the platform supports it (e.g. `EXTRA_IS_SENSITIVE` on Android), so previews and clipboard history show it in cleartext.
+- **Universal Clipboard Not Restricted**: Not restricting sensitive clipboard items to the local device or setting an expiration on iOS, letting them sync to other devices.
+- **Clipboard Not Cleared**: Leaving sensitive content on the clipboard after it has served its purpose.
+- **Untrusted Clipboard Input**: Processing pasted clipboard data without validation, even though any app can have written it.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Sensitive information may be retained in an image or video after the app session ends and may later be viewed, shared, synchronized, backed up, or accessed by another person or service.
+- **Compromise of Sensitive Data**: Attackers can read personal or financial data from the clipboard, resulting in unauthorized disclosure of user data.
+- **Authentication or Authorization Bypass**: Attackers can capture copied credentials or one-time codes, resulting in unauthorized access to the user's accounts.
 
 ## Mitigations
 
-- **Redact Sensitive On-Screen Content**: Display only the portion of a sensitive value required for the current task. Mask values by default and unmask the values only for the needed actions, masking them again once they have been used for the task.
-- **Anti-Screenshot Platform Protections**: Apply platform protections that prevent elements containing sensitive content from appearing in screenshots or on non-secure displays (for example, in Android, applying the [`FLAG_SECURE`](https://developer.android.com/reference/android/view/WindowManager.LayoutParams#FLAG_SECURE) flag).
+- **Avoid the Clipboard for Secrets**: Disable copying for sensitive fields and provide secure alternatives such as auto-fill (see @MASWE-0019) so users never need to copy secrets.
+- **Only Copy with User Consent**: If copying is required, ask the user for consent before placing sensitive data on the clipboard, or only act as a result of a user-chosen action (e.g. a "Copy" button).
+- **Mark Clipboard Content as Sensitive**: When sensitive content must be copied, flag it as sensitive so the platform masks previews and treats it accordingly.
+- **Specify an appropriate expiration**: When sensitive content must be copied, set an expiration so it is removed from the clipboard after a short time.
+- **Restrict Clipboard Exposure**: When copying, follow the platform's [secure clipboard handling guidance on Android](https://developer.android.com/privacy-and-security/risks/secure-clipboard-handling) and mark the content using [`ClipDescription.EXTRA_IS_SENSITIVE`](https://developer.android.com/reference/android/content/ClipDescription#EXTRA_IS_SENSITIVE) to obscure clipboard previews. On iOS, use pasteboard options such as [`localOnly`](https://developer.apple.com/documentation/uikit/uipasteboard/optionskey/localonly) and [`expirationDate`](https://developer.apple.com/documentation/uikit/uipasteboard/optionskey/expirationdate) to limit cross-device propagation and content lifetime.
+- **Validate Pasted Data**: Treat clipboard content as untrusted input and validate it before use.

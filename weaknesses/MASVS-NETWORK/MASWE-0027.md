@@ -1,51 +1,59 @@
 ---
-title: Insecure Identity Pinning
+title: Insecure Certificate Validation
 id: MASWE-0027
-alias: insecure-pinning
-requirement: "The app correctly implements identity pinning."
+alias: insecure-cert-validation
+requirement: "The app validates certificates for all network traffic."
 platform: [android, ios]
-profiles: [L2]
+profiles: [L1, L2]
 threat: MAS-THREAT-0027
-attacks: [MAS-ATTACK-0014, MAS-ATTACK-0016, MAS-ATTACK-0017]
+attacks: [MAS-ATTACK-0014, MAS-ATTACK-0015]
 mappings:
-  masvs-v1: [MSTG-NETWORK-4]
-  masvs-v2: [MASVS-NETWORK-2]
-  cwe: [295]
-  android-core-app-quality: [Network_Security_Configuration]
-  maswe-beta: [MASWE-0047]
+  masvs-v1: [MSTG-NETWORK-3]
+  masvs-v2: [MASVS-NETWORK-1]
+  cwe: [295, 297]
+  android-risks:
+  - unsafe-trustmanager
+  - unsafe-hostname
+  android-core-app-quality: [Network_Security_Configuration, Security_Provider_Initialization]
+  maswe-beta: [MASWE-0052]
 refs:
-- https://developer.android.com/privacy-and-security/security-config#CertificatePinning
-- https://developer.apple.com/news/?id=g9ejcf8y
-- https://cheatsheetseries.owasp.org/cheatsheets/Pinning_Cheat_Sheet.html
+- https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-52r2.pdf#page=17
+- https://developer.android.com/privacy-and-security/security-ssl#tls-1.3-enabled-by-default
+- https://support.google.com/faqs/answer/7071387?hl=en
+- https://developer.android.com/reference/android/webkit/WebViewClient.html?sjid=15211564825735678155-EU#onReceivedSslError(android.webkit.WebView,%20android.webkit.SslErrorHandler,%20android.net.http.SslError)
+- https://developer.android.com/privacy-and-security/security-ssl#WarningsSslSocket
+- https://developer.apple.com/forums/thread/67493
+- https://developer.apple.com/forums/thread/707320
+- https://support.apple.com/en-us/102390
+- https://developer.apple.com/documentation/foundation/performing-manual-server-trust-authentication
 ---
 
 ## Overview
 
-This weakness occurs when identity pinning (also known as certificate pinning, public key pinning, or TLS pinning) is not implemented, or is implemented incorrectly, so the app cannot guarantee that it only communicates with servers presenting a specific, pre-determined cryptographic identity.
+This weakness occurs when an app does not properly validate TLS certificates during secure communication, accepting invalid, expired, self-signed, or untrusted certificates without appropriate verification.
 
-Identity pinning associates a mobile app with a specific certificate or public key, adding a layer of trust verification on top of standard certificate validation. This reduces the risk of unauthorized interception even if a trusted Certificate Authority (CA) is compromised. Compromise of a public CA is rare, but pinning narrows trust to identities the app operator controls, and raises the effort required to intercept, inspect, or replay the app's traffic.
-
-Pinning is not foolproof: attackers who can reverse-engineer the app may remove or modify the pre-defined pins or the pinning logic, and attackers using runtime hooking and dynamic instrumentation may bypass the pinning checks on a device they control. This highlights the importance of implementing pinning **alongside other security measures** to enhance the app's resistance to advanced threats.
+Certificate validation is the mechanism through which a TLS client establishes that it is talking to the intended server and not to an intermediary. When it is disabled, weakened, or implemented incorrectly, the confidentiality and integrity guarantees of TLS no longer hold, even though the connection itself is encrypted.
 
 ## Modes of Introduction
 
-- **Improper Configuration of Pinning Libraries**: Misconfiguring libraries like TrustKit or OkHttp's `CertificatePinner` leading to ineffective pinning.
-- **Dynamic Pinning without Security**: Retrieving pins dynamically over insecure channels without proper validation.
-- **Improper Validation Logic**: Implementing custom pinning logic that does not correctly validate the certificate chain or public key. For example, accepting any certificate that chains to a trusted root CA instead of a specific certificate or public key.
-- **Lack of Backup Pins**: Not including backup pins, so the app cannot establish connections if the primary pin is no longer valid.
+- **Disabling Certificate Validation**: Disabling or bypassing certificate validation checks to simplify development or troubleshoot connectivity issues, and shipping that configuration to production.
+- **Accepting Self-Signed Certificates**: Accepting self-signed or untrusted certificates without proper validation against trusted Certificate Authorities (CAs).
+- **Ignoring Hostname Verification**: Failing to verify that the certificate's hostname matches the server's hostname.
+- **Using Insecure Custom Trust Managers**: Implementing custom certificate validation logic that is incomplete, incorrect, or insecure.
+- **Incorrect Error Handling**: Proceeding with connections even when certificate validation errors occur, without alerting the user or terminating the connection.
+- **Third-Party Libraries**: Using third-party libraries or SDKs that disable or weaken certificate validation internally, or that default to permissive trust settings.
 
 ## Impact
 
 - **Compromise of Sensitive Data**: Attackers can capture, read, or alter sensitive information transmitted over the network, resulting in unauthorized disclosure or manipulation of user data.
 - **Authentication or Authorization Bypass**: Attackers can capture credentials or session tokens in transit, resulting in user impersonation and unauthorized access to accounts or backend systems.
-- **Compromise of System Integrity and Business Operations**: Attackers can inspect and reverse engineer the app's API traffic to abuse backend services, resulting in fraud, scraping, or service abuse against the app owner.
+- **Compromise of System Integrity and Business Operations**: Attackers can impersonate legitimate servers and feed altered or malicious data to the app, resulting in unreliable or malicious app behavior and reputational damage for the app owner.
+- **Legal and Regulatory Non-Compliance**: Attackers can capture personal data in transit, resulting in reportable breaches and regulatory penalties for the app owner under laws such as GDPR or HIPAA.
 
 ## Mitigations
 
-- **Prefer Platform-Provided Solutions**: Use platform-provided mechanisms like Android's Network Security Configuration (NSC) or iOS's App Transport Security (ATS) to enforce pinning.
-- **Use Trusted Pinning Libraries**: Refrain from writing custom pinning logic; instead, rely on established and well-maintained libraries and frameworks (e.g., TrustKit, OkHttp's `CertificatePinner`) and ensure they are correctly configured according to best practices.
-- **Secure Dynamic Pinning**: If dynamic pinning is necessary, retrieve pins over secure channels and validate them thoroughly before use.
-- **Pin to Public Keys Instead of Certificates**: Pin to the certificate's public key rather than the whole certificate to avoid issues regarding expiration and renewals.
-- **Enforce Pinning Consistently**: Apply pinning uniformly for all connections to servers that you control.
-- **Regularly Update Pins**: Keep the pinned certificates or public keys up to date with the server's current configuration and have a process for updating the app when changes occur.
-- **Implement Backup Pins**: Include backup pins (hashes of additional trusted public keys) to prevent connectivity issues if the primary key changes.
+- **Enforce Strict Certificate Validation**: Always validate TLS certificates against a trusted set of Certificate Authorities (CAs) provided by the operating system or a trusted third party.
+- **Avoid Accepting Self-Signed Certificates**: Do not accept self-signed or untrusted certificates in production environments unless there is a secure mechanism to trust them explicitly.
+- **Enable Hostname Verification**: Ensure that the application's network layer verifies the server's hostname against the certificate's Subject Alternative Name (SAN) or Common Name (CN).
+- **Use Standard Trust Managers**: Utilize well-established libraries and platform-provided APIs for certificate validation instead of custom implementations.
+- **Handle Validation Errors Properly**: Terminate the connection and alert the user whenever certificate validation fails due to issues like expiration, revocation, or mismatch.

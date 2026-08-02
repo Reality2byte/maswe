@@ -1,42 +1,40 @@
 ---
-title: Fallback to Non-biometric Credentials Allowed for Sensitive Transactions
+title: Crypto Keys Not Invalidated on New Biometric Enrollment
 id: MASWE-0022
-alias: no-biometric-fallback
-requirement: "The app does not allow fallback to non-biometric credentials for sensitive transactions."
+alias: crypto-keys-biometric-enrollment
+requirement: "The app invalidates keys after any enrollment of new biometric data."
 platform: [android, ios]
 profiles: [L2]
 threat: MAS-THREAT-0022
-attacks: [MAS-ATTACK-0034]
+attacks: [MAS-ATTACK-0035]
 mappings:
-  masvs-v2: [MASVS-AUTH-2]
-  cwe: [288, 287]
-  android-core-app-quality: [Biometric_Authentication]
-  maswe-beta: [MASWE-0045]
+  masvs-v2: [MASVS-AUTH-2, MASVS-CRYPTO-2]
+  cwe: [287, 522]
+  maswe-beta: [MASWE-0046]
 refs:
-- https://developer.android.com/training/sign-in/biometric-auth#allow-fallback
-- https://developer.apple.com/documentation/localauthentication/logging_a_user_into_your_app_with_face_id_or_touch_id#3148834
-- https://developer.apple.com/documentation/localauthentication/lapolicy/deviceownerauthenticationwithbiometrics/
+- https://developer.android.com/reference/android/security/keystore/KeyGenParameterSpec.Builder#setInvalidatedByBiometricEnrollment(boolean)
+- https://developer.apple.com/documentation/security/secaccesscontrolcreateflags/biometrycurrentset
 ---
 
 ## Overview
 
-This weakness occurs when authentication for a sensitive transaction can silently fall back from biometrics to a weaker device credential such as a PIN, pattern, or password.
+This weakness occurs when cryptographic keys gated by biometric authentication remain valid after the set of enrolled biometrics changes.
 
-Device credentials are typically short, reusable, and observable, so allowing them as a fallback drops the assurance level below what a high-value operation requires. On Android, this happens when `DEVICE_CREDENTIAL` is permitted as an authenticator (e.g. via `BiometricPrompt.setAllowedAuthenticators`) for a sensitive action; on iOS, when `LAPolicy.deviceOwnerAuthentication` is used instead of `LAPolicy.deviceOwnerAuthenticationWithBiometrics`. Sensitive transactions should require biometrics and be bound to a biometric-protected key rather than permitting a non-biometric fallback.
+Biometric-bound keys are meant to be usable only by the person whose biometrics were enrolled when the key was created. If keys stay valid across enrollments, anyone who can add a new fingerprint or face to the device can unlock them. On Android, invalidation on new enrollment is enabled by default but can be disabled with `setInvalidatedByBiometricEnrollment(false)`; on iOS, it must be explicitly enabled by creating the access control with `SecAccessControlCreateFlags.biometryCurrentSet` (formerly `touchIDCurrentSet`), which invalidates the Keychain item when a biometric is added or removed.
 
 ## Modes of Introduction
 
-- **Device Credential Allowed for Sensitive Actions**: Permitting `DEVICE_CREDENTIAL` as an accepted authenticator for high-value operations on Android.
-- **Generic Authentication Policy on iOS**: Using `LAPolicy.deviceOwnerAuthentication`, which allows passcode fallback, instead of `LAPolicy.deviceOwnerAuthenticationWithBiometrics` for sensitive operations.
-- **Operation Not Bound to a Biometric-Only Key**: Protecting the sensitive operation with a UI-level prompt rather than a keystore key that only unlocks with strong biometric authentication.
+- **Invalidation Disabled on Android**: Creating keys with `setInvalidatedByBiometricEnrollment(false)`, keeping them usable after new biometrics are enrolled.
+- **Invalidation Not Enabled on iOS**: Protecting Keychain items without `biometryCurrentSet`, so items remain accessible with any enrolled biometric, including ones added later.
+- **Unsafe Invalidation Recovery**: Silently re-creating an invalidated key or falling back to weaker authentication when invalidation occurs, instead of re-verifying the user's identity first.
 
 ## Impact
 
-- **Authentication or Authorization Bypass**: Attackers can complete authentication challenges intended to require the user's biometrics, resulting in unauthorized approval of sensitive operations.
-- **Financial Loss**: Attackers can authorize payments or transfers with a stolen device and its credential, resulting in direct financial harm to the user.
+- **Authentication or Authorization Bypass**: Attackers can pass biometric prompts with their own newly enrolled biometrics, resulting in unauthorized approval of operations bound to the victim's identity.
+- **Compromise of Sensitive Data**: Attackers can unlock data protected by biometric-bound keys, resulting in unauthorized disclosure of sensitive user information.
 
 ## Mitigations
 
-- **Require Biometrics for Sensitive Transactions**: Configure the authentication prompt to accept only strong biometrics (e.g. `BIOMETRIC_STRONG` on Android, `LAPolicy.deviceOwnerAuthenticationWithBiometrics` on iOS) for high-value operations.
-- **Bind Operations to Biometric-Only Keys**: Protect the operation with a keystore key that requires strong biometric authentication for use and is invalidated on new biometric enrollments (see @MASWE-0023).
-- **Match Assurance to Sensitivity**: Allow device-credential fallback only for low-risk convenience features, never for the transactions that motivated biometric protection in the first place.
+- **Keep Enrollment Invalidation Enabled on Android**: Do not call `setInvalidatedByBiometricEnrollment(false)` for keys protecting sensitive data or operations.
+- **Enable Enrollment Invalidation on iOS**: Create Keychain access controls with `SecAccessControlCreateFlags.biometryCurrentSet` so items are invalidated when the enrolled biometric set changes.
+- **Handle Invalidation Safely**: When a key has been invalidated, require full re-authentication of the user (e.g. account credentials or a server-verified flow) before re-creating the key, and never silently fall back to weaker protection.

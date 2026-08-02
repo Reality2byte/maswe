@@ -1,45 +1,38 @@
 ---
-title: WebViews Allow Access to Local Resources with Untrusted Content
+title: Unnecessary Exposure of Sensitive Data via Notifications
 id: MASWE-0037
-alias: webviews-local-resources
-requirement: "The app only allows trusted WebView content to access local resources."
+alias: data-leak-notifications
+requirement: "The app does not unnecessarily expose sensitive data through system notifications."
 platform: [android, ios]
-profiles: [L1, L2]
+profiles: [L2]
 threat: MAS-THREAT-0037
-attacks: [MAS-ATTACK-0047, MAS-ATTACK-0051]
+attacks: [MAS-ATTACK-0044, MAS-ATTACK-0045]
 mappings:
-  masvs-v1: [MSTG-PLATFORM-6]
-  masvs-v2: [MASVS-PLATFORM-2, MASVS-STORAGE-2, MASVS-CODE-4]
-  cwe: [22, 79, 200, 669]
-  android-risks:
-  - webview-unsafe-file-inclusion
-  android-core-app-quality: [WebView_Asset_Loader]
-  maswe-beta: [MASWE-0069, MASWE-0073]
+  masvs-v2: [MASVS-PLATFORM-3, MASVS-STORAGE-2]
+  cwe: [200, 359]
+  maswe-beta: [MASWE-0054]
 refs:
-- https://blog.oversecured.com/Android-Exploring-vulnerabilities-in-WebResourceResponse/
+- https://developer.android.com/develop/ui/views/notifications/build-notification#lockscreenNotification
+- https://developer.apple.com/documentation/usernotifications
 ---
 
 ## Overview
 
-This weakness occurs when a WebView is configured to access local resources while also rendering untrusted content, allowing that content to reach files and data outside the web sandbox.
+This weakness occurs when an app includes more sensitive data (such as one-time codes, message contents, or account details) than necessary in a system notification.
 
-Settings that enable file or content access (e.g. `setAllowFileAccess`, `setAllowFileAccessFromFileURLs`, `setAllowUniversalAccessFromFileURLs`, `setAllowContentAccess` on Android, or overly broad file read access grants on iOS) let JavaScript running in the WebView read app-private files, traverse the filesystem, or exfiltrate data. Insecure custom resource loading, such as serving internal files through a hand-rolled `WebResourceResponse` instead of a safe asset loader, can likewise expose protected files to the less-trusted WebView JavaScript context or serve attacker-controllable content from the app's own origin.
+Notifications can be rendered on the lock screen, and therefore, anyone holding the device can read them without unlocking it. They also can be read by other apps that hold notification access, if the platform allows it (e.g. an Android [`NotificationListenerService`](https://developer.android.com/reference/android/service/notification/NotificationListenerService)). Any sensitive value included in a notification therefore leaves the app's control the moment it is posted.
 
 ## Modes of Introduction
 
-- **File Access Enabled with Untrusted Content**: Enabling file or content access settings on WebViews that also render untrusted or externally influenced content.
-- **Universal Access from File URLs**: Allowing universal or file-URL cross-origin access, so a local HTML file can read other local files and send them to remote origins.
-- **Insecure Custom Resource Loading**: Serving internal files through custom response handlers without path validation, instead of a dedicated asset-loading mechanism with a restricted scope.
-- **Overly Broad File Read Grants**: Granting the WebView read access to broader directories than the specific content it needs to display.
+- **Sensitive Content in Notifications**: Including one-time codes, message contents, financial details, or other sensitive values directly in notification titles or bodies when a generic notification would suffice.
+- **No Lock-Screen Redaction**: Not configuring notification visibility so that sensitive content is redacted or hidden on the lock screen.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Attackers can read and exfiltrate app-private files, such as databases, preferences, or cached tokens, resulting in unauthorized disclosure of user and app data.
-- **Authentication or Authorization Bypass**: Attackers can steal session material stored in reachable files or WebView storage, resulting in account takeover.
+- **Compromise of Sensitive Data**: Unauthorized observers or, where applicable, apps with notification-listener access may obtain personal, financial, authentication, or account information contained in notifications.
+- **Authentication or Authorization Bypass**: Attackers may use exposed credentials or still-valid one-time codes to access an account, perform unauthorized transactions, or carry out other sensitive actions.
 
 ## Mitigations
 
-- **Disable File and Content Access**: Keep file, file-URL, and content access settings disabled unless strictly required, and never combine them with untrusted content.
-- **Use a Safe Asset Loader**: Serve local app resources through a dedicated asset-loading mechanism with a fixed, validated scope instead of custom response handlers over arbitrary paths.
-- **Scope File Read Access Narrowly**: When loading local files, grant read access only to the specific file or directory being displayed.
-- **Separate Trusted and Untrusted Content**: Render untrusted content only in WebViews with no local resource access and no privileged configuration.
+- **Minimize Notification Content**: Use notifications only to indicate that an event occurred, and retrieve sensitive details inside the app after appropriate authentication and authorization. For iOS remote notifications, follow Apple's [remote-notification payload guidance](https://developer.apple.com/documentation/usernotifications/generating-a-remote-notification) and keep user-visible alert content non-sensitive by default.
+- **Configure Android Lock-Screen Visibility**: Use [`NotificationCompat.Builder.setVisibility()` and `setPublicVersion()`](https://developer.android.com/develop/ui/views/notifications/build-notification#lockscreenNotification) to modify the presentation of sensitive notifications. Use `VISIBILITY_PRIVATE` together with a generic public version when a redacted notification may be shown, and use `VISIBILITY_SECRET` when the notification should not appear on a secure lock screen. Do not place sensitive data in the title because private notifications may still display basic information including the title.

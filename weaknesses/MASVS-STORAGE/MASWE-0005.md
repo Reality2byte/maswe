@@ -1,50 +1,44 @@
 ---
-title: Cryptographic Keys Stored Outside of Platform Keystore
+title: Insertion of Sensitive Data into Logs
 id: MASWE-0005
-alias: crypto-keys-not-protected-at-rest
-requirement: "The app stores cryptographic keys inside the platform-provided secure keystore."
+alias: data-in-logs
+requirement: "The app excludes sensitive data from application logs."
 platform: [android, ios]
 profiles: [L1, L2]
 threat: MAS-THREAT-0005
-attacks: [MAS-ATTACK-0001, MAS-ATTACK-0005, MAS-ATTACK-0008]
+attacks: [MAS-ATTACK-0005, MAS-ATTACK-0006]
 mappings:
-  masvs-v1: [MSTG-STORAGE-1, MSTG-CRYPTO-1]
-  masvs-v2: [MASVS-STORAGE-1, MASVS-CRYPTO-2]
-  cwe: [312, 318, 321]
+  masvs-v1: [MSTG-STORAGE-7]
+  masvs-v2: [MASVS-STORAGE-2]
+  cwe: [209, 359, 497, 532]
   android-risks:
-  - hardcoded-cryptographic-secrets
-  maswe-beta: [MASWE-0013, MASWE-0014, MASWE-0016]
+  - log-info-disclosure
+  android-core-app-quality: [Sensitive_Data_Logging]
+  maswe-beta: [MASWE-0001]
 refs:
-- https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf
-- https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-175Br1.pdf
-- https://developer.android.com/privacy-and-security/keystore#ImportingEncryptedKeys
-- https://developer.apple.com/documentation/security/certificate_key_and_trust_services/keys/storing_keys_as_data
-- https://developer.android.com/privacy-and-security/keystore#StrongBoxKeyMint
+- https://developer.apple.com/documentation/os/logging/generating_log_messages_from_your_code
 ---
 
 ## Overview
 
-This weakness occurs when cryptographic keys are stored outside the platform-provided secure keystore, in locations such as unencrypted preferences, unprotected files, or the application code itself.
+This weakness occurs when an app writes sensitive data to system or application logs. This may include sensitive user data, such as passwords, credit card numbers, or other personally identifiable information (PII), as well as sensitive system data, such as cryptographic keys or session tokens.
 
-Cryptographic keys are essential for securing sensitive data in mobile applications. Keys that are hardcoded in the app, included in source control and shipped in the final package, or written to insecure storage locations lack the access control and hardware-backed protection that platform keystores, such as the [Android Keystore](https://developer.android.com/training/articles/keystore) and the [iOS Keychain](https://developer.apple.com/documentation/security/keychain_services), are designed to provide.
+Logging all possible information is very useful at development time, especially for debugging the app. However, in production it might not always be necessary and should be prevented whenever possible to avoid any accidental exposure to potential attackers.
 
 ## Modes of Introduction
 
-- **Insecure Storage Locations**: Storing cryptographic keys in locations that are not designed for secure storage, such as regular configuration or user preferences files, application data directories, or other areas lacking encryption and access control mechanisms.
-- **Hardcoded Cryptographic Keys**: Including cryptographic keys directly in the application code or in resources shipped with the app package.
-- **Insecure Key Import**: Importing keys into the keystore in plaintext instead of using secure wrapped or encrypted import, exposing the key material outside the secure environment.
+- **Sensitive Data in System Logs**: Writing sensitive data to the system log via platform logging APIs, often as leftover debugging statements.
+- **Sensitive Data in App Log Files**: Writing sensitive data to custom log files in the app's data directory, e.g. via third-party logging frameworks.
+- **Verbose Logging in Production**: Shipping release builds with debug or verbose log levels still enabled, so diagnostic details containing sensitive data end up in production logs.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Attackers can decrypt protected information or forge encrypted data, resulting in unauthorized disclosure or modification of sensitive data.
-- **Authentication or Authorization Bypass**: Attackers can create valid cryptographic values or impersonate trusted parties, resulting in unauthorized access to protected accounts, data, or functionality.
-- **Bypass of Protection Mechanisms**: Attackers can forge licensing, entitlement, or integrity tokens signed with a compromised key to unlock restricted features or defeat client-side checks, resulting in circumvention of the protections the app enforces.
-- **Financial Loss**: Attackers can abuse a compromised key that authenticates to a paid or metered backend service to run up usage on the owner's account, resulting in unexpected charges to the app owner.
+- **Compromise of Sensitive Data**: Attackers can read passwords, credit card numbers, or PII from log output, resulting in unauthorized disclosure of user data and enabling further attacks such as identity theft.
+- **Authentication or Authorization Bypass**: Attackers can reuse leaked credentials or session tokens, resulting in unauthorized access to the user's account and the app's backend services.
 
 ## Mitigations
 
-- **Use Platform Keystores**: Where possible, generate cryptographic keys dynamically on the device, rather than using predefined keys, and ensure that they are securely stored after creation. For this you can use the platform-specific keystores, such as the [Android Keystore](https://developer.android.com/training/articles/keystore) or the [iOS Keychain](https://developer.apple.com/documentation/security/keychain_services).
-- **Implement Strongest Hardware Security Solutions**: For the most critical cases and whenever [available and compatible](https://developer.android.com/privacy-and-security/keystore#HardwareSecurityModule) for the use case at hand, leverage the strongest hardware-backed security options such as [Android StrongBox](https://developer.android.com/privacy-and-security/keystore#StrongBoxKeyMint) or iOS's Secure Enclave [`kSecAttrTokenIDSecureEnclave`](https://developer.apple.com/documentation/security/ksecattrtokenidsecureenclave) option to ensure the highest protection including physical and side-channel attacks.
-- **Use Cryptographic Key Management Systems**: Securely retrieve keys from server-side services that provide secure storage, access control, and auditing for sensitive data. For example, AWS Secrets Manager, Azure Key Vault, or Google Cloud Secret Manager are some popular managed secrets storage solutions. The app can securely retrieve the necessary secrets at runtime through secure, authenticated API calls.
-- **Encrypt and Wrap Keys**: Whenever storing keys in platform keystores is not suitable for the use case or keys need to be exported, use envelope encryption (DEK+KEK) and key wrapping techniques as specified in [NIST.SP.800-175Br1 5.3.5](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-175Br1.pdf) to protect cryptographic keys before storing them.
-- **Follow Standard Key Management Best Practices**: Implement proper key management practices, including key rotation and robust protection mechanisms for keys in storage as outlined in [NIST.SP.800-57pt1r5 6.2.2](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-57pt1r5.pdf), ensuring availability, integrity, confidentiality, and proper association with usage, entities, and related information.
+- **Avoid Logging Sensitive Data**: Do not log sensitive data at all; treat any user or system secret as unloggable by default.
+- **Redact Sensitive Data**: Where log statements are needed around sensitive values, redact or mask those values before writing them.
+- **Use Log Levels Properly**: Assign debug-only details to debug or verbose levels and ensure those levels are disabled in production releases.
+- **Disable Logging in Production**: Use build flags or configuration to disable logging in production releases, following the platform guidance for [Android](https://developer.android.com/privacy-and-security/risks/log-info-disclosure#mitigations) and [iOS](https://developer.apple.com/documentation/os/logging/generating_log_messages_from_your_code#3665948).

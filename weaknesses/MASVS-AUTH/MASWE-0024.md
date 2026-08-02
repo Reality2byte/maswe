@@ -1,49 +1,43 @@
 ---
-title: Lack of Auto-fill Support for Credential Providers
+title: Sensitive Data Accessible After Session Termination
 id: MASWE-0024
-alias: autofill-authenticators
-requirement: "The app enables auto-fill support for credential providers."
-
+alias: session-termination
+requirement: "The app makes sensitive data inaccessible after session termination."
 platform: [android, ios]
 profiles: [L2]
 threat: MAS-THREAT-0024
-attacks: [MAS-ATTACK-0041, MAS-ATTACK-0042]
+attacks: [MAS-ATTACK-0005, MAS-ATTACK-0032, MAS-ATTACK-0033]
 mappings:
-  masvs-v1: [MSTG-AUTH-9]
-  masvs-v2: [MASVS-AUTH-1, MASVS-AUTH-3]
-  cwe: [287, 522]
-  android-core-app-quality: [Autofill_Hints, Credential_Manager]
-  maswe-beta: [MASWE-0028, MASWE-0032, MASWE-0035, MASWE-0039]
+  masvs-v2: [MASVS-AUTH-3]
+  cwe: [285, 287, 613]
+  maswe-beta: [MASWE-0030]
 refs:
-- https://developer.apple.com/documentation/security/password_autofill
-- https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession
-- https://developer.android.com/guide/topics/text/autofill
-- https://developer.apple.com/documentation/authenticationservices/public-private_key_authentication/supporting_passkeys
+- https://developer.android.com/identity/sign-in/credential-manager-siwg-implementation#handle-sign-out
+- https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html
 ---
 
 ## Overview
 
-This weakness occurs when an app does not support the platform's auto-fill and credential-management mechanisms, pushing users toward insecure workarounds such as copying and pasting credentials between apps.
+This weakness occurs when sensitive data or an authenticated session remains accessible after the session should have ended, whether through explicit logout, a timeout, or a contextual state change.
 
-Platforms provide secure flows for supplying credentials, one-time codes, and passkeys: credential and one-time-code auto-fill, Password AutoFill tied to the app's associated domain, system authentication sessions for third-party services, passwordless authentication with passkeys and WebAuthn, and shared web credentials between an app and its website counterpart. When an app ignores these mechanisms, users end up typing or copying secrets manually, weakening both their credentials and the trust boundary they cross.
+Session termination is not limited to the user tapping "log out": inactivity timeouts, the app moving to the background, or remarkable changes in the user's context (such as location or profile changes) can all require the session to end or the user to re-authenticate. When the app fails to invalidate the session and clear the associated sensitive data (session tokens, cached personal data, in-memory state, on-screen content), anyone who gains access to the device or the leftover tokens can resume access without authenticating.
 
 ## Modes of Introduction
 
-- **No Auto-Fill Support in Credential Fields**: Building login fields that are not recognized by or are incompatible with the platform's auto-fill framework and password managers.
-- **No One-Time-Code Auto-Fill**: Requiring users to manually read and copy one-time codes (e.g. from SMS) instead of supporting the platform's code auto-fill.
-- **Missing Website Association**: Not associating the app with its domain, preventing frictionless secure credential sharing between the app and its website counterpart.
-- **Embedded Custom Login Instead of System Flows**: Handling custom authentication, such as using third-party logins in embedded views, instead of system-provided authentication sessions (e.g. `ASWebAuthenticationSession`).
-- **No Support for Passwordless Authentication**: Not offering passkeys or other multi-device FIDO/WebAuthn credentials where they could replace passwords.
+- **Sessions Not Invalidated Server-Side**: Terminating sessions only client-side, leaving session tokens valid on the server after logout or timeout.
+- **Missing Client-Side Session Termination**: The app provides no way to terminate user sessions (e.g. no logout button or timeout).
+- **No Re-Authentication on State Changes**: Resuming the app from the background or continuing after remarkable context changes (e.g. a significant change in the user's location or profile) without invalidating the current session and requiring re-authentication.
+- **Cached Data Not Cleared**: Retaining session tokens, cached personal data, in-memory state, or on-screen content after the session ends.
+- **Missing Inactivity Timeout**: Allowing sessions to remain valid indefinitely without inactivity or absolute expiration limits.
 
 ## Impact
 
-- **Authentication or Authorization Bypass**: Attackers can reuse captured credentials or one-time codes, resulting in account takeover and unauthorized access to the user's data and functionality.
-- **Compromise of Sensitive Data**: Attackers can read credentials exposed through clipboard-based workarounds, resulting in disclosure of authentication material that protects sensitive information.
+- **Authentication or Authorization Bypass**: Attackers can resume the victim's session and act as the user without authenticating, resulting in unauthorized access to the account and its functionality.
+- **Compromise of Sensitive Data**: Attackers can read cached or leftover personal data from a terminated session, resulting in unauthorized disclosure of user information.
 
 ## Mitigations
 
-- **Support Platform Auto-Fill**: Annotate credential fields so the platform's auto-fill framework and password managers can fill them securely (e.g. autofill hints on Android, `textContentType` on iOS).
-- **Support One-Time-Code Auto-Fill**: Use the platform mechanisms that deliver one-time codes directly into the app, removing the need for manual copying.
-- **Associate the App with Its Domain**: Configure website association (e.g. iOS Password AutoFill with associated domains, shared web credentials) so credentials flow securely between the app and its website.
-- **Use System Authentication Sessions for Third-Party Logins**: Authenticate against third-party services with system flows such as `ASWebAuthenticationSession` instead of embedded views.
-- **Support Passkeys**: Offer passkeys or other WebAuthn-based passwordless authentication to remove shared secrets from the login flow entirely.
+- **Invalidate Sessions Fully**: Invalidate the session server-side on logout, timeout, and account state changes, following the [OWASP Session Management Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html).
+- **Re-Authenticate on Context Changes**: Require re-authentication when the app returns to the foreground after a sensitive flow or when remarkable changes in the user's context (e.g. location or profile) are detected.
+- **Clear Sensitive Data on Termination**: Remove session tokens, cached personal data, and in-memory or on-screen sensitive content when the session ends, including disconnecting linked accounts where applicable.
+- **Enforce Timeouts**: Apply both inactivity and absolute session timeouts appropriate to the app's risk profile.

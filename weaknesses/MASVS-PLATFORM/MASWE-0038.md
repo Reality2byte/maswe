@@ -1,48 +1,38 @@
 ---
-title: WebViews Loading Untrusted Content
+title: Insufficient Protection of Sensitive Data from Screenshots or Screen Recordings
 id: MASWE-0038
-alias: webviews-untrusted-content
-requirement: "The app only allows trusted content in WebViews."
+alias: data-leak-screenshots
+requirement: "The app removes or masks sensitive data from its views when moved to the background, when being recorded or when a screenshot is taken."
 platform: [android, ios]
-profiles: [L1, L2]
+profiles: [L2]
 threat: MAS-THREAT-0038
-attacks: [MAS-ATTACK-0047, MAS-ATTACK-0051]
+attacks: [MAS-ATTACK-0010, MAS-ATTACK-0071, MAS-ATTACK-0072]
 mappings:
-  masvs-v2: [MASVS-PLATFORM-2, MASVS-CODE-4]
-  cwe: [79, 601, 829]
-  android-risks:
-  - cross-app-scripting
-  - unsafe-uri-loading
-  maswe-beta: [MASWE-0071, MASWE-0070, MASWE-0072]
+  masvs-v1: [MSTG-STORAGE-9]
+  masvs-v2: [MASVS-PLATFORM-3, MASVS-STORAGE-2]
+  cwe: [200, 359]
+  maswe-beta: [MASWE-0055]
 refs:
-- https://blog.oversecured.com/Evernote-Universal-XSS-theft-of-all-cookies-from-all-sites-and-more/
+- https://developer.android.com/about/versions/14/features/screenshot-detection
 ---
 
 ## Overview
 
-This weakness occurs when a WebView loads URLs, HTML, or JavaScript from untrusted sources, or lets users navigate to arbitrary sites outside the developer's control.
+This weakness occurs when sensitive data displayed by an app can be captured in screenshots or screen recordings, and the app does not prevent the capture or conceal or redact the data when such protection is warranted.
 
-WebViews run with app-specific privileges and often use JavaScript bridges (see @MASWE-0036) to communicate between the web sandbox and the app to access contacts, local files, the device location, or its camera. Loading untrusted content into WebViews is therefore more dangerous than opening it in an external browser.
- 
-A URL received via an intent or deep link, or JavaScript fetched from an unverified source, can lead to cross-site scripting, including Universal XSS, allowing an attacker to steal cookies and tokens from any site, perform phishing attacks, or trigger drive-by downloads. Actors can also access functionality outside the web sandbox using JavaScript bridges declared by the developers.
+Mobile platforms allow users, privileged apps, and external tools to capture screenshots or record the screen. In addition, when an app enters the background, the system may capture a snapshot of the app's current view for display in the app switcher. Sensitive content that remains visible without appropriate protection can be retained in these images or recordings.
 
 ## Modes of Introduction
 
-- **Unrestricted Navigation**: Not restricting which origins the WebView may load (e.g. via `WebViewClient.shouldOverrideUrlLoading` or navigation delegates), letting users or content navigate anywhere directly, or loading domains that can be used to navigate to attacker-controlled domains.
-- **Untrusted URLs from External Input**: Loading URLs received through intents, deep links, or other external input without validating them against an allowlist.
-- **Untrusted Script Inclusion**: Loading JavaScript from unverified sources into pages rendered by the WebView.
-- **Safe Browsing Disabled**: Disabling platform protections such as Safe Browsing that warn about known-malicious sites.
-- **Deprecated WebView Components**: Using deprecated WebView implementations that lack modern process isolation and security protections.
+- **Missing Platform Screenshot Protection**: Displaying sensitive fields without applying the related platform protections that can avoid the field information from appearing in screenshots or screen recordings (e.g., in Android, applying the [`FLAG_SECURE`](https://developer.android.com/reference/android/view/WindowManager.LayoutParams#FLAG_SECURE) flag).
+- **Missing Capture-State Redaction**: Continuing to display sensitive information while the app or scene is being recorded, mirrored, or shared, despite the platform providing an API to detect the active capture state.
+- **Excessive On-Screen Disclosure**: Displaying complete sensitive values when a masked, partial, temporary, or user-initiated representation would be sufficient for the current task.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Attackers can steal cookies, tokens, or displayed data from any origin via cross-site scripting in the privileged WebView, resulting in unauthorized disclosure of session material and user data.
-- **Authentication or Authorization Bypass**: Attackers can reuse stolen session cookies or tokens, resulting in account takeover across the sites the WebView had sessions with.
-- **Loss of User Trust**: Attackers can render phishing pages or trigger unwanted downloads inside the app's own UI, resulting in users being deceived under the app's identity and reputational damage for the app owner.
+- **Compromise of Sensitive Data**: Sensitive information may be retained in an image or video after the app session ends and may later be viewed, shared, synchronized, backed up, or accessed by another person or service.
 
 ## Mitigations
 
-- **Allowlist Navigation**: Restrict the WebView to an allowlist of trusted origins and open everything else in the system browser.
-- **Validate Externally Supplied URLs**: Treat URLs arriving via intents or deep links as untrusted input and validate them before loading (see @MASWE-0038).
-- **Load Scripts Only from Trusted Sources**: Never inject or include JavaScript fetched from unverified sources.
-- **Keep Platform Protections Enabled**: Leave Safe Browsing and equivalent protections enabled and use current, supported WebView components.
+- **Redact Sensitive On-Screen Content**: Display only the portion of a sensitive value required for the current task. Mask values by default and unmask the values only for the needed actions, masking them again once they have been used for the task.
+- **Anti-Screenshot Platform Protections**: Apply platform protections that prevent elements containing sensitive content from appearing in screenshots or on non-secure displays (for example, in Android, applying the [`FLAG_SECURE`](https://developer.android.com/reference/android/view/WindowManager.LayoutParams#FLAG_SECURE) flag).

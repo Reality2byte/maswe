@@ -26,7 +26,7 @@ refs:
 
 This weakness occurs when security-critical functionality, such as cryptography, networking and TLS, DNS resolution, or authentication, is implemented with custom code or unproven components instead of platform-provided APIs or established, peer-reviewed libraries.
 
-Platform APIs and vetted libraries are designed and maintained by experts, incorporate security best practices, and receive timely updates. Custom or non-standard implementations are far more likely to contain subtle, exploitable flaws and to miss security updates. This weakness also covers failing to leverage secure functionality the platform already provides, for example using an insecure custom DNS setup instead of the platform's Private DNS / DNS-over-TLS support. It is the security-focused counterpart to @MASWE-0074, which applies the same principle from a privacy angle.
+Platform APIs and vetted libraries are designed and maintained by experts, incorporate security best practices, and receive timely updates. Custom or non-standard implementations are far more likely to contain subtle, exploitable flaws and to miss security updates. This weakness also covers failing to leverage secure functionality the platform already provides, for example using an insecure custom DNS setup instead of the platform's Private DNS / DNS-over-TLS support. It is the security-focused counterpart to @MASWE-0070, which applies the same principle from a privacy angle.
 
 ## Modes of Introduction
 

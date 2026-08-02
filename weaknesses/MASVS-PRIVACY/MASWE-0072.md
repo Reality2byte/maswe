@@ -1,65 +1,46 @@
 ---
-title: Inadequate Permission Management
+title: Inadequate Defaults for Privacy Relevant Actions
 id: MASWE-0072
-alias: inadequate-permission-management
-requirement: "The app adequately manages permissions."
+alias: unsafe-defaults-privacy-actions
+requirement: "The app uses adequate defaults for privacy relevant actions."
 platform: [android, ios]
 profiles: [P]
 threat: MAS-THREAT-0072
-attacks: [MAS-ATTACK-0088, MAS-ATTACK-0089]
+attacks: [MAS-ATTACK-0084, MAS-ATTACK-0087]
 mappings:
-  masvs-v2: [MASVS-PRIVACY-1]
-  cwe: [250]
-  android-core-app-quality: [Minimize_Permissions, Sensitive_Permissions, Runtime_Permissions, Permission_Rationale, Graceful_Degradation]
-  maswe-beta: [MASWE-0117]
+    masvs-v2: [MASVS-PRIVACY-2]
+    cwe: [359]
+    maswe-beta: [MASWE-0109]
 refs:
-- https://developer.apple.com/design/human-interface-guidelines/privacy#Requesting-permission
-- https://developer.apple.com/documentation/uikit/protecting_the_user_s_privacy/requesting_access_to_protected_resources
-- https://developer.android.com/training/permissions/requesting
-- https://support.google.com/googleplay/android-developer/answer/9888170?hl=en
-- https://developer.android.com/privacy-and-security/minimize-permission-requests
-- https://developer.android.com/training/permissions/usage-notes
-- https://arxiv.org/pdf/1905.02713
-- https://arxiv.org/pdf/2203.10583
-- https://ieeexplore.ieee.org/document/9001128
-- https://www.enisa.europa.eu/sites/default/files/publications/WP2017%20O-2-2-4%20GDPR%20Mobile.pdf
-- https://developer.android.com/privacy-and-security/risks/ai-risks/excessive-agency
-- https://developer.android.com/privacy-and-security/risks/ai-risks/sensitive-information-disclosure
-- https://developer.apple.com/documentation/bundleresources/information_property_list/nsextension/nsextensionattributes/requestsopenaccess
+- https://cloud.google.com/sensitive-data-protection/docs/classification-redaction
+- https://gdpr-info.eu/recitals/no-26/
+- https://gdpr-info.eu/recitals/no-28/
+- https://gdpr-info.eu/art-4-gdpr/
+- https://www.edpb.europa.eu/topics/ai-and-technology/anonymisation-pseudonymisation_en
+- https://ec.europa.eu/justice/article-29/documentation/opinion-recommendation/files/2014/wp216_en.pdf
+- https://www.statista.com/topics/9460/app-tracking-and-mobile-privacy/
 ---
 
 ## Overview
 
-This weakness occurs when an app requests more permissions than it needs, keeps permissions it no longer needs, or fails to explain why permissions are required.
+This weakness occurs when an app uses defaults for a privacy relevant action that expose more data than is necessary for the expected functionality.
 
-Permissions control access to sensitive device features such as the camera, microphone, location, and storage, making them a crucial aspect of mobile app privacy. They serve as the gateway for data collection and processing, so proper permission management is essential to protect user privacy and comply with regulations.
+Privacy relevant actions include sharing, exporting, publishing, synchronizing, backing up, changing visibility, responding to a request from another party, or moving data from private app storage to storage or services accessible by other applications, users, or third parties.
 
-Developers face the challenge of balancing functionality with privacy: while some permissions are essential for core features (e.g., a camera app requiring camera access), excessive permissions enable unnecessary data collection. From the user's perspective, privacy concerns may lead to reluctance in granting permissions, forcing them to choose between privacy and app functionality, while other users may grant permissions without fully understanding the implications. Pre-installed apps aggravate the problem, as they frequently come with excessive permissions that are granted by default and that users cannot control or revoke.
-
-Third-party libraries (SDKs) further complicate permission management by requiring permissions that the app itself does not need and by using the app's granted permissions to collect data. Similarly, AI-enabled features can be given permission-backed tools that allow them to access sensitive data or act on the user's behalf beyond what the feature requires. Mobile permission models often fail to distinguish between permissions granted to an app and those assigned to third-party components, a challenge highlighted in the [IEEE research paper "Engineering Privacy in Smartphone Apps"](https://ieeexplore.ieee.org/document/9001128) (Section IV, _"Third-party content"_). Furthermore, third-party services behind these SDKs may continue accessing data collected over the network even after permissions are revoked or the app is deleted.
+The weakness may cause users to disclose different data, disclose data to a broader audience, or create more persistent copies than they reasonably intended. The issue is whether the default configuration results in a more exposing privacy state than is necessary for the requested functionality.
 
 ## Modes of Introduction
 
-- **Requesting Excessive Permissions**: Requesting more permissions than necessary for the app's core functionality.
-- **Lack of Use of Privacy-Friendly Alternatives**: Failing to use less intrusive alternatives, such as requesting fine location when coarse location would suffice or requesting camera and photo-library access instead of using an image picker.
-- **Retaining Unneeded Permissions**: Not revoking permissions that are no longer necessary.
-- **Inadequate Permission Explanations**: Failing to provide clear explanations for why each permission is required.
-- **Third-Party Permission Requirements**: Including SDKs that require permissions beyond the app's functional needs or use granted permissions to collect and analyze data.
-- **Excessive AI Agent Permissions**: Giving an AI-enabled feature permission-backed tools or data access beyond what it requires for its intended task.
-- **Unjustified Full Access in a Bundled Keyboard**: Shipping a custom keyboard extension that sets `RequestsOpenAccess` to `true` without a feature that requires it, allowing the keyboard to transmit typed input or write it to a shared container.
+- **Unclear Disclosure Context**: The interface or action labels do not clearly identify the affected records, files, accounts, data elements, included metadata, destination, audience, or resulting privacy state, including when responding to another party's request for data.
+- **Overly Exposing Defaults**: The app preselects broader audiences, more data, longer retention, public visibility, or additional recipients when a less exposing default would satisfy the expected functionality.
 
 ## Impact
 
-- **Violation of User Privacy**: Apps and embedded components can use unnecessarily granted access to collect location, contacts, or media, resulting in tracking, surveillance, or profiling of the user.
-- **Compromise of Sensitive Data**: Apps and embedded components can retain sensitive data collected through unnecessary permissions, resulting in broader exposure of that data when the app or a third-party service suffers a data breach.
-- **Loss of User Trust**: Users can perceive permission requests as unjustified, resulting in refused permissions, negative reviews, lower user engagement, and reduced retention for the app owner.
-- **Legal and Regulatory Non-Compliance**: Requesting or retaining unnecessary permissions can violate data minimization requirements in regulations like GDPR or CCPA, resulting in fines, legal action, or removal from app stores for the app owner.
+- **Violation of User Privacy**: The app can disclose personal or sensitive data to recipients who are not entitled to receive it under the user's sharing choices, resulting in unauthorized exposure of that data.
+- **Loss of User Trust**: Users can discover that the app shared more data, or shared it more broadly, than they reasonably expected, resulting in reduced confidence in the app and its owner.
+- **Legal and Regulatory Non-Compliance**: The app can share personal data using unnecessarily exposing defaults, resulting in violations of privacy obligations and potential enforcement action.
 
 ## Mitigations
 
-- **Limit Permissions to Essential Needs**: Ensure the app and any AI-enabled features only request permissions necessary for core functionality, avoiding the collection of unnecessary data and adhering to the principle of data minimization.
-- **Prefer Privacy-Friendly Alternatives**: Use privacy-friendly alternatives to permissions that are less intrusive and provide users with more control over their data. For example, use coarse location instead of fine location, or use an image picker instead of requesting access to the camera and photo gallery.
-- **Enable Proactive Permission Revocation**: Automatically relinquish permissions that are no longer necessary to minimize unnecessary data access over time, and ensure that users can manually revoke permissions at any time through a clear and accessible interface.
-- **Implement Just-in-Time Permission Requests**: Request permissions only when they are needed, providing clear explanations for why each permission is required. This approach helps build user trust and ensures users understand the implications of granting access to their data.
-- **Add Proper Permission Explanations**: Provide clear explanations for why each permission is required, helping users understand the necessity and scope of the requested access.
-- **Avoid Full Access in Bundled Keyboards**: Do not set `RequestsOpenAccess` in a custom keyboard extension unless a user-facing feature requires it, and never use it to transmit or store the characters the keyboard receives.
+- **Provide Clear Disclosure Context and Control**: At the point of action, show the affected data, included metadata, destination, audience, and material privacy consequences; before responding to another party's request for data, identify the requester and recipient and allow the user to approve, limit, or decline the disclosure.
+- **Use Privacy Protective Defaults**: Default to the narrowest audience, smallest data set, shortest appropriate persistence, and least exposing destination that supports the requested functionality.

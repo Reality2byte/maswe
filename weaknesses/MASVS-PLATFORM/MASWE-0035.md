@@ -1,55 +1,48 @@
 ---
-title: Insecure Intents
+title: WebViews Loading Untrusted Content
 id: MASWE-0035
-alias: insecure-intents
-requirement: "The app securely handles intents."
-platform: [android]
+alias: webviews-untrusted-content
+requirement: "The app only allows trusted content in WebViews."
+platform: [android, ios]
 profiles: [L1, L2]
 threat: MAS-THREAT-0035
-attacks: [MAS-ATTACK-0047, MAS-ATTACK-0049, MAS-ATTACK-0050]
+attacks: [MAS-ATTACK-0047, MAS-ATTACK-0051]
 mappings:
-  masvs-v2: [MASVS-PLATFORM-1, MASVS-STORAGE-2]
-  cwe: [927, 940]
+  masvs-v2: [MASVS-PLATFORM-2, MASVS-CODE-4]
+  cwe: [79, 601, 829]
   android-risks:
-  - implicit-intent-hijacking
-  - intent-redirection
-  - pending-intent
-  - sender-of-pending-intents
-  - sticky-broadcast
-  android-core-app-quality: [Component_Permissions]
-  maswe-beta: [MASWE-0066]
+  - cross-app-scripting
+  - unsafe-uri-loading
+  maswe-beta: [MASWE-0071, MASWE-0070, MASWE-0072]
 refs:
-- https://support.google.com/faqs/answer/9267555?hl=en
-- https://developer.android.com/privacy-and-security/security-tips#intents
-- https://developer.android.com/topic/security/risks/intent-redirection
-- https://developer.android.com/topic/security/risks/implicit-intent-hijacking
-- https://developer.android.com/topic/security/risks/pending-intent
-- https://developer.android.com/topic/security/risks/sticky-broadcast
+- https://blog.oversecured.com/Evernote-Universal-XSS-theft-of-all-cookies-from-all-sites-and-more/
 ---
 
 ## Overview
 
-This weakness occurs when an app creates or handles Android intents insecurely, allowing other apps to intercept, redirect, or manipulate its communication.
+This weakness occurs when a WebView loads URLs, HTML, or JavaScript from untrusted sources, or lets users navigate to arbitrary sites outside the developer's control.
 
-Intents are Android's primary inter- and intra-app messaging mechanism. Insecure handling includes sending sensitive data via implicit intents that any matching app can receive, acting on untrusted intents and their extended data (e.g. calling `startActivity`, `startService`, `sendBroadcast`, or `setResult` on intents received from other apps) without validation, creating PendingIntents that other apps can modify or replay, and using sticky broadcasts, which any app can read and replace.
+WebViews run with app-specific privileges and often use JavaScript bridges (see @MASWE-0033) to communicate between the web sandbox and the app to access contacts, local files, the device location, or its camera. Loading untrusted content into WebViews is therefore more dangerous than opening it in an external browser.
+ 
+A URL received via an intent or deep link, or JavaScript fetched from an unverified source, can lead to cross-site scripting, including Universal XSS, allowing an attacker to steal cookies and tokens from any site, perform phishing attacks, or trigger drive-by downloads. Actors can also access functionality outside the web sandbox using JavaScript bridges declared by the developers.
 
 ## Modes of Introduction
 
-- **Implicit Intents for Internal Communication**: Using implicit intents, which any matching app can receive, for internal app communication or for carrying sensitive extras.
-- **Intent Redirection**: Extracting a nested intent from untrusted extras and forwarding it (e.g. via `startActivity`) without validating its destination, letting other apps reach the app's non-exported components.
-- **Mutable PendingIntents**: Creating PendingIntents without `FLAG_IMMUTABLE`, allowing the receiving app to modify the underlying intent and execute it with the app's identity.
-- **Replayable PendingIntents**: Creating one-off PendingIntents without `FLAG_ONE_SHOT`, allowing them to be reused.
-- **Sticky Broadcasts**: Using [sticky broadcasts](https://developer.android.com/privacy-and-security/risks/sticky-broadcast), which remain accessible after delivery and can be read or replaced by any app.
+- **Unrestricted Navigation**: Not restricting which origins the WebView may load (e.g. via `WebViewClient.shouldOverrideUrlLoading` or navigation delegates), letting users or content navigate anywhere directly, or loading domains that can be used to navigate to attacker-controlled domains.
+- **Untrusted URLs from External Input**: Loading URLs received through intents, deep links, or other external input without validating them against an allowlist.
+- **Untrusted Script Inclusion**: Loading JavaScript from unverified sources into pages rendered by the WebView.
+- **Safe Browsing Disabled**: Disabling platform protections such as Safe Browsing that warn about known-malicious sites.
+- **Deprecated WebView Components**: Using deprecated WebView implementations that lack modern process isolation and security protections.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Attackers can receive sensitive extras carried in implicit intents or broadcasts, resulting in unauthorized disclosure of user or app data to other apps.
-- **Authentication or Authorization Bypass**: Attackers can reach non-exported components through intent redirection or execute actions with the app's identity through manipulated PendingIntents, resulting in privileged operations performed on the attacker's behalf.
+- **Compromise of Sensitive Data**: Attackers can steal cookies, tokens, or displayed data from any origin via cross-site scripting in the privileged WebView, resulting in unauthorized disclosure of session material and user data.
+- **Authentication or Authorization Bypass**: Attackers can reuse stolen session cookies or tokens, resulting in account takeover across the sites the WebView had sessions with.
+- **Loss of User Trust**: Attackers can render phishing pages or trigger unwanted downloads inside the app's own UI, resulting in users being deceived under the app's identity and reputational damage for the app owner.
 
 ## Mitigations
 
-- **Use Explicit Intents Internally**: Address internal communication to explicit component targets so no other app can receive it, and never place sensitive data in implicit intents.
-- **Validate Redirected Intents**: Before forwarding a nested intent from untrusted input, validate its destination against an allowlist and strip unexpected flags.
-- **Create Immutable, Explicit PendingIntents**: Build PendingIntents with `FLAG_IMMUTABLE` over explicit base intents, and add `FLAG_ONE_SHOT` where a single use is intended.
-- **Avoid Sticky Broadcasts**: Use regular broadcasts protected with permissions, or more targeted mechanisms, instead of deprecated sticky broadcasts.
--**Validate Incoming Intent Data**: Treat all extended intent data entering the app through exported components as untrusted. Validate it before further processing (@MASWE-0048).
+- **Allowlist Navigation**: Restrict the WebView to an allowlist of trusted origins and open everything else in the system browser.
+- **Validate Externally Supplied URLs**: Treat URLs arriving via intents or deep links as untrusted input and validate them before loading (see @MASWE-0035).
+- **Load Scripts Only from Trusted Sources**: Never inject or include JavaScript fetched from unverified sources.
+- **Keep Platform Protections Enabled**: Leave Safe Browsing and equivalent protections enabled and use current, supported WebView components.

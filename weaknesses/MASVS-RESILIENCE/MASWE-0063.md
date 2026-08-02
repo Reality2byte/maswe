@@ -1,46 +1,37 @@
 ---
-title: App Resources Integrity Not Verified
+title: No Application-Level Payload Encryption
 id: MASWE-0063
-alias: app-resources-integrity
-requirement: "The app verifies the integrity of its resources."
+alias: data-unencrypted
+requirement: "The app applies application-level payload encryption in addition to transport-layer encryption."
 platform: [android, ios]
 profiles: [R]
 threat: MAS-THREAT-0063
-attacks: [MAS-ATTACK-0009, MAS-ATTACK-0070]
+attacks: [MAS-ATTACK-0064]
 mappings:
-  masvs-v1: [MSTG-RESILIENCE-3]
-  masvs-v2: [MASVS-RESILIENCE-2, MASVS-CODE-4]
-  cwe: [471]
-  maswe-beta: [MASWE-0105]
-refs:
-- https://developer.android.com/privacy-and-security/cryptography
-- https://developer.android.com/privacy-and-security/keystore
-- https://developer.apple.com/documentation/cryptokit/hmac
-- https://developer.apple.com/documentation/cryptokit/storing-cryptokit-keys-in-the-keychain
-- https://developer.apple.com/documentation/security/restricting-keychain-item-accessibility
+  masvs-v1: [MSTG-RESILIENCE-13]
+  masvs-v2: [MASVS-RESILIENCE-3, MASVS-NETWORK-1]
+  cwe: [319]
+  maswe-beta: [MASWE-0096]
 ---
 
 ## Overview
 
-This weakness occurs when an app does not verify that the resources it relies on have not been tampered with.
+This weakness occurs when an app relies solely on transport-layer encryption for its network traffic, without an additional layer of application-level payload encryption.
 
-Beyond the app package, apps depend on non-executable resources whose integrity matters: files in the app sandbox, configuration, downloaded content, and data restored from backups. An attacker who can alter these resources can change the app's behavior or inject malicious content without modifying its packaged code, sidestepping package- and code-integrity checks (see @MASWE-0062, @MASWE-0064). Safe dynamic code loading is covered by @MASWE-0044.
+Even when the connection uses HTTPS, an attacker who controls the device can bypass transport protections (for example by defeating certificate pinning with instrumentation) and observe or tamper with the plaintext payloads, revealing the inner workings of the app and its API. Application-level payload encryption raises the effort required to analyze and manipulate the app's traffic. This is a resilience measure aimed at hindering analysis and abuse; it complements rather than replaces transport security (see @MASWE-0026, @MASWE-0028).
 
 ## Modes of Introduction
 
-- **Sandbox Files Not Verified**: Trusting files in the app's data directory without verifying their integrity.
-- **Downloaded Resources Not Verified**: Using downloaded content or configuration without verifying its integrity and authenticity.
-- **Restored Data Not Revalidated**: Using data restored from backups or device transfers without revalidating its integrity.
-- **Verification Result Ignored**: Continuing to use a resource after its integrity verification fails.
+- **TLS-Only Protection**: Sending security-relevant API payloads with no protection beyond the transport channel, so they appear in plaintext as soon as TLS is intercepted on a controlled device.
+- **No Integrity Binding on Requests**: Not signing or otherwise binding sensitive requests, so intercepted payloads can be modified and replayed once the transport layer is bypassed.
 
 ## Impact
 
-- **Bypass of Protection Mechanisms**: Attackers can modify configuration or state files that drive security-relevant behavior, resulting in the circumvention of controls without modifying any code.
-- **Execution of Unauthorized Code**: Attackers can inject malicious content into resources the app renders or interprets (e.g. scripts or templates), resulting in attacker-controlled behavior inside the app.
+- **Compromise of System Integrity and Business Operations**: Attackers can map the app's API and craft or tamper with requests, resulting in fraud, scraping, and abuse of backend services at the app owner's expense.
+- **Bypass of Protection Mechanisms**: Attackers can easily modify payloads that carry security-relevant state, without having to reverse-engineer the application to first circumvent the additional encryption.
 
 ## Mitigations
 
-- **Verify Resource Integrity**: Compare security-relevant files against a trusted expected hash, HMAC, or digital signature before use. Protect keys and reference values from modification, and treat local verification as a defense-in-depth control on compromised devices.
-- **Authenticate Downloaded Content**: Verify integrity and authenticity (e.g. a signature, see @MASWE-0015) of downloaded resources before use.
-- **Treat Restored Data as Untrusted**: Re-validate data that reappears via backup restore or device transfer before acting on it (see @MASWE-0048).
-- **Respond to Failed Checks**: Discard or re-fetch tampered resources, restrict functionality, or alert the backend when validation fails.
+- **Encrypt Sensitive Payloads at the Application Layer**: Apply an additional layer of encryption to security-relevant payloads before they enter the transport channel, using keys managed via the platform keystore.
+- **Sign Security-Relevant Requests**: Authenticate and integrity-protect sensitive requests (e.g. with signatures bound to attested, hardware-backed keys) so tampered payloads are rejected server-side.
+- **Treat It as Defense in Depth**: Keep full transport security (TLS and pinning) in place; application-level encryption raises analysis effort but is still client-side and ultimately bypassable.

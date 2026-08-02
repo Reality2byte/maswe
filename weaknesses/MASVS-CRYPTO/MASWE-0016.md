@@ -1,44 +1,50 @@
 ---
-title: Improper Random Number Generation
+title: Cryptographic Key Access Not Restricted
 id: MASWE-0016
-alias: improper-random-number-generation
-requirement: "The app properly generates random numbers."
+alias: crypto-key-access-not-restricted
+requirement: "The app restricts access to cryptographic keys."
 platform: [android, ios]
-profiles: [L1, L2]
+profiles: [L2]
 threat: MAS-THREAT-0016
-attacks: [MAS-ATTACK-0001, MAS-ATTACK-0019, MAS-ATTACK-0024]
+attacks: [MAS-ATTACK-0002, MAS-ATTACK-0003, MAS-ATTACK-0027]
 mappings:
-  masvs-v1: [MSTG-CRYPTO-6]
-  masvs-v2: [MASVS-CRYPTO-1]
-  cwe: [332, 337, 338]
-  android-risks:
-  - weak-prng
-  android-core-app-quality: [Cryptographic_Algorithms]
-  maswe-beta: [MASWE-0027]
+  masvs-v2: [MASVS-CRYPTO-2, MASVS-AUTH-2, MASVS-AUTH-3]
+  cwe: [284, 306]
+  maswe-beta: [MASWE-0018]
 refs:
-- https://datatracker.ietf.org/doc/html/rfc4086
-- https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#secure-random-number-generation
+- https://developer.android.com/reference/android/security/keystore/KeyGenParameterSpec.Builder#setUnlockedDeviceRequired(boolean)
+- https://developer.apple.com/documentation/security/ksecattraccessiblewhenunlockedthisdeviceonly
+- https://developer.android.com/training/sign-in/biometric-auth#prompt-the-user-to-authenticate-with-biometrics
+- https://developer.apple.com/documentation/security/restricting-keychain-item-accessibility
+- https://developer.android.com/privacy-and-security/keystore#StrongBoxKeyMint
+- https://developer.apple.com/documentation/security/ksecattrtokenidsecureenclave
 ---
 
 ## Overview
 
-This weakness occurs when random values used in a security context are produced by a non-cryptographic pseudorandom number generator (PRNG) or derived from predictable seeds.
+This weakness occurs when cryptographic keys can be used without restrictions on who may use them, under which device conditions, and for how long.
 
-A [PRNG](https://en.wikipedia.org/wiki/Pseudorandom_number_generator) generates sequences deterministically from a seed. Common implementations are not cryptographically secure; for example, they typically use a linear congruential formula whose future outputs can be predicted after observing enough previous outputs. Such generators are not suitable for security-critical purposes like generating session tokens, one-time passwords, or cryptographic key material.
+Platform keystores allow developers to bind key usage to strict conditions, such as requiring user authentication, requiring the device to be unlocked, binding the key to the current device, or limiting the validity of an authorization to a short period or a single operation. 
+
+When these restrictions are not configured, any code running as the app, or any actor in possession of the unlocked device, can use the keys freely. This applies even to keys generated inside a hardware security module such as Android StrongBox or the iOS Secure Enclave: hardware backing protects the key material from extraction, but usage restrictions must still be configured explicitly.
 
 ## Modes of Introduction
 
-- **Risky Random APIs**: Using general-purpose random APIs, which do not provide cryptographically secure output, in security-relevant contexts.
-- **Non-Random Sources**: Using custom methods to create "supposedly random" values from non-random sources such as the current time.
-- **Hardcoded or Predictable Seeds**: Seeding a generator deterministically, e.g. with a hardcoded seed value shipped in the app.
+- **No User Authentication Requirement**: Creating keys that can be used without requiring the user to authenticate (e.g. with biometrics or device credentials) for each sensitive operation.
+- **Usable While the Device Is Locked**: Not restricting key or Keychain item availability to the unlocked device state (e.g. `setUnlockedDeviceRequired` on Android or `kSecAttrAccessibleWhenUnlockedThisDeviceOnly` on iOS).
+- **Not Device-Bound**: Allowing key material to migrate to other devices via backups or transfers instead of using device-only protection classes.
+- **Unbounded Authorization Validity**: Configuring long authentication validity durations so that a single user authentication authorizes key use indefinitely, rather than for a short window or a single operation.
+- **Assuming Hardware Implies Restriction**: Generating keys inside StrongBox or the Secure Enclave without configuring access restrictions, assuming the hardware alone limits who can use the key.
 
 ## Impact
 
-- **Authentication or Authorization Bypass**: Attackers can predict session tokens, one-time passwords, or password-reset codes, resulting in unauthorized access to user accounts or privileged functionality.
-- **Compromise of Sensitive Data**: Attackers can reproduce cryptographic material derived from predictable values and decrypt protected information, resulting in unauthorized disclosure of sensitive data.
+- **Compromise of Sensitive Data**: Attackers can decrypt protected information or forge encrypted data without ever extracting the key, resulting in unauthorized disclosure or modification of sensitive data.
+- **Authentication or Authorization Bypass**: Attackers can perform signing or authentication operations reserved for the legitimate user, resulting in unauthorized transactions or access to protected functionality.
 
 ## Mitigations
 
-- **Use Cryptographically Secure RNGs**: For security-relevant contexts, always generate random values with a cryptographically secure random number generator provided by the platform.
-- **Avoid Deterministic Seeding**: Do not use any random function in a deterministic way, even a secure one, and especially avoid hardcoded seed values, which can be recovered by decompiling the app.
-- **Follow Established Guidance**: Refer to [RFC 4086 - Randomness Requirements for Security](https://datatracker.ietf.org/doc/html/rfc4086) and the [OWASP Cryptographic Storage Cheat Sheet - Secure Random Number Generation](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#secure-random-number-generation) for recommendations on random number generation.
+- **Require User Authentication for Key Use**: Bind keys used for sensitive operations to user authentication, e.g. biometric or device-credential authentication on Android (`setUserAuthenticationRequired`) or Keychain access control flags on iOS, so each use requires the user's presence.
+- **Restrict Keys to Unlocked Devices**: Configure keys and Keychain items so they are only available while the device is unlocked (e.g. `setUnlockedDeviceRequired(true)` on Android, `kSecAttrAccessibleWhenUnlockedThisDeviceOnly` on iOS).
+- **Bind Keys to the Device**: Use device-only protection classes so key material cannot leave the device via backups or transfers.
+- **Limit Authorization Validity**: Keep authentication validity durations short or require authentication per operation, so a single unlock does not authorize unlimited key use.
+- **Configure Restrictions Even for Hardware-Backed Keys**: Apply the same user-authentication, unlocked-device, and validity restrictions to keys generated in StrongBox or the Secure Enclave; hardware backing protects against extraction, not against unauthorized use.

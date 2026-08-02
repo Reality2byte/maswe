@@ -1,11 +1,11 @@
 ---
 title: Non-Reproducible Builds
-id: MASWE-0076
+id: MASWE-0049
 alias: non-reproducible-builds
 requirement: "The app offers reproducible builds."
 platform: [android, ios]
 profiles: [L2]
-threat: MAS-THREAT-0077
+threat: MAS-THREAT-0049
 attacks: [MAS-ATTACK-0060, MAS-ATTACK-0062]
 mappings:
   masvs-v2: [MASVS-CODE-3]

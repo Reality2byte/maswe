@@ -1,44 +1,44 @@
 ---
-title: Improper Hashing
+title: Improper Random Number Generation
 id: MASWE-0012
-alias: improper-hashing
-requirement: "The app properly hashes sensitive data."
+alias: improper-random-number-generation
+requirement: "The app properly generates random numbers."
 platform: [android, ios]
 profiles: [L1, L2]
 threat: MAS-THREAT-0012
-attacks: [MAS-ATTACK-0028]
+attacks: [MAS-ATTACK-0001, MAS-ATTACK-0019, MAS-ATTACK-0024]
 mappings:
-  masvs-v1: [MSTG-CRYPTO-4]
+  masvs-v1: [MSTG-CRYPTO-6]
   masvs-v2: [MASVS-CRYPTO-1]
-  cwe: [328]
+  cwe: [332, 337, 338]
+  android-risks:
+  - weak-prng
   android-core-app-quality: [Cryptographic_Algorithms]
-  maswe-beta: [MASWE-0021]
+  maswe-beta: [MASWE-0027]
 refs:
-- https://developer.android.com/privacy-and-security/cryptography#deprecated-functionality
-- https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf
-- https://en.wikipedia.org/wiki/Collision_attack
-- https://csrc.nist.gov/pubs/ir/8547/ipd
+- https://datatracker.ietf.org/doc/html/rfc4086
+- https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#secure-random-number-generation
 ---
 
 ## Overview
 
-This weakness occurs when a broken or unsuitable hash function is used in a security-sensitive context, such as integrity checks, digital signatures, or certificate fingerprints.
+This weakness occurs when random values used in a security context are produced by a non-cryptographic pseudorandom number generator (PRNG) or derived from predictable seeds.
 
-Broken algorithms such as MD5 and SHA-1 have practical collision attacks, and NIST has deprecated both for all security purposes; they must not be used in any security-sensitive context. Using an otherwise sound hash function for the wrong job is equally problematic: passwords and passphrases require a dedicated password-based key derivation function rather than a plain hash (see @MASWE-0008), and non-cryptographic checksums provide no security at all.
+A [PRNG](https://en.wikipedia.org/wiki/Pseudorandom_number_generator) generates sequences deterministically from a seed. Common implementations are not cryptographically secure; for example, they typically use a linear congruential formula whose future outputs can be predicted after observing enough previous outputs. Such generators are not suitable for security-critical purposes like generating session tokens, one-time passwords, or cryptographic key material.
 
 ## Modes of Introduction
 
-- **Broken Hash Algorithms**: Using algorithms such as MD5 or SHA-1 in contexts that require collision or second-preimage resistance, e.g. digital signatures, integrity verification, or fingerprinting.
-- **Wrong Hash for the Job**: Using a plain, fast hash for password storage or key derivation instead of a password-based KDF (see @MASWE-0008), or using non-cryptographic checksums such as CRC-32 where a cryptographic hash is required.
-- **Truncated Digests**: Truncating hash output below the security strength required by the use case, reducing collision and preimage resistance.
+- **Risky Random APIs**: Using general-purpose random APIs, which do not provide cryptographically secure output, in security-relevant contexts.
+- **Non-Random Sources**: Using custom methods to create "supposedly random" values from non-random sources such as the current time.
+- **Hardcoded or Predictable Seeds**: Seeding a generator deterministically, e.g. with a hardcoded seed value shipped in the app.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Attackers can substitute or modify data without invalidating its hash, resulting in undetected manipulation of sensitive information.
-- **Authentication or Authorization Bypass**: Attackers can forge artifacts whose authenticity is established via hashes, such as signed payloads or fingerprinted certificates, resulting in impersonation or unauthorized access.
+- **Authentication or Authorization Bypass**: Attackers can predict session tokens, one-time passwords, or password-reset codes, resulting in unauthorized access to user accounts or privileged functionality.
+- **Compromise of Sensitive Data**: Attackers can reproduce cryptographic material derived from predictable values and decrypt protected information, resulting in unauthorized disclosure of sensitive data.
 
 ## Mitigations
 
-- **Use Approved Hash Functions**: Use hash functions approved by current standards, such as SHA-256 or stronger members of the SHA-2 and SHA-3 families, per [NIST.SP.800-131Ar2](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf), and follow emerging post-quantum guidance such as [NIST IR 8547](https://csrc.nist.gov/pubs/ir/8547/ipd).
-- **Use Password-Based KDFs for Passwords**: Never hash passwords or passphrases directly; use a dedicated password-based KDF as described in @MASWE-0008.
-- **Preserve Digest Length**: Do not truncate digests below the security strength required by the use case.
+- **Use Cryptographically Secure RNGs**: For security-relevant contexts, always generate random values with a cryptographically secure random number generator provided by the platform.
+- **Avoid Deterministic Seeding**: Do not use any random function in a deterministic way, even a secure one, and especially avoid hardcoded seed values, which can be recovered by decompiling the app.
+- **Follow Established Guidance**: Refer to [RFC 4086 - Randomness Requirements for Security](https://datatracker.ietf.org/doc/html/rfc4086) and the [OWASP Cryptographic Storage Cheat Sheet - Secure Random Number Generation](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#secure-random-number-generation) for recommendations on random number generation.

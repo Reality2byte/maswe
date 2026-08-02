@@ -1,41 +1,46 @@
 ---
-title: Runtime Code Integrity Not Verified
+title: Debug Mechanisms Not Disabled
 id: MASWE-0064
-alias: runtime-code-integrity
-requirement: "The app detects unauthorized changes to its code and execution flow at runtime."
+alias: debuggable-flag
+requirement: "The app disables debug mechanisms."
 platform: [android, ios]
 profiles: [R]
 threat: MAS-THREAT-0064
-attacks: [MAS-ATTACK-0002, MAS-ATTACK-0003]
+attacks: [MAS-ATTACK-0002, MAS-ATTACK-0003, MAS-ATTACK-0004]
 mappings:
-  masvs-v1: [MSTG-RESILIENCE-6]
-  masvs-v2: [MASVS-RESILIENCE-2]
-  maswe-beta: [MASWE-0107]
+  masvs-v1: [MSTG-RESILIENCE-2]
+  masvs-v2: [MASVS-RESILIENCE-4, MASVS-PLATFORM-2]
+  cwe: [489]
+  android-risks:
+  - android-debuggable
+  maswe-beta: [MASWE-0067, MASWE-0074]
+refs:
+- https://developer.android.com/guide/topics/manifest/application-element
+- https://developer.android.com/reference/android/webkit/WebView#setWebContentsDebuggingEnabled(boolean)
+- https://developer.apple.com/documentation/webkit/wkwebview/4111163-isinspectable
+- https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.security.cs.debugger
 ---
 
 ## Overview
 
-This weakness occurs when an app is running in an unsafe environment (rooted or jailbroken device) and does not verify the integrity of its own code at runtime, allowing in-memory patching, code injection, and hooking to go undetected.
+This weakness occurs when the application has debug mechanisms enabled in production builds, allowing the usage of platform debuggers, or exposes embedded web or JavaScript content to developer inspection tools.
 
-Even a correctly signed app can be modified while it runs: attackers can patch instructions in memory, inject libraries into the process, or hook functions to change their behavior. Runtime code integrity verification, such as checking loaded code segments, detecting injected libraries, and spotting patched function prologues, complements packaged-app integrity verification (see @MASWE-0062) by covering tampering that happens after the app has launched.
+Mobile apps typically include configuration flags and mechanisms that enable debugging. While these are essential during development, leaving them enabled in production makes the app inspectable and manipulable.
 
-Unlike dynamic-analysis tool detection (see @MASWE-0061), runtime integrity verification detects unauthorized changes to the app's memory and execution state without relying on tool-specific artifacts.
+Beyond the application-level debuggable flag, this weakness also covers web-content debugging, which lets a remote inspector attach to the app's web content (e.g. Android's [`WebView.setWebContentsDebuggingEnabled(true)`](https://developer.android.com/reference/android/webkit/WebView#setWebContentsDebuggingEnabled(boolean)) or iOS's [`WKWebView.isInspectable`](https://developer.apple.com/documentation/webkit/wkwebview/isinspectable)). Like the debuggable flag, this must be disabled in production builds.
 
 ## Modes of Introduction
 
-- **No Runtime Code Checks**: Not verifying the integrity of loaded code segments or executable memory at runtime.
-- **Injected Libraries or Executable Mappings Not Detected**: Not inspecting the process for executable memory mappings or libraries that are unexpected for the app or platform.
-- **Hooked Functions Not Detected**: Not checking security-critical functions for patched prologues or redirected implementations.
-- **No Response to Tampering**: Detecting modifications but not reacting to protect sensitive operations.
+- **Misconfigured Build Settings**: Accidentally leaving the app in a debuggable state through improper selection of build variants, errors in CI/CD configurations, or mistakenly applying debug settings to production environments.
+- **WebView or JavaScript Debugging Enabled**: Leaving WebView content debugging enabled in production (e.g. `setWebContentsDebuggingEnabled(true)` on Android or `isInspectable = true` on iOS).
 
 ## Impact
 
-- **Bypass of Protection Mechanisms**: Attackers can patch or hook the functions implementing the app's security checks, resulting in the circumvention of its client-side defenses.
-- **Compromise of Sensitive Data**: Attackers can redirect or wrap data-handling functions to siphon their inputs and outputs, resulting in exposure of credentials and user data processed by the app.
+- **Compromise of Sensitive Data**: Attackers can read the app's memory and logs to obtain encryption keys, API keys, user credentials, or tokens that are never written to the app's code or disk, resulting in unauthorized disclosure of secrets and user data.
+- **Authentication or Authorization Bypass**: Attackers can manipulate the app's execution flow to skip authentication and authorization checks, resulting in unauthorized access to protected functionality.
+- **Facilitated Reverse Engineering and Instrumentation**: Debug access reduces the effort required to observe and manipulate the application's behavior and may facilitate further dynamic analysis or instrumentation.
 
 ## Mitigations
 
-- **Verify Code Segments at Runtime**: Periodically validate the integrity of the app's loaded code and executable memory, especially around sensitive operations.
-- **Detect Injection and Hooking**: Check for foreign libraries in the process and for patched prologues or redirected implementations of security-critical functions.
-- **Layer and Protect the Checks**: Implement checks in native code, diversify them, and protect them with obfuscation (see @MASWE-0051) so they cannot all be disabled with one patch.
-- **Respond to Detection**: Terminate, restrict functionality, or signal the backend when runtime tampering is detected, and assess the checks against current hooking frameworks.
+- **Disable Application Debugging in Release Builds**: Ensure that the debuggable flag in the app's configuration file is not enabled for production builds. For example, set [`isDebuggable = false` or `debuggable false`](https://developer.android.com/studio/publish/preparing) in Android or ensure that the `get-task-allow` entitlement is absent or set to `false` in iOS applications.
+- **Disable WebView and JavaScript Content Debugging in Release Builds**: Ensure that the WebViews and JavaScript contexts in the application are not debuggable. For example, do not call `setWebContentsDebuggingEnabled(true)` on Android and keep `WKWebView.isInspectable` set to `false` on iOS.

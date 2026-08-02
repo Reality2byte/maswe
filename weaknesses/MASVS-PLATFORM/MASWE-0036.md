@@ -1,51 +1,39 @@
 ---
-title: Sensitive Native Functionality Exposed in WebViews
+title: Unnecessary Exposure of Sensitive Data via the User Interface
 id: MASWE-0036
-alias: js-bridges-webviews
-requirement: "The app does not expose sensitive native functionality to WebView content."
+alias: data-leak-ui
+requirement: "The app does not unnecessarily expose sensitive data through its user interface."
 platform: [android, ios]
-profiles: [L1, L2]
+profiles: [L2]
 threat: MAS-THREAT-0036
-attacks: [MAS-ATTACK-0047, MAS-ATTACK-0051]
+attacks: [MAS-ATTACK-0005, MAS-ATTACK-0041, MAS-ATTACK-0043]
 mappings:
-  masvs-v1: [MSTG-PLATFORM-7]
-  masvs-v2: [MASVS-PLATFORM-2, MASVS-STORAGE-2]
-  cwe: [749, 94]
-  android-risks:
-  - insecure-webview-native-bridges
-  android-core-app-quality: [WebView_JavaScript]
-  maswe-beta: [MASWE-0068]
+  masvs-v1: [MSTG-STORAGE-7]
+  masvs-v2: [MASVS-PLATFORM-3, MASVS-STORAGE-2]
+  cwe: [200, 359]
+  maswe-beta: [MASWE-0053]
 refs:
-- https://support.google.com/faqs/answer/9095419
-- https://developer.android.com/develop/ui/views/layout/webapps/native-api-access-jsbridge
-- https://developer.android.com/reference/androidx/webkit/WebViewCompat#addWebMessageListener(android.webkit.WebView,java.lang.String,java.util.Set%3Cjava.lang.String%3E,androidx.webkit.WebViewCompat.WebMessageListener)
-- https://developer.apple.com/documentation/webkit/wkscriptmessagehandler
+- https://developer.android.com/develop/ui/views/touch-and-input/keyboard-input/style#Type
+- https://developer.apple.com/documentation/uikit/uitextinputtraits/1624427-issecuretextentry
 ---
 
 ## Overview
 
-This weakness occurs when an app exposes sensitive native functionality to content loaded in its WebViews, most commonly through JavaScript bridges.
+This weakness occurs when an app exposes sensitive data beyond what is required for the user's current task, or exposes required data without protections proportionate to its sensitivity through its user interface.
 
-Bridges such as [`addWebMessageListener`](https://developer.android.com/reference/androidx/webkit/WebViewCompat#addWebMessageListener%28android.webkit.WebView,java.lang.String,java.util.Set%3Cjava.lang.String%3E,androidx.webkit.WebViewCompat.WebMessageListener%29) on Android and [`WKScriptMessageHandler`](https://developer.apple.com/documentation/webkit/wkscriptmessagehandler) on iOS allow web content to send messages to native code. When these bridges expose more capability than necessary, or are reachable by untrusted content, malicious JavaScript can invoke native functionality, access sensitive data, or perform privileged actions using the app's permissions and privileges.
+The typical exposure path involves displaying secrets or sensitive information in cleartext when masking or a partial representation would suffice, (e.g., using unprotected input fields for passwords or PINs).
 
 ## Modes of Introduction
 
-- **Bridges Reachable by Untrusted Content**: Making bridge interfaces available to any page, origin, or frame the WebView loads instead of restricting them to trusted origins.
-- **Unvalidated Bridge Messages**: Accepting message names, arguments, or payloads without validating their structure, types, values, authorization, and expected application state.
-- **Globally Exposed Bridge Mechanisms**: Using bridge mechanisms that expose native interfaces broadly across the WebView, such as Android `addJavascriptInterface`, when origin-scoped messaging APIs are available.
-- **App-Owned Bridge Scripts in the Page World**: Running injected bridge scripts in the same JavaScript execution world as page content, allowing page scripts, including third-party scripts, to access or interfere with the bridge.
-- **Sensitive Data in Bridge Replies**: Returning sensitive data into the WebView JavaScript context in a way that any untrusted scripts can read, regardless of user authentication state.
-- **Over-Exposed Bridges**: Exposing more native functionality through the bridge than the web content actually needs.
+- **Non-Secure Text Entry**: Building password or PIN fields without inserting them in platform-specific fields that mask sensitive data (e.g. [`isSecureTextEntry`](https://developer.apple.com/documentation/uikit/uitextinputtraits/issecuretextentry) on iOS, [`textPassword`](https://developer.android.com/develop/ui/views/touch-and-input/keyboard-input/style#Type) input types on Android), so the input is shown in cleartext.
+- **Unmasked Sensitive Values**: Displaying full values (e.g. complete card numbers or personal identifiers) where a masked or partial representation would suffice.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Attackers can call bridge methods that return user or app data, resulting in exfiltration of sensitive information to attacker-controlled servers.
-- **Execution of Unauthorized Code**: Attackers can drive native functionality exposed through the bridge, resulting in privileged actions performed within the app's context.
+- **Compromise of Sensitive Data**: Sensitive information may be observed from the screen and captured by other user.
+- **Authentication or Authorization Bypass**: Attackers can capture credentials, PINs, or one-time codes exposed through the UI, resulting in unauthorized access to the user's accounts.
 
 ## Mitigations
 
-- **Minimize the Bridge Surface**: Expose only the specific methods the web content needs, and strip bridges entirely from WebViews that do not need them.
-- **Restrict Bridges to Trusted Origins**: Attach bridges only when loading trusted content and prefer origin-scoped messaging mechanisms over global bridges.
-- **Validate Bridge Messages**: Treat every message arriving over the bridge as untrusted input and validate it before acting on it.
-- **Prefer Modern Messaging APIs**: On Android, prefer [`WebViewCompat.addWebMessageListener`](https://developer.android.com/reference/androidx/webkit/WebViewCompat#addWebMessageListener%28android.webkit.WebView,java.lang.String,java.util.Set,androidx.webkit.JavaScriptExecutionWorld,androidx.webkit.WebViewCompat.WebMessageListener%29) over the legacy [`WebView.addJavascriptInterface`](https://developer.android.com/reference/android/webkit/WebView#addJavascriptInterface%28java.lang.Object,java.lang.String%29). On iOS, use [`WKScriptMessageHandlerWithReply`](https://developer.apple.com/documentation/webkit/wkscriptmessagehandlerwithreply) when JavaScript requires a native response, and use [`WKScriptMessageHandler`](https://developer.apple.com/documentation/webkit/wkscriptmessagehandler) for one way messages.
-- **Isolate App-Owned Bridge Scripts**: When the bridge is intended only for app-injected JavaScript, register the handler and injected script in a named execution world. Use [`JavaScriptExecutionWorld`](https://developer.android.com/reference/androidx/webkit/JavaScriptExecutionWorld) on Android and [`WKContentWorld`](https://developer.apple.com/documentation/webkit/wkcontentworld) on iOS, where supported. Keep origin restrictions, frame checks, and message validation in place, because execution world isolation is not origin authorization.
+- **Use Secure Text Entry for Secrets**: Configure passwords, PINs, and other secrets using the platform's secure text-entry controls, such as [`textPassword` on Android Views](https://developer.android.com/develop/ui/views/touch-and-input/keyboard-input/style), [`SecureTextField` in Jetpack Compose](https://developer.android.com/develop/ui/compose/text/user-input), or [`isSecureTextEntry` on iOS](https://developer.apple.com/documentation/uikit/uitextinputtraits/issecuretextentry). Do not rely solely on custom visual masking when a platform-provided secure text-entry control is available.
+- **Minimize Visual Disclosure**: Display only the portion of a sensitive value required for the user's current task. When revealing the full value is necessary, reveal it only after an explicit user action (see @MASWE-0023) and for a limited duration.

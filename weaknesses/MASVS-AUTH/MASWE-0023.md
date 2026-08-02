@@ -1,40 +1,55 @@
 ---
-title: Crypto Keys Not Invalidated on New Biometric Enrollment
+title: Step-Up Authentication Not Implemented for Sensitive Actions
 id: MASWE-0023
-alias: crypto-keys-biometric-enrollment
-requirement: "The app invalidates keys after any enrollment of new biometric data."
+alias: step-up-auth
+requirement: "The app enforces step-up authentication before granting access to sensitive functionality."
 platform: [android, ios]
 profiles: [L2]
 threat: MAS-THREAT-0023
-attacks: [MAS-ATTACK-0035]
+attacks: [MAS-ATTACK-0032, MAS-ATTACK-0033]
 mappings:
-  masvs-v2: [MASVS-AUTH-2, MASVS-CRYPTO-2]
-  cwe: [287, 522]
-  maswe-beta: [MASWE-0046]
+  masvs-v1: [MSTG-AUTH-10]
+  masvs-v2: [MASVS-AUTH-3, MASVS-PLATFORM-3]
+  cwe: [306]
+  android-core-app-quality: [Biometric_Authentication]
+  maswe-beta: [MASWE-0029]
 refs:
-- https://developer.android.com/reference/android/security/keystore/KeyGenParameterSpec.Builder#setInvalidatedByBiometricEnrollment(boolean)
-- https://developer.apple.com/documentation/security/secaccesscontrolcreateflags/biometrycurrentset
+- https://developer.apple.com/documentation/localauthentication
+- https://auth0.com/blog/what-is-step-up-authentication-when-to-use-it/
+- https://pages.nist.gov/800-63-4/sp800-63b.html
 ---
 
 ## Overview
 
-This weakness occurs when cryptographic keys gated by biometric authentication remain valid after the set of enrolled biometrics changes.
+This weakness occurs when an app allows sensitive actions to be performed within an already authenticated session without requiring the user to re-confirm their identity.
 
-Biometric-bound keys are meant to be usable only by the person whose biometrics were enrolled when the key was created. If keys stay valid across enrollments, anyone who can add a new fingerprint or face to the device can unlock them. On Android, invalidation on new enrollment is enabled by default but can be disabled with `setInvalidatedByBiometricEnrollment(false)`; on iOS, it must be explicitly enabled by creating the access control with `SecAccessControlCreateFlags.biometryCurrentSet` (formerly `touchIDCurrentSet`), which invalidates the Keychain item when a biometric is added or removed.
+Step-up authentication requires the user to re-authenticate or provide an additional authentication factor before performing a sensitive action, even within an active session. 
+
+For example, a user logged into their bank account who requests a large transfer to an unknown payee should be required to re-confirm their identity (e.g. via biometrics or a second factor) so that only the legitimate user can complete the action. Without it, whoever holds the active session, not necessarily the legitimate user, can perform every operation the account allows.
+
+Depending on the context, other sensitive actions may include:
+
+- Changing account data such as password, email address or phone number
+- Elevating a user role
+- Disabling security features such as multifactor authentication (MFA)
+- Displaying sensitive data such as credit card number / PAN
 
 ## Modes of Introduction
 
-- **Invalidation Disabled on Android**: Creating keys with `setInvalidatedByBiometricEnrollment(false)`, keeping them usable after new biometrics are enrolled.
-- **Invalidation Not Enabled on iOS**: Protecting Keychain items without `biometryCurrentSet`, so items remain accessible with any enrolled biometric, including ones added later.
-- **Unsafe Invalidation Recovery**: Silently re-creating an invalidated key or falling back to weaker authentication when invalidation occurs, instead of re-verifying the user's identity first.
+- **No Re-Authentication for Sensitive Actions**: Allowing high-risk operations, such as payments, credential or profile changes, or the display of sensitive personal data, with only the assurance of the initial login.
+- **Step-Up Not Bound to the Action**: Implementing a re-authentication challenge that is not tied to the specific transaction being approved, so a single approval can be reused for a different or modified action.
+- **Step-Up Not Enforced Server-Side**: Step-up authentication is only performed by app and not by the server. 
+- **Uniform Assurance Level**: Designing all functionality behind a single login assurance level without classifying operations by risk.
 
 ## Impact
 
-- **Authentication or Authorization Bypass**: Attackers can pass biometric prompts with their own newly enrolled biometrics, resulting in unauthorized approval of operations bound to the victim's identity.
-- **Compromise of Sensitive Data**: Attackers can unlock data protected by biometric-bound keys, resulting in unauthorized disclosure of sensitive user information.
+- **Financial Loss**: Attackers can initiate transfers or purchases in the victim's session, resulting in direct financial harm to the user.
+- **Compromise of Sensitive Data**: Attackers can view or export sensitive personal data available in the session, resulting in unauthorized disclosure of user information.
+- **Authentication or Authorization Bypass**: Attackers can change the account's credentials or security settings without any additional challenge, resulting in persistent account takeover.
 
 ## Mitigations
 
-- **Keep Enrollment Invalidation Enabled on Android**: Do not call `setInvalidatedByBiometricEnrollment(false)` for keys protecting sensitive data or operations.
-- **Enable Enrollment Invalidation on iOS**: Create Keychain access controls with `SecAccessControlCreateFlags.biometryCurrentSet` so items are invalidated when the enrolled biometric set changes.
-- **Handle Invalidation Safely**: When a key has been invalidated, require full re-authentication of the user (e.g. account credentials or a server-verified flow) before re-creating the key, and never silently fall back to weaker protection.
+- **Classify Actions by Risk**: Define which operations require step-up authentication and match the required assurance level to the sensitivity of each action.
+- **Require Step-Up for Sensitive Actions**: Re-authenticate the user, e.g. with biometrics bound to a keystore-protected key or an additional factor, before executing high-risk operations or displaying highly sensitive data.
+- **Bind the Challenge to the Action**: Tie the step-up challenge cryptographically to the specific transaction (e.g. transaction signing), so an approval cannot be replayed or applied to a different action.
+- **Enforce Step-Up Server-Side**: Have the server require and verify step-up evidence before executing the action, rather than trusting a client-side check.

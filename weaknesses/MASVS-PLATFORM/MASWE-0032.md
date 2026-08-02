@@ -1,45 +1,55 @@
 ---
-title: Insecure Deep Links
+title: Insecure Intents
 id: MASWE-0032
-alias: insecure-deep-links
-requirement: "The app securely handles deep links."
-platform: [android, ios]
+alias: insecure-intents
+requirement: "The app securely handles intents."
+platform: [android]
 profiles: [L1, L2]
 threat: MAS-THREAT-0032
-attacks: [MAS-ATTACK-0046, MAS-ATTACK-0047]
+attacks: [MAS-ATTACK-0047, MAS-ATTACK-0049, MAS-ATTACK-0050]
 mappings:
-  masvs-v1: [MSTG-PLATFORM-3]
-  masvs-v2: [MASVS-PLATFORM-1, MASVS-STORAGE-2, MASVS-CODE-4]
-  cwe: [939, 917]
+  masvs-v2: [MASVS-PLATFORM-1, MASVS-STORAGE-2]
+  cwe: [927, 940]
   android-risks:
-  - unsafe-use-of-deeplinks
-  maswe-beta: [MASWE-0058]
+  - implicit-intent-hijacking
+  - intent-redirection
+  - pending-intent
+  - sender-of-pending-intents
+  - sticky-broadcast
+  android-core-app-quality: [Component_Permissions]
+  maswe-beta: [MASWE-0066]
 refs:
-- https://developer.apple.com/documentation/technotes/tn3155-debugging-universal-links
-- https://developer.android.com/training/app-links/verify-android-applinks
+- https://support.google.com/faqs/answer/9267555?hl=en
+- https://developer.android.com/privacy-and-security/security-tips#intents
+- https://developer.android.com/topic/security/risks/intent-redirection
+- https://developer.android.com/topic/security/risks/implicit-intent-hijacking
+- https://developer.android.com/topic/security/risks/pending-intent
+- https://developer.android.com/topic/security/risks/sticky-broadcast
 ---
 
 ## Overview
 
-This weakness occurs when an app handles deep links insecurely, relying on unverified schemes or trusting the attacker-controllable data they carry.
+This weakness occurs when an app creates or handles Android intents insecurely, allowing other apps to intercept, redirect, or manipulate its communication.
 
-Deep links (Android App Links, iOS Universal Links and custom URL schemes) let other apps and websites launch the app, trigger an in-app action and pass parameters. They become insecure when the app relies on custom URL schemes that any app can claim, does not verify App Links or Universal Links through domain association, or fails to validate and sanitize the incoming URL and its parameters. Because deep link input is attacker-controllable, a malformed URI or parameter can trigger injection or logic abuse at various points in the app.
+Intents are Android's primary inter- and intra-app messaging mechanism. Insecure handling includes sending sensitive data via implicit intents that any matching app can receive, acting on untrusted intents and their extended data (e.g. calling `startActivity`, `startService`, `sendBroadcast`, or `setResult` on intents received from other apps) without validation, creating PendingIntents that other apps can modify or replay, and using sticky broadcasts, which any app can read and replace.
 
 ## Modes of Introduction
 
-- **Unverified Custom URL Schemes**: Relying on custom URL schemes for sensitive flows even though any installed app can claim the same scheme.
-- **Missing Domain Association**: Declaring App Links without `autoVerify` and Digital Asset Links, or Universal Links without a valid apple-app-site-association file, so links are not cryptographically tied to the app's domain.
-- **Unvalidated Deep Link Input**: Passing the deep link URL and its parameters into navigation decisions, WebViews, or queries without validation and sanitization.
+- **Implicit Intents for Internal Communication**: Using implicit intents, which any matching app can receive, for internal app communication or for carrying sensitive extras.
+- **Intent Redirection**: Extracting a nested intent from untrusted extras and forwarding it (e.g. via `startActivity`) without validating its destination, letting other apps reach the app's non-exported components.
+- **Mutable PendingIntents**: Creating PendingIntents without `FLAG_IMMUTABLE`, allowing the receiving app to modify the underlying intent and execute it with the app's identity.
+- **Replayable PendingIntents**: Creating one-off PendingIntents without `FLAG_ONE_SHOT`, allowing them to be reused.
+- **Sticky Broadcasts**: Using [sticky broadcasts](https://developer.android.com/privacy-and-security/risks/sticky-broadcast), which remain accessible after delivery and can be read or replaced by any app.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Attackers can intercept tokens or personal data carried in deep links, or exfiltrate data through injected parameters, resulting in unauthorized disclosure of user data.
-- **Authentication or Authorization Bypass**: Attackers can capture authentication material delivered via hijacked links (e.g. login or password-reset links), resulting in account takeover.
-- **Execution of Unauthorized Code**: Attackers can inject expressions or script through unsanitized deep link parameters that reach interpreters or WebViews, resulting in attacker-controlled behavior inside the app.
+- **Compromise of Sensitive Data**: Attackers can receive sensitive extras carried in implicit intents or broadcasts, resulting in unauthorized disclosure of user or app data to other apps.
+- **Authentication or Authorization Bypass**: Attackers can reach non-exported components through intent redirection or execute actions with the app's identity through manipulated PendingIntents, resulting in privileged operations performed on the attacker's behalf.
 
 ## Mitigations
 
-- **Use Verified Link Mechanisms**: Handle sensitive flows only through verified Android App Links (with `autoVerify` and Digital Asset Links) and iOS Universal Links, not through claimable custom schemes.
-- **Validate and Sanitize Deep Link Input**: Treat every deep link URL and parameter as untrusted input; validate against an allowlist of expected destinations and value formats before use.
-- **Validate the Source Where Possible**: Verify the calling application or referrer for custom scheme invocations when the platform allows it.
-- **Keep Secrets Out of Deep Links**: Avoid transporting session tokens or other secrets in links; where unavoidable, make them single-use and short-lived.
+- **Use Explicit Intents Internally**: Address internal communication to explicit component targets so no other app can receive it, and never place sensitive data in implicit intents.
+- **Validate Redirected Intents**: Before forwarding a nested intent from untrusted input, validate its destination against an allowlist and strip unexpected flags.
+- **Create Immutable, Explicit PendingIntents**: Build PendingIntents with `FLAG_IMMUTABLE` over explicit base intents, and add `FLAG_ONE_SHOT` where a single use is intended.
+- **Avoid Sticky Broadcasts**: Use regular broadcasts protected with permissions, or more targeted mechanisms, instead of deprecated sticky broadcasts.
+-**Validate Incoming Intent Data**: Treat all extended intent data entering the app through exported components as untrusted. Validate it before further processing (@MASWE-0051).

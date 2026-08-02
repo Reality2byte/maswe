@@ -1,45 +1,48 @@
 ---
-title: Usage of Non-Privacy-Preserving Functionality
+title: Inadequate Data Collection Declarations
 id: MASWE-0074
-alias: non-privacy-preserving-functionality
-requirement: "The app uses privacy-preserving functionality."
+alias: data-collection-declarations
+requirement: "The app adequately declares all user collected data."
 platform: [android, ios]
 profiles: [P]
 threat: MAS-THREAT-0074
-attacks: [MAS-ATTACK-0076, MAS-ATTACK-0088]
+attacks: [MAS-ATTACK-0081, MAS-ATTACK-0082]
 mappings:
-  masvs-v2: [MASVS-PRIVACY-2]
+  masvs-v1: [MSTG-STORAGE-12, MSTG-NETWORK-1]
+  masvs-v2: [MASVS-PRIVACY-3, MASVS-PRIVACY-1]
   cwe: [359]
-  android-core-app-quality: [Minimize_Permissions]
+  maswe-beta: [MASWE-0112, MASWE-0108]
 refs:
-- https://datatracker.ietf.org/doc/html/rfc8252#appendix-B
-- https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession
-- https://developer.android.com/training/data-storage/shared/photopicker
-- https://developer.apple.com/documentation/photokit/phpickerviewcontroller
+- https://support.apple.com/en-us/102188
+- https://support.apple.com/kb/HT211970
+- https://developer.apple.com/app-store/review/guidelines/#5.1.2
+- https://developer.apple.com/app-store/app-privacy-details/#data-collection
+- https://support.google.com/googleplay/android-developer/answer/10787469
+- https://developer.apple.com/videos/play/wwdc2023/10060
+- https://support.google.com/googleplay/answer/11416267
+- https://www.youtube.com/watch?v=J7TM0Yy0aTQ
+- https://www.youtube.com/watch?v=4rfF3y4xchU
 ---
 
 ## Overview
 
-This weakness occurs when an app uses functionality that unnecessarily exposes user data even though the platform provides a privacy-preserving alternative.
+This weakness occurs when an app's stated data collection practices, such as those documented in Apple's [App Privacy Report](https://support.apple.com/en-us/102188) and [Privacy Nutrition Labels](https://support.apple.com/kb/HT211970), or Google's [Data Safety section](https://support.google.com/googleplay/android-developer/answer/10787469?hl=en), are incomplete or inconsistent with the app's actual behavior.
 
-Platforms increasingly offer least-exposing APIs for common tasks: system authentication sessions (ASWebAuthenticationSession on iOS and Custom Tabs on Android, as recommended by RFC 8252, Appendix B) keep credentials and browsing state isolated from the app; system pickers (e.g., PHPickerViewController on iOS and the Android Photo Picker) return only the items selected by the user without granting broad permissions; and on-device processing can avoid sending data to remote AI services. Choosing a less privacy-preserving option leads to avoidable data exposure and over-collection. This is the privacy-focused counterpart to @MASWE-0047, which applies the same "prefer platform-provided functionality" principle from a security perspective; some features, such as system authentication sessions, improve both security and privacy.
+These declarations must clearly outline what data is collected, how it is used, whether it is linked to the user's identity, and whether it is shared with third parties in accordance with the platform's policies. When they are inaccurate, users are prevented from making informed decisions about their privacy, including understanding whether data will be linked to their identity, used for tracking, or shared with third parties.
+
+**Note about third-party libraries (SDKs)**: Developers, as data controllers, are legally responsible for ensuring that third-party components process sensitive data lawfully, fairly, and transparently, as highlighted in the [ENISA study on GDPR compliance](https://www.enisa.europa.eu/sites/default/files/publications/WP2017%20O-2-2-4%20GDPR%20Mobile.pdf) (Section 2.2.7, _"Data transfers and processing by third parties"_). However, in some cases, it may be challenging for mobile app developers to be fully aware of what data these third-party SDKs actually collect.
 
 ## Modes of Introduction
 
-- **Embedded Authentication Flows**: Handling third-party authentication in embedded WebViews or deprecated session APIs, exposing credentials and browsing state to the app, instead of isolated system authentication sessions.
-- **Broad Permissions Instead of Pickers**: Requesting full photo-library, camera, or file access when a system picker would return only the user-selected items without any permission.
-- **Remote Processing Instead of On-Device AI**: Sending user data to remote AI services when on-device processing can support the feature.
-- **Over-Exposing API Choices**: Choosing APIs that reveal more user data than the feature requires when a least-exposing platform alternative exists (see also @MASWE-0072).
+- **Undeclared Data Collection and Purpose**: Failing to declare what data is being collected (e.g., location, contacts, identifiers) and for what purposes (e.g., analytics, personalization).
+- **Discrepancies in Declarations vs Behavior**: Publishing declarations that differ from the app's actual behavior by using data for purposes other than those disclosed.
 
 ## Impact
 
-- **Violation of User Privacy**: The app and its embedded components can collect and correlate credentials, browsing state, or whole data collections that a privacy-preserving alternative would never have exposed, resulting in tracking, surveillance, or profiling of the user.
-- **Compromise of Sensitive Data**: The app and its embedded components can retain data that a privacy-preserving alternative would not expose, resulting in broader exposure when the app or a third-party service suffers a data breach.
-- **Loss of User Trust**: Users can perceive unnecessary permission prompts and embedded login flows as invasive, resulting in refused permissions, abandoned logins, and reduced retention.
+- **Violation of User Privacy**: Users can unknowingly share data whose purpose they do not understand, resulting in unauthorized sharing, profiling, or targeted advertising.
+- **Loss of User Trust**: Users can discover the inconsistent declarations, resulting in negative reviews, lower user engagement, and reduced retention for the app owner.
+- **Legal and Regulatory Non-Compliance**: Inaccurate or inconsistent data declarations can violate regulations like GDPR or CCPA and platform policies, resulting in fines, legal action, or removal from app stores for the app owner.
 
 ## Mitigations
 
-- **Use System Authentication Sessions**: Authenticate against third-party services with `ASWebAuthenticationSession` on iOS or Custom Tabs on Android, following RFC 8252, instead of embedded WebViews or deprecated APIs.
-- **Prefer System Pickers**: Use the system photo, file, and contact pickers so the app receives only what the user explicitly selects, without broad permission grants.
-- **Prefer On-Device Processing**: Use on-device AI or other local processing when it can support the feature without sending user data to a remote service.
-- **Choose Least-Exposing APIs**: When the platform offers a privacy-preserving variant of a capability, prefer it and request broad access only when the feature genuinely requires it (see @MASWE-0072).
+- **Maintain Accurate Privacy Labels**: Comply with Apple's Privacy Nutrition Labels and Google's Data Safety Section requirements by providing accurate, up to date and transparent information about your data practices, including data collection and sharing with third parties.

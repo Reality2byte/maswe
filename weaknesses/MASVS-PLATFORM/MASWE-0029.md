@@ -1,38 +1,45 @@
 ---
-title: Unnecessary Exposure of Sensitive Data via Notifications
+title: Insecure Deep Links
 id: MASWE-0029
-alias: data-leak-notifications
-requirement: "The app does not unnecessarily expose sensitive data through system notifications."
+alias: insecure-deep-links
+requirement: "The app securely handles deep links."
 platform: [android, ios]
-profiles: [L2]
+profiles: [L1, L2]
 threat: MAS-THREAT-0029
-attacks: [MAS-ATTACK-0044, MAS-ATTACK-0045]
+attacks: [MAS-ATTACK-0046, MAS-ATTACK-0047]
 mappings:
-  masvs-v2: [MASVS-PLATFORM-3, MASVS-STORAGE-2]
-  cwe: [200, 359]
-  maswe-beta: [MASWE-0054]
+  masvs-v1: [MSTG-PLATFORM-3]
+  masvs-v2: [MASVS-PLATFORM-1, MASVS-STORAGE-2, MASVS-CODE-4]
+  cwe: [939, 917]
+  android-risks:
+  - unsafe-use-of-deeplinks
+  maswe-beta: [MASWE-0058]
 refs:
-- https://developer.android.com/develop/ui/views/notifications/build-notification#lockscreenNotification
-- https://developer.apple.com/documentation/usernotifications
+- https://developer.apple.com/documentation/technotes/tn3155-debugging-universal-links
+- https://developer.android.com/training/app-links/verify-android-applinks
 ---
 
 ## Overview
 
-This weakness occurs when an app includes more sensitive data (such as one-time codes, message contents, or account details) than necessary in a system notification.
+This weakness occurs when an app handles deep links insecurely, relying on unverified schemes or trusting the attacker-controllable data they carry.
 
-Notifications can be rendered on the lock screen, and therefore, anyone holding the device can read them without unlocking it. They also can be read by other apps that hold notification access, if the platform allows it (e.g. an Android [`NotificationListenerService`](https://developer.android.com/reference/android/service/notification/NotificationListenerService)). Any sensitive value included in a notification therefore leaves the app's control the moment it is posted.
+Deep links (Android App Links, iOS Universal Links and custom URL schemes) let other apps and websites launch the app, trigger an in-app action and pass parameters. They become insecure when the app relies on custom URL schemes that any app can claim, does not verify App Links or Universal Links through domain association, or fails to validate and sanitize the incoming URL and its parameters. Because deep link input is attacker-controllable, a malformed URI or parameter can trigger injection or logic abuse at various points in the app.
 
 ## Modes of Introduction
 
-- **Sensitive Content in Notifications**: Including one-time codes, message contents, financial details, or other sensitive values directly in notification titles or bodies when a generic notification would suffice.
-- **No Lock-Screen Redaction**: Not configuring notification visibility so that sensitive content is redacted or hidden on the lock screen.
+- **Unverified Custom URL Schemes**: Relying on custom URL schemes for sensitive flows even though any installed app can claim the same scheme.
+- **Missing Domain Association**: Declaring App Links without `autoVerify` and Digital Asset Links, or Universal Links without a valid apple-app-site-association file, so links are not cryptographically tied to the app's domain.
+- **Unvalidated Deep Link Input**: Passing the deep link URL and its parameters into navigation decisions, WebViews, or queries without validation and sanitization.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Unauthorized observers or, where applicable, apps with notification-listener access may obtain personal, financial, authentication, or account information contained in notifications.
-- **Authentication or Authorization Bypass**: Attackers may use exposed credentials or still-valid one-time codes to access an account, perform unauthorized transactions, or carry out other sensitive actions.
+- **Compromise of Sensitive Data**: Attackers can intercept tokens or personal data carried in deep links, or exfiltrate data through injected parameters, resulting in unauthorized disclosure of user data.
+- **Authentication or Authorization Bypass**: Attackers can capture authentication material delivered via hijacked links (e.g. login or password-reset links), resulting in account takeover.
+- **Execution of Unauthorized Code**: Attackers can inject expressions or script through unsanitized deep link parameters that reach interpreters or WebViews, resulting in attacker-controlled behavior inside the app.
 
 ## Mitigations
 
-- **Minimize Notification Content**: Use notifications only to indicate that an event occurred, and retrieve sensitive details inside the app after appropriate authentication and authorization. For iOS remote notifications, follow Apple's [remote-notification payload guidance](https://developer.apple.com/documentation/usernotifications/generating-a-remote-notification) and keep user-visible alert content non-sensitive by default.
-- **Configure Android Lock-Screen Visibility**: Use [`NotificationCompat.Builder.setVisibility()` and `setPublicVersion()`](https://developer.android.com/develop/ui/views/notifications/build-notification#lockscreenNotification) to modify the presentation of sensitive notifications. Use `VISIBILITY_PRIVATE` together with a generic public version when a redacted notification may be shown, and use `VISIBILITY_SECRET` when the notification should not appear on a secure lock screen. Do not place sensitive data in the title because private notifications may still display basic information including the title.
+- **Use Verified Link Mechanisms**: Handle sensitive flows only through verified Android App Links (with `autoVerify` and Digital Asset Links) and iOS Universal Links, not through claimable custom schemes.
+- **Validate and Sanitize Deep Link Input**: Treat every deep link URL and parameter as untrusted input; validate against an allowlist of expected destinations and value formats before use.
+- **Validate the Source Where Possible**: Verify the calling application or referrer for custom scheme invocations when the platform allows it.
+- **Keep Secrets Out of Deep Links**: Avoid transporting session tokens or other secrets in links; where unavoidable, make them single-use and short-lived.
