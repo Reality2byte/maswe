@@ -15,18 +15,32 @@ mappings:
 refs:
 - https://developer.apple.com/documentation/xcode/using-the-latest-code-signature-format
 - https://developer.apple.com/documentation/devicecheck/preparing-to-use-the-app-attest-service
+- https://developer.apple.com/documentation/devicecheck/validating-apps-that-connect-to-your-server
+- https://source.android.com/docs/security/features/apksigning
+- https://developer.android.com/google/play/integrity/verdicts
+- https://developer.android.com/reference/android/content/pm/SigningInfo
+- https://github.com/android/keyattestation
+- https://source.android.com/docs/security/features/keystore/attestation
+- https://grapheneos.org/articles/attestation-compatibility-guide
 ---
 
 ## Overview
 
-This weakness occurs when an app does not attest its own authenticity and integrity, i.e. it implements no effective techniques to verify that the running binary is a genuine, unmodified copy of the app.
+This weakness occurs when an app does not provide its backend with server-verifiable attestation evidence about the app instance (e.g. app signature), or when the backend does not validate and enforce that evidence to determine whether the app has the expected identity and integrity state.
 
-App attestation includes verifying the app's signature and binaries at runtime, detecting an invalid or unexpected signing certificate, and using platform attestation services that vouch for the app's identity (e.g. App Attest on iOS, Play Integrity app verdicts on Android). It also covers using current signing schemes: outdated formats, such as Android V1-only signatures or an iOS CodeDirectory version below 20400, weaken the platform's own integrity guarantees. Verifying the package or signature against expected values, which also provides official-store assurance, remains one of the applicable techniques.
+App attestation mechanisms let a backend assess whether requests come from a recognized app instance. The app collects evidence about its signing identity and integrity, protects that evidence with a cryptographic signature or platform-provided token, and sends it to the backend for verification and enforcement. This can include platform services such as Play Integrity or App Attest, and can also include app-defined integrity reports based on local signals.
+
+On Android, an app can use hardware-backed key attestation API to provide its backend with signed evidence of the app's package name, version code, and signing-certificate digests. Together with Android's enforcement of app signatures, this evidence lets the backend verify that the app was signed with an accepted key and detect copies that have been modified and re-signed. Alternatively, the app can use the Play Integrity API, which returns a Google-generated app-recognition verdict. Play Integrity requires Google Play services to be installed and available on the device.
+
+On iOS, an app can use the App Attest service from the DeviceCheck framework. App Attest lets the app create a hardware-based key that Apple attests as belonging to a valid app instance. The backend validates the initial attestation and then uses the attested public key to verify request-bound assertions.
+
+The code-signature format also affects platform-enforced integrity. Using outdated formats, such as Android V1-only signatures or an iOS CodeDirectory version below 20400, weaken the platform's own integrity guarantees.
 
 ## Modes of Introduction
 
-- **No Runtime Integrity Verification**: Not verifying the app's signature, package identity, or binaries at runtime, so a repackaged copy runs unnoticed.
-- **No Platform App Attestation**: Not using platform services that attest the app's identity to the backend, so servers cannot distinguish genuine clients from modified ones.
+- **No Packaged App Integrity Verification or Attestation**: Not verifying the app's signing identity, package identity, or packaged executable files.
+- **No Server-Verified App Integrity Signal**: Not providing the app's backend with an app-integrity signal.
+- **Missing or Partial Server Attestation Verification or Enforcement**: Not verifying the integrity signals received at the backend or not enforcing verdicts.
 - **Outdated Signing Schemes**: Signing releases with outdated formats (e.g. Android V1-only signatures, iOS CodeDirectory below version 20400) that are easier to abuse.
 
 ## Impact
@@ -37,7 +51,7 @@ App attestation includes verifying the app's signature and binaries at runtime, 
 
 ## Mitigations
 
-- **Verify App Integrity at Runtime**: Check the app's signing certificate, package identity, and binaries at runtime against expected values, implementing checks in layers that are harder to patch out (e.g. native code).
+- **Verify Packaged App Integrity**: Check the app's signing identity, package identity, and packaged executable files against expected values.
 - **Use Platform App Attestation**: Integrate services such as iOS App Attest or Play Integrity app verdicts and verify their results server-side, so the backend rejects modified or repackaged clients.
 - **Use Current Signing Schemes**: Sign releases with up-to-date signature formats and rotate away from deprecated ones.
 - **Respond to Failed Checks**: Terminate, restrict functionality, or flag the session to the backend when integrity verification fails, and assess the checks against known bypass techniques.
