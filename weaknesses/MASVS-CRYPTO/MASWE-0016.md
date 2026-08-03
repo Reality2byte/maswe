@@ -24,7 +24,7 @@ refs:
 
 This weakness occurs when cryptographic keys can be used without restrictions on who may use them, under which device conditions, and for how long.
 
-Platform keystores allow developers to bind key usage to strict conditions, such as requiring user authentication, requiring the device to be unlocked, binding the key to the current device, or limiting the validity of an authorization to a short period or a single operation. 
+Platform keystores allow developers to bind key usage to strict conditions, such as requiring user authentication, requiring the device to be unlocked, binding the key to the current device, or limiting the validity of an authorization to a short period or a single operation.
 
 When these restrictions are not configured, any code running as the app, or any actor in possession of the unlocked device, can use the keys freely. This applies even to keys generated inside a hardware security module such as Android StrongBox or the iOS Secure Enclave: hardware backing protects the key material from extraction, but usage restrictions must still be configured explicitly.
 

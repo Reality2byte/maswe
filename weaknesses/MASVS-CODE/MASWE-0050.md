@@ -31,7 +31,7 @@ refs:
 
 This weakness occurs when data originating outside the app's trust boundary reaches a sensitive sink without being validated, sanitized, or safely parsed.
 
-Untrusted data is any data the app did not create itself, regardless of how it arrives: network responses (even over TLS), data restored from backups, external interfaces such as Bluetooth, NFC, and USB, local files (including document pickers and archives), user interface input (text fields, QR codes, URLs, the clipboard), and the platform's IPC (e.g., for Android, received intents, broadcasts, content URIs, or deep links). 
+Untrusted data is any data the app did not create itself, regardless of how it arrives: network responses (even over TLS), data restored from backups, external interfaces such as Bluetooth, NFC, and USB, local files (including document pickers and archives), user interface input (text fields, QR codes, URLs, the clipboard), and the platform's IPC (e.g., for Android, received intents, broadcasts, content URIs, or deep links).
 
 When the untrusted data reaches a dangerous sink that has not been validated or sanitized, it cause unintended behavior of the application by exploiting vulnerabilities like SQL injection, path traversal (including variants like ZIP path traversal), XML external entity (XXE) injection, insecure object deserialization, output-encoding flaws, or memory corruption in native parsers, or misleading presentation of security-relevant information.
 

@@ -23,7 +23,7 @@ refs:
 
 This weakness occurs when an app allows sensitive actions to be performed within an already authenticated session without requiring the user to re-confirm their identity.
 
-Step-up authentication requires the user to re-authenticate or provide an additional authentication factor before performing a sensitive action, even within an active session. 
+Step-up authentication requires the user to re-authenticate or provide an additional authentication factor before performing a sensitive action, even within an active session.
 
 For example, a user logged into their bank account who requests a large transfer to an unknown payee should be required to re-confirm their identity (e.g. via biometrics or a second factor) so that only the legitimate user can complete the action. Without it, whoever holds the active session, not necessarily the legitimate user, can perform every operation the account allows.
 
@@ -38,7 +38,7 @@ Depending on the context, other sensitive actions may include:
 
 - **No Re-Authentication for Sensitive Actions**: Allowing high-risk operations, such as payments, credential or profile changes, or the display of sensitive personal data, with only the assurance of the initial login.
 - **Step-Up Not Bound to the Action**: Implementing a re-authentication challenge that is not tied to the specific transaction being approved, so a single approval can be reused for a different or modified action.
-- **Step-Up Not Enforced Server-Side**: Step-up authentication is only performed by app and not by the server. 
+- **Step-Up Not Enforced Server-Side**: Step-up authentication is only performed by app and not by the server.
 - **Uniform Assurance Level**: Designing all functionality behind a single login assurance level without classifying operations by risk.
 
 ## Impact
