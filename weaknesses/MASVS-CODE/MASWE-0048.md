@@ -4,7 +4,7 @@ id: MASWE-0048
 alias: malicious-code-included
 requirement: "The app package does not contain malicious code."
 platform: [android, ios]
-profiles: [L2]
+profiles: [L1, L2]
 threat: MAS-THREAT-0048
 attacks: [MAS-ATTACK-0060, MAS-ATTACK-0061]
 mappings:
