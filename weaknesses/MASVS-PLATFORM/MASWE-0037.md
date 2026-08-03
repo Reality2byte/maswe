@@ -14,6 +14,10 @@ mappings:
 refs:
 - https://developer.android.com/develop/ui/views/notifications/build-notification#lockscreenNotification
 - https://developer.apple.com/documentation/usernotifications
+- https://developer.apple.com/documentation/usernotifications/generating-a-remote-notification
+- https://developer.apple.com/documentation/usernotifications/unnotificationcategory/hiddenpreviewsbodyplaceholder
+- https://developer.apple.com/documentation/usernotifications/unnotificationcategoryoptions/hiddenpreviewsshowtitle
+- https://developer.apple.com/documentation/usernotifications/unnotificationcategoryoptions/hiddenpreviewsshowsubtitle
 ---
 
 ## Overview
@@ -34,5 +38,5 @@ Notifications can be rendered on the lock screen, and therefore, anyone holding 
 
 ## Mitigations
 
-- **Minimize Notification Content**: Use notifications only to indicate that an event occurred, and retrieve sensitive details inside the app after appropriate authentication and authorization. For iOS remote notifications, follow Apple's [remote-notification payload guidance](https://developer.apple.com/documentation/usernotifications/generating-a-remote-notification) and keep user-visible alert content non-sensitive by default.
-- **Configure Android Lock-Screen Visibility**: Use [`NotificationCompat.Builder.setVisibility()` and `setPublicVersion()`](https://developer.android.com/develop/ui/views/notifications/build-notification#lockscreenNotification) to modify the presentation of sensitive notifications. Use `VISIBILITY_PRIVATE` together with a generic public version when a redacted notification may be shown, and use `VISIBILITY_SECRET` when the notification should not appear on a secure lock screen. Do not place sensitive data in the title because private notifications may still display basic information including the title.
+- **Minimize Notification Content**: Use notifications only to indicate that an event occurred, and retrieve sensitive details inside the app after appropriate authentication and authorization. For iOS remote notifications, follow Apple's [remote-notification payload guidance](https://developer.apple.com/documentation/usernotifications/generating-a-remote-notification) and keep user-visible alert content non-sensitive by default. Do not place sensitive data in the title because private notifications may still display basic information including the title.
+- **Configure Lock-Screen/Preview Redaction**: On Android, use [`NotificationCompat.Builder.setVisibility()` and `setPublicVersion()`](https://developer.android.com/develop/ui/views/notifications/build-notification#lockscreenNotification): `VISIBILITY_PRIVATE` with a generic public version when a redacted notification may be shown, or `VISIBILITY_SECRET` when it should not appear on a secure lock screen at all. On iOS, provide a generic [`hiddenPreviewsBodyPlaceholder`](https://developer.apple.com/documentation/usernotifications/unnotificationcategory/hiddenpreviewsbodyplaceholder) and avoid enabling [`hiddenPreviewsShowTitle`](https://developer.apple.com/documentation/usernotifications/unnotificationcategoryoptions/hiddenpreviewsshowtitle) or [`hiddenPreviewsShowSubtitle`](https://developer.apple.com/documentation/usernotifications/unnotificationcategoryoptions/hiddenpreviewsshowsubtitle) unless those fields are safe to display — these only customize the preview once it is already hidden, they do not force it to be hidden.

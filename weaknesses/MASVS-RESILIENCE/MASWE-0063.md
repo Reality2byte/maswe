@@ -25,9 +25,11 @@ refs:
 
 This weakness occurs when the application has debug mechanisms enabled in production builds, allowing the usage of platform debuggers, or exposes embedded web or JavaScript content to developer inspection tools.
 
-Mobile apps typically include configuration flags and mechanisms that enable debugging. While these are essential during development, leaving them enabled in production makes the app inspectable and manipulable.
+Mobile apps can include configuration flags and mechanisms that enable debugging. While these are essential during development, leaving them enabled in production makes the app inspectable and manipulable.
 
-Beyond the application-level debuggable flag, this weakness also covers web-content debugging, which lets a remote inspector attach to the app's web content (e.g. Android's [`WebView.setWebContentsDebuggingEnabled(true)`](https://developer.android.com/reference/android/webkit/WebView#setWebContentsDebuggingEnabled(boolean)) or iOS's [`WKWebView.isInspectable`](https://developer.apple.com/documentation/webkit/wkwebview/isinspectable)). Like the debuggable flag, this must be disabled in production builds.
+On Android, application debugging is controlled by the [`android:debuggable`](https://developer.android.com/privacy-and-security/risks/android-debuggable) value in the app's Android Manifest. On iOS, application debuggability is not controlled by an `Info.plist` key. It depends on the [`get-task-allow` entitlement](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.security.cs.debugger) in the signed application, which is normally enabled for development-signed builds and disabled for distribution-signed builds.
+
+Beyond the application-level debuggable flag, this weakness also covers web-content debugging, which lets a remote inspector attach to the app's web content (e.g. Android's [`WebView.setWebContentsDebuggingEnabled(true)`](https://developer.android.com/reference/android/webkit/WebView#setWebContentsDebuggingEnabled(boolean)) or iOS's [`WKWebView.isInspectable`](https://developer.apple.com/documentation/webkit/wkwebview/isinspectable)).
 
 ## Modes of Introduction
 

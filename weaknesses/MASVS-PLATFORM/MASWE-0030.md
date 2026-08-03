@@ -22,7 +22,7 @@ refs:
 
 This weakness occurs when an app places sensitive data on the system clipboard, or handles clipboard content insecurely, exposing that data beyond the app's control.
 
-The clipboard is a shared resource: other apps can read its contents, and on some platforms, clipboard content synchronizes to nearby devices via a universal clipboard. Copying sensitive data such as passwords, one-time codes, card numbers, or tokens to the clipboard, failing to mark it as sensitive, or leaving it there indefinitely can leak that data to other apps and devices.
+The clipboard is a shared resource: other apps can read its contents, and on some platforms, clipboard content synchronizes to nearby devices (e.g. the iOS [Universal Clipboard](https://support.apple.com/en-us/102430)). Copying sensitive data such as passwords, one-time codes, card numbers, or tokens to the clipboard, failing to mark it as sensitive, or leaving it there indefinitely can leak that data to other apps and devices.
 
 ## Modes of Introduction
 

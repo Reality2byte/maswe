@@ -9,7 +9,7 @@ threat: MAS-THREAT-0025
 attacks: [MAS-ATTACK-0036, MAS-ATTACK-0037]
 mappings:
   masvs-v2: [MASVS-AUTH-3]
-  cwe: [287, 778]
+  cwe: [451, 778]
   maswe-beta: [MASWE-0031]
 refs:
 - https://developer.android.com/training/articles/security-android-protected-confirmation
@@ -20,12 +20,11 @@ refs:
 
 This weakness occurs when critical actions, such as confirming a payment or a high-value transaction, can be approved without a trusted confirmation path that produces cryptographic evidence of what the user actually saw and approved.
 
-For a critical action to be non-repudiable, the user must be shown exactly what they are approving through a trusted, hardware-protected confirmation path, and the app should obtain cryptographic evidence that this specific prompt was confirmed by the user. 
+For a critical action to be non-repudiable, the user must be shown exactly what they are approving through a trusted, hardware-protected confirmation path, and the app should obtain cryptographic evidence that this specific prompt was confirmed by the user.
 
 This can be achieved by displaying a prompt and then signing the confirmed message with an attested hardware-backed key.
 
 Note that it does not provide a secure information channel, so it must not be used to display sensitive information that wouldn't ordinarily be shown on the device. Equivalent trusted-confirmation paths on other platforms need to be evaluated case by case.
-
 
 !!! Warning
 
@@ -46,5 +45,4 @@ Beyond the technical aspect, non-repudiation has a legal dimension: a signed, us
 ## Mitigations
 
 - **Bind Cryptographic Evidence to the Action**: Have the confirmation produce a hardware-backed signature over the exact message shown to the user, verify it server-side, and retain it as evidence of the approval.
-- **Do Not Display Secrets in the Prompt**: Keep sensitive information out of the trusted confirmation message; it guarantees integrity of the confirmation, not confidentiality of its contents.
 - **Use the Strongest Available Alternative**: Where no trusted-UI mechanism exists, bind transaction approval to a user-authenticated, hardware-backed signing key (e.g. biometric-bound transaction signing) as the closest available equivalent. Verify the key attestation certificate of the signing key on the server-side.
