@@ -26,7 +26,7 @@ This weakness occurs when sensitive data is embedded in the app package (APK/IPA
 
 The hardcoded sensitive data may include API keys and secrets for first- or third-party services, credentials such as passwords or session tokens, and cryptographic material such as symmetric or private keys embedded directly in the package (as opposed to being generated and stored in a platform keystore, see @MASWE-0003). It also includes developer leftover artifacts, such as staging or integration URLs, developer emails and usernames, and source code files left in the package (e.g. `.swift`, `.cpp`, map files, or other build artifacts) that leak internal information.
 
-Note that developer _debug_ artifacts (verbose logging, backdoors, testing utilities, hidden switches) are covered separately under resilience in @MASWE-0062. The focus here is on hardcoded sensitive data that leaks confidentiality regardless of any anti-tampering considerations.
+Note that developer _debug_ artifacts (verbose logging, backdoors, testing utilities, hidden switches) are covered separately under resilience in @MASWE-0061. The focus here is on hardcoded sensitive data that leaks confidentiality regardless of any anti-tampering considerations.
 
 ## Modes of Introduction
 

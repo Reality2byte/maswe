@@ -55,7 +55,7 @@ In terms of privacy, dependencies can introduce risks if they collect or transmi
 
     "When you use a third-party SDK with your app, you are responsible for all the code the SDK includes in your app, and need to be aware of its data collection and use practices.
 
-For more information on privacy and data collection declarations, see @MASWE-0074.
+For more information on privacy and data collection declarations, see @MASWE-0073.
 
 ## Modes of Introduction
 

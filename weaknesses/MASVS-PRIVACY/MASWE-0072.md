@@ -1,46 +1,41 @@
 ---
-title: Inadequate Defaults for Privacy Relevant Actions
+title: Inadequate Privacy Policy
 id: MASWE-0072
-alias: unsafe-defaults-privacy-actions
-requirement: "The app uses adequate defaults for privacy relevant actions."
+alias: privacy-policy
+requirement: "The app provides an adequate privacy policy."
 platform: [android, ios]
 profiles: [P]
 threat: MAS-THREAT-0072
-attacks: [MAS-ATTACK-0084, MAS-ATTACK-0087]
+attacks: [MAS-ATTACK-0079, MAS-ATTACK-0080]
 mappings:
-    masvs-v2: [MASVS-PRIVACY-2]
-    cwe: [359]
-    maswe-beta: [MASWE-0109]
+  masvs-v1: [MSTG-STORAGE-12]
+  masvs-v2: [MASVS-PRIVACY-3]
+  cwe: [359]
+  maswe-beta: [MASWE-0111]
 refs:
-- https://cloud.google.com/sensitive-data-protection/docs/classification-redaction
-- https://gdpr-info.eu/recitals/no-26/
-- https://gdpr-info.eu/recitals/no-28/
-- https://gdpr-info.eu/art-4-gdpr/
-- https://www.edpb.europa.eu/topics/ai-and-technology/anonymisation-pseudonymisation_en
-- https://ec.europa.eu/justice/article-29/documentation/opinion-recommendation/files/2014/wp216_en.pdf
-- https://www.statista.com/topics/9460/app-tracking-and-mobile-privacy/
+- https://support.google.com/googleplay/android-developer/answer/9859455#privacy_policy
+- https://developer.apple.com/app-store/app-privacy-details/#privacy-links
+- https://developer.apple.com/app-store/review/guidelines/#5.1.1
 ---
 
 ## Overview
 
-This weakness occurs when an app uses defaults for a privacy relevant action that expose more data than is necessary for the expected functionality.
+This weakness occurs when an app does not provide users with a clear, accessible, and accurate statement of how their data is collected, processed, shared, and protected.
 
-Privacy relevant actions include sharing, exporting, publishing, synchronizing, backing up, changing visibility, responding to a request from another party, or moving data from private app storage to storage or services accessible by other applications, users, or third parties.
-
-The weakness may cause users to disclose different data, disclose data to a broader audience, or create more persistent copies than they reasonably intended. The issue is whether the default configuration results in a more exposing privacy state than is necessary for the requested functionality.
+Privacy policies should be easily accessible, tailored specifically to the app in question, and written in a way that users can easily understand. Without a robust privacy policy, users are unable to make informed decisions about their data, and may be unaware of how their information is being used or shared. A privacy policy that is incomplete, vague, or does not match the app's behavior can mislead users and undermine transparency.
 
 ## Modes of Introduction
 
-- **Unclear Disclosure Context**: The interface or action labels do not clearly identify the affected records, files, accounts, data elements, included metadata, destination, audience, or resulting privacy state, including when responding to another party's request for data.
-- **Overly Exposing Defaults**: The app preselects broader audiences, more data, longer retention, public visibility, or additional recipients when a less exposing default would satisfy the expected functionality.
+- **Unclear or Absent Privacy Policy**: Not providing a privacy policy, or having one that is not easily accessible or clear to the user, or that doesn't specifically address the data practices of that particular app, instead being a generic document that covers multiple services.
+- **Discrepancies in Policy vs Behavior**: Collecting, processing, or sharing data in ways that differ from what the privacy policy states.
 
 ## Impact
 
-- **Violation of User Privacy**: The app can disclose personal or sensitive data to recipients who are not entitled to receive it under the user's sharing choices, resulting in unauthorized exposure of that data.
-- **Loss of User Trust**: Users can discover that the app shared more data, or shared it more broadly, than they reasonably expected, resulting in reduced confidence in the app and its owner.
-- **Legal and Regulatory Non-Compliance**: The app can share personal data using unnecessarily exposing defaults, resulting in violations of privacy obligations and potential enforcement action.
+- **Violation of User Privacy**: Users can unknowingly provide data that is shared with third parties, used for profiling, or used for targeted advertising without explicit consent, resulting in the loss of control over their personal information.
+- **Loss of User Trust**: Users can perceive the app as non-transparent, resulting in negative reviews, decreased user engagement, and reduced retention for the app owner.
+- **Legal and Regulatory Non-Compliance**: Failing to provide an adequate privacy policy can violate privacy laws and regulations, such as GDPR or CCPA, resulting in fines, legal action, or removal from app stores for the app owner.
 
 ## Mitigations
 
-- **Provide Clear Disclosure Context and Control**: At the point of action, show the affected data, included metadata, destination, audience, and material privacy consequences; before responding to another party's request for data, identify the requester and recipient and allow the user to approve, limit, or decline the disclosure.
-- **Use Privacy Protective Defaults**: Default to the narrowest audience, smallest data set, shortest appropriate persistence, and least exposing destination that supports the requested functionality.
+- **Provide a Clear Privacy Policy**: Make sure a comprehensive and understandable privacy policy is readily accessible to users. Tailor it to the specific data practices of your app and write it in clear, understandable language as stated in Article 12 of the GDPR.
+- **Ensure Consistency in Policy vs Behavior**: Keep your data collection practices documented and up to date in privacy policies, privacy labels, and app store listings. Ensure that these documents match the app's actual behavior to avoid discrepancies that could mislead users or violate platform policies.

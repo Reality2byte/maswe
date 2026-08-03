@@ -1,43 +1,46 @@
 ---
-title: App Attestation Not Implemented
+title: App Resources Integrity Not Verified
 id: MASWE-0057
-alias: app-integrity
-requirement: "The app implements app attestation."
+alias: app-resources-integrity
+requirement: "The app verifies the integrity of its resources."
 platform: [android, ios]
 profiles: [R]
 threat: MAS-THREAT-0057
-attacks: [MAS-ATTACK-0040, MAS-ATTACK-0068, MAS-ATTACK-0069]
+attacks: [MAS-ATTACK-0009, MAS-ATTACK-0070]
 mappings:
-  masvs-v1: [MSTG-CODE-1]
-  masvs-v2: [MASVS-RESILIENCE-2]
-  cwe: [347]
-  maswe-beta: [MASWE-0104, MASWE-0106]
+  masvs-v1: [MSTG-RESILIENCE-3]
+  masvs-v2: [MASVS-RESILIENCE-2, MASVS-CODE-4]
+  cwe: [471]
+  maswe-beta: [MASWE-0105]
 refs:
-- https://developer.apple.com/documentation/xcode/using-the-latest-code-signature-format
-- https://developer.apple.com/documentation/devicecheck/preparing-to-use-the-app-attest-service
+- https://developer.android.com/privacy-and-security/cryptography
+- https://developer.android.com/privacy-and-security/keystore
+- https://developer.apple.com/documentation/cryptokit/hmac
+- https://developer.apple.com/documentation/cryptokit/storing-cryptokit-keys-in-the-keychain
+- https://developer.apple.com/documentation/security/restricting-keychain-item-accessibility
 ---
 
 ## Overview
 
-This weakness occurs when an app does not attest its own authenticity and integrity, i.e. it implements no effective techniques to verify that the running binary is a genuine, unmodified copy of the app.
+This weakness occurs when an app does not verify that the resources it relies on have not been tampered with.
 
-App attestation includes verifying the app's signature and binaries at runtime, detecting an invalid or unexpected signing certificate, and using platform attestation services that vouch for the app's identity (e.g. App Attest on iOS, Play Integrity app verdicts on Android). It also covers using current signing schemes: outdated formats, such as Android V1-only signatures or an iOS CodeDirectory version below 20400, weaken the platform's own integrity guarantees. Verifying the package or signature against expected values, which also provides official-store assurance, remains one of the applicable techniques.
+Beyond the app package, apps depend on non-executable resources whose integrity matters: files in the app sandbox, configuration, downloaded content, and data restored from backups. An attacker who can alter these resources can change the app's behavior or inject malicious content without modifying its packaged code, sidestepping package- and code-integrity checks (see @MASWE-0056, @MASWE-0058). Safe dynamic code loading is covered by @MASWE-0049.
 
 ## Modes of Introduction
 
-- **No Runtime Integrity Verification**: Not verifying the app's signature, package identity, or binaries at runtime, so a repackaged copy runs unnoticed.
-- **No Platform App Attestation**: Not using platform services that attest the app's identity to the backend, so servers cannot distinguish genuine clients from modified ones.
-- **Outdated Signing Schemes**: Signing releases with outdated formats (e.g. Android V1-only signatures, iOS CodeDirectory below version 20400) that are easier to abuse.
+- **Sandbox Files Not Verified**: Trusting files in the app's data directory without verifying their integrity.
+- **Downloaded Resources Not Verified**: Using downloaded content or configuration without verifying its integrity and authenticity.
+- **Restored Data Not Revalidated**: Using data restored from backups or device transfers without revalidating its integrity.
+- **Verification Result Ignored**: Continuing to use a resource after its integrity verification fails.
 
 ## Impact
 
-- **Bypass of Protection Mechanisms**: Attackers can strip resiliency controls from a repackaged copy, making it easier to further analyze and reverse-engineer the application.
-- **Compromise of Sensitive Data**: Attackers can distribute trojanized versions of the app that harvest credentials and data from the users they deceive, resulting in account compromise attributed to the app.
-- **Compromise of System Integrity and Business Operations**: Modified clients, cracked features, and cloned apps circulate under the app's brand, resulting in revenue loss and reputational damage for the app owner.
+- **Bypass of Protection Mechanisms**: Attackers can modify configuration or state files that drive security-relevant behavior, resulting in the circumvention of controls without modifying any code.
+- **Execution of Unauthorized Code**: Attackers can inject malicious content into resources the app renders or interprets (e.g. scripts or templates), resulting in attacker-controlled behavior inside the app.
 
 ## Mitigations
 
-- **Verify App Integrity at Runtime**: Check the app's signing certificate, package identity, and binaries at runtime against expected values, implementing checks in layers that are harder to patch out (e.g. native code).
-- **Use Platform App Attestation**: Integrate services such as iOS App Attest or Play Integrity app verdicts and verify their results server-side, so the backend rejects modified or repackaged clients.
-- **Use Current Signing Schemes**: Sign releases with up-to-date signature formats and rotate away from deprecated ones.
-- **Respond to Failed Checks**: Terminate, restrict functionality, or flag the session to the backend when integrity verification fails, and assess the checks against known bypass techniques.
+- **Verify Resource Integrity**: Compare security-relevant files against a trusted expected hash, HMAC, or digital signature before use. Protect keys and reference values from modification, and treat local verification as a defense-in-depth control on compromised devices.
+- **Authenticate Downloaded Content**: Verify integrity and authenticity (e.g. a signature, see @MASWE-0011) of downloaded resources before use.
+- **Treat Restored Data as Untrusted**: Re-validate data that reappears via backup restore or device transfer before acting on it (see @MASWE-0050).
+- **Respond to Failed Checks**: Discard or re-fetch tampered resources, restrict functionality, or alert the backend when validation fails.

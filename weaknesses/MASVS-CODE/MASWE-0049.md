@@ -1,42 +1,43 @@
 ---
-title: Non-Reproducible Builds
+title: Unsafe Dynamic Code Loading
 id: MASWE-0049
-alias: non-reproducible-builds
-requirement: "The app offers reproducible builds."
+alias: unsafe-code-loading
+requirement: "The app loads dynamic code safely from trusted sources."
 platform: [android, ios]
 profiles: [L2]
 threat: MAS-THREAT-0049
-attacks: [MAS-ATTACK-0060, MAS-ATTACK-0062]
+attacks: [MAS-ATTACK-0014, MAS-ATTACK-0057]
 mappings:
-  masvs-v2: [MASVS-CODE-3]
-  cwe: [1357, 494]
+  masvs-v2: [MASVS-CODE-4]
+  cwe: [494]
+  android-risks:
+  - dynamic-code-loading
+  - create-package-context
+  android-core-app-quality: [App_Bundles]
+  maswe-beta: [MASWE-0085]
 refs:
-- https://reproducible-builds.org/
-- https://slsa.dev/
-- https://github.com/signalapp/Signal-Android/blob/main/reproducible-builds/README.md
+- dynamic-code-loading
 ---
 
 ## Overview
 
-This weakness occurs when compiling the app's source with the same build environment does not yield a bit-for-bit identical binary, making it impossible to independently verify that a distributed binary was built from the claimed, unmodified source.
+This weakness occurs when an app loads and executes code resolved at runtime without verifying its source and integrity.
 
-Reproducible builds allow third parties, and the developers themselves, to detect tampering or injected malicious code by rebuilding from source and comparing the result with the released artifact. Without reproducibility, this verification is impossible, weakening supply-chain integrity. Together with build provenance and attestation frameworks (e.g. SLSA), reproducible builds let stakeholders verify the integrity of released artifacts.
+Dynamic code loading includes loading native libraries via `dlopen`, loading DEX/JAR files through class loaders, and downloading executable code or scripts at runtime. When the loaded code comes from writable or external locations, or is fetched without integrity and authenticity verification, an attacker who can modify or substitute it gains arbitrary code execution within the app's context, with all the app's permissions and data access.
 
 ## Modes of Introduction
 
-- **Non-Deterministic Build Outputs**: Embedding timestamps, absolute paths, environment data, or unstable orderings in build artifacts, so identical inputs produce differing outputs.
-- **Unpinned Build Environments**: Building with undocumented or unpinned toolchains and dependencies, so it's impossible to recreate the environment that produced a release.
-- **No Provenance or Attestation**: Publishing releases without provenance describing what was built, from which source, and by which pipeline.
-- **Applying Non-Deterministic Obfuscation Controls**: By applying non-deterministic obfuscation controls, each build will generate a new random binary which cannot directly be compared with previous builds from the same code.
+- **Loading from Writable or External Locations**: Loading native libraries or DEX/JAR files from writable, external, or world-accessible storage where other malicious apps can replace them.
+- **Downloaded Code Without Verification**: Downloading and executing code, plugins, or scripts without verifying their integrity and authenticity (e.g. signature verification, see @MASWE-0011).
+- **Code from Other Packages**: Executing code from other installed packages (e.g. via package contexts with code inclusion) whose identity and integrity are not verified.
 
 ## Impact
 
-- **Execution of Unauthorized Code**: Attackers can inject code during the build or distribution process without straightforward detection, since no independent party can verify the binary against the source, resulting in malicious code shipping to the entire user base.
-- **Loss of User Trust**: Users and auditors cannot verify that the shipped app matches the published source, resulting in weakened trust in the app, particularly for security- and privacy-sensitive apps.
+- **Execution of Unauthorized Code**: Attackers can run attacker-controlled code with the app's identity, permissions, and data access, resulting in full compromise of the app's functionality on the device.
+- **Compromise of Sensitive Data**: Attackers can use the injected code to read the app's private data and credentials, resulting in unauthorized disclosure of user and app data.
 
 ## Mitigations
 
-- **Make Builds Deterministic**: Eliminate timestamps, absolute paths, environment-dependent data, and unstable orderings from build outputs, following [reproducible-builds.org](https://reproducible-builds.org/) guidance.
-- **Pin and Document the Build Environment**: Define the exact toolchain and dependency versions in version control so any party can recreate the build environment.
-- **Publish Provenance and Attestations**: Generate build provenance (e.g. per [SLSA](https://slsa.dev/)) and, where feasible, publish verification instructions so third parties can reproduce and compare releases.
-- **Use Deterministic Obfuscation Techniques**: Use obfuscation techniques which will always generate the same deterministic result.
+- **Avoid Dynamic Code Loading**: Ship all executable code inside the signed app package whenever possible; app stores also restrict runtime code delivery.
+- **Load Only from Protected Locations**: When loading is unavoidable, load code only from the app's protected, read-only installation directories, never from writable or external storage.
+- **Verify Integrity and Authenticity**: Verify a cryptographic signature over any dynamically delivered code against a pinned trusted key before loading it, and deliver it only over secure channels.

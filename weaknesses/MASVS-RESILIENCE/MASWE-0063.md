@@ -1,37 +1,46 @@
 ---
-title: No Application-Level Payload Encryption
+title: Debug Mechanisms Not Disabled
 id: MASWE-0063
-alias: data-unencrypted
-requirement: "The app applies application-level payload encryption in addition to transport-layer encryption."
+alias: debuggable-flag
+requirement: "The app disables debug mechanisms."
 platform: [android, ios]
 profiles: [R]
 threat: MAS-THREAT-0063
-attacks: [MAS-ATTACK-0064]
+attacks: [MAS-ATTACK-0002, MAS-ATTACK-0003, MAS-ATTACK-0004]
 mappings:
-  masvs-v1: [MSTG-RESILIENCE-13]
-  masvs-v2: [MASVS-RESILIENCE-3, MASVS-NETWORK-1]
-  cwe: [319]
-  maswe-beta: [MASWE-0096]
+  masvs-v1: [MSTG-RESILIENCE-2]
+  masvs-v2: [MASVS-RESILIENCE-4, MASVS-PLATFORM-2]
+  cwe: [489]
+  android-risks:
+  - android-debuggable
+  maswe-beta: [MASWE-0067, MASWE-0074]
+refs:
+- https://developer.android.com/guide/topics/manifest/application-element
+- https://developer.android.com/reference/android/webkit/WebView#setWebContentsDebuggingEnabled(boolean)
+- https://developer.apple.com/documentation/webkit/wkwebview/4111163-isinspectable
+- https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.security.cs.debugger
 ---
 
 ## Overview
 
-This weakness occurs when an app relies solely on transport-layer encryption for its network traffic, without an additional layer of application-level payload encryption.
+This weakness occurs when the application has debug mechanisms enabled in production builds, allowing the usage of platform debuggers, or exposes embedded web or JavaScript content to developer inspection tools.
 
-Even when the connection uses HTTPS, an attacker who controls the device can bypass transport protections (for example by defeating certificate pinning with instrumentation) and observe or tamper with the plaintext payloads, revealing the inner workings of the app and its API. Application-level payload encryption raises the effort required to analyze and manipulate the app's traffic. This is a resilience measure aimed at hindering analysis and abuse; it complements rather than replaces transport security (see @MASWE-0026, @MASWE-0028).
+Mobile apps typically include configuration flags and mechanisms that enable debugging. While these are essential during development, leaving them enabled in production makes the app inspectable and manipulable.
+
+Beyond the application-level debuggable flag, this weakness also covers web-content debugging, which lets a remote inspector attach to the app's web content (e.g. Android's [`WebView.setWebContentsDebuggingEnabled(true)`](https://developer.android.com/reference/android/webkit/WebView#setWebContentsDebuggingEnabled(boolean)) or iOS's [`WKWebView.isInspectable`](https://developer.apple.com/documentation/webkit/wkwebview/isinspectable)). Like the debuggable flag, this must be disabled in production builds.
 
 ## Modes of Introduction
 
-- **TLS-Only Protection**: Sending security-relevant API payloads with no protection beyond the transport channel, so they appear in plaintext as soon as TLS is intercepted on a controlled device.
-- **No Integrity Binding on Requests**: Not signing or otherwise binding sensitive requests, so intercepted payloads can be modified and replayed once the transport layer is bypassed.
+- **Misconfigured Build Settings**: Accidentally leaving the app in a debuggable state through improper selection of build variants, errors in CI/CD configurations, or mistakenly applying debug settings to production environments.
+- **WebView or JavaScript Debugging Enabled**: Leaving WebView content debugging enabled in production (e.g. `setWebContentsDebuggingEnabled(true)` on Android or `isInspectable = true` on iOS).
 
 ## Impact
 
-- **Compromise of System Integrity and Business Operations**: Attackers can map the app's API and craft or tamper with requests, resulting in fraud, scraping, and abuse of backend services at the app owner's expense.
-- **Bypass of Protection Mechanisms**: Attackers can easily modify payloads that carry security-relevant state, without having to reverse-engineer the application to first circumvent the additional encryption.
+- **Compromise of Sensitive Data**: Attackers can read the app's memory and logs to obtain encryption keys, API keys, user credentials, or tokens that are never written to the app's code or disk, resulting in unauthorized disclosure of secrets and user data.
+- **Authentication or Authorization Bypass**: Attackers can manipulate the app's execution flow to skip authentication and authorization checks, resulting in unauthorized access to protected functionality.
+- **Facilitated Reverse Engineering and Instrumentation**: Debug access reduces the effort required to observe and manipulate the application's behavior and may facilitate further dynamic analysis or instrumentation.
 
 ## Mitigations
 
-- **Encrypt Sensitive Payloads at the Application Layer**: Apply an additional layer of encryption to security-relevant payloads before they enter the transport channel, using keys managed via the platform keystore.
-- **Sign Security-Relevant Requests**: Authenticate and integrity-protect sensitive requests (e.g. with signatures bound to attested, hardware-backed keys) so tampered payloads are rejected server-side.
-- **Treat It as Defense in Depth**: Keep full transport security (TLS and pinning) in place; application-level encryption raises analysis effort but is still client-side and ultimately bypassable.
+- **Disable Application Debugging in Release Builds**: Ensure that the debuggable flag in the app's configuration file is not enabled for production builds. For example, set [`isDebuggable = false` or `debuggable false`](https://developer.android.com/studio/publish/preparing) in Android or ensure that the `get-task-allow` entitlement is absent or set to `false` in iOS applications.
+- **Disable WebView and JavaScript Content Debugging in Release Builds**: Ensure that the WebViews and JavaScript contexts in the application are not debuggable. For example, do not call `setWebContentsDebuggingEnabled(true)` on Android and keep `WKWebView.isInspectable` set to `false` on iOS.

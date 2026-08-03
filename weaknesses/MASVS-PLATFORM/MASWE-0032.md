@@ -52,4 +52,4 @@ Intents are Android's primary inter- and intra-app messaging mechanism. Insecure
 - **Validate Redirected Intents**: Before forwarding a nested intent from untrusted input, validate its destination against an allowlist and strip unexpected flags.
 - **Create Immutable, Explicit PendingIntents**: Build PendingIntents with `FLAG_IMMUTABLE` over explicit base intents, and add `FLAG_ONE_SHOT` where a single use is intended.
 - **Avoid Sticky Broadcasts**: Use regular broadcasts protected with permissions, or more targeted mechanisms, instead of deprecated sticky broadcasts.
--**Validate Incoming Intent Data**: Treat all extended intent data entering the app through exported components as untrusted. Validate it before further processing (@MASWE-0051).
+-**Validate Incoming Intent Data**: Treat all extended intent data entering the app through exported components as untrusted. Validate it before further processing (@MASWE-0050).

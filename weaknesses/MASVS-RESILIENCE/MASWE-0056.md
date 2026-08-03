@@ -1,42 +1,43 @@
 ---
-title: Malware Detection Not Implemented
+title: App Attestation Not Implemented
 id: MASWE-0056
-alias: malware-detection
-requirement: "The app detects attacks by malware."
+alias: app-integrity
+requirement: "The app implements app attestation."
 platform: [android, ios]
 profiles: [R]
 threat: MAS-THREAT-0056
-attacks: [MAS-ATTACK-0036, MAS-ATTACK-0052]
+attacks: [MAS-ATTACK-0040, MAS-ATTACK-0068, MAS-ATTACK-0069]
 mappings:
+  masvs-v1: [MSTG-CODE-1]
   masvs-v2: [MASVS-RESILIENCE-2]
-  cwe: [693]
+  cwe: [347]
+  maswe-beta: [MASWE-0104, MASWE-0106]
 refs:
-- https://developers.google.com/android/play-protect
-- https://developers.google.com/android/play-protect/client-protections
+- https://developer.apple.com/documentation/xcode/using-the-latest-code-signature-format
+- https://developer.apple.com/documentation/devicecheck/preparing-to-use-the-app-attest-service
 ---
 
 ## Overview
 
-This weakness occurs when an app does not implement or integrate techniques to detect malware on the device or malicious apps and components that could target it.
+This weakness occurs when an app does not attest its own authenticity and integrity, i.e. it implements no effective techniques to verify that the running binary is a genuine, unmodified copy of the app.
 
-Mobile malware commonly attacks other apps indirectly: abusing accessibility services to read screens and drive the UI, drawing overlays to phish credentials, or exploiting a compromised runtime environment. For high-assurance apps, detecting a potentially hostile environment, e.g. known malicious packages, apps holding accessibility or overlay capabilities, or platform threat signals such as Google Play Protect status, allows the app to warn the user, restrict functionality, or trigger other protective responses. This complements environment-integrity checks such as @MASWE-0052 and platform services such as the Play Integrity API.
+App attestation includes verifying the app's signature and binaries at runtime, detecting an invalid or unexpected signing certificate, and using platform attestation services that vouch for the app's identity (e.g. App Attest on iOS, Play Integrity app verdicts on Android). It also covers using current signing schemes: outdated formats, such as Android V1-only signatures or an iOS CodeDirectory version below 20400, weaken the platform's own integrity guarantees. Verifying the package or signature against expected values, which also provides official-store assurance, remains one of the applicable techniques.
 
 ## Modes of Introduction
 
-- **No Hostile-Environment Checks**: Not checking for known malicious packages or platform threat signals before enabling sensitive functionality.
-- **Abuse-Prone Capabilities Ignored**: Not considering apps holding accessibility or overlay capabilities in the app's risk decisions for sensitive flows (see @MASWE-0039, @MASWE-0040).
-- **No Response Strategy**: Detecting a hostile environment but not warning the user or restricting sensitive functionality.
-- **Insufficient Response Strategy**: Only responding on the current device, rather than on the account level. Malware will often intercept credentials and use them to onboard a legitimate app onto an attacker-controlled device. As part of the response strategy, risky behaviour (such as onboarding the app on a new device) must be blocked in case of a suspected compromise.
+- **No Runtime Integrity Verification**: Not verifying the app's signature, package identity, or binaries at runtime, so a repackaged copy runs unnoticed.
+- **No Platform App Attestation**: Not using platform services that attest the app's identity to the backend, so servers cannot distinguish genuine clients from modified ones.
+- **Outdated Signing Schemes**: Signing releases with outdated formats (e.g. Android V1-only signatures, iOS CodeDirectory below version 20400) that are easier to abuse.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Malware can capture credentials, one-time codes, and displayed content while the app takes no protective action, resulting in exposure of user data the app could have defended.
-- **Financial Loss**: Malware can automate or manipulate transactions against the unprotected app, resulting in direct financial harm to users and fraud losses for the app owner.
+- **Bypass of Protection Mechanisms**: Attackers can strip resiliency controls from a repackaged copy, making it easier to further analyze and reverse-engineer the application.
+- **Compromise of Sensitive Data**: Attackers can distribute trojanized versions of the app that harvest credentials and data from the users they deceive, resulting in account compromise attributed to the app.
+- **Compromise of System Integrity and Business Operations**: Modified clients, cracked features, and cloned apps circulate under the app's brand, resulting in revenue loss and reputational damage for the app owner.
 
 ## Mitigations
 
-- **Integrate Platform Threat Signals**: Use available platform services (e.g. Play Protect status, Play Integrity verdicts) to learn about known malware and a compromised environment.
-- **Assess Risky Capabilities**: Factor the presence of accessibility- or overlay-capable apps into risk decisions for sensitive flows, combined with the UI-level defenses of @MASWE-0039 and @MASWE-0040.
-- **Respond Proportionately**: Warn the user, require additional verification, restrict functionality, or block sensitive operations when a hostile environment is detected.
-- **Lock Down Account**: Apply restrictions to the account, not just the local client. This will prevent attackers from performing actions on a non-hostile environment after the initial compromise.
-- **Assess Effectiveness**: Validate the detection against current malware behaviors and update it as the threat landscape evolves.
+- **Verify App Integrity at Runtime**: Check the app's signing certificate, package identity, and binaries at runtime against expected values, implementing checks in layers that are harder to patch out (e.g. native code).
+- **Use Platform App Attestation**: Integrate services such as iOS App Attest or Play Integrity app verdicts and verify their results server-side, so the backend rejects modified or repackaged clients.
+- **Use Current Signing Schemes**: Sign releases with up-to-date signature formats and rotate away from deprecated ones.
+- **Respond to Failed Checks**: Terminate, restrict functionality, or flag the session to the backend when integrity verification fails, and assess the checks against known bypass techniques.

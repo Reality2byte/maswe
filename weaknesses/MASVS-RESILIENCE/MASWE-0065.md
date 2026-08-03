@@ -1,44 +1,48 @@
 ---
-title: Debugger Detection Not Implemented
+title: Dynamic Analysis Tools Detection Not Implemented
 id: MASWE-0065
-alias: debugger-detection
-requirement: "The app detects debugger attachment at runtime and responds to protect sensitive operations."
+alias: dynamic-analysis-tools
+requirement: "The app detects dynamic analysis tools and responds to protect sensitive operations."
 platform: [android, ios]
 profiles: [R]
 threat: MAS-THREAT-0065
-attacks: [MAS-ATTACK-0002]
+attacks: [MAS-ATTACK-0003]
 mappings:
-  masvs-v1: [MSTG-RESILIENCE-2]
+  masvs-v1: [MSTG-RESILIENCE-4]
   masvs-v2: [MASVS-RESILIENCE-4]
-  maswe-beta: [MASWE-0101]
+  maswe-beta: [MASWE-0102]
 refs:
-- https://developer.android.com/reference/android/os/Debug#isDebuggerConnected()
-- https://man7.org/linux/man-pages/man5/proc_pid_status.5.html
-- https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/ptrace.2.html
-- https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man3/sysctl.3.html
-- https://www.youtube.com/watch?v=ih6gWZDuNME
+- https://frida.re/docs/home/
+- https://github.com/LSPosed/LSPosed
+- https://github.com/LSPosed/LSPlant
+- https://www.cydiasubstrate.com/api/c/MSHookFunction/
+- https://github.com/tealbathingsuit/ellekit
+- https://github.com/roothide/Bootstrap
+- https://burjcdigital.urjc.es/server/api/core/bitstreams/d249ebbb-5923-48ea-9215-af14cf2cc0b9/content
 ---
 
 ## Overview
 
-This weakness occurs when an app does not detect the presence of a debugger attached to it at runtime.
+This weakness occurs when an app does not detect the presence of dynamic instrumentation and hooking frameworks at runtime.
 
-A debugger lets an attacker inspect memory, set breakpoints, and alter control flow to bypass client-side controls, even when the release build is not flagged as debuggable (see @MASWE-0064 for that case). Platforms offer detection primitives such as `Debug.isDebuggerConnected()` (Java debugging) and the `TracerPid` field in `/proc/self/status` on Android (Native debugging), or `sysctl`- and `ptrace`-based checks on iOS. Without such checks and a response, a debugger can be attached and used against the app unnoticed.
+Tools such as Frida, Xposed/LSPosed, and ElleKit/Cydia Substrate let attackers observe and modify the app while it runs, replacing method implementations and defeating client-side security controls. These frameworks can leave detectable artifacts, such as loaded libraries, named pipes, listening ports, installed hooks, or framework-specific classes, but attackers can often rename, relocate, hide, or patch these indicators to bypass shallow detection. Without layered detection and a response, instrumentation can proceed unnoticed.
+
+Unlike runtime code integrity verification (see @MASWE-0058), this weakness focuses on detecting the presence of instrumentation tools and frameworks through tool-specific indicators. On the other hand, runtime code integrity verification checks whether loaded code, executable memory, or security-critical functions were modified, even when no known tool artifact is present.
 
 ## Modes of Introduction
 
-- **No Debugger Checks**: Shipping without any runtime verification that a debugger is attached to the process.
-- **One-Time or Single-Point Checks**: Checking only at startup or in a single code path instead of around sensitive operations and throughout runtime.
-- **No Response Strategy**: Detecting a debugger but not reacting in a way that protects the app's sensitive operations.
+- **No Instrumentation Checks**: Shipping without any detection of well-known instrumentation and hooking frameworks.
+- **Artifact Checks Missing or Shallow**: Not checking for hooking artifacts such as suspicious loaded libraries, named pipes, listening ports, or known trampoline instruction sequences in function prologues, or checking only from easily hooked Java/Swift code.
+- **No Response Strategy**: Detecting instrumentation but continuing to expose sensitive functionality.
 
 ## Impact
 
-- **Bypass of Protection Mechanisms**: Attackers can alter control flow at breakpoints to skip the app's client-side checks, resulting in the circumvention of its defenses.
-- **Compromise of Sensitive Data**: Attackers can read secrets and user data from process memory during debugging, resulting in exposure of credentials, keys, and tokens.
+- **Bypass of Protection Mechanisms**: Attackers can hook and replace the app's security checks at runtime, resulting in the circumvention of its client-side defenses, including root, debugger, and integrity checks.
+- **Compromise of Sensitive Data**: Attackers can intercept function arguments and memory contents during instrumentation, resulting in exposure of credentials, keys, and user data.
 
 ## Mitigations
 
-- **Implement Debugger Detection**: Use platform primitives (e.g. `Debug.isDebuggerConnected()`, `TracerPid`, `sysctl`/`ptrace`-based checks) implemented in multiple layers, including native code.
-- **Check Continuously**: Run detection periodically and around sensitive operations, not only at startup, so late attachment is also caught.
-- **Respond to Detection**: Terminate, wipe sensitive state, or restrict functionality when a debugger is detected, according to the app's risk profile.
-- **Assess Effectiveness**: Test the checks against common anti-anti-debugging techniques and refine them over time.
+- **Detect Instrumentation Artifacts**: Check for known frameworks and their artifacts (loaded libraries, named pipes, listening ports, hooked functions), implementing the checks in native code where they are harder to bypass.
+- **Check Continuously and Diversify**: Run varied checks at multiple points in the app lifecycle so a single hook cannot disable them all.
+- **Respond to Detection**: Terminate, restrict sensitive functionality, or signal the backend when instrumentation is detected.
+- **Assess Effectiveness**: Regularly test the detection against current instrumentation tools and their evasion modules, and update it as they evolve.

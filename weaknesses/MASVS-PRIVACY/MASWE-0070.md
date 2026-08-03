@@ -1,45 +1,46 @@
 ---
-title: Usage of Non-Privacy-Preserving Functionality
+title: Inadequate Awareness for Privacy Relevant Actions
 id: MASWE-0070
-alias: non-privacy-preserving-functionality
-requirement: "The app uses privacy-preserving functionality."
+alias: inadequate-awareness-privacy-actions
+requirement: "The app informs the user about the privacy implications before performing an action."
 platform: [android, ios]
 profiles: [P]
 threat: MAS-THREAT-0070
-attacks: [MAS-ATTACK-0076, MAS-ATTACK-0088]
+attacks: [MAS-ATTACK-0084]
 mappings:
   masvs-v2: [MASVS-PRIVACY-2]
   cwe: [359]
-  android-core-app-quality: [Minimize_Permissions]
+  maswe-beta: [MASWE-0109]
 refs:
-- https://datatracker.ietf.org/doc/html/rfc8252#appendix-B
-- https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession
-- https://developer.android.com/training/data-storage/shared/photopicker
-- https://developer.apple.com/documentation/photokit/phpickerviewcontroller
+- https://cloud.google.com/sensitive-data-protection/docs/classification-redaction
+- https://gdpr-info.eu/recitals/no-26/
+- https://gdpr-info.eu/recitals/no-28/
+- https://gdpr-info.eu/art-4-gdpr/
+- https://www.edpb.europa.eu/topics/ai-and-technology/anonymisation-pseudonymisation_en
+- https://ec.europa.eu/justice/article-29/documentation/opinion-recommendation/files/2014/wp216_en.pdf
+- https://www.statista.com/topics/9460/app-tracking-and-mobile-privacy/
 ---
 
 ## Overview
 
-This weakness occurs when an app uses functionality that unnecessarily exposes user data even though the platform provides a privacy-preserving alternative.
+This weakness occurs when an app performs a privacy relevant action without making its scope or material consequences reasonably apparent to the user.
 
-Platforms increasingly offer least-exposing APIs for common tasks: system authentication sessions (ASWebAuthenticationSession on iOS and Custom Tabs on Android, as recommended by RFC 8252, Appendix B) keep credentials and browsing state isolated from the app; system pickers (e.g., PHPickerViewController on iOS and the Android Photo Picker) return only the items selected by the user without granting broad permissions; and on-device processing can avoid sending data to remote AI services. Choosing a less privacy-preserving option leads to avoidable data exposure and over-collection. This is the privacy-focused counterpart to @MASWE-0047, which applies the same "prefer platform-provided functionality" principle from a security perspective; some features, such as system authentication sessions, improve both security and privacy.
+Privacy relevant actions include sharing, exporting, publishing, synchronizing, backing up, changing visibility, responding to a request from another party, or moving data from private app storage to storage or services accessible by other applications, users, or third parties.
+
+The weakness may cause users to disclose different data, disclose data to a broader audience, or create more persistent copies than they reasonably intended. It includes flows where the app honors another party's request for data without clearly showing the user what will be shared and with whom, or allowing the user to control the disclosure. It does not require the underlying processing to rely on consent. The issue is whether the interface allows the user to understand and control the resulting privacy state.
 
 ## Modes of Introduction
 
-- **Embedded Authentication Flows**: Handling third-party authentication in embedded WebViews or deprecated session APIs, exposing credentials and browsing state to the app, instead of isolated system authentication sessions.
-- **Broad Permissions Instead of Pickers**: Requesting full photo-library, camera, or file access when a system picker would return only the user-selected items without any permission.
-- **Remote Processing Instead of On-Device AI**: Sending user data to remote AI services when on-device processing can support the feature.
-- **Over-Exposing API Choices**: Choosing APIs that reveal more user data than the feature requires when a least-exposing platform alternative exists (see also @MASWE-0067).
+- **Unclear Disclosure Context**: The interface or action labels do not clearly identify the affected records, files, accounts, data elements, included metadata, destination, audience, or resulting privacy state, including when responding to another party's request for data.
+- **Insufficient Disclosure Review and Feedback**: The app does not allow the user to review, control, or confirm a consequential disclosure, or clearly indicate that a high impact or difficult to reverse disclosure has occurred.
 
 ## Impact
 
-- **Violation of User Privacy**: The app and its embedded components can collect and correlate credentials, browsing state, or whole data collections that a privacy-preserving alternative would never have exposed, resulting in tracking, surveillance, or profiling of the user.
-- **Compromise of Sensitive Data**: The app and its embedded components can retain data that a privacy-preserving alternative would not expose, resulting in broader exposure when the app or a third-party service suffers a data breach.
-- **Loss of User Trust**: Users can perceive unnecessary permission prompts and embedded login flows as invasive, resulting in refused permissions, abandoned logins, and reduced retention.
+- **Violation of User Privacy**: The app can disclose personal or sensitive data to recipients who are not entitled to receive it under the user's sharing choices, resulting in unauthorized exposure of that data.
+- **Loss of User Trust**: Users can discover that the app shared data without their awareness or control, resulting in reduced confidence in the app and its owner.
+- **Legal and Regulatory Non-Compliance**: The app can share personal data without adequate transparency or user control, resulting in violations of privacy obligations and potential enforcement action.
 
 ## Mitigations
 
-- **Use System Authentication Sessions**: Authenticate against third-party services with `ASWebAuthenticationSession` on iOS or Custom Tabs on Android, following RFC 8252, instead of embedded WebViews or deprecated APIs.
-- **Prefer System Pickers**: Use the system photo, file, and contact pickers so the app receives only what the user explicitly selects, without broad permission grants.
-- **Prefer On-Device Processing**: Use on-device AI or other local processing when it can support the feature without sending user data to a remote service.
-- **Choose Least-Exposing APIs**: When the platform offers a privacy-preserving variant of a capability, prefer it and request broad access only when the feature genuinely requires it (see @MASWE-0067).
+- **Provide Clear Disclosure Context and Control**: At the point of action, show the affected data, included metadata, destination, audience, and material privacy consequences; before responding to another party's request for data, identify the requester and recipient and allow the user to approve, limit, or decline the disclosure.
+- **Support Review and Reversal of Consequential Disclosures**: Before completion, allow users to review selected items, recipients, audience, included metadata, and visibility; make the resulting privacy state visible and provide proportionate confirmation or undo mechanisms when practical.

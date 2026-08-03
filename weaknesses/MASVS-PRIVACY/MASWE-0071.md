@@ -1,16 +1,16 @@
 ---
-title: Inadequate Awareness for Privacy Relevant Actions
+title: Inadequate Defaults for Privacy Relevant Actions
 id: MASWE-0071
-alias: inadequate-awareness-privacy-actions
-requirement: "The app informs the user about the privacy implications before performing an action."
+alias: unsafe-defaults-privacy-actions
+requirement: "The app uses adequate defaults for privacy relevant actions."
 platform: [android, ios]
 profiles: [P]
 threat: MAS-THREAT-0071
-attacks: [MAS-ATTACK-0084]
+attacks: [MAS-ATTACK-0084, MAS-ATTACK-0087]
 mappings:
-  masvs-v2: [MASVS-PRIVACY-2]
-  cwe: [359]
-  maswe-beta: [MASWE-0109]
+    masvs-v2: [MASVS-PRIVACY-2]
+    cwe: [359]
+    maswe-beta: [MASWE-0109]
 refs:
 - https://cloud.google.com/sensitive-data-protection/docs/classification-redaction
 - https://gdpr-info.eu/recitals/no-26/
@@ -23,24 +23,24 @@ refs:
 
 ## Overview
 
-This weakness occurs when an app performs a privacy relevant action without making its scope or material consequences reasonably apparent to the user.
+This weakness occurs when an app uses defaults for a privacy relevant action that expose more data than is necessary for the expected functionality.
 
 Privacy relevant actions include sharing, exporting, publishing, synchronizing, backing up, changing visibility, responding to a request from another party, or moving data from private app storage to storage or services accessible by other applications, users, or third parties.
 
-The weakness may cause users to disclose different data, disclose data to a broader audience, or create more persistent copies than they reasonably intended. It includes flows where the app honors another party's request for data without clearly showing the user what will be shared and with whom, or allowing the user to control the disclosure. It does not require the underlying processing to rely on consent. The issue is whether the interface allows the user to understand and control the resulting privacy state.
+The weakness may cause users to disclose different data, disclose data to a broader audience, or create more persistent copies than they reasonably intended. The issue is whether the default configuration results in a more exposing privacy state than is necessary for the requested functionality.
 
 ## Modes of Introduction
 
 - **Unclear Disclosure Context**: The interface or action labels do not clearly identify the affected records, files, accounts, data elements, included metadata, destination, audience, or resulting privacy state, including when responding to another party's request for data.
-- **Insufficient Disclosure Review and Feedback**: The app does not allow the user to review, control, or confirm a consequential disclosure, or clearly indicate that a high impact or difficult to reverse disclosure has occurred.
+- **Overly Exposing Defaults**: The app preselects broader audiences, more data, longer retention, public visibility, or additional recipients when a less exposing default would satisfy the expected functionality.
 
 ## Impact
 
 - **Violation of User Privacy**: The app can disclose personal or sensitive data to recipients who are not entitled to receive it under the user's sharing choices, resulting in unauthorized exposure of that data.
-- **Loss of User Trust**: Users can discover that the app shared data without their awareness or control, resulting in reduced confidence in the app and its owner.
-- **Legal and Regulatory Non-Compliance**: The app can share personal data without adequate transparency or user control, resulting in violations of privacy obligations and potential enforcement action.
+- **Loss of User Trust**: Users can discover that the app shared more data, or shared it more broadly, than they reasonably expected, resulting in reduced confidence in the app and its owner.
+- **Legal and Regulatory Non-Compliance**: The app can share personal data using unnecessarily exposing defaults, resulting in violations of privacy obligations and potential enforcement action.
 
 ## Mitigations
 
 - **Provide Clear Disclosure Context and Control**: At the point of action, show the affected data, included metadata, destination, audience, and material privacy consequences; before responding to another party's request for data, identify the requester and recipient and allow the user to approve, limit, or decline the disclosure.
-- **Support Review and Reversal of Consequential Disclosures**: Before completion, allow users to review selected items, recipients, audience, included metadata, and visibility; make the resulting privacy state visible and provide proportionate confirmation or undo mechanisms when practical.
+- **Use Privacy Protective Defaults**: Default to the narrowest audience, smallest data set, shortest appropriate persistence, and least exposing destination that supports the requested functionality.

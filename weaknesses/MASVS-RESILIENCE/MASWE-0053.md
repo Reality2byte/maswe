@@ -1,41 +1,46 @@
 ---
-title: App Virtualization Environment Detection Not Implemented
+title: Emulated or Virtual Device Detection Not Implemented
 id: MASWE-0053
-alias: app-virtualization-detection
-requirement: "The app detects when it is running inside an app-virtualization environment."
+alias: emulated-virtual-device-detection
+requirement: "The app detects when it is running in an emulated or virtual device environment."
 platform: [android, ios]
 profiles: [R]
 threat: MAS-THREAT-0053
-attacks: [MAS-ATTACK-0067]
+attacks: [MAS-ATTACK-0003, MAS-ATTACK-0066]
 mappings:
-  masvs-v2: [MASVS-RESILIENCE-1]
-  cwe: [693]
-  maswe-beta: [MASWE-0098]
+  masvs-v1: [MSTG-RESILIENCE-5, MSTG-RESILIENCE-8]
+  masvs-v2: [MASVS-RESILIENCE-1, MASVS-RESILIENCE-4]
+  maswe-beta: [MASWE-0099, MASWE-0103]
+refs:
+- https://developer.android.com/google/play/integrity/overview
+- https://developer.android.com/google/play/integrity/verdicts
+- https://github.com/eltavine/Duck-Detector-Refactoring
+- https://github.com/Lakr233/vphone-cli
+- https://developer.apple.com/documentation/devicecheck
+- https://ieeexplore.ieee.org/document/10935812
+
 ---
 
 ## Overview
 
-This weakness occurs when an app does not detect that it is running inside an app-virtualization or cloning environment.
+This weakness occurs when an app does not implement effective techniques to detect that it is running in an emulator or virtual device.
 
-App virtualization and "dual-app" container frameworks run an app inside another app's process, letting the hosting app intercept its calls, access its data, and instrument it, all without rooting the device. They also enable running multiple cloned instances of the same app. An app that does not check for anomalies in its process path and package structure, or for known virtualization frameworks, cannot respond to running in such a hostile host.
+Emulators give attackers a fully controlled, snapshottable environment for analyzing the app, automating interactions, and running it at scale in bot farms. Detection typically relies on identifying the features and limitations of commonly used emulation solutions, such as characteristic device identifiers, emulator-specific file-paths, hardware properties, sensors, and timing behavior.
 
 ## Modes of Introduction
 
-- **No Virtualization Checks**: Not verifying the app's process path, package structure, or runtime environment for signs of running inside another app's process.
-- **Known Frameworks Not Detected**: Not checking for artifacts of known virtualization and cloning frameworks.
-- **No Response Strategy**: Detecting a virtualized environment but continuing to operate normally with sensitive functionality enabled.
+- **No Emulator Checks**: Shipping without any verification of device properties, hardware features, or sensor behavior that distinguish emulators from real devices.
+- **Single-Source Detection Signals**: Relying on a single source of emulation or virtualization indicators (e.g. system properties) that emulators can trivially fake.
+- **No Response Strategy**: Detecting an emulated environment but not adapting the app's behavior in response.
 
 ## Impact
 
-- **Compromise of Sensitive Data**: Attackers can intercept the virtualized app's files, credentials, and API calls from the hosting app, resulting in exposure of user data without requiring root access.
-- **Bypass of Protection Mechanisms**: Attackers can instrument the app inside the container to defeat its client-side controls, resulting in the circumvention of its defenses on unrooted devices.
-- **Compromise of System Integrity and Business Operations**: Attackers can run multiple cloned instances to abuse promotions or multi-account limits, resulting in fraud against the app owner.
-- **Lack of Server-Verified Platform Attestation**: Failing to validate the app's package identity, signing certificate via hardware-backed platform attestation (e.g., Play Integrity or App Attest) on a backend server, allowing the app to execute unchecked inside virtual containers or cloned spaces.
+- **Bypass of Protection Mechanisms**: Attackers can iterate on bypasses of the app's defenses with snapshots and full inspection, resulting in faster and cheaper circumvention of its protections.
+- **Compromise of System Integrity and Business Operations**: Attackers can run automated fleets of emulated instances, resulting in bot-driven fraud, fake accounts, and abuse of the app owner's services.
 
 ## Mitigations
 
-- **Detect Environment Anomalies**: Verify the app's process path, data directory, and package structure at runtime and treat mismatches as indicators of virtualization.
-- **Check for Known Frameworks**: Detect artifacts of known virtualization and cloning frameworks and their hosting packages.
-- **Respond to Detection**: Restrict sensitive functionality, notify the backend, or terminate when a virtualized environment is detected, according to the app's risk profile.
-- **Assess Effectiveness**: Test the detection against current virtualization frameworks and update it as they evolve.
-- **Attest Application Integrity**: Use platform attestation frameworks such as Play Integrity on Android or App Attest on iOS (see @MASWE-0055) with backend nonce verification to validate the official package name, signing certificate, and application integrity.
+- **Detect Emulator Characteristics**: Check device identifiers, hardware capabilities, sensor availability, file paths and behavioral traits that differ between emulators and physical devices, combining multiple signals.
+- **Respond to Detection**: Restrict sensitive functionality, require additional verification, or terminate when an emulated environment is detected, according to the app's risk profile.
+- **Combine with Attestation**: Use server-verified device attestation (see @MASWE-0054) so emulated environments are also flagged independently of local checks.
+- **Assess Effectiveness**: Test the detection against popular emulators and hardening/evasion tools and refine it over time.
