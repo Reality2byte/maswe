@@ -23,7 +23,6 @@ mappings:
 refs:
 - https://developer.android.com/topic/security/risks/path-traversal
 - https://developer.android.com/topic/security/risks/sql-injection
-- unsafe-deserialization
 - https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html
 ---
 
