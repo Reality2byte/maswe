@@ -42,4 +42,3 @@ Accessibility services (e.g. Android's `AccessibilityService`) can observe scree
 - **Add Friction to High-Risk Flows**: Require verification that UI automation cannot satisfy (e.g. biometric-bound confirmation, see @MASWE-0020) for the most sensitive actions.
 - **Preserve Legitimate Accessibility**: Minimize only the sensitive values exposed; never degrade the app's overall accessibility for assistive-technology users.
 - **Use Custom Passcode Inputs**: Replace standard system keyboards with an in-app custom keypad for sensitive entry fields, preventing accessibility services from capturing or announcing typed credentials.
-- **Use Custom Passcode Inputs**: Replace standard system keyboards with an in-app custom keypad for sensitive entry fields, preventing accessibility services from capturing or announcing typed credentials.
