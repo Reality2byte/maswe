@@ -17,6 +17,7 @@ mappings:
   - access-control-to-exported-components
   - android-exported
   - custom-permissions
+  - file-providers
   android-core-app-quality: [Component_Export, Component_Permissions, Component_Protection]
   maswe-beta: [MASWE-0033, MASWE-0038, MASWE-0040, MASWE-0051, MASWE-0059, MASWE-0062, MASWE-0063, MASWE-0064, MASWE-0065, MASWE-0119]
 refs:
@@ -25,8 +26,6 @@ refs:
 - https://developer.android.com/privacy-and-security/security-tips#BroadcastReceivers
 - https://developer.android.com/privacy-and-security/security-tips#ContentProviders
 - https://developer.android.com/privacy-and-security/security-tips#binder-and-messenger-interfaces
-- https://developer.android.com/topic/security/risks/content-resolver
-- https://developer.android.com/topic/security/risks/file-providers
 ---
 
 ## Overview
